@@ -6,7 +6,7 @@ import SheetButton from "@/components/SheetButton";
 
 export default function PlaceScreen() {
   return (
-    <div style={{ width: "390px", height: "2090px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "2168px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ position: "relative", height: "340px" }}>
         <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="The Tree of Life jali seen from inside Sidi Saiyyed Mosque" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", top: "0", height: "130px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0.45) 0%, rgba(20, 12, 6, 0) 100%)" }} />
@@ -46,7 +46,7 @@ export default function PlaceScreen() {
             <path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21" />
           </svg>
           <span>
-            1 / 2
+            1 / 5
           </span>
         </Tap>
       </div>
@@ -210,7 +210,7 @@ export default function PlaceScreen() {
           <h2 style={{ margin: "0", fontSize: "19px", fontWeight: "800" }}>
             Look for these on site
           </h2>
-          <div style={{ margin: "12px -20px 0", padding: "0 20px", display: "flex", gap: "12px", overflowX: "auto", scrollbarWidth: "none" }}>
+          <div className="hscroll" style={{ margin: "12px -20px 0", padding: "0 20px", display: "flex", gap: "12px", overflowX: "auto", scrollbarWidth: "none" }}>
             <article style={{ flex: "0 0 210px", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
               <div style={{ position: "relative", height: "112px" }}>
                 <img src="/images/358cd23211709da539c3303890c27e8b.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
@@ -228,12 +228,8 @@ export default function PlaceScreen() {
               </div>
             </article>
             <article style={{ flex: "0 0 210px", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
-              <div role="img" aria-label="Illustration placeholder: geometric jali" style={{ position: "relative", height: "112px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="96" height="80" viewBox="0 0 96 80" fill="none" stroke="#9C7A55" strokeWidth="1.6" aria-hidden="true">
-                  <rect x="8" y="4" width="80" height="72" rx="4" />
-                  <path d="M8 22h80M8 40h80M8 58h80M28 4v72M48 4v72M68 4v72" />
-                  <path d="M18 13l10 9-10 9-10-9zM38 13l10 9-10 9-10-9zM58 13l10 9-10 9-10-9zM78 13l10 9-10 9-10-9zM18 49l10 9-10 9-10-9zM38 49l10 9-10 9-10-9zM58 49l10 9-10 9-10-9zM78 49l10 9-10 9-10-9z" />
-                </svg>
+              <div style={{ position: "relative", height: "112px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img src="/images/sidi-lattice.jpg" alt="A geometric stone screen in a side arch of the mosque" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 50%", display: "block" }} />
                 <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   2
                 </span>
@@ -248,12 +244,8 @@ export default function PlaceScreen() {
               </div>
             </article>
             <article style={{ flex: "0 0 210px", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
-              <div role="img" aria-label="Illustration placeholder: blank arch" style={{ position: "relative", height: "112px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="70" height="84" viewBox="0 0 70 84" fill="none" stroke="#9C7A55" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                  <path d="M6 82V36a29 29 0 0 1 58 0v46" />
-                  <path d="M14 82V38a21 21 0 0 1 42 0v44" />
-                  <path d="M14 52h42M14 66h42M30 38v44M42 52v30" />
-                </svg>
+              <div style={{ position: "relative", height: "112px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img src="/images/sidi-exterior.jpg" alt="The west wall of the mosque, with its row of arches" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "40% 45%", display: "block" }} />
                 <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   3
                 </span>
@@ -341,25 +333,33 @@ export default function PlaceScreen() {
               Open daily, 7 AM – 6 PM, at Lal Darwaja. Visits pause during prayer times.
             </span>
           </div>
+          <Link href="/tickets?book=sidi-guided" style={{ marginTop: "14px", minHeight: "64px", padding: "10px 14px", borderRadius: "16px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+            <span style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+              <path d="M13 5v2M13 17v2M13 11v2" />
+            </svg>
+            </span>
+            <span style={{ flex: "1", minWidth: "0" }}>
+              <span style={{ display: "block", fontSize: "15px", fontWeight: "800" }}>
+                Visit with a heritage guide
+              </span>
+              <span style={{ display: "block", marginTop: "2px", fontSize: "12px", color: "#D9C6AE" }}>
+                45 min · from ₹150 · reserve now, pay there
+              </span>
+            </span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+          </Link>
         </section>
         <section style={{ marginTop: "30px" }}>
           <h2 style={{ margin: "0", fontSize: "19px", fontWeight: "800" }}>
             Nearby, on foot
           </h2>
-          <div style={{ margin: "12px -20px 0", padding: "0 20px", display: "flex", gap: "12px", overflowX: "auto", scrollbarWidth: "none" }}>
+          <div className="hscroll" style={{ margin: "12px -20px 0", padding: "0 20px", display: "flex", gap: "12px", overflowX: "auto", scrollbarWidth: "none" }}>
             <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px" }}>
-              <div role="img" aria-label="Photo placeholder: Bhadra Fort" style={{ height: "110px", borderRadius: "14px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="60" height="60" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M8 70V28h10v42" />
-                  <path d="M62 70V28h10v42" />
-                  <path d="M8 28v-6h3v3h4v-3h3v6" />
-                  <path d="M62 28v-6h3v3h4v-3h3v6" />
-                  <path d="M18 70V38h44v32" />
-                  <path d="M30 70V54a10 10 0 0 1 20 0v16" />
-                  <path d="M4 70h72" />
-                  <path d="M24 46h4M52 46h4" />
-                </svg>
-              </div>
+              <img src="/images/bhadra-fort.jpg" alt="The gate and tower of Bhadra Fort" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Bhadra Fort
               </span>
@@ -368,16 +368,7 @@ export default function PlaceScreen() {
               </span>
             </article>
             <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px" }}>
-              <div role="img" aria-label="Photo placeholder: Teen Darwaza" style={{ height: "110px", borderRadius: "14px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="64" height="60" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M6 70V30h68v40" />
-                  <path d="M6 30l4-6h60l4 6" />
-                  <path d="M14 70V50a8 8 0 0 1 16 0v20" />
-                  <path d="M32 70V46a8 10 0 0 1 16 0v24" />
-                  <path d="M50 70V50a8 8 0 0 1 16 0v20" />
-                  <path d="M2 70h76" />
-                </svg>
-              </div>
+              <img src="/images/teen-darwaza.jpg" alt="The three arches of Teen Darwaza" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Teen Darwaza
               </span>
@@ -386,21 +377,7 @@ export default function PlaceScreen() {
               </span>
             </article>
             <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px" }}>
-              <div role="img" aria-label="Photo placeholder: Jama Masjid" style={{ height: "110px", borderRadius: "14px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="60" height="60" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M22 70V44h36v26" />
-                  <path d="M24 44a16 16 0 0 1 32 0" />
-                  <path d="M40 28v-6" />
-                  <path d="M10 70V30" />
-                  <path d="M16 70V30" />
-                  <path d="M10 30l3-8 3 8" />
-                  <path d="M64 70V30" />
-                  <path d="M70 70V30" />
-                  <path d="M64 30l3-8 3 8" />
-                  <path d="M34 70V58a6 6 0 0 1 12 0v12" />
-                  <path d="M4 70h72" />
-                </svg>
-              </div>
+              <img src="/images/jama-masjid.jpg" alt="The courtyard of Jama Masjid, Ahmedabad" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Jama Masjid
               </span>

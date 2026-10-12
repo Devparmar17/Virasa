@@ -111,7 +111,7 @@ export default function LensScreen() {
         <p style={{ margin: "14px 0 0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
           ASK VIRASA AI
         </p>
-        <div style={{ margin: "8px -20px 0", padding: "0 20px", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
+        <div className="hscroll" style={{ margin: "8px -20px 0", padding: "0 20px", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
           <Tap ask="Who carved the Tree of Life jali?" style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "999px", border: "1.5px solid #E2D3C1", background: "#FBF6EE", color: "#2B1B10", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
             Who carved it?
           </Tap>

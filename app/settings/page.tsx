@@ -180,6 +180,10 @@ export default function SettingsScreen() {
             All screens
             <Chevron />
           </Link>
+          <Link href="/credits" style={rowStyle()}>
+            Photo credits
+            <Chevron />
+          </Link>
           <div style={{ ...rowStyle(true), cursor: "default" }}>
             Version
             <span style={{ fontSize: "14px", fontWeight: 500, color: "#6F5B4B" }}>0.1.0</span>

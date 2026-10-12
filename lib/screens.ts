@@ -169,6 +169,34 @@ export const screens = [
     "interactive": true
   },
   {
+    "route": "/tickets",
+    "title": "30 · Tickets & guided walks",
+    "w": 390,
+    "h": 844,
+    "interactive": true
+  },
+  {
+    "route": "/plan",
+    "title": "31 · Plan your trip",
+    "w": 390,
+    "h": 844,
+    "interactive": true
+  },
+  {
+    "route": "/secret",
+    "title": "32 · Local secret",
+    "w": 390,
+    "h": 844,
+    "interactive": true
+  },
+  {
+    "route": "/credits",
+    "title": "33 · Photo credits",
+    "w": 390,
+    "h": 844,
+    "interactive": false
+  },
+  {
     "route": "/login",
     "title": "29 · Log in or sign up",
     "w": 390,

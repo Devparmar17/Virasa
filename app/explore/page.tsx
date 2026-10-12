@@ -198,7 +198,7 @@ export default function ExploreScreen() {
           </svg>
         </button>
       </div>
-      <div style={{ position: "absolute", top: "116px", left: "16px", right: "0", display: "flex", gap: "8px", overflowX: "auto", paddingRight: "16px", paddingBottom: "8px", scrollbarWidth: "none" }}>
+      <div className="hscroll" style={{ position: "absolute", top: "116px", left: "16px", right: "0", display: "flex", gap: "8px", overflowX: "auto", paddingRight: "16px", paddingBottom: "8px", scrollbarWidth: "none" }}>
         <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")} style={{ flex: "0 0 auto", height: "38px", padding: "0 14px", borderRadius: "999px", border: "0", background: filter === "all" ? "#2B1B10" : "#FFFFFF", color: filter === "all" ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: "700", boxShadow: "0 4px 12px rgba(43, 27, 16, 0.18)", cursor: "pointer" }}>
           All
         </button>
@@ -255,7 +255,7 @@ export default function ExploreScreen() {
           </button>
         </div>
         <div key={place.id} className="rise">
-          <Link href={place.href || "/explore"} onClick={(e) => { if (!place.href) { e.preventDefault(); ask(`Tell me about ${place.name}`); } }} style={{ marginTop: "10px", display: "flex", gap: "14px", textDecoration: "none", color: "#2B1B10" }}>
+          <Link href={place.href || place.detail || "/explore"} onClick={(e) => { if (!place.href && !place.detail) { e.preventDefault(); ask(`Tell me about ${place.name}`); } }} style={{ marginTop: "10px", display: "flex", gap: "14px", textDecoration: "none", color: "#2B1B10" }}>
             {place.img ? (
               <img src={place.img} alt="" style={{ flex: "0 0 92px", width: "92px", height: "92px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
             ) : (
@@ -297,9 +297,15 @@ export default function ExploreScreen() {
                 {" Story · 2 min "}
               </Link>
             ) : (
-              <button type="button" onClick={() => ask(`Tell me the story of ${place.name}`)} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid #9A4E36", background: "none", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", cursor: "pointer" }}>
-                Ask the guide
-              </button>
+              place.detail ? (
+                <Link href={place.detail} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid #9A4E36", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
+                  Read about it
+                </Link>
+              ) : (
+                <button type="button" onClick={() => ask(`Tell me the story of ${place.name}`)} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid #9A4E36", background: "none", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", cursor: "pointer" }}>
+                  Ask the guide
+                </button>
+              )
             )}
             <button
               type="button"

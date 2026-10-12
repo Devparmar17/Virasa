@@ -80,7 +80,7 @@ export default function ReelsScreen() {
       }}
       style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#1E130B", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#FFFFFF" }}
     >
-      <button type="button" aria-label={paused ? "Play reel" : "Pause reel"} onClick={() => setPaused(!paused)} style={{ position: "absolute", inset: "0", padding: "0", border: "0", background: "none", cursor: "pointer", overflow: "hidden" }}>
+      <button type="button" data-plain aria-label={paused ? "Play reel" : "Pause reel"} onClick={() => setPaused(!paused)} style={{ position: "absolute", inset: "0", padding: "0", border: "0", background: "none", cursor: "pointer", overflow: "hidden" }}>
         <img key={reel.id} src={reel.img} alt={reel.alt} className={`kenburns${paused ? " paused" : ""}`} style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: reel.focus, display: "block" }} />
         {paused ? (
           <span className="pop-in" aria-hidden="true" style={{ position: "absolute", left: "50%", top: "50%", width: "76px", height: "76px", margin: "-38px 0 0 -38px", borderRadius: "50%", background: "rgba(20, 12, 6, 0.55)", display: "flex", alignItems: "center", justifyContent: "center" }}>

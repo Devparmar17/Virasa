@@ -11,6 +11,9 @@ type Photo = { src: string; caption: string; credit: string };
 const PHOTOS: Photo[] = [
   { src: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", caption: "The Tree of Life jali, seen from inside the prayer hall", credit: "Virasa" },
   { src: "/images/358cd23211709da539c3303890c27e8b.jpg", caption: "Sidi Saiyyed Mosque — light through the carved screen", credit: "Virasa" },
+  { src: "/images/sidi-tree.jpg", caption: "The Tree of Life jali from the street side", credit: "Snehrashmi, CC BY-SA 4.0, via Wikimedia Commons" },
+  { src: "/images/sidi-lattice.jpg", caption: "One of the eight geometric screens", credit: "Bernard Gagnon, CC BY-SA 3.0, via Wikimedia Commons" },
+  { src: "/images/sidi-exterior.jpg", caption: "The mosque from its garden, with the row of screened arches", credit: "Bernard Gagnon, CC BY-SA 3.0, via Wikimedia Commons" },
 ];
 
 export default function GalleryScreen() {
@@ -60,7 +63,7 @@ export default function GalleryScreen() {
         }}
         style={{ position: "relative", margin: "8px 0 0", height: "470px", overflow: "hidden", background: "#120B06" }}
       >
-        <button type="button" aria-label={zoomed ? "Zoom out" : "Zoom in"} onClick={() => setZoomed(!zoomed)} style={{ width: "100%", height: "100%", padding: 0, border: 0, background: "none", cursor: zoomed ? "zoom-out" : "zoom-in" }}>
+        <button type="button" data-plain aria-label={zoomed ? "Zoom out" : "Zoom in"} onClick={() => setZoomed(!zoomed)} style={{ width: "100%", height: "100%", padding: 0, border: 0, background: "none", cursor: zoomed ? "zoom-out" : "zoom-in" }}>
           <img key={photo.src} className="fade-in" src={photo.src} alt={photo.caption} style={{ width: "100%", height: "100%", objectFit: zoomed ? "cover" : "contain", scale: zoomed ? "1.6" : "1", transition: "scale 0.35s ease", display: "block" }} />
         </button>
         {photos.length > 1 ? (
@@ -85,7 +88,7 @@ export default function GalleryScreen() {
         <p style={{ margin: 0, fontSize: "16px", lineHeight: 1.4, fontWeight: 700 }}>{photo.caption}</p>
         <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#C9B6A0" }}>Photo: {photo.credit}</p>
       </div>
-      <div style={{ margin: "18px 0 0", padding: "0 20px", display: "flex", gap: "10px", overflowX: "auto", scrollbarWidth: "none" }}>
+      <div className="hscroll" style={{ margin: "18px 0 0", padding: "0 20px", display: "flex", gap: "10px", overflowX: "auto", scrollbarWidth: "none" }}>
         {photos.map((p, i) => (
           <button key={p.src} type="button" aria-label={`Photo ${i + 1}: ${p.caption}`} aria-pressed={i === index} onClick={() => { setIndex(i); setZoomed(false); }} style={{ flex: "0 0 72px", width: "72px", height: "72px", padding: 0, borderRadius: "14px", border: i === index ? "3px solid #F3D9A8" : "3px solid transparent", background: "none", overflow: "hidden", cursor: "pointer" }}>
             <img src={p.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />

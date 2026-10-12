@@ -5,9 +5,11 @@ import { useState } from "react";
 import Link from "next/link";
 import GeoLink from "@/components/GeoLink";
 import { toast } from "@/components/Toast";
+import { useRouter } from "next/navigation";
 import { useAsk } from "@/components/Tap";
 import { frame, ScreenHeader } from "@/components/ui";
 import { useStored } from "@/lib/store";
+import { cityPlan } from "@/lib/plans";
 
 type City = { id: string; name: string; tag: string; mb: number; trip?: string };
 
@@ -27,6 +29,7 @@ export default function CityScreen() {
   const [loading, setLoading] = useState<string | null>(null);
   const [packs, setPacks] = useStored<Record<string, boolean>>("packs", {});
   const ask = useAsk();
+  const router = useRouter();
   const needle = query.trim().toLowerCase();
   const list = CITIES.filter((c) => !needle || `${c.name} ${c.tag}`.toLowerCase().includes(needle));
 
@@ -81,7 +84,7 @@ export default function CityScreen() {
         </Link>
 
         <h2 style={{ margin: "24px 0 4px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>PLAN YOUR NEXT CITY</h2>
-        <p style={{ margin: "0 0 10px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>Download a pack before you travel, or ask the guide what to see.</p>
+        <p style={{ margin: "0 0 10px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>Tap a city to plan the trip, and download its pack before you travel.</p>
         {list.length ? (
           <ul className="stagger" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
             {list.map((c) => {
@@ -90,7 +93,7 @@ export default function CityScreen() {
               return (
                 <li key={c.id} style={{ padding: "12px 12px 12px 14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${have ? "#BFDCC8" : "#EADFD2"}`, overflow: "hidden", position: "relative" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <button type="button" onClick={() => ask(`What should I see in ${c.name}? Plan me a first day.`)} style={{ flex: 1, minWidth: 0, padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
+                    <button type="button" onClick={() => (cityPlan(c.id) ? router.push(`/plan?city=${c.id}`) : ask(`What should I see in ${c.name}? Plan me a first day.`))} style={{ flex: 1, minWidth: 0, padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
                       <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{c.name}</span>
                       <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{c.tag}</span>
                       {c.trip ? <span style={{ display: "inline-flex", marginTop: "6px", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "12px", fontWeight: 700, alignItems: "center" }}>{c.trip}</span> : null}

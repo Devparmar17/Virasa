@@ -11,17 +11,20 @@ export default function PersonalizeScreen() {
   const [interests, setInterests] = useStored<Record<string, boolean> | null>("interests", null);
   const [settings, setSettings] = useStored<Settings>("settings", DEFAULT_SETTINGS);
   const [lang, setLang] = useStored("lang", "en");
-  const state = { sel: interests || undefined, len: settings.length, lang };
+  // The story-language row has three choices; "Local" stands for any regional language (Settings offers five).
+  const local = lang !== "en" && lang !== "hi";
+  const state = { sel: interests || undefined, len: settings.length, lang: local ? "gu" : lang };
   const setState = (patch: Record<string, any>) => {
     if (patch.sel) setInterests(patch.sel);
     if (patch.len) setSettings((s) => ({ ...s, length: patch.len }));
-    if (patch.lang) setLang(patch.lang);
+    // Picking "Local" keeps a regional language already chosen in Settings (Tamil, Bengali…).
+    if (patch.lang && !(patch.lang === "gu" && local)) setLang(patch.lang);
   };
   const v: any = renderVals(state, setState);
   return (
     <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FBF6EE", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <Link href="/welcome" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <Link href="/login" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
@@ -29,7 +32,9 @@ export default function PersonalizeScreen() {
         </Link>
         <div style={{ flex: "1", display: "flex", flexDirection: "column", gap: "6px", alignItems: "center" }}>
           <div style={{ display: "flex", gap: "6px" }}>
-            <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#9A4E36" }} />
+            <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1", overflow: "hidden", display: "block" }}>
+              <span className="step-fill" style={{ display: "block", width: "100%", height: "100%", borderRadius: "999px", background: "#9A4E36" }} />
+            </span>
             <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1" }} />
           </div>
           <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
@@ -57,7 +62,7 @@ export default function PersonalizeScreen() {
             {v.count}{" selected"}
           </span>
         </legend>
-        <div style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
+        <div className="stagger" style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
           <button type="button" onClick={v.tog.arch} aria-pressed={v.on.arch} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.arch.bd}`, background: v.s.arch.bg, color: v.s.arch.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="3" x2="21" y1="22" y2="22" />
@@ -72,7 +77,7 @@ export default function PersonalizeScreen() {
             </span>
             {v.on.arch ? (
               <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="pop-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </>
@@ -91,7 +96,7 @@ export default function PersonalizeScreen() {
             </span>
             {v.on.well ? (
               <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="pop-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </>
@@ -108,7 +113,7 @@ export default function PersonalizeScreen() {
             </span>
             {v.on.food ? (
               <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="pop-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </>
@@ -127,7 +132,7 @@ export default function PersonalizeScreen() {
             </span>
             {v.on.craft ? (
               <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="pop-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </>
@@ -143,7 +148,7 @@ export default function PersonalizeScreen() {
             </span>
             {v.on.legend ? (
               <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="pop-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </>
@@ -158,7 +163,7 @@ export default function PersonalizeScreen() {
             </span>
             {v.on.spirit ? (
               <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="pop-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </>
@@ -174,7 +179,7 @@ export default function PersonalizeScreen() {
             </span>
             {v.on.fest ? (
               <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="pop-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </>
@@ -190,7 +195,7 @@ export default function PersonalizeScreen() {
             </span>
             {v.on.photo ? (
               <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="pop-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </>
@@ -202,7 +207,7 @@ export default function PersonalizeScreen() {
         <legend style={{ padding: "0", fontSize: "13px", fontWeight: "700", letterSpacing: "0.08em", color: "#8A6424" }}>
           STORY LENGTH
         </legend>
-        <div style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "8px" }}>
+        <div className="stagger" style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "8px" }}>
           <button type="button" onClick={v.setLen.quick} aria-pressed={v.lenOn.quick} style={{ height: "58px", borderRadius: "14px", border: `1.5px solid ${v.lenS.quick.bd}`, background: v.lenS.quick.bg, color: v.lenS.quick.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
             <span style={{ fontSize: "14px", fontWeight: "700" }}>
               Quick
@@ -233,7 +238,7 @@ export default function PersonalizeScreen() {
         <legend style={{ padding: "0", fontSize: "13px", fontWeight: "700", letterSpacing: "0.08em", color: "#8A6424" }}>
           STORY LANGUAGE
         </legend>
-        <div style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "8px" }}>
+        <div className="stagger" style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "8px" }}>
           <button type="button" lang="en" onClick={v.setLang.en} aria-pressed={v.langOn.en} style={{ height: "46px", borderRadius: "999px", border: `1.5px solid ${v.langS.en.bd}`, background: v.langS.en.bg, color: v.langS.en.fg, fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
             English
           </button>

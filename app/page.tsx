@@ -21,7 +21,7 @@ export default function MainScreen() {
           </defs>
           <rect width="390" height="844" fill="url(#jali)" />
         </svg>
-        <Link href="/welcome" aria-label="Continue to Virasa" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "#2B1B10", paddingBottom: "40px" }}>
+        <Link href="/welcome" data-plain aria-label="Continue to Virasa" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "#2B1B10", paddingBottom: "40px" }}>
           <div className="splash-logo" style={{ width: "176px", height: "176px", borderRadius: "50%", background: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 44px rgba(122, 74, 40, 0.18)", border: "1px solid #EADFD2" }}>
             <img src="/images/845c09135def6279c007582842533707.png" alt="" style={{ width: "104px", height: "112px", objectFit: "contain", display: "block" }} />
           </div>

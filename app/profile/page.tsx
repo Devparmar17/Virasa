@@ -15,9 +15,10 @@ export default function ProfileScreen() {
   const [lang] = useStored("lang", "en");
   const [settings] = useStored("settings", DEFAULT_SETTINGS);
   const [pack] = useStored("pack", true);
+  const [tickets] = useStored<unknown[]>("tickets", []);
   const v: any = renderVals({ sw }, (patch: { sw: typeof sw }) => setSw(patch.sw));
   return (
-    <div style={{ width: "390px", height: "1270px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "1326px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 12px 0 20px", display: "flex", alignItems: "center", gap: "14px" }}>
         <span style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "50%", padding: "3px", background: "#8A6424" }}>
           <Avatar style={{ width: "66px", height: "66px", borderRadius: "50%", objectFit: "cover", display: "block", border: "2px solid #FFFFFF" }} />
@@ -191,6 +192,17 @@ export default function ProfileScreen() {
               </svg>
             </span>
           </Link>
+          </li>
+          <li style={{ borderBottom: "1px solid #F0E8DD" }}>
+            <Link href="/tickets#mine" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
+              <span style={{ fontSize: "15px", fontWeight: "600" }}>My tickets</span>
+              <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
+                {tickets.length ? `${tickets.length} booked` : "Book a visit"}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </span>
+            </Link>
           </li>
           <li style={{ borderBottom: "1px solid #F0E8DD" }}>
             <Link href="/city" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>

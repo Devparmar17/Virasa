@@ -68,8 +68,9 @@ export default function LoginScreen() {
 
   const done = (who: string, isNew: boolean) => {
     toast(isNew ? `Welcome to Virasa, ${who}` : `Welcome back, ${who}`);
-    // New travellers choose their interests next; returning ones go home.
-    router.push(isNew || !readStored("onboarded", false) ? "/personalize" : "/home");
+    // Signing in always leads through interests (with language) and location; earlier
+    // choices are remembered, so a returning traveller can skip straight through.
+    router.push("/personalize");
   };
   const firstName = () => (readStored<{ name: string } | null>("user", null)?.name || "traveller").trim().split(/\s+/)[0];
 
@@ -165,7 +166,7 @@ export default function LoginScreen() {
           <button type="button" onClick={() => switchTo("signin")} style={{ ...outline, marginTop: "16px", borderColor: "#9A4E36", color: "#9A4E36", background: "transparent" }}>
             Log in
           </button>
-          <Link href="/location" style={{ marginTop: "8px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: 700, color: "#5A4434" }}>
+          <Link href="/personalize" style={{ marginTop: "8px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: 700, color: "#5A4434" }}>
             Explore as guest
           </Link>
         </div>

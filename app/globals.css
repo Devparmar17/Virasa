@@ -110,8 +110,23 @@ a:hover {
 .sheet button,
 .sheet a {
   -webkit-tap-highlight-color: transparent;
-  transition: scale 0.16s ease, opacity 0.16s ease, background-color 0.22s ease, color 0.22s ease,
+  transition: scale 0.16s ease, opacity 0.16s ease, filter 0.18s ease, background-color 0.22s ease, color 0.22s ease,
     border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+/* Buttons and links change colour when touched: a shade deeper under the
+   pointer, deeper still while pressed. A filter is used because each control
+   carries its own colour inline. [data-plain] opts out (full-screen tap areas). */
+@media (hover: hover) {
+  .screen :is(a, button):not([data-plain]):hover,
+  .sheet :is(a, button):hover {
+    filter: brightness(0.93) saturate(1.08);
+  }
+}
+
+.screen :is(a, button):not([data-plain]):active,
+.sheet :is(a, button):active {
+  filter: brightness(0.8) saturate(1.2);
 }
 
 .screen a:active,
@@ -584,4 +599,151 @@ a:hover {
     transform: scale(3);
     opacity: 0;
   }
+}
+
+/* ---------- sideways rows ---------- */
+
+/* Card rows and chip rows scroll sideways: swipe, trackpad, or drag with a mouse. */
+.hscroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 20px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+.hscroll::-webkit-scrollbar {
+  display: none;
+}
+.hscroll > * {
+  scroll-snap-align: start;
+}
+.hscroll img,
+.hscroll a {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.hscroll.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+
+/* ---------- welcome hero ---------- */
+
+/* The two chips bob beside the arch and trade places every few seconds.
+   translate carries the swap and transform the bob, so the two compose.
+   (344px - 100%) is the distance from one chip's resting edge to the other's. */
+.hero-chip {
+  z-index: 1;
+  will-change: translate, transform;
+}
+
+.hero-chip-a {
+  animation: chip-swap-a 9s cubic-bezier(0.65, 0, 0.35, 1) 1.2s infinite, chip-bob 3.4s ease-in-out infinite;
+}
+
+.hero-chip-b {
+  animation: chip-swap-b 9s cubic-bezier(0.65, 0, 0.35, 1) 1.2s infinite, chip-bob 3.4s ease-in-out -1.7s infinite;
+}
+
+@keyframes chip-swap-a {
+  0%,
+  28% {
+    translate: 0 0;
+    scale: 1;
+  }
+  36% {
+    translate: calc((344px - 100%) * 0.4) -128px;
+    scale: 1.1;
+  }
+  44%,
+  78% {
+    translate: calc(344px - 100%) -96px;
+    scale: 1;
+  }
+  86% {
+    translate: calc((344px - 100%) * 0.6) 30px;
+    scale: 1.1;
+  }
+  94%,
+  100% {
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+@keyframes chip-swap-b {
+  0%,
+  28% {
+    translate: 0 0;
+    scale: 1;
+  }
+  36% {
+    translate: calc((100% - 344px) * 0.4) 128px;
+    scale: 1.1;
+  }
+  44%,
+  78% {
+    translate: calc(100% - 344px) 96px;
+    scale: 1;
+  }
+  86% {
+    translate: calc((100% - 344px) * 0.6) -30px;
+    scale: 1.1;
+  }
+  94%,
+  100% {
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+@keyframes chip-bob {
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.hero-arch {
+  animation: arch-in 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) backwards, arch-drift 6s ease-in-out 0.9s infinite;
+}
+
+@keyframes arch-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+    translate: 0 18px;
+  }
+}
+
+@keyframes arch-drift {
+  50% {
+    translate: 0 -5px;
+  }
+}
+
+/* ---------- choosing ---------- */
+
+/* Anything that can be switched on (interest chips, filters, tabs, segmented
+   choices) gives a small bounce as it becomes selected; its colours cross-fade
+   through the transition on buttons above. */
+.screen button[aria-pressed="true"],
+.screen button[aria-checked="true"],
+.screen button[aria-selected="true"] {
+  animation: select-pop 0.34s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+@keyframes select-pop {
+  0% {
+    scale: 0.93;
+  }
+  60% {
+    scale: 1.05;
+  }
+}
+
+/* Onboarding progress: the current step's bar fills as the screen opens. */
+.step-fill {
+  animation: fill 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.25s backwards;
 }

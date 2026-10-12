@@ -14,12 +14,12 @@ type Stop = { id: string; name: string; hook: string; visit: number; extra: stri
 // have a walking distance whatever order they are visited in.
 const STOPS: Stop[] = [
   { id: "sidi", name: "Sidi Saiyyed Mosque", hook: "The Tree of Life jali", visit: 20, extra: "story 2 min", at: 0, href: "/place" },
-  { id: "bhadra", name: "Bhadra Fort", hook: "Lakshmi and the night guard", visit: 25, extra: "legend 3 min", at: 450 },
+  { id: "bhadra", name: "Bhadra Fort", hook: "Lakshmi and the night guard", visit: 25, extra: "legend 3 min", at: 450, href: "/secret?id=bhadra" },
   { id: "teen", name: "Teen Darwaza", hook: "The lamp kept burning for 600 years", visit: 10, extra: "legend 1 min", at: 750 },
-  { id: "jama", name: "Jama Masjid", hook: "260 pillars under 15 domes", visit: 25, extra: "story 3 min", at: 1150 },
+  { id: "jama", name: "Jama Masjid", hook: "260 pillars under 15 domes", visit: 25, extra: "story 3 min", at: 1150, href: "/secret?id=jama" },
   { id: "chandravilas", name: "Chandravilas", hook: "Fafda and jalebi since 1900", visit: 15, extra: "snack stop", at: 1300 },
-  { id: "manek", name: "Manek Chowk", hook: "Morning market, night food street", visit: 20, extra: "chai break", at: 1400 },
-  { id: "dhal", name: "Dhal ni Pol", hook: "Carved havelis and a bird-feeder tower", visit: 30, extra: "story 2 min", at: 2400 },
+  { id: "manek", name: "Manek Chowk", hook: "Morning market, night food street", visit: 20, extra: "chai break", at: 1400, href: "/secret?id=manek" },
+  { id: "dhal", name: "Dhal ni Pol", hook: "Carved havelis and a bird-feeder tower", visit: 30, extra: "story 2 min", at: 2400, href: "/secret?id=dhal" },
 ];
 const BASE_ORDER = ["sidi", "bhadra", "teen", "jama", "manek", "dhal"];
 
@@ -33,64 +33,22 @@ const THUMBS: Record<string, React.ReactNode> = {
     <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
   ),
   bhadra: (
-    <div role="img" aria-label="Photo placeholder: Bhadra Fort" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg width="36" height="36" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M8 70V28h10v42" />
-        <path d="M62 70V28h10v42" />
-        <path d="M18 70V38h44v32" />
-        <path d="M30 70V54a10 10 0 0 1 20 0v16" />
-        <path d="M4 70h72" />
-      </svg>
-    </div>
+    <img src="/images/bhadra-fort.jpg" alt="The gate and tower of Bhadra Fort" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
   ),
   teen: (
-    <div role="img" aria-label="Photo placeholder: Teen Darwaza" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg width="38" height="36" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M6 70V30h68v40" />
-        <path d="M14 70V50a8 8 0 0 1 16 0v20" />
-        <path d="M32 70V46a8 10 0 0 1 16 0v24" />
-        <path d="M50 70V50a8 8 0 0 1 16 0v20" />
-        <path d="M2 70h76" />
-      </svg>
-    </div>
+    <img src="/images/teen-darwaza.jpg" alt="The three arches of Teen Darwaza" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
   ),
   jama: (
-    <div role="img" aria-label="Photo placeholder: Jama Masjid" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg width="36" height="36" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M22 70V44h36v26" />
-        <path d="M24 44a16 16 0 0 1 32 0" />
-        <path d="M10 70V30" />
-        <path d="M16 70V30" />
-        <path d="M10 30l3-8 3 8" />
-        <path d="M64 70V30" />
-        <path d="M70 70V30" />
-        <path d="M64 30l3-8 3 8" />
-        <path d="M4 70h72" />
-      </svg>
-    </div>
+    <img src="/images/jama-masjid.jpg" alt="The courtyard of Jama Masjid, Ahmedabad" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
   ),
   manek: (
-    <div role="img" aria-label="Photo placeholder: Manek Chowk" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg width="36" height="36" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M12 46h56" />
-        <path d="M16 46a24 15 0 0 0 48 0" />
-        <path d="M30 36c-3-4 3-6 0-10" />
-        <path d="M40 34c-3-4 3-6 0-10" />
-        <path d="M50 36c-3-4 3-6 0-10" />
-      </svg>
-    </div>
+    <img src="/images/manek-chowk.jpg" alt="Food stalls at Manek Chowk at night" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
   ),
   dhal: (
     <img src="/images/6b114a4ce322f517be6c561ea38233e8.jpg" alt="" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
   ),
   chandravilas: (
-    <div role="img" aria-label="Photo placeholder: Chandravilas" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#9C7A55" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
-        <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
-        <path d="M6 2v2M10 2v2M14 2v2" />
-      </svg>
-    </div>
+    <img src="/images/fafda-jalebi.jpg" alt="Fafda and jalebi" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
   ),
 };
 
@@ -311,6 +269,21 @@ export default function WalkScreen() {
             </span>
           </button>
         </div>
+        <Link href="/tickets?book=morning-walk" style={{ marginTop: "14px", minHeight: "60px", padding: "10px 14px", borderRadius: "16px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+          <span style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: "#F5E6CC", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+              <path d="M13 5v2M13 17v2M13 11v2" />
+            </svg>
+          </span>
+          <span style={{ flex: "1", minWidth: "0" }}>
+            <span style={{ display: "block", fontSize: "15px", fontWeight: "800" }}>Do this walk with a guide</span>
+            <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>7:45 AM daily · ₹350 a person</span>
+          </span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </Link>
         <div style={{ marginTop: "28px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <h2 style={{ margin: "0", fontSize: "19px", fontWeight: "800" }}>
             Your stops

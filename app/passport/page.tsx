@@ -98,7 +98,7 @@ export default function PassportScreen() {
         </div>
       </section>
 
-      <div style={{ margin: "18px 0 0", padding: "0 20px", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
+      <div className="hscroll" style={{ margin: "18px 0 0", padding: "0 20px", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
         {(["all", "GJ", "RJ", "DL"] as const).map((id) => (
           <button key={id} type="button" aria-pressed={filter === id} onClick={() => setFilter(id)} style={{ flex: "0 0 auto", height: "38px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${filter === id ? "#2B1B10" : "#E2D3C1"}`, background: filter === id ? "#2B1B10" : "#FFFFFF", color: filter === id ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
             {id === "all" ? `All ${STAMPS.length}` : `${STATES[id].name} ${counts(id)}`}

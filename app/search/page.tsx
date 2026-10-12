@@ -1,9 +1,10 @@
 "use client";
 
 // 06 · Search results
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useAsk } from "@/components/Tap";
+import VoiceSearch from "@/components/VoiceSearch";
 
 const TABS = [
   ["all", "All"],
@@ -19,7 +20,14 @@ const KNOWN = /jal+i|jaali|lattice|stone screen/i;
 const SUGGESTIONS = ["jali", "stepwells", "Manek Chowk food", "Bhadra Fort legend"];
 
 export default function SearchScreen() {
-  const [q, setQ] = useState("jali");
+  // A search can arrive in the address (/search?q=…), for example from voice search on Home.
+  const fromUrl = useSyncExternalStore(
+    () => () => {},
+    () => new URLSearchParams(window.location.search).get("q"),
+    () => null
+  );
+  const [typed, setQ] = useState<string | null>(null);
+  const q = typed ?? fromUrl ?? "jali";
   const [tab, setTab] = useState<Tab>("all");
   const ask = useAsk();
   const query = q.trim();
@@ -47,6 +55,13 @@ export default function SearchScreen() {
             <path d="m21 21-4.3-4.3" />
           </svg>
           <input type="search" aria-label="Search places, stories or food" placeholder="Search places, stories or food" value={v.q} onChange={v.onQ} onKeyDown={(e) => { if (e.key === "Enter" && query && !found) ask(query); }} style={{ flex: "1", minWidth: "0", height: "44px", border: "0", outline: "none", background: "transparent", fontSize: "16px", fontWeight: "600", color: "#2B1B10" }} />
+          <VoiceSearch onResult={setQ} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#9A4E36" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+              <line x1="12" x2="12" y1="19" y2="22" />
+            </svg>
+          </VoiceSearch>
           <button type="button" aria-label="Clear search" onClick={v.clear} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#6F5B4B" }}>
             <span style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#EFE6DA", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -59,7 +74,7 @@ export default function SearchScreen() {
       </div>
       {found ? (
         <>
-      <div style={{ padding: "12px 20px 0", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
+      <div className="hscroll" style={{ padding: "12px 20px 0", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
         {TABS.map(([id, text]) => (
           <button key={id} type="button" aria-pressed={tab === id} onClick={() => setTab(id)} style={{ flex: "0 0 auto", height: "38px", padding: "0 14px", borderRadius: "999px", border: tab === id ? "1.5px solid #2B1B10" : "1.5px solid #E2D3C1", background: tab === id ? "#2B1B10" : "#FFFFFF", color: tab === id ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
             {text}
@@ -133,21 +148,7 @@ export default function SearchScreen() {
           </li>
           <li>
             <button type="button" onClick={() => ask("Tell me about Rani Sipri's Mosque")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "#2B1B10", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
-              <div role="img" aria-label="Photo placeholder: Rani Sipri's Mosque" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="40" height="40" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M22 70V44h36v26" />
-                  <path d="M24 44a16 16 0 0 1 32 0" />
-                  <path d="M40 28v-6" />
-                  <path d="M10 70V30" />
-                  <path d="M16 70V30" />
-                  <path d="M10 30l3-8 3 8" />
-                  <path d="M64 70V30" />
-                  <path d="M70 70V30" />
-                  <path d="M64 30l3-8 3 8" />
-                  <path d="M34 70V58a6 6 0 0 1 12 0v12" />
-                  <path d="M4 70h72" />
-                </svg>
-              </div>
+              <img src="/images/rani-sipri.jpg" alt="Rani Sipri's Mosque, Ahmedabad" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
                 <span style={{ fontSize: "16px", fontWeight: "800" }}>
                   {"Rani Sipri's Mosque"}
@@ -195,15 +196,7 @@ export default function SearchScreen() {
         <ul style={{ listStyle: "none", margin: "4px 0 0", padding: "0 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
           <li>
             <button type="button" onClick={() => ask("Tell me about Salim Chishti's Tomb")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "#2B1B10", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
-              <div role="img" aria-label="Photo placeholder: Salim Chishti's Tomb" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="40" height="40" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M14 70V40h52v30" />
-                  <path d="M24 40a16 16 0 0 1 32 0" />
-                  <path d="M40 24v-6" />
-                  <path d="M14 52h52M14 62h52M27 40v30M40 40v30M53 40v30" />
-                  <path d="M6 70h68" />
-                </svg>
-              </div>
+              <img src="/images/salim-chishti.jpg" alt="Marble jalis at the tomb of Salim Chishti" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
                 <span style={{ fontSize: "16px", fontWeight: "800" }}>
                   {"Salim Chishti's Tomb"}
@@ -222,16 +215,7 @@ export default function SearchScreen() {
           </li>
           <li>
             <button type="button" onClick={() => ask("Tell me about Hawa Mahal")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "#2B1B10", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
-              <div role="img" aria-label="Photo placeholder: Hawa Mahal" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="40" height="40" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M8 70V36h64v34" />
-                  <path d="M16 36V26h48v10" />
-                  <path d="M26 26V18h28v8" />
-                  <path d="M35 18v-6h10v6" />
-                  <path d="M16 50a4 4 0 0 1 8 0v6h-8zM30 50a4 4 0 0 1 8 0v6h-8zM44 50a4 4 0 0 1 8 0v6h-8zM58 50a4 4 0 0 1 8 0v6h-8z" />
-                  <path d="M4 70h72" />
-                </svg>
-              </div>
+              <img src="/images/hawa-mahal.jpg" alt="The facade of Hawa Mahal, Jaipur" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
                 <span style={{ fontSize: "16px", fontWeight: "800" }}>
                   Hawa Mahal

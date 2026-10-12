@@ -265,7 +265,7 @@ export default function AIGuideScreen() {
           </div>
         ) : null}
       </div>
-      <div aria-label="Suggested questions" style={{ position: "absolute", left: "0", right: "0", bottom: "162px", padding: "0 16px", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
+      <div aria-label="Suggested questions" className="hscroll" style={{ position: "absolute", left: "0", right: "0", bottom: "162px", padding: "0 16px", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
         <Link href="/lens" style={{ flex: "0 0 auto", height: "38px", padding: "0 12px 0 10px", borderRadius: "999px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700", textDecoration: "none" }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />

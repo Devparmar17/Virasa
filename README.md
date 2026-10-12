@@ -9,14 +9,22 @@ npm run dev      # http://localhost:3000
 
 ## What works
 
-- **Onboarding** — splash, welcome, interests, location permission (real browser geolocation). Returning visitors skip straight to Home.
+- **Onboarding** — splash, welcome, login, then two steps: interests (with story length and language) and location permission (real browser geolocation). Returning visitors skip straight to Home.
 - **Home, Search, Map** — the tab bar stays on screen; the map has selectable pins, category filters, a list view and saving.
 - **Place, Story, Reels** — a story player with a real timeline, chapters, speed, three transcript languages and spoken narration (the browser's own voice); reels that advance, like, save and share.
 - **Walk planner** — route options and reordering change the stops, distance and time.
 - **AI Guide** — chat, voice input and follow-ups handed over from other screens.
+- **Voice search** — the mic on Home and Search listens with the browser's speech recognition (Chrome, Edge, Safari) and searches for what it hears.
+- **Tickets and guided walks** — `/tickets`: pick a date, time and guests, reserve, and keep the booking code under My tickets. Prices are sample values and nothing is charged; bookings are stored in the browser only.
+- **Local secrets** — the three cards on Home open `/secret?id=…`, a description page shaped to the find: things to spot, dishes to eat, or legend set beside the record.
+- **Trip plans** — the city cards on Home open `/plan?city=…`: choose 1–3 days and interests for a day-by-day outline, and save it to Saved › Plans.
 - **Saved, Profile, Settings, Passport, Notifications, City packs, Gallery.**
 
 Saved places, settings and downloads are remembered in the browser's localStorage. There is no account or server database yet, and city-pack and story "downloads" are recorded as flags rather than fetching files.
+
+## Photos
+
+Most place photographs come from Wikimedia Commons under Creative Commons licences. Their authors and licences are listed in the app at `/credits` (Settings › Photo credits) and in `public/images/CREDITS.md`. Keep those credits if you keep the photos.
 
 ## Accounts
 

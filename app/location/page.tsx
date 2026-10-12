@@ -15,7 +15,9 @@ export default function LocationScreen() {
         <div style={{ flex: "1", display: "flex", flexDirection: "column", gap: "6px", alignItems: "center" }}>
           <div style={{ display: "flex", gap: "6px" }}>
             <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#9A4E36" }} />
-            <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#9A4E36" }} />
+            <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1", overflow: "hidden", display: "block" }}>
+              <span className="step-fill" style={{ display: "block", width: "100%", height: "100%", borderRadius: "999px", background: "#9A4E36" }} />
+            </span>
           </div>
           <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
             Step 2 of 2
@@ -143,7 +145,7 @@ export default function LocationScreen() {
             Allow while using the app
           </span>
         </GeoLink>
-        <Link href="/home" style={{ height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: "700", color: "#5A4434", textDecoration: "none" }}>
+        <Link href="/city" style={{ height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: "700", color: "#5A4434", textDecoration: "none" }}>
           Choose a city instead
         </Link>
       </div>

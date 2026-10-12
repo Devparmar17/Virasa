@@ -31,5 +31,61 @@ export default function Motion() {
     });
     return () => io.disconnect();
   }, []);
+
+  // Lets a mouse drag sideways rows (.hscroll); touch and trackpads already scroll them.
+  useEffect(() => {
+    let row: HTMLElement | null = null;
+    let startX = 0;
+    let startLeft = 0;
+    let moved = false;
+    const down = (e: MouseEvent) => {
+      moved = false;
+      if (e.button !== 0) return;
+      row = (e.target as HTMLElement).closest<HTMLElement>(".hscroll");
+      if (!row || row.scrollWidth <= row.clientWidth) {
+        row = null;
+        return;
+      }
+      startX = e.clientX;
+      startLeft = row.scrollLeft;
+      moved = false;
+    };
+    const move = (e: MouseEvent) => {
+      if (!row) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) < 6) return;
+      moved = true;
+      row.classList.add("dragging");
+      row.scrollLeft = startLeft - dx;
+      e.preventDefault();
+    };
+    const up = () => {
+      row?.classList.remove("dragging");
+      row = null;
+    };
+    // A drag that ends on a card must not also open it.
+    const click = (e: MouseEvent) => {
+      if (!moved) return;
+      moved = false;
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    document.addEventListener("mousedown", down);
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", up);
+    document.addEventListener("click", click, true);
+    // Stop the browser dragging a card's image or link out of the row instead.
+    const dragstart = (e: DragEvent) => {
+      if ((e.target as HTMLElement).closest?.(".hscroll")) e.preventDefault();
+    };
+    document.addEventListener("dragstart", dragstart);
+    return () => {
+      document.removeEventListener("dragstart", dragstart);
+      document.removeEventListener("mousedown", down);
+      document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", up);
+      document.removeEventListener("click", click, true);
+    };
+  }, []);
   return null;
 }

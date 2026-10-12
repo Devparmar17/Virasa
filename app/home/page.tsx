@@ -2,13 +2,15 @@
 import Link from "next/link";
 import MainNav from "@/components/MainNav";
 import LangButton from "@/components/LangButton";
+import VoiceSearch from "@/components/VoiceSearch";
+import Highlights from "@/components/Highlights";
 import { MarkOnboarded } from "@/components/Prefs";
 import { Avatar, UserName } from "@/components/User";
 import { Tap } from "@/components/Tap";
 
 export default function HomeScreen() {
   return (
-    <div style={{ width: "390px", height: "2310px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "2388px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <header style={{ padding: "54px 20px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "#FFFFFF", boxShadow: "0 8px 20px rgba(90, 60, 30, 0.07)", position: "relative" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <img src="/images/845c09135def6279c007582842533707.png" alt="" style={{ width: "46px", height: "50px", objectFit: "contain", display: "block" }} />
@@ -80,22 +82,24 @@ export default function HomeScreen() {
             Where will your story begin?
           </h1>
         </div>
-        <Link href="/search" style={{ margin: "18px 20px 0", height: "58px", border: "1.5px solid #D9C7B3", borderRadius: "16px", background: "#FFFFFF", display: "flex", alignItems: "center", gap: "12px", padding: "0 6px 0 16px", textDecoration: "none", boxShadow: "0 6px 16px rgba(90, 60, 30, 0.06)" }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <div style={{ margin: "18px 20px 0", height: "58px", border: "1.5px solid #D9C7B3", borderRadius: "16px", background: "#FFFFFF", display: "flex", alignItems: "center", padding: "0 6px 0 0", boxShadow: "0 6px 16px rgba(90, 60, 30, 0.06)" }}>
+          <Link href="/search" style={{ flex: "1", minWidth: "0", height: "100%", display: "flex", alignItems: "center", gap: "12px", padding: "0 8px 0 16px", textDecoration: "none" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
           </svg>
-          <span style={{ flex: "1", fontSize: "15px", color: "#6F5B4B" }}>
-            Search monuments, stories or food
-          </span>
-          <span aria-hidden="true" style={{ width: "46px", height: "46px", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <span style={{ flex: "1", fontSize: "15px", color: "#6F5B4B" }}>
+              Search monuments, stories or food
+            </span>
+          </Link>
+          <VoiceSearch style={{ flex: "0 0 46px", width: "46px", height: "46px", border: "0", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
               <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
               <line x1="12" x2="12" y1="19" y2="22" />
             </svg>
-          </span>
-        </Link>
+          </VoiceSearch>
+        </div>
         <nav aria-label="Quick actions" style={{ margin: "18px 20px 0", display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "10px" }}>
           <Link href="/ar" style={{ height: "90px", paddingTop: "16px", border: "1.5px solid #D9C7B3", borderRadius: "18px", background: "#FFFFFF", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", textDecoration: "none", color: "#2B1B10" }}>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7E3D29" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -133,6 +137,25 @@ export default function HomeScreen() {
             </span>
           </Link>
         </nav>
+        <Link href="/tickets" style={{ margin: "14px 20px 0", minHeight: "64px", padding: "10px 14px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+          <span style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+              <path d="M13 5v2M13 17v2M13 11v2" />
+            </svg>
+          </span>
+          <span style={{ flex: "1", minWidth: "0" }}>
+            <span style={{ display: "block", fontSize: "15px", fontWeight: "800" }}>
+              Tickets and guided walks
+            </span>
+            <span style={{ display: "block", marginTop: "2px", fontSize: "12px", color: "#D9C6AE" }}>
+              Reserve entry or a local guide, pay there
+            </span>
+          </span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </Link>
         <section style={{ marginTop: "30px" }}>
           <div style={{ padding: "0 12px 0 20px", display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
             <div>
@@ -150,84 +173,7 @@ export default function HomeScreen() {
               </svg>
             </Link>
           </div>
-          <div style={{ display: "flex", gap: "14px", padding: "14px 20px 6px", overflow: "hidden", width: "435px" }}>
-            <article style={{ flex: "0 0 300px", border: "1px solid #EADFD2", borderRadius: "20px", overflow: "hidden", background: "#FFFFFF", boxShadow: "0 8px 20px rgba(90, 60, 30, 0.08)" }}>
-              <Link href="/place" style={{ display: "block", position: "relative", height: "172px", textDecoration: "none" }}>
-                <img src="/images/358cd23211709da539c3303890c27e8b.jpg" alt="The Tree of Life stone jali inside Sidi Saiyyed Mosque" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                <span style={{ position: "absolute", top: "12px", left: "12px", height: "30px", padding: "0 11px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.95)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: "700", color: "#2B1B10" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z" />
-                    <path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z" />
-                  </svg>
-                  <span>
-                    22 min · 1.8 km
-                  </span>
-                </span>
-                <span style={{ position: "absolute", bottom: "12px", left: "12px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "rgba(43, 27, 16, 0.78)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: "700", color: "#FFFFFF" }}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="#F3C267" stroke="none" aria-hidden="true">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                  </svg>
-                  {" 4.9 "}
-                </span>
-                <span style={{ position: "absolute", bottom: "12px", right: "12px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "#E3F1E7", display: "flex", alignItems: "center", fontSize: "12px", fontWeight: "700", color: "#2F7A4A" }}>
-                  Open now
-                </span>
-              </Link>
-              <div style={{ padding: "14px 16px 16px" }}>
-                <Link href="/place" style={{ display: "block", textDecoration: "none", color: "#2B1B10" }}>
-                  <h3 style={{ margin: "0", fontSize: "18px", fontWeight: "800", letterSpacing: "-0.01em" }}>
-                    Sidi Saiyyed Mosque
-                  </h3>
-                  <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#A0522D" }}>
-                    Famous Tree of Life jali stonework
-                  </p>
-                </Link>
-                <div style={{ marginTop: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
-                    1573 · Gujarat Sultanate
-                  </span>
-                  <Link href="/story" style={{ height: "44px", padding: "0 14px 0 10px", borderRadius: "999px", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700", textDecoration: "none" }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
-                      <polygon points="7 4 19 12 7 20 7 4" />
-                    </svg>
-                    <span>
-                      Listen 2 min
-                    </span>
-                  </Link>
-                </div>
-              </div>
-            </article>
-            <article style={{ flex: "0 0 300px", border: "1px solid #EADFD2", borderRadius: "20px", overflow: "hidden", background: "#FFFFFF", boxShadow: "0 8px 20px rgba(90, 60, 30, 0.08)" }}>
-              <div style={{ position: "relative", height: "172px" }}>
-                <img src="/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg" alt="Sarkhej Roza mosque and tomb complex" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "30% 40%", display: "block" }} />
-                <span style={{ position: "absolute", top: "12px", left: "12px", height: "30px", padding: "0 11px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.95)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: "700", color: "#2B1B10" }}>
-                  8 km · 20 min drive
-                </span>
-                <span style={{ position: "absolute", bottom: "12px", left: "12px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "rgba(43, 27, 16, 0.78)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: "700", color: "#FFFFFF" }}>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="#F3C267" stroke="none" aria-hidden="true">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                  </svg>
-                  {" 4.8 "}
-                </span>
-              </div>
-              <div style={{ padding: "14px 16px 16px" }}>
-                <h3 style={{ margin: "0", fontSize: "18px", fontWeight: "800", letterSpacing: "-0.01em" }}>
-                  Sarkhej Roza
-                </h3>
-                <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#A0522D" }}>
-                  {"Called the 'Acropolis of Ahmedabad'"}
-                </p>
-                <div style={{ marginTop: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
-                    1451 · Tomb complex
-                  </span>
-                  <span style={{ height: "44px", padding: "0 14px 0 10px", borderRadius: "999px", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700" }}>
-                    Listen 3 min
-                  </span>
-                </div>
-              </div>
-            </article>
-          </div>
+          <Highlights />
         </section>
         <section style={{ margin: "26px 20px 0" }}>
           <Link href="/walk" style={{ position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", gap: "10px", padding: "18px 18px 18px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE", textDecoration: "none" }}>
@@ -279,7 +225,7 @@ export default function HomeScreen() {
               </svg>
             </Link>
           </div>
-          <div style={{ display: "flex", gap: "12px", padding: "14px 20px 0", overflowX: "auto", scrollbarWidth: "none" }}>
+          <div className="hscroll" style={{ display: "flex", gap: "12px", padding: "14px 20px 0", overflowX: "auto", scrollbarWidth: "none" }}>
             <Link href="/ar-time" style={{ flex: "0 0 160px", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
               <span style={{ position: "relative", height: "120px", borderRadius: "16px", overflow: "hidden", display: "block", background: "#2B1B10" }}>
                 <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
@@ -347,7 +293,7 @@ export default function HomeScreen() {
             </p>
           </div>
           <div style={{ padding: "14px 20px 0", display: "flex", flexDirection: "column", gap: "12px" }}>
-            <article style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", border: "1px solid #EADFD2", borderRadius: "18px", background: "#FFFFFF" }}>
+            <Link href="/secret?id=dhal" aria-label="Dhal ni Pol woodcarvings" style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", border: "1px solid #EADFD2", borderRadius: "18px", background: "#FFFFFF", textDecoration: "none", color: "#2B1B10" }}>
               <img src="/images/6b114a4ce322f517be6c561ea38233e8.jpg" alt="Carved wooden facades in Dhal ni Pol" style={{ flex: "0 0 86px", width: "86px", height: "86px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <div style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "5px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -365,23 +311,14 @@ export default function HomeScreen() {
                   Carved havelis and a pol bird-feeder tower
                 </p>
               </div>
-              <Tap aria-label="Open Dhal ni Pol woodcarvings" ask="What should I look for in the woodcarvings of Dhal ni Pol?" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", border: "0", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <span aria-hidden="true" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m9 18 6-6-6-6" />
                 </svg>
-              </Tap>
-            </article>
-            <article style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", border: "1px solid #EADFD2", borderRadius: "18px", background: "#FFFFFF" }}>
-              <div role="img" aria-label="Photo placeholder: Manek Chowk night market" style={{ flex: "0 0 86px", width: "86px", height: "86px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="46" height="46" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M12 46h56" />
-                  <path d="M16 46a24 15 0 0 0 48 0" />
-                  <path d="M30 36c-3-4 3-6 0-10" />
-                  <path d="M40 34c-3-4 3-6 0-10" />
-                  <path d="M50 36c-3-4 3-6 0-10" />
-                  <path d="M28 68h24" />
-                </svg>
-              </div>
+              </span>
+            </Link>
+            <Link href="/secret?id=manek" aria-label="Manek Chowk night market" style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", border: "1px solid #EADFD2", borderRadius: "18px", background: "#FFFFFF", textDecoration: "none", color: "#2B1B10" }}>
+              <img src="/images/manek-chowk.jpg" alt="Food stalls at Manek Chowk at night" style={{ flex: "0 0 86px", width: "86px", height: "86px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <div style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "5px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <span style={{ height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6DCD2", color: "#8A3A22", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
@@ -398,25 +335,14 @@ export default function HomeScreen() {
                   Must-try: Gwalior dosa, pineapple sandwich
                 </p>
               </div>
-              <Tap aria-label="Open Manek Chowk night market" ask="What should I eat at Manek Chowk night market?" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", border: "0", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <span aria-hidden="true" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m9 18 6-6-6-6" />
                 </svg>
-              </Tap>
-            </article>
-            <article style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", border: "1px solid #EADFD2", borderRadius: "18px", background: "#FFFFFF" }}>
-              <div role="img" aria-label="Photo placeholder: Bhadra Fort gate" style={{ flex: "0 0 86px", width: "86px", height: "86px", borderRadius: "12px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="50" height="50" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M8 70V28h10v42" />
-                  <path d="M62 70V28h10v42" />
-                  <path d="M8 28v-6h3v3h4v-3h3v6" />
-                  <path d="M62 28v-6h3v3h4v-3h3v6" />
-                  <path d="M18 70V38h44v32" />
-                  <path d="M30 70V54a10 10 0 0 1 20 0v16" />
-                  <path d="M4 70h72" />
-                  <path d="M24 46h4M52 46h4" />
-                </svg>
-              </div>
+              </span>
+            </Link>
+            <Link href="/secret?id=bhadra" aria-label="Bhadra Fort's secret tunnels" style={{ display: "flex", alignItems: "center", gap: "14px", padding: "12px", border: "1px solid #EADFD2", borderRadius: "18px", background: "#FFFFFF", textDecoration: "none", color: "#2B1B10" }}>
+              <img src="/images/bhadra-fort.jpg" alt="The gate and tower of Bhadra Fort" style={{ flex: "0 0 86px", width: "86px", height: "86px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <div style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "5px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <span style={{ height: "24px", padding: "0 8px", borderRadius: "7px", background: "#EDE4DA", color: "#5A4434", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center", whiteSpace: "nowrap" }}>
@@ -433,12 +359,12 @@ export default function HomeScreen() {
                   Myths of passages running under the old city
                 </p>
               </div>
-              <Tap aria-label="Open Bhadra Fort's secret tunnels" ask="Tell me the legend of the secret tunnels under Bhadra Fort" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", border: "0", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <span aria-hidden="true" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m9 18 6-6-6-6" />
                 </svg>
-              </Tap>
-            </article>
+              </span>
+            </Link>
           </div>
         </section>
         <section style={{ marginTop: "30px" }}>
@@ -451,7 +377,7 @@ export default function HomeScreen() {
                 Heritage trails across India
               </p>
             </div>
-            <Link href="/search" style={{ height: "44px", padding: "0 8px", display: "flex", alignItems: "center", gap: "2px", fontSize: "14px", fontWeight: "700", color: "#9A4E36", whiteSpace: "nowrap" }}>
+            <Link href="/city" style={{ height: "44px", padding: "0 8px", display: "flex", alignItems: "center", gap: "2px", fontSize: "14px", fontWeight: "700", color: "#9A4E36", whiteSpace: "nowrap" }}>
               <span>
                 All cities
               </span>
@@ -460,79 +386,43 @@ export default function HomeScreen() {
               </svg>
             </Link>
           </div>
-          <div style={{ display: "flex", gap: "12px", padding: "14px 20px 0", overflowX: "auto", scrollbarWidth: "none" }}>
-            <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "6px" }}>
-              <div role="img" aria-label="Photo placeholder: Jaipur" style={{ height: "120px", borderRadius: "16px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="64" height="64" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M8 70V36h64v34" />
-                  <path d="M16 36V26h48v10" />
-                  <path d="M26 26V18h28v8" />
-                  <path d="M35 18v-6h10v6" />
-                  <path d="M16 50a4 4 0 0 1 8 0v6h-8zM30 50a4 4 0 0 1 8 0v6h-8zM44 50a4 4 0 0 1 8 0v6h-8zM58 50a4 4 0 0 1 8 0v6h-8z" />
-                  <path d="M4 70h72" />
-                </svg>
-              </div>
+          <div className="hscroll" style={{ display: "flex", gap: "12px", padding: "14px 20px 0", overflowX: "auto", scrollbarWidth: "none" }}>
+            <Link href="/plan?city=jaipur" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+              <img src="/images/amber-fort.jpg" alt="Amber Fort, Jaipur" style={{ width: "100%", height: "120px", borderRadius: "16px", objectFit: "cover", display: "block" }} />
               <span style={{ marginTop: "2px", fontSize: "15px", fontWeight: "800" }}>
                 Jaipur
               </span>
               <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                 {"Rajasthan · forts & bazaars"}
               </span>
-            </article>
-            <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "6px" }}>
-              <div role="img" aria-label="Photo placeholder: Varanasi" style={{ height: "120px", borderRadius: "16px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="64" height="64" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M4 60h72" />
-                  <path d="M4 66c6 3 10 3 16 0s10-3 16 0 10 3 16 0 10-3 16 0" />
-                  <path d="M10 60v-8h60v8" />
-                  <path d="M18 52v-8h44v8" />
-                  <path d="M30 44V26l10-12 10 12v18" />
-                  <path d="M40 14V8" />
-                </svg>
-              </div>
+            </Link>
+            <Link href="/plan?city=varanasi" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+              <img src="/images/varanasi-ghats.jpg" alt="Boats on the Ganga at Varanasi at sunrise" style={{ width: "100%", height: "120px", borderRadius: "16px", objectFit: "cover", display: "block" }} />
               <span style={{ marginTop: "2px", fontSize: "15px", fontWeight: "800" }}>
                 Varanasi
               </span>
               <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                 Uttar Pradesh · ghats
               </span>
-            </article>
-            <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "6px" }}>
-              <div role="img" aria-label="Photo placeholder: Hampi" style={{ height: "120px", borderRadius: "16px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="64" height="64" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M6 70h68" />
-                  <path d="M14 70V42h52v28" />
-                  <path d="M10 42h60l-6-8H16z" />
-                  <path d="M24 70V48M36 70V48M48 70V48M58 70V48" />
-                  <circle cx="64" cy="18" r="8" />
-                  <circle cx="52" cy="24" r="5" />
-                </svg>
-              </div>
+            </Link>
+            <Link href="/plan?city=hampi" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+              <img src="/images/hampi-chariot.jpg" alt="The stone chariot at Vittala Temple, Hampi" style={{ width: "100%", height: "120px", borderRadius: "16px", objectFit: "cover", display: "block" }} />
               <span style={{ marginTop: "2px", fontSize: "15px", fontWeight: "800" }}>
                 Hampi
               </span>
               <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                 Karnataka · Vijayanagara ruins
               </span>
-            </article>
-            <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "6px" }}>
-              <div role="img" aria-label="Photo placeholder: Kolkata" style={{ height: "120px", borderRadius: "16px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="64" height="64" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M6 70h68" />
-                  <path d="M12 70V46h56v24" />
-                  <path d="M26 46a14 14 0 0 1 28 0" />
-                  <path d="M40 32v-8" />
-                  <path d="M20 70V54M30 70V54M50 70V54M60 70V54" />
-                  <path d="M8 46h64" />
-                </svg>
-              </div>
+            </Link>
+            <Link href="/plan?city=kolkata" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+              <img src="/images/victoria-memorial.jpg" alt="Victoria Memorial, Kolkata" style={{ width: "100%", height: "120px", borderRadius: "16px", objectFit: "cover", display: "block" }} />
               <span style={{ marginTop: "2px", fontSize: "15px", fontWeight: "800" }}>
                 Kolkata
               </span>
               <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                 West Bengal · colonial lanes
               </span>
-            </article>
+            </Link>
           </div>
         </section>
       </main>

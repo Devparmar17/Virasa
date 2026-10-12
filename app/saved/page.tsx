@@ -1,13 +1,14 @@
 "use client";
 
 // 15 · Saved & offline
-import { useState, type ReactNode } from "react";
+import { useState, useSyncExternalStore, type ReactNode } from "react";
 import Link from "next/link";
 import MainNav from "@/components/MainNav";
 import Sheet from "@/components/Sheet";
 import { toast } from "@/components/Toast";
 import { useAsk } from "@/components/Tap";
 import { DEFAULT_SAVED, useStored } from "@/lib/store";
+import { cityPlan, planStops, type SavedPlan } from "@/lib/plans";
 
 type Item = {
   id: string;
@@ -23,9 +24,9 @@ type Item = {
 
 const PLACES: Item[] = [
   { id: "sidi", title: "Sidi Saiyyed Mosque", meta: "1.8 km · Old City", city: "Ahmedabad", km: 1.8, badge: "Visited · stamp collected", visited: true, img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
-  { id: "dhal", title: "Dhal ni Pol", meta: "650 m · Khadia", city: "Ahmedabad", km: 0.65, badge: "Visited", visited: true, img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg" },
-  { id: "sarkhej", title: "Sarkhej Roza", meta: "8 km · 20 min drive", city: "Ahmedabad", km: 8, badge: "Best at sunset", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg" },
-  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "For your Jaipur trip" },
+  { id: "dhal", title: "Dhal ni Pol", meta: "650 m · Khadia", city: "Ahmedabad", km: 0.65, badge: "Visited", visited: true, img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/secret?id=dhal" },
+  { id: "sarkhej", title: "Sarkhej Roza", meta: "8 km · 20 min drive", city: "Ahmedabad", km: 8, badge: "Best at sunset", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg", href: "/secret?id=sarkhej" },
+  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "For your Jaipur trip", img: "/images/hawa-mahal.jpg" },
 ];
 
 const WALKS: Item[] = [
@@ -39,9 +40,9 @@ const STORIES: Item[] = [
   { id: "story-sarkhej", title: "Why Sarkhej was built", meta: "Sarkhej Roza · 2:10", city: "Ahmedabad", km: 8, badge: "AR Tour narration", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg", href: "/ar" },
 ];
 
-const TABS = ["Places", "Walks", "Stories", "Offline"] as const;
+const TABS = ["Places", "Walks", "Stories", "Plans", "Offline"] as const;
 type TabName = (typeof TABS)[number];
-const NOUNS: Record<TabName, [string, string]> = { Places: ["place", "places"], Walks: ["walk", "walks"], Stories: ["story", "stories"], Offline: ["saved item", "saved items"] };
+const NOUNS: Record<TabName, [string, string]> = { Places: ["place", "places"], Walks: ["walk", "walks"], Stories: ["story", "stories"], Plans: ["plan", "plans"], Offline: ["saved item", "saved items"] };
 const SORTS = ["Recently saved", "Nearest first", "A to Z"];
 
 // What counts as saved before the traveller changes anything.
@@ -66,7 +67,15 @@ function Thumb({ item }: { item: Item }) {
 }
 
 export default function SavedScreen() {
-  const [tab, setTab] = useState<TabName>("Places");
+  // The planner's "View in Saved" link opens this screen on the Plans tab (/saved#plans).
+  const hash = useSyncExternalStore(
+    () => () => {},
+    () => window.location.hash,
+    () => ""
+  );
+  const [tabPicked, setTab] = useState<TabName | null>(null);
+  const tab: TabName = tabPicked ?? (hash === "#plans" ? "Plans" : "Places");
+  const [plans, setPlans] = useStored<Record<string, SavedPlan>>("plans", {});
   const [sort, setSort] = useState(0);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState("");
@@ -76,8 +85,17 @@ export default function SavedScreen() {
   const [pack, setPack] = useStored("pack", true);
   const ask = useAsk();
 
-  const isSaved = (id: string) => saved[id] ?? DEFAULTS[id] ?? false;
-  const source = tab === "Walks" ? WALKS : tab === "Stories" ? STORIES : tab === "Places" ? PLACES : pack ? [...PLACES, ...WALKS, ...STORIES].filter((it) => it.city === "Ahmedabad") : [];
+  // Trip plans saved from the planner, newest first.
+  const planItems: Item[] = Object.entries(plans)
+    .sort((a, b) => b[1].savedAt - a[1].savedAt)
+    .flatMap(([id, p]) => {
+      const city = cityPlan(id);
+      if (!city) return [];
+      const stops = planStops(city, p.days, p.interests).length;
+      return [{ id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: id === "jaipur" ? "Your trip · in 12 days" : "Trip plan", img: city.img, href: `/plan?city=${id}` }];
+    });
+  const isSaved = (id: string) => id.startsWith("plan-") || (saved[id] ?? DEFAULTS[id] ?? false);
+  const source = tab === "Plans" ? planItems : tab === "Walks" ? WALKS : tab === "Stories" ? STORIES : tab === "Places" ? PLACES : pack ? [...PLACES, ...WALKS, ...STORIES].filter((it) => it.city === "Ahmedabad") : [];
   let items = source.filter((it) => isSaved(it.id));
   const needle = query.trim().toLowerCase();
   if (needle) items = items.filter((it) => `${it.title} ${it.meta}`.toLowerCase().includes(needle));
@@ -88,7 +106,13 @@ export default function SavedScreen() {
   const count = `${items.length} ${NOUNS[tab][items.length === 1 ? 0 : 1]}${tab === "Offline" ? " available offline" : cities > 1 ? ` · ${cities} cities` : ""}`;
 
   const remove = (it: Item) => {
-    setSaved((m) => ({ ...m, [it.id]: false }));
+    if (it.id.startsWith("plan-")) {
+      setPlans((p) => {
+        const rest = { ...p };
+        delete rest[it.id.slice(5)];
+        return rest;
+      });
+    } else setSaved((m) => ({ ...m, [it.id]: false }));
     toast(`Removed ${it.title}`);
   };
 
@@ -165,7 +189,7 @@ export default function SavedScreen() {
           )}
         </button>
       </div>
-      <div role="tablist" aria-label="Saved items" style={{ marginTop: "8px", padding: "0 20px", display: "flex", gap: "22px", borderBottom: "1px solid #EADFD2" }}>
+      <div role="tablist" aria-label="Saved items" style={{ marginTop: "8px", padding: "0 20px", display: "flex", gap: "18px", borderBottom: "1px solid #EADFD2" }}>
         {TABS.map((t) => (
           <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)} style={{ height: "44px", padding: "0", border: "0", borderBottom: `3px solid ${tab === t ? "#9A4E36" : "transparent"}`, background: "none", color: tab === t ? "#2B1B10" : "#6F5B4B", fontSize: "15px", fontWeight: tab === t ? 800 : 700, cursor: "pointer" }}>
             {t}
@@ -225,10 +249,10 @@ export default function SavedScreen() {
               </svg>
             </span>
             <span style={{ fontSize: "17px", fontWeight: "800" }}>{needle ? "No matches" : tab === "Offline" ? "Nothing offline yet" : `No saved ${tab.toLowerCase()} yet`}</span>
-            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? `Nothing saved matches "${query.trim()}".` : tab === "Offline" ? "Download the Ahmedabad pack to keep your saved items for when there's no signal." : "Tap the bookmark on any place, walk or story and it will wait for you here."}</span>
+            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? `Nothing saved matches "${query.trim()}".` : tab === "Offline" ? "Download the Ahmedabad pack to keep your saved items for when there's no signal." : tab === "Plans" ? "Pick a city, choose how long you have, and save the plan. It will wait for you here." : "Tap the bookmark on any place, walk or story and it will wait for you here."}</span>
             {!needle ? (
-              <Link href="/explore" style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
-                Explore nearby
+              <Link href={tab === "Plans" ? "/city" : "/explore"} style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
+                {tab === "Plans" ? "Plan a trip" : "Explore nearby"}
               </Link>
             ) : null}
           </div>
