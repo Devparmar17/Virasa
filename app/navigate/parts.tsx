@@ -1,0 +1,136 @@
+"use client";
+
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { toast } from "@/components/Toast";
+import { useStored } from "@/lib/store";
+import { placeById } from "../explore/places";
+
+const noop = () => () => {};
+
+// The walk in the design is already under way to Sidi Saiyyed. The map can
+// send another destination as /navigate?to=<place id>.
+function useTrip() {
+  const dest = useSyncExternalStore(
+    noop,
+    () => new URLSearchParams(window.location.search).get("to") || "sidi",
+    () => "sidi"
+  );
+  const place = placeById(dest);
+  return dest === "sidi" ? { name: place.name, mins: 14, km: 1.1 } : { name: place.name, mins: place.mins, km: place.km };
+}
+
+function arrival(mins: number) {
+  const d = new Date(Date.now() + mins * 60000);
+  return `${d.getHours() % 12 || 12}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+export function DestName() {
+  return <>{useTrip().name}</>;
+}
+
+export function EtaMins() {
+  return <>{useTrip().mins} min</>;
+}
+
+export function EtaLine() {
+  const trip = useTrip();
+  // The clock time only exists in the browser; the server renders the design's value.
+  const at = useSyncExternalStore(
+    noop,
+    () => arrival(trip.mins),
+    () => "10:42"
+  );
+  return (
+    <>
+      {trip.km} km · arrive {at}
+    </>
+  );
+}
+
+function say(text: string, onEnd?: () => void) {
+  const synth = window.speechSynthesis;
+  if (!synth) return false;
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-IN";
+  if (onEnd) u.onend = onEnd;
+  synth.speak(u);
+  return true;
+}
+
+export function VoiceButton({ style }: { style: React.CSSProperties }) {
+  const [prefs, setPrefs] = useStored<Record<string, boolean>>("prefs", {});
+  const on = prefs.voice ?? true;
+  return (
+    <button
+      type="button"
+      aria-label={on ? "Voice guidance on" : "Voice guidance off"}
+      aria-pressed={on}
+      onClick={() => {
+        setPrefs((p) => ({ ...p, voice: !on }));
+        if (on) {
+          window.speechSynthesis?.cancel();
+          toast("Voice guidance off — we'll still vibrate before turns");
+        } else {
+          say("In 120 metres, turn left onto Relief Road.");
+          toast("Voice guidance on");
+        }
+      }}
+      style={{ ...style, opacity: on ? 1 : 0.7 }}
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+        {on ? (
+          <>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+          </>
+        ) : (
+          <>
+            <line x1="22" x2="16" y1="9" y2="15" />
+            <line x1="16" x2="22" y1="9" y2="15" />
+          </>
+        )}
+      </svg>
+    </button>
+  );
+}
+
+const TEASER =
+  "Just ahead is Teen Darwaza, the triple gateway built in 1415. People say a lamp in one of its niches has been kept burning for six hundred years, lit for the goddess Lakshmi, who is said never to have left the city.";
+
+// Plays the short story about the landmark coming up on the route.
+export function StoryPreview({ style }: { style: React.CSSProperties }) {
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => () => window.speechSynthesis?.cancel(), []);
+  return (
+    <button
+      type="button"
+      aria-label={playing ? "Pause story about Teen Darwaza" : "Play story about Teen Darwaza, 1 minute 10"}
+      onClick={() => {
+        if (playing) {
+          window.speechSynthesis?.cancel();
+          setPlaying(false);
+        } else if (say(TEASER, () => setPlaying(false))) {
+          setPlaying(true);
+        } else {
+          toast("Audio isn't available in this browser");
+        }
+      }}
+      style={style}
+    >
+      {playing ? (
+        <span className="eq" aria-hidden="true" style={{ height: "14px" }}>
+          <i />
+          <i />
+          <i />
+        </span>
+      ) : (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+          <polygon points="7 4 19 12 7 20 7 4" />
+        </svg>
+      )}
+      <span>{playing ? "Pause" : "1:10"}</span>
+    </button>
+  );
+}

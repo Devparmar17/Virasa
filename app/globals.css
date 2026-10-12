@@ -1,0 +1,587 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: #e9e0d4;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #2b1b10;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+input::placeholder {
+  color: #6f5b4b;
+}
+
+a {
+  color: #9a4e36;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #7e3d29;
+}
+
+:focus-visible {
+  outline: 2px solid #9a4e36;
+  outline-offset: 2px;
+}
+
+/* Each screen is drawn at its design size (390px wide for phone screens);
+   the stage centres it and the window scrolls when a screen is taller. */
+.stage {
+  display: flex;
+  justify-content: safe center;
+  align-items: flex-start;
+  padding: 24px 0 72px;
+}
+
+.screen {
+  flex: none;
+  box-shadow: 0 24px 60px rgba(60, 36, 20, 0.18);
+  border-radius: 28px;
+  overflow: clip;
+  animation: screen-in 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+/* clip (not hidden) keeps the tab bar's sticky positioning working;
+   flow-root keeps a first child's top margin inside the frame, as hidden did. */
+.screen > div {
+  overflow: clip !important;
+  display: flow-root;
+}
+
+@media (max-width: 480px) {
+  .stage {
+    padding: 0;
+  }
+  .screen {
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+/* ---------- entrance ---------- */
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+    scale: 0.985;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+
+/* The screen's top-level blocks follow each other in. `translate` is used so
+   blocks that carry their own inline transform keep it. */
+.screen > div > *:not(.nav-rail) {
+  animation: rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+.screen > div > *:nth-child(1) { animation-delay: 0.04s; }
+.screen > div > *:nth-child(2) { animation-delay: 0.09s; }
+.screen > div > *:nth-child(3) { animation-delay: 0.14s; }
+.screen > div > *:nth-child(4) { animation-delay: 0.19s; }
+.screen > div > *:nth-child(5) { animation-delay: 0.24s; }
+.screen > div > *:nth-child(6) { animation-delay: 0.29s; }
+.screen > div > *:nth-child(7) { animation-delay: 0.34s; }
+.screen > div > *:nth-child(n + 8) { animation-delay: 0.39s; }
+
+/* ---------- touch feedback ---------- */
+
+.screen a,
+.screen button,
+.sheet button,
+.sheet a {
+  -webkit-tap-highlight-color: transparent;
+  transition: scale 0.16s ease, opacity 0.16s ease, background-color 0.22s ease, color 0.22s ease,
+    border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.screen a:active,
+.screen button:active,
+.sheet button:active,
+.sheet a:active {
+  scale: 0.965;
+}
+
+.screen button:disabled {
+  cursor: default;
+  scale: 1;
+}
+
+/* ---------- tab bar ---------- */
+
+.nav-rail {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.nav-rail > * {
+  position: sticky;
+  bottom: 0;
+  pointer-events: auto;
+}
+
+.tab-pill {
+  animation: pill-in 0.36s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
+}
+
+@keyframes pill-in {
+  from {
+    scale: 0.5 0.8;
+    opacity: 0;
+  }
+}
+
+/* ---------- toast ---------- */
+
+.toast-host {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 112px;
+  z-index: 90;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.toast {
+  max-width: 330px;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: #2b1b10;
+  color: #fbf6ee;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(43, 27, 16, 0.3);
+  animation: toast-in 0.32s cubic-bezier(0.3, 1.3, 0.5, 1) backwards, toast-out 0.3s ease 2.3s forwards;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+    scale: 0.94;
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* ---------- bottom sheet ---------- */
+
+.sheet-root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 19, 11, 0.5);
+  animation: fade-in 0.24s ease backwards;
+}
+
+.sheet {
+  position: relative;
+  width: min(390px, 100vw);
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 26px 26px 0 0;
+  background: #fbf6ee;
+  color: #2b1b10;
+  box-shadow: 0 -16px 40px rgba(43, 27, 16, 0.24);
+  outline: none;
+  animation: sheet-up 0.34s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+.sheet-grip {
+  align-self: center;
+  width: 40px;
+  height: 4px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: #d9c7b3;
+}
+
+.sheet-head {
+  padding: 8px 12px 4px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sheet-head h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.sheet-close {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: #2b1b10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.sheet-body {
+  padding: 4px 20px 28px;
+  overflow-y: auto;
+}
+
+.sheet-body p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5a4434;
+}
+
+.sheet-row {
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 14px;
+  margin-top: 8px;
+  border: 1.5px solid #eadfd2;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #2b1b10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sheet-row[aria-pressed="true"],
+.sheet-row[aria-checked="true"] {
+  border-color: #9a4e36;
+  background: #fbf1de;
+}
+
+.sheet-row small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6f5b4b;
+}
+
+.sheet-cta {
+  width: 100%;
+  height: 52px;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 14px;
+  background: #9a4e36;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    translate: 0 100%;
+  }
+}
+
+/* ---------- reusable motion ---------- */
+
+.fade-in {
+  animation: fade-in 0.3s ease backwards;
+}
+
+.rise {
+  animation: rise 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.stagger > * {
+  animation: rise 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+.stagger > *:nth-child(2) { animation-delay: 0.05s; }
+.stagger > *:nth-child(3) { animation-delay: 0.1s; }
+.stagger > *:nth-child(4) { animation-delay: 0.15s; }
+.stagger > *:nth-child(5) { animation-delay: 0.2s; }
+.stagger > *:nth-child(6) { animation-delay: 0.25s; }
+.stagger > *:nth-child(n + 7) { animation-delay: 0.3s; }
+
+.pop-in {
+  animation: pop-in 0.4s cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+/* Splash: the logo settles in and the bar fills while the app "loads". */
+.splash-logo {
+  animation: pop-in 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
+}
+
+.splash-bar {
+  animation: fill 1.9s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+@keyframes fill {
+  from {
+    width: 0;
+  }
+}
+
+/* Soft pulse for "live" things: the location dot, a listening mic. */
+.pulse {
+  animation: pulse 1.8s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(154, 78, 54, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 16px rgba(154, 78, 54, 0);
+  }
+}
+
+.float {
+  animation: float 3.6s ease-in-out infinite;
+}
+
+@keyframes float {
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+/* Audio bars shown while a story is playing. */
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+}
+
+.eq i {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  transform-origin: bottom;
+  animation: eq 0.9s ease-in-out infinite;
+}
+.eq i:nth-child(2) { animation-delay: -0.3s; }
+.eq i:nth-child(3) { animation-delay: -0.6s; }
+.eq.paused i { animation-play-state: paused; }
+
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* A slow drift that makes a still photo read as video. */
+.kenburns {
+  animation: kenburns 14s ease-in-out infinite alternate;
+}
+.kenburns.paused {
+  animation-play-state: paused;
+}
+
+@keyframes kenburns {
+  to {
+    scale: 1.12;
+    translate: -2% -1%;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(100deg, #efe6da 30%, #f8f2ea 50%, #efe6da 70%);
+  background-size: 300% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Camera flash when a photo is captured. */
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  background: #ffffff;
+  pointer-events: none;
+  animation: flash 0.45s ease-out forwards;
+}
+
+@keyframes flash {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ---------- prototype helper ---------- */
+
+.screens-link {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #2b1b10;
+  color: #fbf6ee;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(43, 27, 16, 0.25);
+}
+
+.screens-link:hover {
+  color: #f3d9a8;
+}
+
+/* On a phone it would cover the tab bar; Settings links to the same list. */
+@media (max-width: 480px) {
+  .screens-link {
+    display: none;
+  }
+}
+
+/* [data-timer] bars drive real timing (reel progress), so they keep their duration. */
+@media (prefers-reduced-motion: reduce) {
+  *:not([data-timer]),
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- chat ---------- */
+
+.chat-log {
+  scrollbar-width: none;
+}
+.chat-log::-webkit-scrollbar {
+  display: none;
+}
+
+.typing {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.typing i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #9a4e36;
+  animation: typing 1s ease-in-out infinite;
+}
+.typing i:nth-child(2) { animation-delay: 0.15s; }
+.typing i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    translate: 0 0;
+    opacity: 0.4;
+  }
+  30% {
+    translate: 0 -5px;
+    opacity: 1;
+  }
+}
+
+/* ---------- map ---------- */
+
+.locate-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: locate 1.1s ease-out backwards;
+}
+
+@keyframes locate {
+  from {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
