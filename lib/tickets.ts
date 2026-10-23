@@ -1,5 +1,6 @@
 // What can be booked in Virasa: guided walks and monument entry.
-// Prices are sample values for the prototype; no payment is taken in the app.
+// Bookings are paid when made. Prices are sample values and payment is
+// simulated in the prototype: no real money moves.
 
 export type Bookable = {
   id: string;
@@ -38,6 +39,15 @@ export type Ticket = {
   name: string;
   guideLang?: string;
   total: number;
+  // Set when the traveller cancels: what was kept as the charge and what was refunded.
+  cancelled?: { at: number; fee: number; refund: number };
+};
+
+// Cancelling keeps half the price as a cancellation charge and refunds the rest.
+export const CANCEL_FEE_RATE = 0.5;
+export const cancelTerms = (total: number) => {
+  const fee = Math.round(total * CANCEL_FEE_RATE);
+  return { fee, refund: total - fee };
 };
 
 export const bookable = (id: string) => BOOKABLES.find((b) => b.id === id);

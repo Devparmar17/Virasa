@@ -114,7 +114,7 @@ export default function GalleryScreen() {
             urls.current.push(src);
             setMine((m) => [...m, { src, caption: "Your photo of Sidi Saiyyed Mosque", credit: "You" }]);
             setIndex(photos.length);
-            toast("Photo added to this visit");
+            toast("Photo added to this visit", "success");
           }}
         />
       </div>

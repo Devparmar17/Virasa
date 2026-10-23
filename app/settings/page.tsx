@@ -1,7 +1,9 @@
 "use client";
 
 // Settings — everything the Profile screen's rows lead to.
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import Sheet from "@/components/Sheet";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/Toast";
 import { Card, Chevron, frame, rowStyle, ScreenHeader, SectionLabel, Segmented, SwitchRow } from "@/components/ui";
@@ -9,9 +11,19 @@ import { LANGS, resetStored, useStored } from "@/lib/store";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 import { logOut, useUser } from "@/lib/auth";
 import { Avatar } from "@/components/User";
+import { translate, useT } from "@/lib/i18n";
 
 export default function SettingsScreen() {
   const router = useRouter();
+  const t = useT();
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [ai, setAi] = useState<{ gemini: boolean; claude: boolean; model: string | null } | null>(null);
+  useEffect(() => {
+    fetch("/api/ai-status", { method: "POST" })
+      .then((r) => r.json())
+      .then(setAi)
+      .catch(() => setAi({ gemini: false, claude: false, model: null }));
+  }, []);
   const [lang, setLang] = useStored("lang", "en");
   const [settings, setSettings] = useStored<Settings>("settings", DEFAULT_SETTINGS);
   const [sw, setSw] = useStored("switches", { auto: true, desc: false, steps: false });
@@ -23,9 +35,9 @@ export default function SettingsScreen() {
 
   return (
     <div style={frame({ paddingBottom: "48px" })}>
-      <ScreenHeader title="Settings" back="/profile" />
+      <ScreenHeader title={t("st.title")} back="/profile" />
       <div style={{ padding: "0 20px" }}>
-        <SectionLabel id="account">ACCOUNT</SectionLabel>
+        <SectionLabel id="account">{t("st.account")}</SectionLabel>
         <Card>
           {user ? (
             <>
@@ -61,11 +73,30 @@ export default function SettingsScreen() {
           )}
         </Card>
 
-        <SectionLabel id="language">LANGUAGE</SectionLabel>
+        <SectionLabel id="ai">AI</SectionLabel>
+        <Card>
+          <div style={{ ...rowStyle(true), cursor: "default" }}>
+            <span>
+              AI Guide and Search
+              <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>
+                {ai === null ? "Checking…" : ai.gemini ? `Google Gemini (${ai.model}) answers your questions` : ai.claude ? "Claude answers your questions" : "Using Virasa's built-in library. Add GEMINI_API_KEY to .env.local to switch on Gemini"}
+              </span>
+            </span>
+            <span style={{ flex: "0 0 auto", height: "26px", padding: "0 10px", borderRadius: "999px", background: ai?.gemini ? "#EEF2FE" : "#F6EEE4", color: ai?.gemini ? "#3457C9" : "#6E4E1E", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center" }}>
+              {ai === null ? "…" : ai.gemini ? "Gemini on" : "Library"}
+            </span>
+          </div>
+        </Card>
+
+        <SectionLabel id="language">{t("st.language")}</SectionLabel>
         <Card>
           <div role="radiogroup" aria-label="App language">
             {LANGS.map((l, i) => (
-              <button key={l.id} type="button" role="radio" aria-checked={lang === l.id} onClick={() => setLang(l.id)} style={rowStyle(i === LANGS.length - 1)}>
+              <button key={l.id} type="button" role="radio" aria-checked={lang === l.id} onClick={() => {
+                  if (lang === l.id) return;
+                  setLang(l.id);
+                  toast(translate(l.id, "lang.changed", { name: l.native }), "success");
+                }} style={rowStyle(i === LANGS.length - 1)}>
                 <span lang={l.id}>
                   {l.native}
                   <span style={{ marginLeft: "8px", fontSize: "13px", fontWeight: 500, color: "#6F5B4B" }}>{l.label}</span>
@@ -75,13 +106,13 @@ export default function SettingsScreen() {
             ))}
           </div>
         </Card>
-        <p style={{ margin: "8px 2px 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>The AI Guide answers in this language. Story transcripts come in English, Hindi and Gujarati.</p>
+        <p style={{ margin: "8px 2px 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>{t("st.lang_note")}</p>
 
-        <SectionLabel id="stories">STORIES</SectionLabel>
+        <SectionLabel id="stories">{t("st.stories")}</SectionLabel>
         <Card style={{ padding: "14px" }}>
           <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>Story length</div>
           <Segmented
-            label="Story length"
+            label={t("st.story_length")}
             value={settings.length}
             onChange={(length) => set({ length })}
             options={[
@@ -92,14 +123,14 @@ export default function SettingsScreen() {
           />
         </Card>
         <Card style={{ marginTop: "10px" }}>
-          <SwitchRow label="Play story on arrival" hint="Start the narration when you reach a place" on={sw.auto} onToggle={() => setSw((s) => ({ ...s, auto: !s.auto }))} last />
+          <SwitchRow label={t("st.auto")} hint={t("st.auto_hint")} on={sw.auto} onToggle={() => setSw((s) => ({ ...s, auto: !s.auto }))} last />
         </Card>
 
-        <SectionLabel id="travel">TRAVEL</SectionLabel>
+        <SectionLabel id="travel">{t("st.travel")}</SectionLabel>
         <Card style={{ padding: "14px" }}>
           <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>Walking pace</div>
           <Segmented
-            label="Walking pace"
+            label={t("st.pace")}
             value={settings.pace}
             onChange={(pace) => set({ pace })}
             options={[
@@ -111,15 +142,15 @@ export default function SettingsScreen() {
           <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>Walk times in your plans are worked out at this pace.</p>
         </Card>
         <Card style={{ marginTop: "10px" }}>
-          <SwitchRow label="Voice guidance" hint="Spoken turn-by-turn directions" on={voice} onToggle={() => setPrefs((p) => ({ ...p, voice: !voice }))} />
-          <SwitchRow label="Step-free routes" hint="Avoid stairs and stepped lanes" on={sw.steps} onToggle={() => setSw((s) => ({ ...s, steps: !s.steps }))} last />
+          <SwitchRow label={t("st.voice")} hint={t("st.voice_hint")} on={voice} onToggle={() => setPrefs((p) => ({ ...p, voice: !voice }))} />
+          <SwitchRow label={t("st.steps")} hint={t("st.steps_hint")} on={sw.steps} onToggle={() => setSw((s) => ({ ...s, steps: !s.steps }))} last />
         </Card>
 
-        <SectionLabel id="access">ACCESSIBILITY</SectionLabel>
+        <SectionLabel id="access">{t("st.access")}</SectionLabel>
         <Card style={{ padding: "14px" }}>
           <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>Text size</div>
           <Segmented
-            label="Text size"
+            label={t("st.text")}
             value={settings.text}
             onChange={(text) => set({ text })}
             options={[
@@ -132,21 +163,21 @@ export default function SettingsScreen() {
           <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#6F5B4B" }}>Applies to story transcripts and AI Guide answers.</p>
         </Card>
         <Card style={{ marginTop: "10px" }}>
-          <SwitchRow label="Audio descriptions" hint="Describe what is in front of you at each stop" on={sw.desc} onToggle={() => setSw((s) => ({ ...s, desc: !s.desc }))} last />
+          <SwitchRow label={t("st.desc")} hint={t("st.desc_hint")} on={sw.desc} onToggle={() => setSw((s) => ({ ...s, desc: !s.desc }))} last />
         </Card>
 
-        <SectionLabel id="alerts">NOTIFICATIONS</SectionLabel>
+        <SectionLabel id="alerts">{t("st.alerts")}</SectionLabel>
         <Card>
-          <SwitchRow label="Stories nearby" hint="When you walk past a place with a story" on={settings.alerts.nearby} onToggle={() => alert("nearby")} />
-          <SwitchRow label="Trip reminders" hint="Packs to download before you travel" on={settings.alerts.trips} onToggle={() => alert("trips")} />
-          <SwitchRow label="Weekly digest" hint="New stories and games, once a week" on={settings.alerts.digest} onToggle={() => alert("digest")} />
+          <SwitchRow label={t("st.nearby")} hint={t("st.nearby_hint")} on={settings.alerts.nearby} onToggle={() => alert("nearby")} />
+          <SwitchRow label={t("st.trips")} hint={t("st.trips_hint")} on={settings.alerts.trips} onToggle={() => alert("trips")} />
+          <SwitchRow label={t("st.digest")} hint={t("st.digest_hint")} on={settings.alerts.digest} onToggle={() => alert("digest")} />
           <Link href="/notifications" style={rowStyle(true)}>
             See your notifications
             <Chevron />
           </Link>
         </Card>
 
-        <SectionLabel>YOUR DATA</SectionLabel>
+        <SectionLabel>{t("st.data")}</SectionLabel>
         <Card>
           <Link href="/personalize" style={rowStyle()}>
             Edit interests
@@ -162,19 +193,14 @@ export default function SettingsScreen() {
           </Link>
           <button
             type="button"
-            onClick={() => {
-              if (!window.confirm("Reset Virasa on this phone? Saved places, downloads and settings will be cleared.")) return;
-              resetStored();
-              toast("Virasa has been reset");
-              router.push("/");
-            }}
+            onClick={() => setConfirmReset(true)}
             style={{ ...rowStyle(true), color: "#A23A2A" }}
           >
             Reset app data
           </button>
         </Card>
 
-        <SectionLabel>ABOUT</SectionLabel>
+        <SectionLabel>{t("st.about")}</SectionLabel>
         <Card>
           <Link href="/screens" style={rowStyle()}>
             All screens
@@ -190,6 +216,26 @@ export default function SettingsScreen() {
           </div>
         </Card>
       </div>
+      {/* Reset can't be undone, so it asks first, in the app's own sheet rather than a browser dialog. */}
+      <Sheet open={confirmReset} onClose={() => setConfirmReset(false)} title="Reset Virasa?">
+        <p>Saved places, plans, tickets, downloads and settings on this phone will be cleared. This can&apos;t be undone.</p>
+        <button
+          type="button"
+          className="sheet-cta"
+          style={{ background: "#A23A2A" }}
+          onClick={() => {
+            setConfirmReset(false);
+            resetStored();
+            toast("Virasa has been reset", "success");
+            router.push("/");
+          }}
+        >
+          Reset app data
+        </button>
+        <button type="button" className="sheet-row" onClick={() => setConfirmReset(false)} style={{ justifyContent: "center" }}>
+          Keep my data
+        </button>
+      </Sheet>
     </div>
   );
 }

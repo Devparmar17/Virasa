@@ -7,8 +7,9 @@ export type SecretKind = "gem" | "food" | "legend" | "monument";
 
 export type Secret = {
   id: string;
-  // Which row on Home it belongs to: "Local secrets" or "Heritage highlights".
-  group: "secret" | "highlight";
+  // Which row on Home it belongs to ("Local secrets" or "Heritage highlights"),
+  // or a stop on the Old City walk that has no row of its own.
+  group: "secret" | "highlight" | "stop";
   kind: SecretKind;
   // Shown on the Heritage highlights card.
   rating?: string;
@@ -255,6 +256,106 @@ export const SECRETS: Secret[] = [
     ],
     tip: "Around midday the sun reaches straight down the shaft. Come early or late on weekends to avoid the crowd.",
     question: "Tell me about Adalaj Stepwell and the legend of Queen Rudabai",
+  },
+  {
+    id: "kalupur",
+    group: "highlight",
+    kind: "monument",
+    tag: "Temple",
+    title: "Kalupur Swaminarayan Temple",
+    line: "Painted wood carved like lace",
+    distance: "16 min · 1.3 km",
+    mins: 16,
+    walk: true,
+    rating: "4.7",
+    fact: "1822 · Swaminarayan",
+    open: "Open now",
+    img: "/images/kalupur-temple.jpg",
+    alt: "The carved and painted facade of the Kalupur Swaminarayan Temple",
+    story: [
+      "This was the first temple of the Swaminarayan faith, consecrated in 1822 by Swaminarayan himself on land granted by the British.",
+      "It is a riot of colour after the stone of the sultanate mosques: every bracket, pillar and arch is carved in wood and painted, with figures of gods, dancers and animals crowding the surfaces.",
+    ],
+    listTitle: "Look for these",
+    list: [
+      { name: "The carved brackets", note: "Each strut under the eaves is a different figure. Pick one and follow the row." },
+      { name: "The painted arches", note: "Deep reds, greens and gold, renewed over the years to look as they did at the start." },
+      { name: "The haveli next door", note: "The temple's residential wing, built as a carved wooden mansion around a courtyard." },
+    ],
+    know: [
+      { label: "Best time", value: "Morning aarti, about 6:30 AM" },
+      { label: "Time needed", value: "30 minutes" },
+      { label: "Entry", value: "Free" },
+      { label: "Dress", value: "Shoulders and knees covered" },
+    ],
+    tip: "Shoes come off at the entrance, and photography may be limited inside the shrine. Ask before you take pictures.",
+    question: "Tell me about the Kalupur Swaminarayan Temple",
+  },
+  {
+    id: "teen",
+    group: "stop",
+    kind: "legend",
+    tag: "Legend",
+    title: "Teen Darwaza",
+    line: "The lamp kept burning for 600 years",
+    distance: "1.1 km · 14 min",
+    mins: 14,
+    img: "/images/teen-darwaza.jpg",
+    alt: "The three arches of Teen Darwaza with the market in front",
+    story: [
+      "Teen Darwaza, the Three Gates, was built in 1415 as the grand way into the royal square in front of Bhadra Fort. Today the arches stand in the middle of one of the busiest bazaars in the old city.",
+      "Look into the niche on one side of the gateway. A small lamp burns there, and the city says it has not gone out in six hundred years, kept lit for the goddess Lakshmi so that her wealth never leaves Ahmedabad.",
+    ],
+    listTitle: "The tales people tell",
+    list: [
+      { name: "The lamp that never goes out", note: "Tended, the story goes, by one family for generations, and refilled every evening.", badge: "Legend" },
+      { name: "Lakshmi at the gate", note: "The goddess tried to leave the city one night. The watchman asked her to wait for the king's leave and never came back, so she stays.", badge: "Legend" },
+    ],
+    record: {
+      title: "What the record says",
+      points: [
+        "The gateway was built in 1415 under Sultan Ahmad Shah I, who founded the city four years earlier.",
+        "It led into the Maidan Shah, the royal square between Bhadra Fort and the Jama Masjid.",
+        "An inscription on the gate, from the Maratha period, declares that daughters should get an equal share of their father's property.",
+      ],
+    },
+    know: [
+      { label: "Best time", value: "Morning, before the crowd" },
+      { label: "Time needed", value: "10 minutes" },
+      { label: "Entry", value: "Free, always open" },
+      { label: "Nearby", value: "Bhadra Fort, Jama Masjid" },
+    ],
+    tip: "Stand back across the road to see all three arches at once, then look for the lamp niche and the inscription.",
+    question: "Tell me about Teen Darwaza, its lamp and the inscription on it",
+  },
+  {
+    id: "chandravilas",
+    group: "stop",
+    kind: "food",
+    tag: "Snack stop",
+    title: "Chandravilas",
+    line: "Fafda and jalebi since 1900",
+    distance: "1.3 km · 16 min",
+    mins: 16,
+    alt: "A plate of fafda and jalebi",
+    story: [
+      "Chandravilas has been frying snacks on Gandhi Road since 1900, which makes it one of the oldest eating houses in the city. It is known above all for fafda and jalebi, Ahmedabad's favourite breakfast.",
+      "Come in the morning, when the fafda is pulled and fried in front of you and the jalebi is still warm.",
+    ],
+    listTitle: "What to eat",
+    list: [
+      { name: "Fafda", note: "Long, crisp strips of gram-flour dough, served with green chillies and papaya relish.", badge: "Start here" },
+      { name: "Jalebi", note: "Spirals of batter fried and soaked in syrup. Eaten with fafda, sweet against salty." },
+      { name: "Gujarati thali", note: "If you are here at lunch: dal, kadhi, vegetables, rotis and rice, refilled until you stop them." },
+    ],
+    know: [
+      { label: "Best time", value: "7–10 AM" },
+      { label: "Time needed", value: "15 minutes" },
+      { label: "Cost", value: "About ₹60–150" },
+      { label: "Diet", value: "Vegetarian" },
+    ],
+    tip: "Ask for fafda and jalebi together: one plate is plenty for two.",
+    question: "What should I eat at Chandravilas, and what is fafda?",
   },
 ];
 

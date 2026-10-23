@@ -26,34 +26,34 @@ export default function StatesScreen() {
                 </span>
               </div>
             </div>
-            <span style={{ width: "50px", height: "50px", borderRadius: "50%", background: "#F0E7DA" }} />
+            <span style={{ width: "50px", height: "50px", borderRadius: "50%", background: "#F3ECE2" }} />
           </div>
           <div aria-hidden="true" style={{ padding: "22px 20px 0", display: "flex", flexDirection: "column", gap: "12px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <span style={{ width: "34px", height: "34px", borderRadius: "50%", background: "#F0E7DA" }} />
-              <span style={{ width: "150px", height: "14px", borderRadius: "7px", background: "#F0E7DA" }} />
-              <span style={{ marginLeft: "auto", width: "64px", height: "30px", borderRadius: "999px", background: "#F0E7DA" }} />
+              <span style={{ width: "34px", height: "34px", borderRadius: "50%", background: "#F3ECE2" }} />
+              <span style={{ width: "150px", height: "14px", borderRadius: "7px", background: "#F3ECE2" }} />
+              <span style={{ marginLeft: "auto", width: "64px", height: "30px", borderRadius: "999px", background: "#F3ECE2" }} />
             </div>
-            <span style={{ marginTop: "10px", width: "110px", height: "12px", borderRadius: "6px", background: "#F0E7DA" }} />
-            <span style={{ width: "300px", height: "24px", borderRadius: "8px", background: "#F0E7DA" }} />
-            <span style={{ width: "190px", height: "24px", borderRadius: "8px", background: "#F0E7DA" }} />
-            <span style={{ marginTop: "6px", height: "58px", borderRadius: "16px", background: "#F0E7DA" }} />
+            <span style={{ marginTop: "10px", width: "110px", height: "12px", borderRadius: "6px", background: "#F3ECE2" }} />
+            <span style={{ width: "300px", height: "24px", borderRadius: "8px", background: "#F3ECE2" }} />
+            <span style={{ width: "190px", height: "24px", borderRadius: "8px", background: "#F3ECE2" }} />
+            <span style={{ marginTop: "6px", height: "58px", borderRadius: "16px", background: "#F3ECE2" }} />
             <div style={{ marginTop: "6px", display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "10px" }}>
-              <span style={{ height: "90px", borderRadius: "18px", background: "#F0E7DA" }} />
-              <span style={{ height: "90px", borderRadius: "18px", background: "#F0E7DA" }} />
-              <span style={{ height: "90px", borderRadius: "18px", background: "#F0E7DA" }} />
-              <span style={{ height: "90px", borderRadius: "18px", background: "#F0E7DA" }} />
+              <span style={{ height: "90px", borderRadius: "18px", background: "#F3ECE2" }} />
+              <span style={{ height: "90px", borderRadius: "18px", background: "#F3ECE2" }} />
+              <span style={{ height: "90px", borderRadius: "18px", background: "#F3ECE2" }} />
+              <span style={{ height: "90px", borderRadius: "18px", background: "#F3ECE2" }} />
             </div>
-            <span style={{ marginTop: "16px", width: "180px", height: "18px", borderRadius: "8px", background: "#F0E7DA" }} />
-            <span style={{ width: "240px", height: "12px", borderRadius: "6px", background: "#F0E7DA" }} />
+            <span style={{ marginTop: "16px", width: "180px", height: "18px", borderRadius: "8px", background: "#F3ECE2" }} />
+            <span style={{ width: "240px", height: "12px", borderRadius: "6px", background: "#F3ECE2" }} />
             <div style={{ marginTop: "6px", display: "flex", gap: "14px" }}>
-              <span style={{ flex: "0 0 300px", height: "300px", borderRadius: "20px", background: "#F0E7DA" }} />
-              <span style={{ flex: "0 0 300px", height: "300px", borderRadius: "20px", background: "#F0E7DA" }} />
+              <span style={{ flex: "0 0 300px", height: "300px", borderRadius: "20px", background: "#F3ECE2" }} />
+              <span style={{ flex: "0 0 300px", height: "300px", borderRadius: "20px", background: "#F3ECE2" }} />
             </div>
           </div>
           <nav aria-label="Main" style={{ position: "absolute", left: "0", right: "0", bottom: "0", height: "90px", padding: "10px 4px 24px", background: "#EBCFA3", borderRadius: "24px 24px 0 0", display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", boxShadow: "0 -8px 24px rgba(90, 60, 30, 0.10)" }}>
             <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", textDecoration: "none", color: "#7E3D29", fontSize: "12px", fontWeight: "800" }}>
-              <span style={{ width: "58px", height: "32px", borderRadius: "999px", background: "#FBF1DE", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ width: "58px", height: "32px", borderRadius: "999px", background: "#FBEDE6", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                   <polyline points="9 22 9 12 15 12 15 22" />
@@ -81,7 +81,7 @@ export default function StatesScreen() {
                 </svg>
               </span>
               <span>
-                Navigation
+                Explore
               </span>
             </span>
             <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", textDecoration: "none", color: "#5C3D24", fontSize: "12px", fontWeight: "600" }}>
@@ -191,7 +191,7 @@ export default function StatesScreen() {
             Ready offline
           </h2>
           <ul style={{ listStyle: "none", margin: "10px 0 0", padding: "0 20px", display: "flex", flexDirection: "column", gap: "10px" }}>
-            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px", border: "1px solid #EADFD2", borderRadius: "16px" }}>
+            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px", border: "1px solid #EFE6DA", borderRadius: "16px" }}>
               <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="" style={{ flex: "0 0 56px", width: "56px", height: "56px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", display: "flex", flexDirection: "column", gap: "2px" }}>
                 <span style={{ fontSize: "15px", fontWeight: "800" }}>
@@ -206,7 +206,7 @@ export default function StatesScreen() {
                 <path d="m9 12 2 2 4-4" />
               </svg>
             </li>
-            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px", border: "1px solid #EADFD2", borderRadius: "16px" }}>
+            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px", border: "1px solid #EFE6DA", borderRadius: "16px" }}>
               <span style={{ flex: "0 0 56px", width: "56px", height: "56px", borderRadius: "12px", background: "#2B1B10", color: "#F3D9A8", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <circle cx="6" cy="19" r="3" />
@@ -227,7 +227,7 @@ export default function StatesScreen() {
                 <path d="m9 12 2 2 4-4" />
               </svg>
             </li>
-            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px", border: "1px solid #EADFD2", borderRadius: "16px" }}>
+            <li style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px", border: "1px solid #EFE6DA", borderRadius: "16px" }}>
               <img src="/images/6b114a4ce322f517be6c561ea38233e8.jpg" alt="" style={{ flex: "0 0 56px", width: "56px", height: "56px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", display: "flex", flexDirection: "column", gap: "2px" }}>
                 <span style={{ fontSize: "15px", fontWeight: "800" }}>
@@ -245,7 +245,7 @@ export default function StatesScreen() {
           </ul>
           <nav aria-label="Main" style={{ position: "absolute", left: "0", right: "0", bottom: "0", height: "90px", padding: "10px 4px 24px", background: "#EBCFA3", borderRadius: "24px 24px 0 0", display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", boxShadow: "0 -8px 24px rgba(90, 60, 30, 0.10)" }}>
             <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", textDecoration: "none", color: "#7E3D29", fontSize: "12px", fontWeight: "800" }}>
-              <span style={{ width: "58px", height: "32px", borderRadius: "999px", background: "#FBF1DE", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ width: "58px", height: "32px", borderRadius: "999px", background: "#FBEDE6", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                   <polyline points="9 22 9 12 15 12 15 22" />
@@ -273,7 +273,7 @@ export default function StatesScreen() {
                 </svg>
               </span>
               <span>
-                Navigation
+                Explore
               </span>
             </span>
             <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", textDecoration: "none", color: "#5C3D24", fontSize: "12px", fontWeight: "600" }}>
@@ -357,13 +357,13 @@ export default function StatesScreen() {
             STEPWELLS CLOSER TO YOU
           </p>
           <div style={{ margin: "10px 24px 0", display: "flex", flexDirection: "column", gap: "8px" }}>
-            <span style={{ minHeight: "48px", padding: "0 14px", borderRadius: "12px", background: "#FBF6EE", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "14px", fontWeight: "700" }}>
+            <span style={{ minHeight: "48px", padding: "0 14px", borderRadius: "12px", background: "#F6F1EA", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "14px", fontWeight: "700" }}>
               Dada Harir Stepwell
               <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
                 6 km
               </span>
             </span>
-            <span style={{ minHeight: "48px", padding: "0 14px", borderRadius: "12px", background: "#FBF6EE", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "14px", fontWeight: "700" }}>
+            <span style={{ minHeight: "48px", padding: "0 14px", borderRadius: "12px", background: "#F6F1EA", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "14px", fontWeight: "700" }}>
               Adalaj Stepwell
               <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
                 18 km

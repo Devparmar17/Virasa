@@ -3,6 +3,7 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "./Toast";
+import { Spinner } from "./ui";
 import { useStored } from "@/lib/store";
 
 // Ahmedabad's Old City, the area Virasa currently covers.
@@ -27,9 +28,10 @@ export default function GeoLink({ href, style, children }: { href?: string; styl
     <button
       type="button"
       disabled={busy}
+      aria-busy={busy}
       onClick={() => {
         if (!navigator.geolocation) {
-          toast("This browser can't share location. You can still pick a city by hand.");
+          toast("This browser can't share location. You can still pick a city by hand.", "error");
           next();
           return;
         }
@@ -38,7 +40,7 @@ export default function GeoLink({ href, style, children }: { href?: string; styl
           (p) => {
             setGeo({ lat: p.coords.latitude, lon: p.coords.longitude });
             const km = kmFromOldCity(p.coords.latitude, p.coords.longitude);
-            toast(km < 30 ? "Location on — showing stories around you" : `Location on — you're about ${Math.round(km).toLocaleString("en-IN")} km from Ahmedabad's Old City`);
+            toast(km < 30 ? "Location on — showing stories around you" : `Location on — you're about ${Math.round(km).toLocaleString("en-IN")} km from Ahmedabad's Old City`, "success");
             next();
           },
           () => {
@@ -50,7 +52,14 @@ export default function GeoLink({ href, style, children }: { href?: string; styl
       }}
       style={{ border: "0", cursor: "pointer", width: "100%", ...style }}
     >
-      {busy ? "Finding you…" : children}
+      {busy ? (
+        <span key="busy" className="btn-swap">
+          <Spinner />
+          Finding you…
+        </span>
+      ) : (
+        children
+      )}
     </button>
   );
 }

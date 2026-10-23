@@ -98,31 +98,31 @@ export default function FoundationsScreen() {
                 </span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <span style={{ height: "76px", borderRadius: "14px", background: "#A0522D" }} />
+                <span style={{ height: "76px", borderRadius: "14px", background: "#F6F1EA", border: "1px solid #EFE6DA" }} />
                 <span style={{ marginTop: "6px", fontSize: "14px", fontWeight: "800" }}>
-                  Accent
+                  Surface
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#5A4434" }}>
-                  #A0522D
+                  #F6F1EA
                 </span>
                 <span style={{ fontSize: "12px", color: "#6F5B4B" }}>
-                  Section subtitles
+                  Fields, info boxes
                 </span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <span style={{ height: "76px", borderRadius: "14px", background: "#F5E6CC", border: "1px solid #EADFD2" }} />
+                <span style={{ height: "76px", borderRadius: "14px", background: "#F6EEE4", border: "1px solid #EFE6DA" }} />
                 <span style={{ marginTop: "6px", fontSize: "14px", fontWeight: "800" }}>
                   Sand
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#5A4434" }}>
-                  #F5E6CC
+                  #F6EEE4
                 </span>
                 <span style={{ fontSize: "12px", color: "#6F5B4B" }}>
-                  Chips, badges
+                  Tags, icon tiles
                 </span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <span style={{ height: "76px", borderRadius: "14px", background: "#FFFFFF", border: "1px solid #EADFD2" }} />
+                <span style={{ height: "76px", borderRadius: "14px", background: "#FFFFFF", border: "1px solid #EFE6DA" }} />
                 <span style={{ marginTop: "6px", fontSize: "14px", fontWeight: "800" }}>
                   Paper
                 </span>
@@ -134,24 +134,24 @@ export default function FoundationsScreen() {
                 </span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <span style={{ height: "76px", borderRadius: "14px", background: "#EBCFA3" }} />
+                <span style={{ height: "76px", borderRadius: "14px", background: "#FBEDE6" }} />
                 <span style={{ marginTop: "6px", fontSize: "14px", fontWeight: "800" }}>
-                  Tan
+                  Selected
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#5A4434" }}>
-                  #EBCFA3
+                  #FBEDE6
                 </span>
                 <span style={{ fontSize: "12px", color: "#6F5B4B" }}>
-                  Bottom navigation
+                  Chosen chips and rows
                 </span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <span style={{ height: "76px", borderRadius: "14px", background: "#EADFD2" }} />
+                <span style={{ height: "76px", borderRadius: "14px", background: "#EFE6DA" }} />
                 <span style={{ marginTop: "6px", fontSize: "14px", fontWeight: "800" }}>
                   Line
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#5A4434" }}>
-                  #EADFD2
+                  #EFE6DA
                 </span>
                 <span style={{ fontSize: "12px", color: "#6F5B4B" }}>
                   Borders, dividers
@@ -260,7 +260,7 @@ export default function FoundationsScreen() {
               <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#F6DCD2", color: "#8A3A22", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
                 Must-taste · 8 PM
               </span>
-              <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+              <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
                 Hidden gem
               </span>
               <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#EDE4DA", color: "#5A4434", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
@@ -324,7 +324,7 @@ export default function FoundationsScreen() {
                     </svg>
                   </span>
                   <span>
-                    Navigation
+                    Explore
                   </span>
                 </span>
                 <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", textDecoration: "none", color: "#5C3D24", fontSize: "12px", fontWeight: "600" }}>
@@ -353,7 +353,7 @@ export default function FoundationsScreen() {
               </nav>
             </div>
             <p style={{ margin: "16px 0 0", fontSize: "13px", color: "#5A4434" }}>
-              Bottom nav v3: Home, Saved, Navigation, AI Guide, Profile. Dark labels on tan (6.5:1) and a pill behind the active icon. Walks open from Home; AR Tour is a Home quick action.
+              Bottom nav v4: Home, Saved, Explore, AI Guide, Profile. A frosted bar floating above the edge, labels at 5.9:1, and a tinted pill behind the active icon. Walks open from Home; AR Tour is a Home quick action.
             </p>
           </section>
         </div>
@@ -385,7 +385,7 @@ export default function FoundationsScreen() {
                 </dt>
                 <dd style={{ margin: "0", fontSize: "20px", fontWeight: "800" }}>
                   {"Heritage highlights "}
-                  <span style={{ fontSize: "14px", fontWeight: "500", color: "#A0522D" }}>
+                  <span style={{ fontSize: "14px", fontWeight: "500", color: "#6F5B4B" }}>
                     Iconic architecture within reach
                   </span>
                 </dd>
@@ -467,27 +467,27 @@ export default function FoundationsScreen() {
             </div>
             <div style={{ marginTop: "18px", display: "flex", gap: "12px" }}>
               <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", color: "#5A4434" }}>
-                <span style={{ width: "64px", height: "48px", borderRadius: "12px", background: "#F5E6CC", border: "1px solid #E2D3C1" }} />
+                <span style={{ width: "64px", height: "48px", borderRadius: "12px", background: "#F6EEE4", border: "1px solid #E2D3C1" }} />
                 12 thumb
               </span>
               <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", color: "#5A4434" }}>
-                <span style={{ width: "64px", height: "48px", borderRadius: "16px", background: "#F5E6CC", border: "1px solid #E2D3C1" }} />
+                <span style={{ width: "64px", height: "48px", borderRadius: "16px", background: "#F6EEE4", border: "1px solid #E2D3C1" }} />
                 16 button
               </span>
               <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", color: "#5A4434" }}>
-                <span style={{ width: "64px", height: "48px", borderRadius: "20px", background: "#F5E6CC", border: "1px solid #E2D3C1" }} />
+                <span style={{ width: "64px", height: "48px", borderRadius: "20px", background: "#F6EEE4", border: "1px solid #E2D3C1" }} />
                 20 card
               </span>
               <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", color: "#5A4434" }}>
-                <span style={{ width: "64px", height: "48px", borderRadius: "24px 24px 0 0", background: "#F5E6CC", border: "1px solid #E2D3C1" }} />
+                <span style={{ width: "64px", height: "48px", borderRadius: "24px 24px 0 0", background: "#F6EEE4", border: "1px solid #E2D3C1" }} />
                 24 sheet
               </span>
               <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", color: "#5A4434" }}>
-                <span style={{ width: "64px", height: "48px", borderRadius: "999px", background: "#F5E6CC", border: "1px solid #E2D3C1" }} />
+                <span style={{ width: "64px", height: "48px", borderRadius: "999px", background: "#F6EEE4", border: "1px solid #E2D3C1" }} />
                 Pill
               </span>
               <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", color: "#5A4434" }}>
-                <span style={{ width: "48px", height: "52px", borderRadius: "24px 24px 6px 6px", background: "#F5E6CC", border: "1px solid #E2D3C1" }} />
+                <span style={{ width: "48px", height: "52px", borderRadius: "24px 24px 6px 6px", background: "#F6EEE4", border: "1px solid #E2D3C1" }} />
                 Arch frame
               </span>
             </div>

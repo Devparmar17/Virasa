@@ -3,6 +3,8 @@
 // 23 · Jali puzzle (playable)
 import { useState, Fragment } from "react";
 import Link from "next/link";
+import { Confetti, Tick } from "@/components/ui";
+import BackLink from "@/components/Back";
 import { renderVals } from "./logic";
 
 export default function PuzzleScreen() {
@@ -10,18 +12,18 @@ export default function PuzzleScreen() {
   const setState = (patch: Record<string, any>) => setAll((s) => ({ ...s, ...patch }));
   const v: any = renderVals(state, setState);
   return (
-    <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FBF6EE", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 16px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <Link href="/games" aria-label="Back to games" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/games" aria-label="Back to games" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
           </svg>
-        </Link>
+        </BackLink>
         <span style={{ flex: "1", fontSize: "18px", fontWeight: "800" }}>
           Jali puzzle
         </span>
-        <span role="status" style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", gap: "4px" }}>
+        <span role="status" style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", gap: "4px" }}>
           <span>
             {v.moves}
           </span>
@@ -65,11 +67,10 @@ export default function PuzzleScreen() {
       </div>
       {v.solved ? (
         <>
-          <div role="status" style={{ margin: "16px 24px 0", padding: "14px", borderRadius: "16px", background: "#E3F1E7", border: "1px solid #2F7A4A", display: "flex", alignItems: "center", gap: "12px" }}>
-            <span style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "50%", background: "#2F7A4A", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M20 6 9 17l-5-5" />
-              </svg>
+          <div role="status" className="rise" style={{ margin: "16px 24px 0", padding: "14px", borderRadius: "16px", background: "#E3F1E7", border: "1px solid #2F7A4A", display: "flex", alignItems: "center", gap: "12px" }}>
+            <span className="success-badge" style={{ position: "relative", flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "50%", background: "#2F7A4A", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Tick size={20} />
+              <Confetti count={14} spread={70} />
             </span>
             <span style={{ flex: "1", display: "flex", flexDirection: "column", gap: "2px" }}>
               <span style={{ fontSize: "15px", fontWeight: "800", color: "#1F5C36" }}>
@@ -87,7 +88,7 @@ export default function PuzzleScreen() {
       ) : null}
       {v.unsolved ? (
         <>
-          <div style={{ margin: "16px 24px 0", padding: "14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EADFD2", display: "flex", gap: "10px", fontSize: "13px", lineHeight: "1.45", color: "#5A4434" }}>
+          <div style={{ margin: "16px 24px 0", padding: "14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA", display: "flex", gap: "10px", fontSize: "13px", lineHeight: "1.45", color: "#5A4434" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A6424" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flex: "0 0 18px", marginTop: "1px" }}>
               <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
               <path d="M9 18h6" />

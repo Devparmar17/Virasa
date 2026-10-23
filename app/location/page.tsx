@@ -1,17 +1,18 @@
 // 04 · Location priming
 import Link from "next/link";
+import BackLink from "@/components/Back";
 import GeoLink from "@/components/GeoLink";
 
 export default function LocationScreen() {
   return (
-    <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FBF6EE", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <Link href="/personalize" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/personalize" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
           </svg>
-        </Link>
+        </BackLink>
         <div style={{ flex: "1", display: "flex", flexDirection: "column", gap: "6px", alignItems: "center" }}>
           <div style={{ display: "flex", gap: "6px" }}>
             <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#9A4E36" }} />
@@ -25,7 +26,7 @@ export default function LocationScreen() {
         </div>
         <span style={{ width: "54px" }} />
       </div>
-      <div style={{ margin: "6px 24px 0", height: "250px", borderRadius: "24px", overflow: "hidden", position: "relative", background: "#F2EADC", border: "1px solid #E6D8C4" }}>
+      <div style={{ margin: "6px 24px 0", height: "250px", borderRadius: "24px", overflow: "hidden", position: "relative", background: "#F4F1EA", border: "1px solid #E6D8C4" }}>
         <svg aria-hidden="true" width="342" height="250" viewBox="0 0 342 250" style={{ position: "absolute", inset: "0", display: "block" }}>
           <path d="M0 0 H58 C46 70 70 150 50 250 H0 Z" fill="#D3E4DF" />
           <rect x="250" y="190" width="70" height="44" rx="10" fill="#DFE8CF" />
@@ -37,7 +38,7 @@ export default function LocationScreen() {
             <path d="M270 0 V180" />
             <path d="M320 20 V240" />
           </g>
-          <g stroke="#E2D2BC" strokeWidth="12" fill="none" strokeLinecap="round">
+          <g stroke="#E1D8C8" strokeWidth="12" fill="none" strokeLinecap="round">
             <path d="M58 88 H342" />
             <path d="M50 176 C140 168 230 182 342 160" />
             <path d="M168 0 V250" />

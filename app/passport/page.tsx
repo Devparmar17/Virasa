@@ -124,7 +124,7 @@ export default function PassportScreen() {
         <ul style={{ listStyle: "none", margin: "12px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
           {NEXT.map((n) => (
             <li key={n.name}>
-              <Link href={n.href} style={{ minHeight: "64px", padding: "10px 14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EADFD2", color: "#2B1B10", display: "flex", alignItems: "center", gap: "14px" }}>
+              <Link href={n.href} style={{ minHeight: "64px", padding: "10px 14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA", color: "#2B1B10", display: "flex", alignItems: "center", gap: "14px" }}>
                 <span aria-hidden="true" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", border: "2px dashed #CDBFAE", color: "#A8927C", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect width="18" height="11" x="3" y="11" rx="2" />

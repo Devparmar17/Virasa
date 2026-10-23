@@ -5,7 +5,7 @@ export const metadata = { title: "All screens — Virasa" };
 
 export default function ScreensIndex() {
   return (
-    <div style={{ width: 390, background: "#FBF6EE", padding: "48px 20px 32px" }}>
+    <div style={{ width: 390, background: "#F6F1EA", padding: "48px 20px 32px" }}>
       <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800, letterSpacing: "-0.02em" }}>Virasa screens</h1>
       <p style={{ margin: "8px 0 20px", fontSize: 14, lineHeight: 1.45, color: "#5A4434" }}>
         Every screen from the design. Start at the splash to tap through the prototype flow.
@@ -20,7 +20,7 @@ export default function ScreensIndex() {
                 padding: "10px 14px",
                 borderRadius: 14,
                 background: "#FFFFFF",
-                border: "1px solid #EADFD2",
+                border: "1px solid #EFE6DA",
                 color: "#2B1B10",
                 display: "flex",
                 alignItems: "center",

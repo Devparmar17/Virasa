@@ -3,6 +3,7 @@
 // A "Local secrets & flavours" find, described in full.
 import { useSyncExternalStore } from "react";
 import Link from "next/link";
+import BackLink from "@/components/Back";
 import Speak from "@/components/Speak";
 import { toast } from "@/components/Toast";
 import { pop, share, useAsk } from "@/components/Tap";
@@ -52,21 +53,21 @@ export default function SecretScreen() {
         {item.img ? <img src={item.img} alt={item.alt} className="kenburns" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: item.focus, display: "block" }} /> : <span role="img" aria-label={`Illustration: ${item.alt}`} className="float"><Art item={item} size={132} /></span>}
         {item.img ? <div aria-hidden="true" style={{ position: "absolute", left: 0, right: 0, top: 0, height: "130px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0.45) 0%, rgba(20, 12, 6, 0) 100%)" }} /> : null}
         <div style={{ position: "absolute", top: "50px", left: "16px", right: "16px", display: "flex", justifyContent: "space-between" }}>
-          <Link href="/home" aria-label="Back" style={round}>
+          <BackLink href="/home" aria-label="Back" style={round}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
             </svg>
-          </Link>
+          </BackLink>
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               type="button"
               aria-label={isSaved ? "Saved. Remove from saved" : "Save"}
               aria-pressed={isSaved}
               onClick={(e) => {
-                pop(e.currentTarget);
+                pop(e.currentTarget, !isSaved);
                 setSaved((m) => ({ ...m, [item.id]: !isSaved }));
-                toast(isSaved ? "Removed from Saved" : "Saved — find it under Saved");
+                toast(isSaved ? "Removed from Saved" : "Saved — find it under Saved", isSaved ? "info" : "success");
               }}
               style={round}
             >
@@ -91,7 +92,7 @@ export default function SecretScreen() {
           <span style={{ fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>{item.distance}</span>
         </div>
         <h1 style={{ margin: "10px 0 0", fontSize: "26px", lineHeight: 1.18, fontWeight: 800, letterSpacing: "-0.02em", textWrap: "balance" }}>{item.title}</h1>
-        <p style={{ margin: "6px 0 0", fontSize: "15px", color: "#A0522D" }}>{item.line}</p>
+        <p style={{ margin: "6px 0 0", fontSize: "15px", color: "#6F5B4B" }}>{item.line}</p>
 
         <div style={{ marginTop: "16px" }}>
           <Speak text={`${item.title}. ${item.story.join(" ")}`} playingLabel="Stop listening" style={{ height: "46px", padding: "0 16px 0 12px", border: "1.5px solid #9A4E36", borderRadius: "14px", background: "#FFFFFF", color: "#9A4E36", display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}>
@@ -115,7 +116,7 @@ export default function SecretScreen() {
           <h2 style={{ margin: 0, fontSize: "19px", fontWeight: 800 }}>{item.listTitle}</h2>
           <ol style={{ listStyle: "none", margin: "12px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
             {item.list.map((row, i) => (
-              <li key={row.name} style={{ padding: "12px 14px", borderRadius: "16px", background: "#FBF6EE", border: "1px solid #EADFD2", display: "flex", gap: "12px" }}>
+              <li key={row.name} style={{ padding: "12px 14px", borderRadius: "16px", background: "#F6F1EA", border: "1px solid #EFE6DA", display: "flex", gap: "12px" }}>
                 <span aria-hidden="true" style={{ flex: "0 0 30px", width: "30px", height: "30px", borderRadius: "50%", background: k.ink, color: "#FFFFFF", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {i + 1}
                 </span>
@@ -151,13 +152,13 @@ export default function SecretScreen() {
           <h2 style={{ margin: 0, fontSize: "19px", fontWeight: 800 }}>Before you go</h2>
           <dl style={{ margin: "12px 0 0", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
             {item.know.map((row) => (
-              <div key={row.label} style={{ padding: "12px 14px", borderRadius: "14px", background: "#FBF6EE" }}>
+              <div key={row.label} style={{ padding: "12px 14px", borderRadius: "14px", background: "#F6F1EA" }}>
                 <dt style={{ fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{row.label}</dt>
                 <dd style={{ margin: "3px 0 0", fontSize: "15px", lineHeight: 1.3, fontWeight: 800 }}>{row.value}</dd>
               </div>
             ))}
           </dl>
-          <p style={{ margin: "12px 0 0", padding: "12px 14px", borderRadius: "14px", background: "#FBF1DE", fontSize: "13px", lineHeight: 1.5, color: "#5A4434" }}>
+          <p style={{ margin: "12px 0 0", padding: "12px 14px", borderRadius: "14px", background: "#FBEDE6", fontSize: "13px", lineHeight: 1.5, color: "#5A4434" }}>
             <strong style={{ color: "#2B1B10" }}>Tip. </strong>
             {item.tip}
           </p>
@@ -167,10 +168,10 @@ export default function SecretScreen() {
         </section>
 
         <section style={{ marginTop: "22px" }}>
-          <h2 style={{ margin: 0, fontSize: "19px", fontWeight: 800 }}>{item.group === "highlight" ? "More heritage highlights" : "More local secrets"}</h2>
+          <h2 style={{ margin: 0, fontSize: "19px", fontWeight: 800 }}>{item.group === "highlight" ? "More heritage highlights" : item.group === "stop" ? "More stops on the walk" : "More local secrets"}</h2>
           <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "10px" }}>
             {others.map((o) => (
-              <Link key={o.id} href={`/secret?id=${o.id}`} style={{ padding: "12px", borderRadius: "18px", border: "1px solid #EADFD2", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", gap: "14px" }}>
+              <Link key={o.id} href={`/secret?id=${o.id}`} style={{ padding: "12px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", gap: "14px" }}>
                 {o.img ? (
                   <img src={o.img} alt="" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
                 ) : (
@@ -192,7 +193,7 @@ export default function SecretScreen() {
       </main>
 
       <div className="nav-rail">
-        <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EADFD2", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)" }}>
+        <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)" }}>
           <Link href={go.href} style={{ height: "52px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: 800 }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polygon points="3 11 22 2 13 21 11 13 3 11" />

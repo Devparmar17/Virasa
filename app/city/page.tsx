@@ -7,7 +7,7 @@ import GeoLink from "@/components/GeoLink";
 import { toast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
 import { useAsk } from "@/components/Tap";
-import { frame, ScreenHeader } from "@/components/ui";
+import { frame, ScreenHeader, Spinner, Tick } from "@/components/ui";
 import { useStored } from "@/lib/store";
 import { cityPlan } from "@/lib/plans";
 
@@ -36,14 +36,14 @@ export default function CityScreen() {
   const download = (c: City) => {
     if (packs[c.id]) {
       setPacks((p) => ({ ...p, [c.id]: false }));
-      toast(`${c.name} pack removed`);
+      toast(`${c.name} pack removed`, { action: { label: "Undo", run: () => setPacks((p) => ({ ...p, [c.id]: true })) } });
       return;
     }
     setLoading(c.id);
     setTimeout(() => {
       setPacks((p) => ({ ...p, [c.id]: true }));
       setLoading(null);
-      toast(`${c.name} pack ready — ${c.mb} MB`);
+      toast(`${c.name} pack ready — ${c.mb} MB`, "success");
     }, 2200);
   };
 
@@ -91,24 +91,29 @@ export default function CityScreen() {
               const have = !!packs[c.id];
               const busy = loading === c.id;
               return (
-                <li key={c.id} style={{ padding: "12px 12px 12px 14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${have ? "#BFDCC8" : "#EADFD2"}`, overflow: "hidden", position: "relative" }}>
+                <li key={c.id} style={{ padding: "12px 12px 12px 14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${have ? "#BFDCC8" : "#EFE6DA"}`, overflow: "hidden", position: "relative" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <button type="button" onClick={() => (cityPlan(c.id) ? router.push(`/plan?city=${c.id}`) : ask(`What should I see in ${c.name}? Plan me a first day.`))} style={{ flex: 1, minWidth: 0, padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
                       <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{c.name}</span>
                       <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{c.tag}</span>
-                      {c.trip ? <span style={{ display: "inline-flex", marginTop: "6px", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "12px", fontWeight: 700, alignItems: "center" }}>{c.trip}</span> : null}
+                      {c.trip ? <span style={{ display: "inline-flex", marginTop: "6px", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: 700, alignItems: "center" }}>{c.trip}</span> : null}
                     </button>
-                    <button type="button" disabled={busy} aria-label={have ? `Remove ${c.name} pack` : `Download ${c.name} pack, ${c.mb} megabytes`} onClick={() => download(c)} style={{ flex: "0 0 auto", minWidth: "104px", height: "44px", padding: "0 12px", borderRadius: "12px", border: have ? "1.5px solid #BFDCC8" : "0", background: have ? "#E3F1E7" : "#9A4E36", color: have ? "#2F7A4A" : "#FFFFFF", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer" }}>
-                      {busy ? (
-                        <>
-                          <span className="spin" aria-hidden="true" style={{ width: "14px", height: "14px", borderRadius: "50%", border: "2px solid rgba(255, 255, 255, 0.4)", borderTopColor: "#FFFFFF" }} />
-                          Saving
-                        </>
-                      ) : have ? (
-                        "✓ Offline"
-                      ) : (
-                        `Get · ${c.mb} MB`
-                      )}
+                    <button type="button" disabled={busy} aria-busy={busy} aria-label={have ? `Remove ${c.name} pack` : `Download ${c.name} pack, ${c.mb} megabytes`} onClick={() => download(c)} style={{ flex: "0 0 auto", minWidth: "104px", height: "44px", padding: "0 12px", borderRadius: "12px", border: have ? "1.5px solid #BFDCC8" : "0", background: have ? "#E3F1E7" : "#9A4E36", color: have ? "#2F7A4A" : "#FFFFFF", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer" }}>
+                      <span key={busy ? "busy" : have ? "have" : "get"} className="btn-swap" style={{ gap: "6px" }}>
+                        {busy ? (
+                          <>
+                            <Spinner size={14} color="#FFFFFF" track="rgba(255, 255, 255, 0.4)" />
+                            Downloading
+                          </>
+                        ) : have ? (
+                          <>
+                            <Tick size={14} width={3} />
+                            Offline
+                          </>
+                        ) : (
+                          `Get · ${c.mb} MB`
+                        )}
+                      </span>
                     </button>
                   </div>
                   {busy ? <div data-timer style={{ position: "absolute", left: 0, bottom: 0, height: "3px", width: "100%", background: "#9A4E36", animation: "fill 2.2s linear backwards" }} /> : null}
@@ -117,7 +122,7 @@ export default function CityScreen() {
             })}
           </ul>
         ) : (
-          <div className="rise" style={{ padding: "18px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EADFD2" }}>
+          <div className="rise" style={{ padding: "18px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
             <p style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>No pack for “{query.trim()}” yet</p>
             <p style={{ margin: "6px 0 12px", fontSize: "14px", lineHeight: 1.45, color: "#5A4434" }}>The AI Guide can still tell you what to see there.</p>
             <button type="button" onClick={() => ask(`What heritage places should I see in ${query.trim()}?`)} style={{ height: "46px", padding: "0 16px", border: 0, borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", fontSize: "14px", fontWeight: 800, cursor: "pointer" }}>

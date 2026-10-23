@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import Speak from "./Speak";
 import { Toggle } from "./Tap";
+import { T } from "@/lib/i18n";
 import { HIGHLIGHTS, KIND, listenMins, type Secret } from "@/lib/secrets";
 
 // Home's "Heritage highlights" row: one card per monument, each opening its
@@ -24,7 +25,8 @@ type Card = {
   listen: ReactNode;
 };
 
-const listenStyle: CSSProperties = { flex: "0 0 auto", height: "44px", padding: "0 14px 0 10px", border: 0, borderRadius: "999px", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap", cursor: "pointer" };
+// Listen sits beside the title as a quiet round button; the card itself is the main target.
+const listenStyle: CSSProperties = { position: "relative", zIndex: 2, flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center", gap: "2px", fontSize: "11px", fontWeight: 800, textDecoration: "none", cursor: "pointer" };
 
 const Play = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
@@ -53,9 +55,8 @@ const CARDS: Card[] = [
     img: "/images/358cd23211709da539c3303890c27e8b.jpg",
     alt: "The Tree of Life stone jali inside Sidi Saiyyed Mosque",
     listen: (
-      <Link href="/story" style={listenStyle}>
+      <Link href="/story" aria-label="Listen to the story, 2 min" style={listenStyle}>
         <Play />
-        Listen 2 min
       </Link>
     ),
   },
@@ -75,9 +76,8 @@ const CARDS: Card[] = [
       focus: h.focus,
       art: h,
       listen: (
-        <Speak text={`${h.title}. ${h.story.join(" ")}`} playingLabel="Stop" style={listenStyle}>
+        <Speak text={`${h.title}. ${h.story.join(" ")}`} playingLabel="" label={`Listen, ${listenMins(h)} min`} style={listenStyle}>
           <Play />
-          Listen {listenMins(h)} min
         </Speak>
       ),
     })
@@ -102,14 +102,12 @@ function Placeholder({ item }: { item: Secret }) {
 
 export default function Highlights() {
   return (
-    <div className="hscroll" style={{ display: "flex", gap: "14px", padding: "14px 20px 6px" }}>
+    <div className="hscroll" style={{ display: "flex", gap: "14px", padding: "12px 20px 8px" }}>
       {CARDS.map((c) => (
-        <article key={c.id} style={{ flex: "0 0 300px", border: "1px solid #EADFD2", borderRadius: "20px", overflow: "hidden", background: "#FFFFFF", boxShadow: "0 8px 20px rgba(90, 60, 30, 0.08)", display: "flex", flexDirection: "column" }}>
-          <div style={{ position: "relative", height: "172px" }}>
-            <Link href={c.href} aria-label={c.title} style={{ display: "block", width: "100%", height: "100%", textDecoration: "none" }}>
-              {c.img ? <img src={c.img} alt={c.alt} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: c.focus, display: "block" }} /> : c.art ? <Placeholder item={c.art} /> : null}
-            </Link>
-            <span style={{ position: "absolute", top: "12px", left: "12px", height: "30px", padding: "0 11px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.95)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: 700, color: "#2B1B10", pointerEvents: "none" }}>
+        <article key={c.id} className="tap-card" style={{ position: "relative", flex: "0 0 272px", border: "1px solid #EFE6DA", borderRadius: "20px", overflow: "hidden", background: "#FFFFFF", boxShadow: "0 6px 18px rgba(90, 60, 30, 0.07)", display: "flex", flexDirection: "column" }}>
+          <div style={{ position: "relative", height: "156px" }}>
+            {c.img ? <img src={c.img} alt={c.alt} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: c.focus, display: "block" }} /> : c.art ? <Placeholder item={c.art} /> : null}
+            <span style={{ position: "absolute", left: "10px", bottom: "10px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.94)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: 700, color: "#2B1B10" }}>
               {c.walk ? (
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z" />
@@ -132,27 +130,28 @@ export default function Highlights() {
               offLabel={`Save ${c.title}`}
               onToast="Saved — find it under Saved"
               offToast="Removed from Saved"
-              style={{ position: "absolute", top: "8px", right: "8px", width: "40px", height: "40px", border: 0, borderRadius: "50%", background: "rgba(255, 255, 255, 0.95)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 10px rgba(43, 27, 16, 0.16)", cursor: "pointer" }}
+              style={{ position: "absolute", zIndex: 2, top: "8px", right: "8px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
               on={<Bookmark on />}
               off={<Bookmark on={false} />}
             />
-            <span style={{ position: "absolute", bottom: "12px", left: "12px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "rgba(43, 27, 16, 0.78)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: 700, color: "#FFFFFF", pointerEvents: "none" }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="#F3C267" stroke="none" aria-hidden="true">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
-              {c.rating}
-            </span>
-            {c.open ? <span style={{ position: "absolute", bottom: "12px", right: "12px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "#E3F1E7", display: "flex", alignItems: "center", fontSize: "12px", fontWeight: 700, color: "#2F7A4A", pointerEvents: "none" }}>{c.open}</span> : null}
           </div>
-          <div style={{ flex: 1, padding: "14px 16px 16px", display: "flex", flexDirection: "column" }}>
-            <Link href={c.href} style={{ display: "block", textDecoration: "none", color: "#2B1B10" }}>
-              <h3 style={{ margin: 0, fontSize: "18px", fontWeight: 800, letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.title}</h3>
-              <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#A0522D", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.line}</p>
-            </Link>
-            <div style={{ marginTop: "12px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
-              <span style={{ flex: 1, minWidth: 0, fontSize: "13px", lineHeight: 1.3, fontWeight: 600, color: "#6F5B4B" }}>{c.fact}</span>
-              {c.listen}
+          <div style={{ flex: 1, padding: "12px 12px 14px 16px", display: "flex", alignItems: "flex-start", gap: "10px" }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              {/* The title's link stretches over the whole card, so the card is one big target. */}
+              <Link href={c.href} className="card-link" style={{ display: "block", textDecoration: "none", color: "#2B1B10" }}>
+                <h3 style={{ margin: 0, fontSize: "17px", lineHeight: 1.25, fontWeight: 800, letterSpacing: "-0.01em", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.title}</h3>
+              </Link>
+              <p style={{ margin: "3px 0 0", fontSize: "13px", lineHeight: 1.35, color: "#6F5B4B", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.line}</p>
+              <p style={{ margin: "6px 0 0", display: "flex", alignItems: "center", gap: "5px", fontSize: "13px", fontWeight: 700, color: "#2B1B10", whiteSpace: "nowrap" }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#E0A23A" stroke="none" aria-hidden="true">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                {c.rating}
+                {c.open ? <span style={{ color: "#2F7A4A" }}>· {c.open === "Open now" ? <T k="place.open_now" /> : c.open}</span> : null}
+                <span style={{ fontWeight: 600, color: "#6F5B4B" }}>· {c.fact.split(" · ")[0]}</span>
+              </p>
             </div>
+            {c.listen}
           </div>
         </article>
       ))}

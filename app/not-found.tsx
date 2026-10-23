@@ -7,7 +7,7 @@ export const metadata = { title: "Off the map — Virasa" };
 export default function NotFound() {
   return (
     <div style={frame({ height: "844px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 32px", textAlign: "center" })}>
-      <span className="float" aria-hidden="true" style={{ width: "112px", height: "112px", borderRadius: "50%", background: "#FFFFFF", border: "1px solid #EADFD2", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 44px rgba(122, 74, 40, 0.14)" }}>
+      <span className="float" aria-hidden="true" style={{ width: "112px", height: "112px", borderRadius: "50%", background: "#FFFFFF", border: "1px solid #EFE6DA", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 44px rgba(122, 74, 40, 0.14)" }}>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
           <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />

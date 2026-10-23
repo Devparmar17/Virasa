@@ -122,6 +122,12 @@ a:hover {
   .sheet :is(a, button):hover {
     filter: brightness(0.93) saturate(1.08);
   }
+  /* Choices (chips, segments) would look half-selected if they went grey, so
+     they get a soft brand ring instead. */
+  .screen button:is([aria-pressed], [role="radio"], [role="tab"]):hover {
+    filter: none;
+    box-shadow: 0 0 0 3px rgba(154, 78, 54, 0.14) !important;
+  }
 }
 
 .screen :is(a, button):not([data-plain]):active,
@@ -159,13 +165,82 @@ a:hover {
   pointer-events: auto;
 }
 
+/* Floats 10px above the bottom edge; only the bar itself takes touches. */
+.nav-rail > .tabbar-wrap {
+  padding: 0 12px max(12px, env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.tabbar {
+  pointer-events: auto;
+  height: 68px;
+  padding: 0 6px;
+  border-radius: 24px;
+  background: rgba(255, 252, 247, 0.86);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  backdrop-filter: blur(18px) saturate(1.6);
+  border: 1px solid rgba(226, 211, 193, 0.8);
+  box-shadow: 0 12px 32px rgba(60, 36, 20, 0.16), 0 2px 6px rgba(60, 36, 20, 0.06);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: center;
+}
+
+.tab {
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-radius: 18px;
+  color: #75604f;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.2s ease, scale 0.16s ease;
+}
+
+.tab:hover {
+  color: #5a4434;
+}
+
+.tab:active {
+  scale: 0.92;
+}
+
+.tab[aria-current="page"] {
+  color: #9a4e36;
+}
+
+.tab-icon {
+  width: 52px;
+  height: 30px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.tab-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.tab[aria-current="page"] .tab-label {
+  font-weight: 800;
+}
+
+/* The active tab's tinted pill grows in from the middle. */
 .tab-pill {
-  animation: pill-in 0.36s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
+  background: #f6e3d8;
+  animation: pill-in 0.36s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 @keyframes pill-in {
   from {
-    scale: 0.5 0.8;
+    scale: 0.85;
     opacity: 0;
   }
 }
@@ -194,7 +269,7 @@ a:hover {
   line-height: 1.35;
   text-align: center;
   box-shadow: 0 12px 28px rgba(43, 27, 16, 0.3);
-  animation: toast-in 0.32s cubic-bezier(0.3, 1.3, 0.5, 1) backwards, toast-out 0.3s ease 2.3s forwards;
+  animation: toast-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) backwards, toast-out 0.3s ease 2.3s forwards;
 }
 
 @keyframes toast-in {
@@ -237,7 +312,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   border-radius: 26px 26px 0 0;
-  background: #fbf6ee;
+  background: #ffffff;
   color: #2b1b10;
   box-shadow: 0 -16px 40px rgba(43, 27, 16, 0.24);
   outline: none;
@@ -297,7 +372,7 @@ a:hover {
   min-height: 56px;
   padding: 8px 14px;
   margin-top: 8px;
-  border: 1.5px solid #eadfd2;
+  border: 1.5px solid #efe6da;
   border-radius: 14px;
   background: #ffffff;
   color: #2b1b10;
@@ -315,7 +390,7 @@ a:hover {
 .sheet-row[aria-pressed="true"],
 .sheet-row[aria-checked="true"] {
   border-color: #9a4e36;
-  background: #fbf1de;
+  background: #fbede6;
 }
 
 .sheet-row small {
@@ -372,19 +447,19 @@ a:hover {
 .stagger > *:nth-child(n + 7) { animation-delay: 0.3s; }
 
 .pop-in {
-  animation: pop-in 0.4s cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
+  animation: pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 @keyframes pop-in {
   from {
     opacity: 0;
-    scale: 0.6;
+    scale: 0.94;
   }
 }
 
 /* Splash: the logo settles in and the bar fills while the app "loads". */
 .splash-logo {
-  animation: pop-in 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) backwards;
+  animation: pop-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
 .splash-bar {
@@ -731,19 +806,379 @@ a:hover {
 .screen button[aria-pressed="true"],
 .screen button[aria-checked="true"],
 .screen button[aria-selected="true"] {
-  animation: select-pop 0.34s cubic-bezier(0.3, 1.5, 0.5, 1);
+  animation: select-pop 0.34s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes select-pop {
-  0% {
-    scale: 0.93;
-  }
-  60% {
-    scale: 1.05;
+  from {
+    scale: 0.97;
   }
 }
 
 /* Onboarding progress: the current step's bar fills as the screen opens. */
 .step-fill {
   animation: fill 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.25s backwards;
+}
+
+/* ---------- micro-interactions: loading, success, error ---------- */
+
+/* A button doing something it has to wait for: no press bounce, a wait cursor. */
+.screen button[aria-busy="true"] {
+  cursor: progress;
+  scale: 1 !important;
+}
+
+/* Swapping a button's label (idle → busy → done) slides the new one in. */
+.btn-swap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  animation: swap-in 0.26s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+@keyframes swap-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+/* A tick that draws itself in. Give the <path> pathLength="1". */
+.check-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 0.42s cubic-bezier(0.65, 0, 0.35, 1) 0.12s forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The badge behind a success tick swells once, then sends out a ring. */
+.success-badge {
+  animation: pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards, ring 0.9s ease-out 0.25s;
+}
+
+@keyframes ring {
+  from {
+    box-shadow: 0 0 0 0 rgba(47, 122, 74, 0.35);
+  }
+  to {
+    box-shadow: 0 0 0 18px rgba(47, 122, 74, 0);
+  }
+}
+
+/* A field that is wrong gives one short shake as the error appears. */
+.screen [aria-invalid="true"],
+.shake {
+  animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes shake {
+  20%,
+  60% {
+    translate: -3px 0;
+  }
+  40%,
+  80% {
+    translate: 3px 0;
+  }
+}
+
+/* Quiz answers: the right one pops, a wrong pick shakes (beats the select pop). */
+.screen button.ans-right {
+  animation: select-pop 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.screen button.ans-wrong {
+  animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+/* A small burst of colour for real wins: a booking made, a puzzle solved. */
+.confetti {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.confetti i {
+  position: absolute;
+  width: 7px;
+  height: 11px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: confetti 0.95s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes confetti {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(0.6);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(1);
+  }
+}
+
+/* Photos still downloading stay hidden, then fade in (see Motion). */
+.img-wait {
+  opacity: 0;
+}
+
+/* ---------- toast tones ---------- */
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  pointer-events: auto;
+}
+
+.toast-icon {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-success .toast-icon {
+  background: #2f7a4a;
+  color: #ffffff;
+  animation: pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.08s backwards;
+}
+
+.toast-error {
+  animation: toast-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) backwards, shake 0.42s ease 0.3s, toast-out 0.3s ease 3.3s forwards;
+}
+
+.toast-error .toast-icon {
+  background: #c4553b;
+  color: #ffffff;
+}
+
+/* A toast that offers Undo stays up a little longer. */
+.toast-action {
+  animation: toast-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) backwards, toast-out 0.3s ease 4.3s forwards;
+}
+
+.toast button {
+  margin: -6px -8px -6px 6px;
+  height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(251, 246, 238, 0.14);
+  color: #f3d9a8;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.2s ease, scale 0.16s ease;
+}
+
+.toast button:active {
+  scale: 0.95;
+}
+
+/* ---------- switches ---------- */
+
+/* The knob slides across instead of jumping. */
+.switch-knob {
+  transition: translate 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* A passport stamp lands like a real one: down hard, a slight tilt, settle. */
+.stamp-in {
+  animation: stamp-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.45s backwards;
+}
+
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    scale: 1.25;
+    rotate: -6deg;
+  }
+}
+
+/* ---------- cards with one big target ---------- */
+
+/* A card's main link stretches over the whole card; its own buttons (save,
+   listen) sit above it with z-index 2. The card presses in as one piece. */
+.card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+
+.card-link:focus-visible {
+  outline: none;
+}
+
+.card-link:focus-visible::after {
+  outline: 2px solid #9a4e36;
+  outline-offset: -2px;
+}
+
+.screen .card-link:active {
+  scale: 1;
+  filter: none;
+}
+
+.tap-card {
+  transition: scale 0.16s ease, box-shadow 0.2s ease;
+}
+
+.tap-card:has(.card-link:active) {
+  scale: 0.98;
+}
+
+@media (hover: hover) {
+  .tap-card:has(.card-link:hover) {
+    box-shadow: 0 10px 26px rgba(90, 60, 30, 0.13) !important;
+  }
+  .screen .card-link:hover {
+    filter: none;
+  }
+}
+
+/* Search fields draw their own clear button; hide the browser's second one. */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ---------- walking navigation ---------- */
+
+/* Your position breathes while you walk. */
+.nav-halo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nav-halo 2s ease-out infinite;
+}
+
+@keyframes nav-halo {
+  0% {
+    scale: 0.7;
+    opacity: 0.3;
+  }
+  100% {
+    scale: 1.5;
+    opacity: 0;
+  }
+}
+
+/* The story stop pings while you are at it. */
+.nav-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: nav-ping 1.2s ease-out infinite;
+}
+
+@keyframes nav-ping {
+  from {
+    scale: 1;
+    opacity: 0.9;
+  }
+  to {
+    scale: 2.2;
+    opacity: 0;
+  }
+}
+
+/* The story card lifts and glows while you are at the stop. */
+.nav-here {
+  border-color: #8a6424 !important;
+  box-shadow: 0 0 0 4px rgba(138, 100, 36, 0.18), 0 12px 28px rgba(90, 60, 30, 0.2) !important;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* The arrival card rises from the bottom with a little overshoot. */
+.arrive-card {
+  animation: arrive-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes arrive-up {
+  from {
+    translate: 0 100%;
+  }
+}
+
+/* ---------- explore map ---------- */
+
+/* On a phone shorter than the design, the map slides up so the pins stay in view above the card. */
+.map-canvas {
+  transform: translateY(min(0px, calc((100dvh - 844px) * 0.8)));
+}
+
+/* The name above the chosen pin rises in gently. */
+.label-in {
+  animation: label-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes label-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+/* The up-next countdown bar empties as the next story approaches. */
+@keyframes drain {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
+
+/* ---------- camera modes ---------- */
+
+/* Identify: a soft line sweeps the frame while the lens looks. */
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, rgba(243, 217, 168, 0) 0%, rgba(243, 217, 168, 0.55) 100%);
+  border-bottom: 2px solid rgba(243, 217, 168, 0.95);
+  animation: scan 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes scan {
+  from {
+    top: -60px;
+  }
+  to {
+    top: 100%;
+  }
+}
+
+/* Time travel: the handle sways gently until it is first dragged. */
+.nudge {
+  animation: nudge 1.6s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 10px 0;
+  }
 }

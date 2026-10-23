@@ -1,5 +1,6 @@
 // 09 · Place detail
 import Link from "next/link";
+import BackLink from "@/components/Back";
 import { Tap, Toggle } from "@/components/Tap";
 import Speak from "@/components/Speak";
 import SheetButton from "@/components/SheetButton";
@@ -11,12 +12,12 @@ export default function PlaceScreen() {
         <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="The Tree of Life jali seen from inside Sidi Saiyyed Mosque" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", top: "0", height: "130px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0.45) 0%, rgba(20, 12, 6, 0) 100%)" }} />
         <div style={{ position: "absolute", top: "50px", left: "16px", right: "16px", display: "flex", justifyContent: "space-between" }}>
-          <Link href="/home" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)" }}>
+          <BackLink href="/home" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
             </svg>
-          </Link>
+          </BackLink>
           <div style={{ display: "flex", gap: "10px" }}>
             <Toggle storeKey="saved" field="sidi" onLabel="Saved. Remove from saved" offLabel="Save" onToast="Saved — find it under Saved" offToast="Removed from Saved" style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)", cursor: "pointer" }}
               on={
@@ -39,7 +40,7 @@ export default function PlaceScreen() {
             </Tap>
           </div>
         </div>
-        <Tap aria-label="View all photos" href="/gallery" style={{ position: "absolute", right: "16px", bottom: "40px", height: "32px", padding: "0 12px", border: "0", borderRadius: "999px", background: "rgba(43, 27, 16, 0.78)", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}>
+        <Tap aria-label="View all photos" href="/gallery" style={{ position: "absolute", right: "16px", bottom: "36px", height: "40px", padding: "0 14px", border: "0", borderRadius: "999px", background: "rgba(43, 27, 16, 0.78)", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <rect width="18" height="18" x="3" y="3" rx="2" />
             <circle cx="9" cy="9" r="2" />
@@ -55,14 +56,14 @@ export default function PlaceScreen() {
           <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#F6E3DA", color: "#7E3D29", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
             Monument
           </span>
-          <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+          <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
             1573 · Gujarat Sultanate
           </span>
         </div>
         <h1 style={{ margin: "12px 0 0", fontSize: "28px", lineHeight: "1.15", fontWeight: "800", letterSpacing: "-0.02em" }}>
           Sidi Saiyyed Mosque
         </h1>
-        <p style={{ margin: "4px 0 0", fontSize: "15px", color: "#A0522D", fontWeight: "500" }}>
+        <p style={{ margin: "4px 0 0", fontSize: "15px", color: "#6F5B4B", fontWeight: "500" }}>
           Home of the Tree of Life jali
         </p>
         <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", fontWeight: "600", color: "#5A4434" }}>
@@ -110,7 +111,7 @@ export default function PlaceScreen() {
             {" Scan with AI Lens "}
           </Link>
         </div>
-        <section style={{ marginTop: "22px", padding: "18px", borderRadius: "18px", background: "#FBF6EE", border: "1px solid #EADFD2" }}>
+        <section style={{ marginTop: "22px", padding: "18px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
           <p style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
             THE STORY IN 30 SECONDS
           </p>
@@ -144,7 +145,7 @@ export default function PlaceScreen() {
           </div>
           <ol style={{ listStyle: "none", margin: "10px 0 0", padding: "0", display: "flex", flexDirection: "column" }}>
             <li>
-              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F0E8DD" }}>
+              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F3ECE2" }}>
                 <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", background: "#E3F1E7", color: "#2F7A4A", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M20 6 9 17l-5-5" />
@@ -159,7 +160,7 @@ export default function PlaceScreen() {
               </Link>
             </li>
             <li>
-              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F0E8DD" }}>
+              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F3ECE2" }}>
                 <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                     <polygon points="7 4 19 12 7 20 7 4" />
@@ -179,7 +180,7 @@ export default function PlaceScreen() {
               </Link>
             </li>
             <li>
-              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F0E8DD" }}>
+              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F3ECE2" }}>
                 <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", border: "1.5px solid #D9C7B3", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: "800" }}>
                   3
                 </span>
@@ -211,7 +212,7 @@ export default function PlaceScreen() {
             Look for these on site
           </h2>
           <div className="hscroll" style={{ margin: "12px -20px 0", padding: "0 20px", display: "flex", gap: "12px", overflowX: "auto", scrollbarWidth: "none" }}>
-            <article style={{ flex: "0 0 210px", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
+            <article style={{ flex: "0 0 210px", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
               <div style={{ position: "relative", height: "112px" }}>
                 <img src="/images/358cd23211709da539c3303890c27e8b.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -227,7 +228,7 @@ export default function PlaceScreen() {
                 </p>
               </div>
             </article>
-            <article style={{ flex: "0 0 210px", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
+            <article style={{ flex: "0 0 210px", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
               <div style={{ position: "relative", height: "112px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <img src="/images/sidi-lattice.jpg" alt="A geometric stone screen in a side arch of the mosque" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 50%", display: "block" }} />
                 <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -243,7 +244,7 @@ export default function PlaceScreen() {
                 </p>
               </div>
             </article>
-            <article style={{ flex: "0 0 210px", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
+            <article style={{ flex: "0 0 210px", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
               <div style={{ position: "relative", height: "112px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <img src="/images/sidi-exterior.jpg" alt="The west wall of the mosque, with its row of arches" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "40% 45%", display: "block" }} />
                 <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -266,7 +267,7 @@ export default function PlaceScreen() {
             Before you go
           </h2>
           <div style={{ marginTop: "12px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
-            <div style={{ padding: "14px", borderRadius: "14px", background: "#FBF6EE", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ padding: "14px", borderRadius: "14px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "6px" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
               </svg>
@@ -277,7 +278,7 @@ export default function PlaceScreen() {
                 Cover shoulders and knees
               </span>
             </div>
-            <div style={{ padding: "14px", borderRadius: "14px", background: "#FBF6EE", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ padding: "14px", borderRadius: "14px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "6px" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
@@ -289,7 +290,7 @@ export default function PlaceScreen() {
                 20–30 minutes
               </span>
             </div>
-            <div style={{ padding: "14px", borderRadius: "14px", background: "#FBF6EE", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ padding: "14px", borderRadius: "14px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "6px" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="4" />
                 <path d="M12 2v2" />
@@ -308,7 +309,7 @@ export default function PlaceScreen() {
                 Late afternoon
               </span>
             </div>
-            <div style={{ padding: "14px", borderRadius: "14px", background: "#FBF6EE", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ padding: "14px", borderRadius: "14px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "6px" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
                 <path d="M13 5v2" />
@@ -389,7 +390,7 @@ export default function PlaceScreen() {
         </section>
       </main>
       <div className="nav-rail">
-        <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EADFD2", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
+        <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
         <Link href="/walk" aria-label="Add to a heritage walk" style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "14px", border: "1.5px solid #E2D3C1", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />

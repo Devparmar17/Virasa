@@ -2,6 +2,7 @@
 
 // 03 · Personalise
 import Link from "next/link";
+import BackLink from "@/components/Back";
 import { useStored } from "@/lib/store";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 import { renderVals } from "./logic";
@@ -22,14 +23,14 @@ export default function PersonalizeScreen() {
   };
   const v: any = renderVals(state, setState);
   return (
-    <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FBF6EE", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", minHeight: "844px", paddingBottom: "120px", position: "relative", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <Link href="/login" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/login" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
           </svg>
-        </Link>
+        </BackLink>
         <div style={{ flex: "1", display: "flex", flexDirection: "column", gap: "6px", alignItems: "center" }}>
           <div style={{ display: "flex", gap: "6px" }}>
             <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1", overflow: "hidden", display: "block" }}>
@@ -54,16 +55,16 @@ export default function PersonalizeScreen() {
         </p>
       </div>
       <fieldset style={{ border: "0", margin: "20px 0 0", padding: "0 20px", minWidth: "0" }}>
-        <legend style={{ padding: "0", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: "13px", fontWeight: "700", letterSpacing: "0.08em", color: "#8A6424" }}>
+        <legend style={{ padding: "0", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
           <span>
-            INTERESTS
+            Interests
           </span>
           <span style={{ letterSpacing: "0", fontWeight: "600", color: "#6F5B4B" }}>
             {v.count}{" selected"}
           </span>
         </legend>
         <div className="stagger" style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
-          <button type="button" onClick={v.tog.arch} aria-pressed={v.on.arch} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.arch.bd}`, background: v.s.arch.bg, color: v.s.arch.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
+          <button type="button" onClick={v.tog.arch} aria-pressed={v.on.arch} style={{ height: "52px", padding: "0 12px", borderRadius: "16px", border: `1.5px solid ${v.s.arch.bd}`, background: v.s.arch.bg, color: v.s.arch.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="3" x2="21" y1="22" y2="22" />
               <line x1="6" x2="6" y1="18" y2="11" />
@@ -83,7 +84,7 @@ export default function PersonalizeScreen() {
               </>
             ) : null}
           </button>
-          <button type="button" onClick={v.tog.well} aria-pressed={v.on.well} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.well.bd}`, background: v.s.well.bg, color: v.s.well.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
+          <button type="button" onClick={v.tog.well} aria-pressed={v.on.well} style={{ height: "52px", padding: "0 12px", borderRadius: "16px", border: `1.5px solid ${v.s.well.bd}`, background: v.s.well.bg, color: v.s.well.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M3 4h18" />
               <path d="M5 8h14" />
@@ -102,7 +103,7 @@ export default function PersonalizeScreen() {
               </>
             ) : null}
           </button>
-          <button type="button" onClick={v.tog.food} aria-pressed={v.on.food} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.food.bd}`, background: v.s.food.bg, color: v.s.food.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
+          <button type="button" onClick={v.tog.food} aria-pressed={v.on.food} style={{ height: "52px", padding: "0 12px", borderRadius: "16px", border: `1.5px solid ${v.s.food.bd}`, background: v.s.food.bg, color: v.s.food.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
               <path d="M7 2v20" />
@@ -119,7 +120,7 @@ export default function PersonalizeScreen() {
               </>
             ) : null}
           </button>
-          <button type="button" onClick={v.tog.craft} aria-pressed={v.on.craft} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.craft.bd}`, background: v.s.craft.bg, color: v.s.craft.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
+          <button type="button" onClick={v.tog.craft} aria-pressed={v.on.craft} style={{ height: "52px", padding: "0 12px", borderRadius: "16px", border: `1.5px solid ${v.s.craft.bd}`, background: v.s.craft.bg, color: v.s.craft.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="6" cy="6" r="3" />
               <path d="M8.12 8.12 12 12" />
@@ -138,7 +139,7 @@ export default function PersonalizeScreen() {
               </>
             ) : null}
           </button>
-          <button type="button" onClick={v.tog.legend} aria-pressed={v.on.legend} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.legend.bd}`, background: v.s.legend.bg, color: v.s.legend.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
+          <button type="button" onClick={v.tog.legend} aria-pressed={v.on.legend} style={{ height: "52px", padding: "0 12px", borderRadius: "16px", border: `1.5px solid ${v.s.legend.bd}`, background: v.s.legend.bg, color: v.s.legend.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
               <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
@@ -154,7 +155,7 @@ export default function PersonalizeScreen() {
               </>
             ) : null}
           </button>
-          <button type="button" onClick={v.tog.spirit} aria-pressed={v.on.spirit} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.spirit.bd}`, background: v.s.spirit.bg, color: v.s.spirit.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
+          <button type="button" onClick={v.tog.spirit} aria-pressed={v.on.spirit} style={{ height: "52px", padding: "0 12px", borderRadius: "16px", border: `1.5px solid ${v.s.spirit.bd}`, background: v.s.spirit.bg, color: v.s.spirit.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
             </svg>
@@ -169,7 +170,7 @@ export default function PersonalizeScreen() {
               </>
             ) : null}
           </button>
-          <button type="button" onClick={v.tog.fest} aria-pressed={v.on.fest} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.fest.bd}`, background: v.s.fest.bg, color: v.s.fest.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
+          <button type="button" onClick={v.tog.fest} aria-pressed={v.on.fest} style={{ height: "52px", padding: "0 12px", borderRadius: "16px", border: `1.5px solid ${v.s.fest.bd}`, background: v.s.fest.bg, color: v.s.fest.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
               <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" />
@@ -185,7 +186,7 @@ export default function PersonalizeScreen() {
               </>
             ) : null}
           </button>
-          <button type="button" onClick={v.tog.photo} aria-pressed={v.on.photo} style={{ height: "48px", padding: "0 12px", borderRadius: "14px", border: `1.5px solid ${v.s.photo.bd}`, background: v.s.photo.bg, color: v.s.photo.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
+          <button type="button" onClick={v.tog.photo} aria-pressed={v.on.photo} style={{ height: "52px", padding: "0 12px", borderRadius: "16px", border: `1.5px solid ${v.s.photo.bd}`, background: v.s.photo.bg, color: v.s.photo.fg, display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", fontWeight: "700", cursor: "pointer", textAlign: "left" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
               <circle cx="12" cy="13" r="3" />
@@ -204,11 +205,11 @@ export default function PersonalizeScreen() {
         </div>
       </fieldset>
       <fieldset style={{ border: "0", margin: "22px 0 0", padding: "0 20px", minWidth: "0" }}>
-        <legend style={{ padding: "0", fontSize: "13px", fontWeight: "700", letterSpacing: "0.08em", color: "#8A6424" }}>
-          STORY LENGTH
+        <legend style={{ padding: "0", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
+          Story length
         </legend>
-        <div className="stagger" style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "8px" }}>
-          <button type="button" onClick={v.setLen.quick} aria-pressed={v.lenOn.quick} style={{ height: "58px", borderRadius: "14px", border: `1.5px solid ${v.lenS.quick.bd}`, background: v.lenS.quick.bg, color: v.lenS.quick.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
+        <div role="group" style={{ marginTop: "10px", padding: "4px", borderRadius: "16px", background: "#F1E7DA", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
+          <button type="button" onClick={v.setLen.quick} aria-pressed={v.lenOn.quick} style={{ height: "52px", borderRadius: "12px", border: `1.5px solid ${v.lenS.quick.bd}`, background: v.lenS.quick.bg, boxShadow: v.lenS.quick.sh, color: v.lenS.quick.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
             <span style={{ fontSize: "14px", fontWeight: "700" }}>
               Quick
             </span>
@@ -216,7 +217,7 @@ export default function PersonalizeScreen() {
               1 min
             </span>
           </button>
-          <button type="button" onClick={v.setLen.classic} aria-pressed={v.lenOn.classic} style={{ height: "58px", borderRadius: "14px", border: `1.5px solid ${v.lenS.classic.bd}`, background: v.lenS.classic.bg, color: v.lenS.classic.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
+          <button type="button" onClick={v.setLen.classic} aria-pressed={v.lenOn.classic} style={{ height: "52px", borderRadius: "12px", border: `1.5px solid ${v.lenS.classic.bd}`, background: v.lenS.classic.bg, boxShadow: v.lenS.classic.sh, color: v.lenS.classic.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
             <span style={{ fontSize: "14px", fontWeight: "700" }}>
               Classic
             </span>
@@ -224,7 +225,7 @@ export default function PersonalizeScreen() {
               3 min
             </span>
           </button>
-          <button type="button" onClick={v.setLen.deep} aria-pressed={v.lenOn.deep} style={{ height: "58px", borderRadius: "14px", border: `1.5px solid ${v.lenS.deep.bd}`, background: v.lenS.deep.bg, color: v.lenS.deep.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
+          <button type="button" onClick={v.setLen.deep} aria-pressed={v.lenOn.deep} style={{ height: "52px", borderRadius: "12px", border: `1.5px solid ${v.lenS.deep.bd}`, background: v.lenS.deep.bg, boxShadow: v.lenS.deep.sh, color: v.lenS.deep.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
             <span style={{ fontSize: "14px", fontWeight: "700" }}>
               Deep dive
             </span>
@@ -235,17 +236,17 @@ export default function PersonalizeScreen() {
         </div>
       </fieldset>
       <fieldset style={{ border: "0", margin: "22px 0 0", padding: "0 20px", minWidth: "0" }}>
-        <legend style={{ padding: "0", fontSize: "13px", fontWeight: "700", letterSpacing: "0.08em", color: "#8A6424" }}>
-          STORY LANGUAGE
+        <legend style={{ padding: "0", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
+          Story language
         </legend>
-        <div className="stagger" style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "8px" }}>
-          <button type="button" lang="en" onClick={v.setLang.en} aria-pressed={v.langOn.en} style={{ height: "46px", borderRadius: "999px", border: `1.5px solid ${v.langS.en.bd}`, background: v.langS.en.bg, color: v.langS.en.fg, fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
+        <div role="group" style={{ marginTop: "10px", padding: "4px", borderRadius: "16px", background: "#F1E7DA", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
+          <button type="button" lang="en" onClick={v.setLang.en} aria-pressed={v.langOn.en} style={{ height: "44px", borderRadius: "12px", border: `1.5px solid ${v.langS.en.bd}`, background: v.langS.en.bg, boxShadow: v.langS.en.sh, color: v.langS.en.fg, fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
             English
           </button>
-          <button type="button" lang="hi" onClick={v.setLang.hi} aria-pressed={v.langOn.hi} style={{ height: "46px", borderRadius: "999px", border: `1.5px solid ${v.langS.hi.bd}`, background: v.langS.hi.bg, color: v.langS.hi.fg, fontSize: "15px", fontWeight: "600", cursor: "pointer" }}>
+          <button type="button" lang="hi" onClick={v.setLang.hi} aria-pressed={v.langOn.hi} style={{ height: "44px", borderRadius: "12px", border: `1.5px solid ${v.langS.hi.bd}`, background: v.langS.hi.bg, boxShadow: v.langS.hi.sh, color: v.langS.hi.fg, fontSize: "15px", fontWeight: "600", cursor: "pointer" }}>
             हिन्दी
           </button>
-          <button type="button" onClick={v.setLang.gu} aria-pressed={v.langOn.gu} style={{ height: "46px", borderRadius: "999px", border: `1.5px solid ${v.langS.gu.bd}`, background: v.langS.gu.bg, color: v.langS.gu.fg, fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
+          <button type="button" onClick={v.setLang.gu} aria-pressed={v.langOn.gu} style={{ height: "44px", borderRadius: "12px", border: `1.5px solid ${v.langS.gu.bd}`, background: v.langS.gu.bg, boxShadow: v.langS.gu.sh, color: v.langS.gu.fg, fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
             Local
           </button>
         </div>
@@ -253,16 +254,23 @@ export default function PersonalizeScreen() {
           {"Local follows the state you're in — ગુજરાતી in Gujarat, தமிழ் in Tamil Nadu, বাংলা in West Bengal."}
         </p>
       </fieldset>
-      <div style={{ position: "absolute", left: "20px", right: "20px", bottom: "30px" }}>
+      <div className="nav-rail">
+        <div style={{ padding: "28px 20px 24px", background: "linear-gradient(180deg, rgba(251, 246, 238, 0) 0%, #FBF6EE 34%)" }}>
         <Link href="/location" style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
           <span>
             {v.cta}
           </span>
+          {v.count ? (
+            <span key={v.count} className="pop-in" style={{ minWidth: "26px", height: "26px", padding: "0 8px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.22)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800 }}>
+              {v.count}
+            </span>
+          ) : null}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
           </svg>
         </Link>
+        </div>
       </div>
     </div>
   );

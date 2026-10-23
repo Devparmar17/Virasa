@@ -14,7 +14,8 @@ export default function AutoAdvance({ to, ms }: { to: string; ms: number }) {
     } catch {
       // No storage: treat as a first visit.
     }
-    const t = setTimeout(() => router.push(done ? "/home" : to), ms);
+    // Replaced rather than pushed, so Back from the next screen doesn't return here and bounce forward again.
+    const t = setTimeout(() => router.replace(done ? "/home" : to), ms);
     return () => clearTimeout(t);
   }, [router, to, ms]);
   return null;

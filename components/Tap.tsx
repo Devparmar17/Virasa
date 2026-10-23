@@ -14,9 +14,9 @@ export async function share(title: string, text?: string) {
       return;
     }
     await navigator.clipboard.writeText(url);
-    toast("Link copied");
+    toast("Link copied", "success");
   } catch (e) {
-    if ((e as Error)?.name !== "AbortError") toast("Couldn't share right now");
+    if ((e as Error)?.name !== "AbortError") toast("Couldn't share right now", "error");
   }
 }
 
@@ -33,10 +33,12 @@ export function useAsk() {
   };
 }
 
-// A quick bounce that confirms a press.
-export function pop(el: Element) {
+// A soft dip that confirms a press. Switching something on (save, like,
+// download) also sends a ring out from the button.
+export function pop(el: Element, on?: boolean) {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  el.animate([{ scale: "1" }, { scale: "1.22" }, { scale: "0.94" }, { scale: "1" }], { duration: 380, easing: "ease-out" });
+  el.animate([{ scale: "1" }, { scale: "0.92" }, { scale: "1" }], { duration: 280, easing: "cubic-bezier(0.22, 1, 0.36, 1)" });
+  if (on) el.animate([{ boxShadow: "0 0 0 0 rgba(154, 78, 54, 0.5)" }, { boxShadow: "0 0 0 14px rgba(154, 78, 54, 0)" }], { duration: 600, easing: "ease-out" });
 }
 
 type TapProps =ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -90,10 +92,10 @@ export function Toggle({ storeKey, field, initial = false, on, off, onLabel, off
       aria-pressed={active}
       aria-label={(active ? onLabel : offLabel) || rest["aria-label"]}
       onClick={(e) => {
-        pop(e.currentTarget);
+        pop(e.currentTarget, !active);
         setMap((m) => ({ ...m, [field]: !active }));
         const msg = active ? offToast : onToast;
-        if (msg) toast(msg);
+        if (msg) toast(msg, active ? "info" : "success");
       }}
     >
       {active ? on : off}

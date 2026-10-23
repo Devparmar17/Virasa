@@ -17,7 +17,7 @@ export default function Capture({ style, children, label = "Capture photo" }: { 
           flash.addEventListener("animationend", () => flash.remove());
           frame.appendChild(flash);
         }
-        toast("Photo saved to your journal");
+        toast("Photo saved to your journal", "success");
       }}
       style={style}
     >

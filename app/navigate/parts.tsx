@@ -1,79 +1,83 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore, type CSSProperties } from "react";
+import { useRouter } from "next/navigation";
+import { canGoBack, replacingScreen } from "@/components/Back";
 import { toast } from "@/components/Toast";
-import { useStored } from "@/lib/store";
+import { asLang, tr, useT, VOICE } from "@/lib/i18n";
+import { readStored, useStored } from "@/lib/store";
 import { placeById } from "../explore/places";
 
 const noop = () => () => {};
 
 // The walk in the design is already under way to Sidi Saiyyed. The map can
 // send another destination as /navigate?to=<place id>.
-function useTrip() {
+export function useTrip() {
   const dest = useSyncExternalStore(
     noop,
     () => new URLSearchParams(window.location.search).get("to") || "sidi",
     () => "sidi"
   );
   const place = placeById(dest);
-  return dest === "sidi" ? { name: place.name, mins: 14, km: 1.1 } : { name: place.name, mins: place.mins, km: place.km };
+  // Where the destination is described: its own page, or the map for places without one.
+  const page = place.href || place.detail || "/explore";
+  return dest === "sidi"
+    ? { id: dest, name: place.name, mins: 14, km: 1.1, page, img: place.img, arrive: "/arrived" }
+    : { id: dest, name: place.name, mins: place.mins, km: place.km, page, img: place.img, arrive: page };
 }
 
-function arrival(mins: number) {
-  const d = new Date(Date.now() + mins * 60000);
-  return `${d.getHours() % 12 || 12}:${String(d.getMinutes()).padStart(2, "0")}`;
-}
-
-export function DestName() {
-  return <>{useTrip().name}</>;
-}
-
-export function EtaMins() {
-  return <>{useTrip().mins} min</>;
-}
-
-export function EtaLine() {
+// Ends the walk and returns to where it was started from (the map, a place,
+// the walk planner). Opened from a link, it replaces itself with the
+// destination's page, so Back can never lead into the ended walk again.
+export function useEndWalk() {
+  const router = useRouter();
   const trip = useTrip();
-  // The clock time only exists in the browser; the server renders the design's value.
-  const at = useSyncExternalStore(
-    noop,
-    () => arrival(trip.mins),
-    () => "10:42"
-  );
-  return (
-    <>
-      {trip.km} km · arrive {at}
-    </>
-  );
+  return (quiet?: boolean) => {
+    window.speechSynthesis?.cancel();
+    if (!quiet) toast(tr("nav.ended", { dest: trip.name }));
+    if (canGoBack()) router.back();
+    else {
+      replacingScreen();
+      router.replace(trip.page);
+    }
+  };
 }
 
-function say(text: string, onEnd?: () => void) {
+// Speaks in the app's language when the browser has a voice for it.
+export function say(text: string, onEnd?: () => void) {
   const synth = window.speechSynthesis;
   if (!synth) return false;
   synth.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = "en-IN";
+  u.lang = VOICE[asLang(readStored("lang", "en"))];
   if (onEnd) u.onend = onEnd;
   synth.speak(u);
   return true;
 }
 
-export function VoiceButton({ style }: { style: React.CSSProperties }) {
+export const useVoice = () => {
+  const [prefs] = useStored<Record<string, boolean>>("prefs", {});
+  return prefs.voice ?? true;
+};
+
+// Turns spoken directions on or off; turning them on reads out the current instruction.
+export function VoiceButton({ style, current }: { style: CSSProperties; current: string }) {
   const [prefs, setPrefs] = useStored<Record<string, boolean>>("prefs", {});
+  const t = useT();
   const on = prefs.voice ?? true;
   return (
     <button
       type="button"
-      aria-label={on ? "Voice guidance on" : "Voice guidance off"}
+      aria-label={on ? t("nav.voice_on") : t("nav.voice_off")}
       aria-pressed={on}
       onClick={() => {
         setPrefs((p) => ({ ...p, voice: !on }));
         if (on) {
           window.speechSynthesis?.cancel();
-          toast("Voice guidance off — we'll still vibrate before turns");
+          toast(t("nav.voice_off"));
         } else {
-          say("In 120 metres, turn left onto Relief Road.");
-          toast("Voice guidance on");
+          say(current);
+          toast(t("nav.voice_on"), "success");
         }
       }}
       style={{ ...style, opacity: on ? 1 : 0.7 }}
@@ -99,13 +103,14 @@ export function VoiceButton({ style }: { style: React.CSSProperties }) {
 const TEASER =
   "Just ahead is Teen Darwaza, the triple gateway built in 1415. People say a lamp in one of its niches has been kept burning for six hundred years, lit for the goddess Lakshmi, who is said never to have left the city.";
 
-// Plays the short story about the landmark coming up on the route.
-export function StoryPreview({ style }: { style: React.CSSProperties }) {
+// Plays the short story about the landmark on the route.
+export function StoryPreview({ style }: { style: CSSProperties }) {
   const [playing, setPlaying] = useState(false);
   useEffect(() => () => window.speechSynthesis?.cancel(), []);
   return (
     <button
       type="button"
+      aria-pressed={playing}
       aria-label={playing ? "Pause story about Teen Darwaza" : "Play story about Teen Darwaza, 1 minute 10"}
       onClick={() => {
         if (playing) {
@@ -114,7 +119,7 @@ export function StoryPreview({ style }: { style: React.CSSProperties }) {
         } else if (say(TEASER, () => setPlaying(false))) {
           setPlaying(true);
         } else {
-          toast("Audio isn't available in this browser");
+          toast("Audio isn't available in this browser", "error");
         }
       }}
       style={style}
@@ -130,7 +135,7 @@ export function StoryPreview({ style }: { style: React.CSSProperties }) {
           <polygon points="7 4 19 12 7 20 7 4" />
         </svg>
       )}
-      <span>{playing ? "Pause" : "1:10"}</span>
+      <span>{playing ? "" : "1:10"}</span>
     </button>
   );
 }

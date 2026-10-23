@@ -12,8 +12,8 @@ export function renderVals(state, setState) {
       const isOn = !!sel[id];
       on[id] = isOn;
       s[id] = isOn
-        ? { bg: '#9A4E36', bd: '#9A4E36', fg: '#FFFFFF' }
-        : { bg: '#FFFFFF', bd: '#E2D3C1', fg: '#2B1B10' };
+        ? { bg: '#FBEDE6', bd: '#9A4E36', fg: '#7E3D29' }
+        : { bg: '#FFFFFF', bd: '#E8DCCD', fg: '#2B1B10' };
       tog[id] = () => {
         const next = Object.assign({}, sel);
         next[id] = !isOn;
@@ -21,9 +21,10 @@ export function renderVals(state, setState) {
       };
     });
     const count = ids.filter((id) => sel[id]).length;
+    // Segmented control: the chosen option is a raised white thumb on a sand track.
     const pick = (cur, k) => (cur === k
-      ? { bg: '#2B1B10', bd: '#2B1B10', fg: '#FFFFFF', sub: '#E7D3B5' }
-      : { bg: '#FFFFFF', bd: '#E2D3C1', fg: '#2B1B10', sub: '#6F5B4B' });
+      ? { bg: '#FFFFFF', bd: 'transparent', fg: '#2B1B10', sub: '#9A4E36', sh: '0 2px 8px rgba(60, 36, 20, 0.14)' }
+      : { bg: 'transparent', bd: 'transparent', fg: '#5A4434', sub: '#6F5B4B', sh: 'none' });
     const lens = ['quick', 'classic', 'deep'];
     const langs = ['en', 'hi', 'gu'];
     const lenS = {}; const lenOn = {}; const setLen = {};
@@ -32,7 +33,7 @@ export function renderVals(state, setState) {
     langs.forEach((k) => { langS[k] = pick(lang, k); langOn[k] = lang === k; setLang[k] = () => setState({ lang: k }); });
     return {
       s, tog, on, count,
-      cta: count ? 'Continue · ' + count + ' selected' : 'Skip for now',
+      cta: count ? 'Continue' : 'Skip for now',
       lenS, lenOn, setLen, langS, langOn, setLang
     };
 }

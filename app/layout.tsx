@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import ToastHost from "@/components/Toast";
 import Prefs from "@/components/Prefs";
+import { NavTrail } from "@/components/Back";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main className="stage">{children}</main>
         <ToastHost />
         <Prefs />
+        <NavTrail />
         <Link href="/screens" className="screens-link">
           All screens
         </Link>
