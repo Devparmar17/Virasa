@@ -3,14 +3,20 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useStored } from "@/lib/store";
+import { replacingScreen } from "./Back";
 import { DEFAULT_SETTINGS, TEXT_SCALE, type Settings } from "@/lib/settings";
 
 // Applies the reading-size preference to the whole document.
 export default function Prefs() {
   const [settings] = useStored<Settings>("settings", DEFAULT_SETTINGS);
+  const [lang] = useStored("lang", "en");
   useEffect(() => {
     document.documentElement.style.setProperty("--read-scale", String(TEXT_SCALE[settings.text] ?? 1));
   }, [settings.text]);
+  // The page's language follows the picker, so screen readers pronounce it right.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
   return null;
 }
 
@@ -46,7 +52,9 @@ export function AutoStory({ href, seconds = 8 }: { href: string; seconds?: numbe
   useEffect(() => {
     if (!active) return;
     if (left <= 0) {
-      router.push(href);
+      // The story takes this screen's place, so Back from it doesn't restart the countdown.
+      replacingScreen();
+      router.replace(href);
       return;
     }
     const t = setTimeout(() => setLeft((n) => n - 1), 1000);
@@ -63,7 +71,7 @@ export function AutoStory({ href, seconds = 8 }: { href: string; seconds?: numbe
         </span>
         Story starts in {left} s
       </span>
-      <button type="button" onClick={() => setCancelled(true)} style={{ height: "36px", padding: "0 12px", border: "0", borderRadius: "10px", background: "rgba(251, 246, 238, 0.14)", color: "#FBF6EE", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+      <button type="button" onClick={() => setCancelled(true)} style={{ height: "40px", padding: "0 14px", border: "0", borderRadius: "10px", background: "rgba(251, 246, 238, 0.14)", color: "#FBF6EE", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
         Not now
       </button>
     </div>

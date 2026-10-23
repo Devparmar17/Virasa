@@ -32,6 +32,36 @@ export default function Motion() {
     return () => io.disconnect();
   }, []);
 
+  // Photos that are still downloading fade in when they arrive instead of
+  // snapping in line by line. Already-cached photos are left alone. The fade
+  // is a Web Animation so it doesn't replace a photo's own CSS animation (Ken Burns).
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const prep = (img: HTMLImageElement) => {
+      if ((img.complete && img.naturalWidth) || img.dataset.fade) return;
+      img.dataset.fade = "1";
+      img.classList.add("img-wait");
+      const show = () => {
+        img.classList.remove("img-wait");
+        img.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 450, easing: "ease-out" });
+      };
+      img.addEventListener("load", show, { once: true });
+      img.addEventListener("error", () => img.classList.remove("img-wait"), { once: true });
+    };
+    const scan = (root: ParentNode) => root.querySelectorAll?.<HTMLImageElement>(".screen img").forEach(prep);
+    scan(document);
+    // Photos that appear later (a new tab, a card that opens) get the same treatment.
+    const mo = new MutationObserver((records) => {
+      for (const r of records)
+        r.addedNodes.forEach((n) => {
+          if (n instanceof HTMLImageElement) prep(n);
+          else if (n instanceof Element) n.querySelectorAll<HTMLImageElement>("img").forEach(prep);
+        });
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => mo.disconnect();
+  }, []);
+
   // Lets a mouse drag sideways rows (.hscroll); touch and trackpads already scroll them.
   useEffect(() => {
     let row: HTMLElement | null = null;

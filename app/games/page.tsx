@@ -1,21 +1,22 @@
 // 21 · Play & learn
 import Link from "next/link";
+import BackLink from "@/components/Back";
 import MainNav from "@/components/MainNav";
 
 export default function GamesScreen() {
   return (
-    <div style={{ width: "390px", height: "1110px", position: "relative", overflow: "hidden", background: "#FBF6EE", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "1110px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 16px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <Link href="/home" aria-label="Back" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/home" aria-label="Back" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
           </svg>
-        </Link>
+        </BackLink>
         <h1 style={{ flex: "1", margin: "0", fontSize: "22px", fontWeight: "800", letterSpacing: "-0.01em" }}>
           {"Play & learn"}
         </h1>
-        <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", gap: "4px" }}>
+        <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", gap: "4px" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="#C8902B" stroke="none" aria-hidden="true">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
           </svg>
@@ -51,13 +52,13 @@ export default function GamesScreen() {
         More games
       </h2>
       <div style={{ margin: "12px 20px 0", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "12px" }}>
-        <Link href="/puzzle" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EADFD2", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+        <Link href="/puzzle" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
           <span style={{ position: "relative", height: "104px", borderRadius: "12px", overflow: "hidden", display: "block", background: "#2B1B10" }}>
             <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-            <span style={{ position: "absolute", left: "33.33%", top: "0", bottom: "0", width: "3px", background: "#FBF6EE" }} />
-            <span style={{ position: "absolute", left: "66.66%", top: "0", bottom: "0", width: "3px", background: "#FBF6EE" }} />
-            <span style={{ position: "absolute", top: "33.33%", left: "0", right: "0", height: "3px", background: "#FBF6EE" }} />
-            <span style={{ position: "absolute", top: "66.66%", left: "0", right: "0", height: "3px", background: "#FBF6EE" }} />
+            <span style={{ position: "absolute", left: "33.33%", top: "0", bottom: "0", width: "3px", background: "#F6F1EA" }} />
+            <span style={{ position: "absolute", left: "66.66%", top: "0", bottom: "0", width: "3px", background: "#F6F1EA" }} />
+            <span style={{ position: "absolute", top: "33.33%", left: "0", right: "0", height: "3px", background: "#F6F1EA" }} />
+            <span style={{ position: "absolute", top: "66.66%", left: "0", right: "0", height: "3px", background: "#F6F1EA" }} />
             <span style={{ position: "absolute", right: "0", bottom: "0", width: "33.33%", height: "33.33%", background: "#2B1B10" }} />
           </span>
           <span style={{ marginTop: "4px", fontSize: "15px", fontWeight: "800" }}>
@@ -70,13 +71,13 @@ export default function GamesScreen() {
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#8A6424" }}>
               +20 pts
             </span>
-            <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+            <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
               2 min
             </span>
           </span>
         </Link>
-        <article style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EADFD2", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
-          <span role="img" aria-label="Illustration placeholder: guess the state" style={{ height: "104px", borderRadius: "12px", background: "#F5E6CC", display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center", gap: "6px", padding: "0 12px" }}>
+        <article style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+          <span role="img" aria-label="Illustration placeholder: guess the state" style={{ height: "104px", borderRadius: "12px", background: "#F6EEE4", display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center", gap: "6px", padding: "0 12px" }}>
             <span style={{ height: "28px", padding: "0 10px", borderRadius: "8px", background: "#FFFFFF", fontSize: "12px", fontWeight: "800", display: "flex", alignItems: "center" }}>
               Rajasthan?
             </span>
@@ -97,12 +98,12 @@ export default function GamesScreen() {
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#8A6424" }}>
               +10 pts
             </span>
-            <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+            <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
               All India
             </span>
           </span>
         </article>
-        <Link href="/lens" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EADFD2", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+        <Link href="/lens" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
           <span style={{ height: "104px", borderRadius: "12px", background: "#2B1B10", color: "#F3D9A8", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M3 7V5a2 2 0 0 1 2-2h2" />
@@ -123,12 +124,12 @@ export default function GamesScreen() {
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#8A6424" }}>
               +25 pts
             </span>
-            <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+            <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
               On site
             </span>
           </span>
         </Link>
-        <article style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EADFD2", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+        <article style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
           <span style={{ height: "104px", borderRadius: "12px", background: "#EDE4DA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
@@ -145,13 +146,13 @@ export default function GamesScreen() {
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#8A6424" }}>
               +15 pts
             </span>
-            <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+            <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
               1 min
             </span>
           </span>
         </article>
       </div>
-      <section style={{ margin: "22px 20px 0", padding: "16px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid #EADFD2" }}>
+      <section style={{ margin: "22px 20px 0", padding: "16px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span style={{ fontSize: "15px", fontWeight: "800" }}>
             Next stamp: Gujarat gold
@@ -160,7 +161,7 @@ export default function GamesScreen() {
             240 / 300
           </span>
         </div>
-        <div style={{ marginTop: "10px", height: "8px", borderRadius: "999px", background: "#EADFD2", overflow: "hidden" }}>
+        <div style={{ marginTop: "10px", height: "8px", borderRadius: "999px", background: "#EFE6DA", overflow: "hidden" }}>
           <div style={{ width: "80%", height: "100%", borderRadius: "999px", background: "#8A6424" }} />
         </div>
         <p style={{ margin: "10px 0 0", fontSize: "12px", color: "#6F5B4B" }}>

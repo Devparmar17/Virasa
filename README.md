@@ -15,7 +15,7 @@ npm run dev      # http://localhost:3000
 - **Walk planner** — route options and reordering change the stops, distance and time.
 - **AI Guide** — chat, voice input and follow-ups handed over from other screens.
 - **Voice search** — the mic on Home and Search listens with the browser's speech recognition (Chrome, Edge, Safari) and searches for what it hears.
-- **Tickets and guided walks** — `/tickets`: pick a date, time and guests, reserve, and keep the booking code under My tickets. Prices are sample values and nothing is charged; bookings are stored in the browser only.
+- **Tickets and guided walks** — `/tickets`: pick a date, time and guests, pay, and keep the booking code under My tickets. Cancelling keeps a 50% cancellation charge and refunds the rest; cancelled bookings stay listed with the refund. Prices are sample values and payment is simulated; bookings are stored in the browser only.
 - **Local secrets** — the three cards on Home open `/secret?id=…`, a description page shaped to the find: things to spot, dishes to eat, or legend set beside the record.
 - **Trip plans** — the city cards on Home open `/plan?city=…`: choose 1–3 days and interests for a day-by-day outline, and save it to Saved › Plans.
 - **Saved, Profile, Settings, Passport, Notifications, City packs, Gallery.**
@@ -31,11 +31,16 @@ Most place photographs come from Wikimedia Commons under Creative Commons licenc
 `/login` offers Google, email sign-up, log in, or carrying on as a guest.
 
 - **Email** accounts are stored in this browser only (password kept as a salted hash). They are for trying the flow, not real security: there is no server, password reset or sync between devices yet.
-- **Google** needs an OAuth client ID. In Google Cloud Console create an *OAuth client ID* of type *Web application*, add `http://localhost:3000` (and your live URL) under *Authorised JavaScript origins*, then put it in `.env.local` and restart:
+- **Google** sign-in goes through **Firebase Authentication**. In the Firebase console, turn on Authentication › Sign-in method › Google, register a Web app under Project settings, and copy its config into `.env.local`:
 
 ```
-NEXT_PUBLIC_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project
+NEXT_PUBLIC_FIREBASE_APP_ID=...
 ```
+
+  Restart the server afterwards. `localhost` is allowed by default; add your live domain under Authentication › Settings › Authorized domains when you deploy. (A plain Google OAuth client ID in `NEXT_PUBLIC_GOOGLE_CLIENT_ID` also works, if you'd rather not use Firebase.)
 
 Until then the Google button explains that it isn't set up and offers email instead.
 
@@ -43,13 +48,17 @@ Until then the Google button explains that it isn't set up and offers email inst
 
 Without any setup the guide answers from a small built-in library (`lib/guide.ts`) covering Ahmedabad's Old City and a few other cities, in English and partly in Hindi.
 
-To have Claude answer instead, create `.env.local` with:
+To have **Google Gemini** answer, add your key (from Google AI Studio) to `.env.local` and restart the server:
 
 ```
-ANTHROPIC_API_KEY=your-key
+GEMINI_API_KEY=your-key
+# optional, to use a different model:
+GEMINI_MODEL=gemini-3.8-flash
 ```
 
-and restart the dev server. The route is `app/api/guide/route.ts`; if the request fails it falls back to the library.
+Claude can answer instead with `ANTHROPIC_API_KEY=your-key`. When both are set Gemini answers first and Claude takes over if it fails; with neither, or if a request fails, the library answers. The route is `app/api/guide/route.ts`.
+
+Answers are read aloud in the chosen language as well as shown (the speaker button in the guide's header turns this off), and questions can be asked by voice with the mic.
 
 ## Learn More
 

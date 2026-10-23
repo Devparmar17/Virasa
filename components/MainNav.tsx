@@ -1,13 +1,14 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { T, type Key } from "@/lib/i18n";
 
 type Tab = "home" | "saved" | "explore" | "ai-guide" | "profile";
 
-const TABS: { id: Tab; href: string; label: string; icon: ReactNode }[] = [
+const TABS: { id: Tab; href: string; label: Key; icon: ReactNode }[] = [
   {
     id: "home",
     href: "/home",
-    label: "Home",
+    label: "tab.home",
     icon: (
       <>
         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -18,13 +19,13 @@ const TABS: { id: Tab; href: string; label: string; icon: ReactNode }[] = [
   {
     id: "saved",
     href: "/saved",
-    label: "Saved",
+    label: "tab.saved",
     icon: <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />,
   },
   {
     id: "explore",
     href: "/explore",
-    label: "Navigation",
+    label: "tab.explore",
     icon: (
       <>
         <circle cx="12" cy="12" r="10" />
@@ -35,7 +36,7 @@ const TABS: { id: Tab; href: string; label: string; icon: ReactNode }[] = [
   {
     id: "ai-guide",
     href: "/ai-guide",
-    label: "AI Guide",
+    label: "tab.guide",
     icon: (
       <>
         <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z" />
@@ -47,7 +48,7 @@ const TABS: { id: Tab; href: string; label: string; icon: ReactNode }[] = [
   {
     id: "profile",
     href: "/profile",
-    label: "Profile",
+    label: "tab.profile",
     icon: (
       <>
         <circle cx="12" cy="8" r="4.5" />
@@ -57,26 +58,30 @@ const TABS: { id: Tab; href: string; label: string; icon: ReactNode }[] = [
   },
 ];
 
-// The main tab bar. It sits at the bottom of the screen and stays in view
-// while a long screen scrolls.
+// The main tab bar: a frosted bar floating just above the bottom edge. It
+// stays in view while a long screen scrolls.
 export default function MainNav({ active }: { active?: Tab }) {
   return (
     <div className="nav-rail">
-      <nav aria-label="Main" style={{ height: "90px", padding: "10px 4px 24px", background: "#EBCFA3", borderRadius: "24px 24px 0 0", display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", boxShadow: "0 -8px 24px rgba(90, 60, 30, 0.10)" }}>
-        {TABS.map((t) => {
-          const on = t.id === active;
-          return (
-            <Link key={t.id} href={t.href} aria-current={on ? "page" : undefined} className="tab" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "4px", textDecoration: "none", color: on ? "#7E3D29" : "#5C3D24", fontSize: "12px", fontWeight: on ? 800 : 600 }}>
-              <span className={on ? "tab-pill" : undefined} style={{ width: "58px", height: "32px", borderRadius: "999px", background: on ? "#FBF1DE" : "transparent", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={on ? 2.1 : 1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  {t.icon}
-                </svg>
-              </span>
-              <span>{t.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+      <div className="tabbar-wrap">
+        <nav aria-label="Main" className="tabbar">
+          {TABS.map((t) => {
+            const on = t.id === active;
+            return (
+              <Link key={t.id} href={t.href} aria-current={on ? "page" : undefined} className="tab" data-plain>
+                <span className={on ? "tab-icon tab-pill" : "tab-icon"}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={on ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    {t.icon}
+                  </svg>
+                </span>
+                <span className="tab-label">
+                  <T k={t.label} />
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
     </div>
   );
 }

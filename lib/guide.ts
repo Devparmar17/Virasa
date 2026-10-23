@@ -1,6 +1,11 @@
 // Virasa's built-in heritage library. The AI Guide answers from here when no
 // language model is configured (see app/api/guide/route.ts).
 
+import { searchApp } from "./search";
+import { SECRETS } from "./secrets";
+import { BOOKABLES, rupees } from "./tickets";
+import { CITY_PLANS } from "./plans";
+
 export type GuideMessage = { role: "user" | "guide"; text: string };
 
 // `city` entries answer "what should I see in…" and outrank general topics.
@@ -106,10 +111,73 @@ const LIBRARY: Entry[] = [
   },
 ];
 
+// Everyday conversation, so "hello" or "thanks" gets a human reply rather than a shrug.
+const SMALL_TALK: { test: RegExp; en: string; hi: string }[] = [
+  {
+    test: /^\s*(hi+|hello+|hey+|hiya|namaste|namaskar|namaskaar|kem cho|vanakkam|good (morning|afternoon|evening)|greetings)\b|^\s*(नमस्ते|नमस्कार|हैलो|हाय)/i,
+    en: "Namaste! I'm your Virasa guide for Ahmedabad's Old City. Ask me about a monument, a legend or where to eat — or say \"plan two hours\" and I'll plan a walk for you.",
+    hi: "नमस्ते! मैं अहमदाबाद के पुराने शहर के लिए आपका विरासत गाइड हूँ। किसी स्मारक, किंवदंती या खाने की जगह के बारे में पूछिए — या कहिए \"दो घंटे की सैर बनाओ\" और मैं आपके लिए सैर बना दूँगा।",
+  },
+  {
+    test: /\b(thanks|thank you|thank u|thx|ty|shukriya|dhanyavaad|dhanyavad|aabhar)\b|धन्यवाद|शुक्रिया/i,
+    en: "You're welcome! Is there anything else nearby you'd like to know about?",
+    hi: "आपका स्वागत है! आस-पास और कुछ जानना चाहेंगे?",
+  },
+  {
+    test: /\b(who are you|what are you|what can you do|how can you help|help me|what do you know|your name)\b|तुम कौन|आप कौन/i,
+    en: "I'm Virasa's heritage guide. I can tell you the story behind a place, explain what you're looking at, suggest where to eat, plan a walk around the Old City, or help with tickets and timings. Try \"Tell me about Jama Masjid\".",
+    hi: "मैं विरासत का हेरिटेज गाइड हूँ। मैं किसी जगह की कहानी, सामने दिख रही चीज़ का मतलब, खाने की जगहें, पुराने शहर की सैर की योजना और टिकट व समय बता सकता हूँ। पूछिए: \"जामा मस्जिद के बारे में बताओ\"।",
+  },
+  {
+    test: /\b(how are you|how r u|how's it going|kaise ho|kaise hain)\b|कैसे हो|कैसे हैं/i,
+    en: "I'm well, and ready to explore! The light is lovely at the Sidi Saiyyed jali right now. What would you like to see?",
+    hi: "मैं बढ़िया हूँ और घूमने को तैयार! अभी सीदी सैयद की जाली पर रोशनी बहुत सुंदर है। आप क्या देखना चाहेंगे?",
+  },
+  {
+    test: /^\s*(bye|goodbye|good night|see you|tata|alvida)\b|अलविदा/i,
+    en: "Enjoy the Old City! I'm here whenever you want the story behind what you see.",
+    hi: "पुराने शहर का आनंद लीजिए! जब भी किसी जगह की कहानी चाहिए, मैं यहीं हूँ।",
+  },
+  {
+    test: /^\s*(ok|okay|cool|nice|great|wow|good|super|awesome|hmm+)\s*[.!]*\s*$/i,
+    en: "Glad that helps! Want me to plan a short walk from here, or tell you about the next place on your way?",
+    hi: "अच्छा लगा! क्या यहाँ से एक छोटी सैर बना दूँ, या रास्ते की अगली जगह के बारे में बताऊँ?",
+  },
+];
+
+// Anything else the app knows — a place, a find, a ticket, a trip — answered from its own pages.
+const COMMON = new Set(["what", "where", "when", "which", "tell", "about", "show", "famous", "best", "good", "near", "this", "that", "there", "with", "from", "have", "does", "capital", "city", "place", "places", "visit", "time", "today"]);
+
+function fromApp(question: string): string | null {
+  const hit = searchApp(question, 1)[0];
+  if (!hit) return null;
+  // Only answer from a page when the question names it: a stray shared word
+  // ("capital", "best") must not turn an unrelated question into a place's story.
+  const title = hit.title.toLowerCase();
+  const named = question
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .some((w) => w.length >= 4 && !COMMON.has(w) && title.includes(w.replace(/s$/, "")));
+  if (!named) return null;
+  const place = SECRETS.find((x) => x.id === hit.id);
+  if (place) return `${place.story[0]} ${place.tip}`;
+  const ticket = BOOKABLES.find((b) => `ticket-${b.id}` === hit.id);
+  if (ticket) return `${ticket.title}, ${ticket.place}: ${ticket.blurb} It runs ${ticket.duration.toLowerCase()} and costs ${rupees(ticket.adult)} for an adult — you can book it under Tickets.`;
+  const plan = CITY_PLANS.find((c) => `plan-${c.id}` === hit.id);
+  if (plan) {
+    const firsts = plan.stops.filter((x) => x.core).slice(0, 3).map((x) => x.name);
+    return `${plan.name} (${plan.tag.toLowerCase()}): start with ${firsts.join(", ")}. ${plan.season}. ${plan.getting}. Open the ${plan.name} plan on Home for a day-by-day outline.`;
+  }
+  return `${hit.title}: ${hit.sub}. It's on the map under Explore.`;
+}
+
 const FALLBACK = {
-  en: "I don't have a verified story for that yet. I know the Old City best — try asking about Sidi Saiyyed Mosque, Bhadra Fort, Manek Chowk, the pols, stepwells or planning a walk.",
+  en: "I'm not sure about that one yet — I know Ahmedabad's Old City best. Try \"Tell me about Jama Masjid\", \"Where should I eat tonight?\" or \"Plan two hours for me\".",
   hi: "इसके बारे में मेरे पास अभी प्रमाणित जानकारी नहीं है। मैं पुराने शहर को सबसे अच्छी तरह जानता हूँ — सीदी सैय्यद मस्जिद, भद्र क़िला, माणेक चौक, पोल, वाव या पैदल सैर की योजना के बारे में पूछिए।",
 };
+
+// True when the library had nothing specific to say.
+export const isFallback = (text: string) => text === FALLBACK.en || text === FALLBACK.hi;
 
 function find(text: string) {
   const q = text.toLowerCase();
@@ -136,11 +204,18 @@ export function libraryAnswer(messages: GuideMessage[], lang: string): string {
   const hindi = lang === "hi" || isHindiRequest(last);
   const kid = isKidRequest(last);
 
+  const chat = SMALL_TALK.find((x) => x.test.test(last));
+  if (chat && !find(last)) return hindi ? chat.hi : chat.en;
+
   let entry = find(last);
   if (!entry && (isHindiRequest(last) || kid)) {
     for (let i = users.length - 2; i >= 0 && !entry; i--) entry = find(users[i].text);
   }
-  if (!entry) return hindi ? FALLBACK.hi : FALLBACK.en;
+  if (!entry) {
+    const known = fromApp(last);
+    if (known) return hindi ? `${known}\n\n(यह जानकारी अभी हिन्दी में उपलब्ध नहीं है।)` : known;
+    return hindi ? FALLBACK.hi : FALLBACK.en;
+  }
   if (kid && entry.kid) return entry.kid;
   if (hindi) return entry.hi || `${entry.en}\n\n(यह कहानी अभी हिन्दी में उपलब्ध नहीं है।)`;
   return entry.en;

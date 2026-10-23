@@ -1,22 +1,41 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { libraryAnswer, type GuideMessage } from "@/lib/guide";
+import { isFallback, libraryAnswer, type GuideMessage } from "@/lib/guide";
 import { langOf } from "@/lib/store-shared";
+import { gemini, geminiKey } from "@/lib/gemini";
 
-// Answers a question for the AI Guide. With an Anthropic key in the
-// environment (ANTHROPIC_API_KEY in .env.local) Claude answers; without one,
-// or if the request fails, the built-in heritage library answers instead.
+// Answers a question for the AI Guide. Google Gemini answers when
+// GEMINI_API_KEY is set in .env.local; otherwise Claude does when
+// ANTHROPIC_API_KEY is set. With neither, or if the request fails, the
+// built-in heritage library answers instead, so the guide always replies.
 
 const SYSTEM = `You are the Virasa AI Guide, a warm, knowledgeable heritage guide inside a travel app for India. The traveller is standing near Sidi Saiyyed Mosque in the Old City of Ahmedabad, Gujarat.
 
-Answer questions about monuments, history, legends, crafts, food and how to plan a visit. The traveller is reading on a phone while walking, so keep each answer under about 90 words, in plain sentences with no markdown, headings or bullet symbols. Lead with the answer. Give dates, names and distances only when you are confident of them, and say plainly when something is legend rather than recorded history or when you are not sure. If asked about something unrelated to travel and heritage, say briefly what you can help with instead.
+Answer questions about monuments, history, legends, crafts, food and how to plan a visit. The traveller is reading on a phone while walking, so keep each answer under about 90 words, in plain sentences with no markdown, headings or bullet symbols. Lead with the answer. Give dates, names and distances only when you are confident of them, and say plainly when something is legend rather than recorded history or when you are not sure. The traveller may also ask about anything else — general knowledge, language and translation, culture, food, weather, directions, everyday questions or small talk. Answer those helpfully and directly too, the way a well-informed local friend would, and where it fits, connect back to their trip. Decline only requests that are harmful.
+
+Write years, dates, numbers and distances as digits (1573, 2 km, 9 pm), never spelled out in words.
 
 Latency-sensitive; begin your visible answer immediately.`;
 
 const hasKey = () => Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
+// Search asks for a short, glanceable answer; the guide chat can say a little more.
+const SEARCH_NOTE = "This question comes from the app's search box: answer in at most 45 words, two or three plain sentences.";
+
+async function askGemini(history: GuideMessage[], lang: string, mode: string): Promise<string | null> {
+  return gemini({
+    system: `${SYSTEM}
+
+Reply in ${langOf(lang).label} unless the traveller asks for another language.${mode === "search" ? `
+
+${SEARCH_NOTE}` : ""}`,
+    contents: history.map((m) => ({ role: m.role === "user" ? "user" : "model", parts: [{ text: m.text }] })),
+    maxTokens: mode === "search" ? 220 : 600,
+  });
+}
 
 export async function POST(request: Request) {
   let messages: GuideMessage[] = [];
   let lang = "en";
+  let mode = "chat";
   try {
     const body = await request.json();
     if (Array.isArray(body.messages)) {
@@ -26,6 +45,7 @@ export async function POST(request: Request) {
         .map((m: GuideMessage) => ({ role: m.role, text: m.text.slice(0, 2000) }));
     }
     if (typeof body.lang === "string") lang = body.lang;
+    if (body.mode === "search") mode = "search";
   } catch {
     return Response.json({ error: "Invalid request" }, { status: 400 });
   }
@@ -33,11 +53,26 @@ export async function POST(request: Request) {
     return Response.json({ error: "Ask a question" }, { status: 400 });
   }
 
-  const fromLibrary = () => Response.json({ text: libraryAnswer(messages, lang), source: "library" });
-  if (!hasKey()) return fromLibrary();
-
+  const fromLibrary = () => {
+    let text = libraryAnswer(messages, lang);
+    const fallback = isFallback(text);
+    // Without Gemini the library can't answer everything: say why, right where it's noticed.
+    if (fallback && !geminiKey() && mode !== "search") text += "\n\n(Gemini isn't connected yet, so I can only answer from Virasa's built-in library. Add GEMINI_API_KEY to .env.local and restart the app to have Gemini answer anything.)";
+    return Response.json({ text, source: "library", fallback });
+  };
   // The conversation must open with the traveller's turn.
   const history = messages.slice(messages.findIndex((m) => m.role === "user"));
+
+  if (geminiKey()) {
+    try {
+      const text = await askGemini(history, lang, mode);
+      if (text) return Response.json({ text, source: "gemini" });
+    } catch (error) {
+      console.error("AI Guide: Gemini request failed.", error);
+    }
+    if (!hasKey()) return fromLibrary();
+  }
+  if (!hasKey()) return fromLibrary();
   try {
     const client = new Anthropic();
     const response = await client.beta.messages.create({

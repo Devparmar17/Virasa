@@ -3,6 +3,7 @@
 // Trip plan for a city — pick the length and interests, then save it.
 import { useState, useSyncExternalStore, type CSSProperties } from "react";
 import Link from "next/link";
+import BackLink from "@/components/Back";
 import { toast } from "@/components/Toast";
 import { pop, share, useAsk } from "@/components/Tap";
 import { frame } from "@/components/ui";
@@ -15,7 +16,7 @@ const SLOT_ICON: Record<Slot, string> = {
   Afternoon: "M12 2v2 M12 20v2 M4.93 4.93l1.41 1.41 M17.66 17.66l1.41 1.41 M2 12h2 M20 12h2 M6.34 17.66l-1.41 1.41 M19.07 4.93l-1.41 1.41 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z",
   Evening: "M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z",
 };
-const chip = (on: boolean): CSSProperties => ({ flex: "0 0 auto", minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "#9A4E36" : "#E2D3C1"}`, background: on ? "#9A4E36" : "#FFFFFF", color: on ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: 700, cursor: "pointer" });
+const chip = (on: boolean): CSSProperties => ({ flex: "0 0 auto", minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "#9A4E36" : "#E2D3C1"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: on ? "#7E3D29" : "#2B1B10", fontSize: "13px", fontWeight: 700, cursor: "pointer" });
 const label: CSSProperties = { margin: "22px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" };
 
 export default function PlanScreen() {
@@ -46,29 +47,30 @@ export default function PlanScreen() {
     if (saved) setPlans((p) => ({ ...p, [city.id]: { ...p[city.id], days: merged.days, interests: merged.interests } }));
   };
   const toggleSave = (el: Element) => {
-    pop(el);
+    pop(el, !saved);
     if (saved) {
+      const kept = saved;
       setPlans((p) => {
         const rest = { ...p };
         delete rest[city.id];
         return rest;
       });
-      toast("Plan removed from Saved");
+      toast("Plan removed from Saved", { action: { label: "Undo", run: () => setPlans((p) => ({ ...p, [city.id]: kept })) } });
     } else {
       setPlans((p) => ({ ...p, [city.id]: { days, interests, savedAt: Date.now() } }));
-      toast("Plan saved — find it under Saved › Plans");
+      toast("Plan saved — find it under Saved › Plans", "success");
     }
   };
 
   return (
     <div style={frame({ paddingBottom: "124px" })}>
       <div style={{ padding: "54px 8px 0", height: "98px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Link href="/home" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/home" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
           </svg>
-        </Link>
+        </BackLink>
         <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>Plan your trip</h1>
         <button type="button" aria-label="Share plan" onClick={() => share(`${days} days in ${city.name}`, stops.map((s) => `Day ${s.day}: ${s.name}`).join("\n"))} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -125,8 +127,8 @@ export default function PlanScreen() {
               <ol key={`${day}-${list.length}`} className="stagger" style={{ listStyle: "none", margin: "10px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
                 {list.map((s) => (
                   <li key={s.name}>
-                    <button type="button" onClick={() => ask(`Tell me about ${s.name} in ${city.name}`)} style={{ width: "100%", padding: "12px 14px", borderRadius: "16px", border: "1px solid #EADFD2", background: "#FFFFFF", color: "#2B1B10", display: "flex", gap: "12px", textAlign: "left", cursor: "pointer" }}>
-                      <span aria-hidden="true" style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: s.core ? "#F6E3DA" : "#F5E6CC", color: s.core ? "#9A4E36" : "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <button type="button" onClick={() => ask(`Tell me about ${s.name} in ${city.name}`)} style={{ width: "100%", padding: "12px 14px", borderRadius: "16px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: "#2B1B10", display: "flex", gap: "12px", textAlign: "left", cursor: "pointer" }}>
+                      <span aria-hidden="true" style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: s.core ? "#F6E3DA" : "#F6EEE4", color: s.core ? "#9A4E36" : "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d={SLOT_ICON[s.slot]} />
                         </svg>
@@ -173,12 +175,12 @@ export default function PlanScreen() {
       </div>
 
       <div className="nav-rail">
-        <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EADFD2", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
-          <button type="button" aria-pressed={!!saved} onClick={(e) => toggleSave(e.currentTarget)} style={{ flex: 1, height: "52px", borderRadius: "14px", border: saved ? "1.5px solid #9A4E36" : "0", background: saved ? "#FBF1DE" : "#9A4E36", color: saved ? "#9A4E36" : "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: 800, cursor: "pointer" }}>
+        <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
+          <button type="button" aria-pressed={!!saved} onClick={(e) => toggleSave(e.currentTarget)} style={{ flex: 1, height: "52px", borderRadius: "14px", border: saved ? "1.5px solid #9A4E36" : "0", background: saved ? "#FBEDE6" : "#9A4E36", color: saved ? "#9A4E36" : "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: 800, cursor: "pointer" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
             </svg>
-            {saved ? "Saved" : "Save plan"}
+            <span key={saved ? "on" : "off"} className="btn-swap">{saved ? "Saved" : "Save plan"}</span>
           </button>
           {saved ? (
             <Link href="/saved#plans" className="pop-in" style={{ flex: "0 0 auto", height: "52px", padding: "0 16px", borderRadius: "14px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: 700 }}>

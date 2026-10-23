@@ -4,17 +4,19 @@ import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { toast } from "./Toast";
 
 // Reads a passage aloud with the browser's own voice; press again to stop.
-export default function Speak({ text, lang = "en-IN", style, children, playingLabel = "Stop" }: { text: string; lang?: string; style?: CSSProperties; children: ReactNode; playingLabel?: string }) {
+// `label` names an icon-only button for screen readers ("Listen, 2 min"); it says Stop while playing.
+export default function Speak({ text, lang = "en-IN", style, children, playingLabel = "Stop", label, onDone }: { text: string; lang?: string; style?: CSSProperties; children: ReactNode; playingLabel?: string; label?: string; onDone?: () => void }) {
   const [playing, setPlaying] = useState(false);
   useEffect(() => () => window.speechSynthesis?.cancel(), []);
   return (
     <button
       type="button"
       aria-pressed={playing}
+      aria-label={label ? (playing ? "Stop listening" : label) : undefined}
       onClick={() => {
         const synth = window.speechSynthesis;
         if (!synth) {
-          toast("Audio isn't available in this browser");
+          toast("Audio isn't available in this browser", "error");
           return;
         }
         synth.cancel();
@@ -24,7 +26,10 @@ export default function Speak({ text, lang = "en-IN", style, children, playingLa
         }
         const u = new SpeechSynthesisUtterance(text);
         u.lang = lang;
-        u.onend = () => setPlaying(false);
+        u.onend = () => {
+          setPlaying(false);
+          onDone?.();
+        };
         u.onerror = () => setPlaying(false);
         synth.speak(u);
         setPlaying(true);

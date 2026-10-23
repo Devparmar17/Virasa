@@ -3,6 +3,7 @@
 // 08 · Reels
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import BackLink from "@/components/Back";
 import { toast } from "@/components/Toast";
 import { pop, share, useAsk } from "@/components/Tap";
 import { useStored } from "@/lib/store";
@@ -93,12 +94,12 @@ export default function ReelsScreen() {
       <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", top: "0", height: "170px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0.6) 0%, rgba(20, 12, 6, 0) 100%)", pointerEvents: "none" }} />
       <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", height: "440px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.72) 40%, rgba(20, 12, 6, 0.92) 100%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", top: "50px", left: "8px", right: "8px", height: "48px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <Link href="/home" aria-label="Close reels" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
+        <BackLink href="/home" aria-label="Close reels" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
           </svg>
-        </Link>
+        </BackLink>
         <div style={{ display: "flex", gap: "6px" }}>
           {(
             [
@@ -141,7 +142,7 @@ export default function ReelsScreen() {
           aria-label={`${isLiked ? "Unlike" : "Like"}, ${reel.likes} likes`}
           aria-pressed={isLiked}
           onClick={(e) => {
-            pop(e.currentTarget);
+            pop(e.currentTarget.firstElementChild || e.currentTarget, !isLiked);
             setLiked((m) => ({ ...m, [reel.id]: !isLiked }));
           }}
           style={action}
@@ -158,9 +159,9 @@ export default function ReelsScreen() {
           aria-label={isSaved ? "Remove from saved" : "Save"}
           aria-pressed={isSaved}
           onClick={(e) => {
-            pop(e.currentTarget);
+            pop(e.currentTarget.firstElementChild || e.currentTarget, !isSaved);
             setSaved((m) => ({ ...m, [reel.id]: !isSaved }));
-            toast(isSaved ? "Removed from Saved" : "Saved — find it under Saved › Stories");
+            toast(isSaved ? "Removed from Saved" : "Saved — find it under Saved › Stories", isSaved ? "info" : "success");
           }}
           style={action}
         >

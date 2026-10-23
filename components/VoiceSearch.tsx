@@ -30,7 +30,7 @@ export default function VoiceSearch({ style, children, onResult, label = "Search
     const w = window as any;
     const Recognition = w.SpeechRecognition || w.webkitSpeechRecognition;
     if (!Recognition) {
-      toast("Voice search isn't available in this browser. Type your search instead.");
+      toast("Voice search isn't available in this browser. Type your search instead.", "error");
       return;
     }
     const r = new Recognition();
@@ -47,7 +47,7 @@ export default function VoiceSearch({ style, children, onResult, label = "Search
     };
     r.onerror = (e: any) => {
       if (e.error === "aborted") return;
-      toast(e.error === "not-allowed" ? "Allow the microphone to search by voice." : e.error === "no-speech" ? "Didn't hear anything. Tap the mic and try again." : "Voice search didn't work this time. Try again.");
+      toast(e.error === "not-allowed" ? "Allow the microphone to search by voice." : e.error === "no-speech" ? "Didn't hear anything. Tap the mic and try again." : "Voice search didn't work this time. Try again.", "error");
     };
     r.onend = () => {
       rec.current = null;

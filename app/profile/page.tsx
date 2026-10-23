@@ -4,7 +4,7 @@
 import Link from "next/link";
 import MainNav from "@/components/MainNav";
 import { Tap } from "@/components/Tap";
-import { Avatar, UserName } from "@/components/User";
+import { AccountCard, Avatar, UserName } from "@/components/User";
 import { langOf, useStored } from "@/lib/store";
 import { LENGTHS, PACES, TEXT_SIZES, DEFAULT_SETTINGS } from "@/lib/settings";
 import { renderVals } from "./logic";
@@ -18,7 +18,7 @@ export default function ProfileScreen() {
   const [tickets] = useStored<unknown[]>("tickets", []);
   const v: any = renderVals({ sw }, (patch: { sw: typeof sw }) => setSw(patch.sw));
   return (
-    <div style={{ width: "390px", height: "1326px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "1396px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 12px 0 20px", display: "flex", alignItems: "center", gap: "14px" }}>
         <span style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "50%", padding: "3px", background: "#8A6424" }}>
           <Avatar style={{ width: "66px", height: "66px", borderRadius: "50%", objectFit: "cover", display: "block", border: "2px solid #FFFFFF" }} />
@@ -44,6 +44,7 @@ export default function ProfileScreen() {
           </svg>
         </Tap>
       </div>
+      <AccountCard />
       <section aria-label="Heritage passport" style={{ position: "relative", overflow: "hidden", margin: "20px 20px 0", padding: "18px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE" }}>
         <svg aria-hidden="true" width="160" height="160" viewBox="0 0 160 160" style={{ position: "absolute", right: "-30px", top: "-30px", opacity: "0.14" }}>
           <defs>
@@ -116,18 +117,18 @@ export default function ProfileScreen() {
           <h2 style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
             YOUR INTERESTS
           </h2>
-          <Link href="/personalize" style={{ height: "36px", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: "700", color: "#9A4E36" }}>
+          <Link href="/personalize" aria-label="Edit your interests" style={{ height: "44px", minWidth: "44px", marginRight: "-10px", padding: "0 10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: "700", color: "#9A4E36" }}>
             Edit
           </Link>
         </div>
         <div style={{ marginTop: "6px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+          <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
             Architecture
           </span>
-          <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+          <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
             Street food
           </span>
-          <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+          <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
             Legends
           </span>
         </div>
@@ -136,8 +137,8 @@ export default function ProfileScreen() {
         <h2 style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
           STORIES
         </h2>
-        <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden" }}>
-          <li style={{ borderBottom: "1px solid #F0E8DD" }}>
+        <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden" }}>
+          <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/settings#language" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
               Language
@@ -150,7 +151,7 @@ export default function ProfileScreen() {
             </span>
           </Link>
           </li>
-          <li style={{ borderBottom: "1px solid #F0E8DD" }}>
+          <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/settings#stories" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
               Story length
@@ -168,8 +169,8 @@ export default function ProfileScreen() {
               Play story on arrival
             </span>
             <button type="button" role="switch" aria-checked={v.sw.auto} aria-label="Play story on arrival" onClick={v.tog.auto} style={{ width: "56px", height: "44px", border: "0", background: "none", padding: "0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-              <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.auto.track, display: "flex", alignItems: "center", justifyContent: v.swS.auto.pos, padding: "3px" }}>
-                <span style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)" }} />
+              <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.auto.track, display: "flex", alignItems: "center", padding: "3px", transition: "background-color 0.2s ease" }}>
+                <span className="switch-knob" style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)", translate: v.sw.auto ? "20px 0" : "0 0" }} />
               </span>
             </button>
           </li>
@@ -179,8 +180,8 @@ export default function ProfileScreen() {
         <h2 style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
           TRAVEL
         </h2>
-        <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden" }}>
-          <li style={{ borderBottom: "1px solid #F0E8DD" }}>
+        <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden" }}>
+          <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/saved" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
               Offline city packs
@@ -193,7 +194,7 @@ export default function ProfileScreen() {
             </span>
           </Link>
           </li>
-          <li style={{ borderBottom: "1px solid #F0E8DD" }}>
+          <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/tickets#mine" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
               <span style={{ fontSize: "15px", fontWeight: "600" }}>My tickets</span>
               <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
@@ -204,7 +205,7 @@ export default function ProfileScreen() {
               </span>
             </Link>
           </li>
-          <li style={{ borderBottom: "1px solid #F0E8DD" }}>
+          <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/city" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
               Upcoming trips
@@ -236,8 +237,8 @@ export default function ProfileScreen() {
         <h2 style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
           ACCESSIBILITY
         </h2>
-        <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EADFD2", borderRadius: "16px", overflow: "hidden" }}>
-          <li style={{ borderBottom: "1px solid #F0E8DD" }}>
+        <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden" }}>
+          <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/settings#access" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
               Text size
@@ -250,13 +251,13 @@ export default function ProfileScreen() {
             </span>
           </Link>
           </li>
-          <li style={{ minHeight: "56px", padding: "0 10px 0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #F0E8DD" }}>
+          <li style={{ minHeight: "56px", padding: "0 10px 0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #F3ECE2" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
               Audio descriptions
             </span>
             <button type="button" role="switch" aria-checked={v.sw.desc} aria-label="Audio descriptions" onClick={v.tog.desc} style={{ width: "56px", height: "44px", border: "0", background: "none", padding: "0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-              <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.desc.track, display: "flex", alignItems: "center", justifyContent: v.swS.desc.pos, padding: "3px" }}>
-                <span style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)" }} />
+              <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.desc.track, display: "flex", alignItems: "center", padding: "3px", transition: "background-color 0.2s ease" }}>
+                <span className="switch-knob" style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)", translate: v.sw.desc ? "20px 0" : "0 0" }} />
               </span>
             </button>
           </li>
@@ -265,8 +266,8 @@ export default function ProfileScreen() {
               Step-free routes
             </span>
             <button type="button" role="switch" aria-checked={v.sw.steps} aria-label="Step-free routes" onClick={v.tog.steps} style={{ width: "56px", height: "44px", border: "0", background: "none", padding: "0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-              <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.steps.track, display: "flex", alignItems: "center", justifyContent: v.swS.steps.pos, padding: "3px" }}>
-                <span style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)" }} />
+              <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.steps.track, display: "flex", alignItems: "center", padding: "3px", transition: "background-color 0.2s ease" }}>
+                <span className="switch-knob" style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)", translate: v.sw.steps ? "20px 0" : "0 0" }} />
               </span>
             </button>
           </li>

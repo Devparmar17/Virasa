@@ -21,7 +21,7 @@ const NOTES: Note[] = [
 const ICON: Record<Kind, { bg: string; fg: string; path: string }> = {
   nearby: { bg: "#F6E3DA", fg: "#9A4E36", path: "M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" },
   trips: { bg: "#E3EEF8", fg: "#2F6FB0", path: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4 M7 10l5 5 5-5 M12 15V3" },
-  digest: { bg: "#F5E6CC", fg: "#8A6424", path: "M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" },
+  digest: { bg: "#F6EEE4", fg: "#8A6424", path: "M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" },
   you: { bg: "#E3F1E7", fg: "#2F7A4A", path: "M20 6 9 17l-5-5" },
 };
 
@@ -66,7 +66,7 @@ export default function NotificationsScreen() {
                 const ic = ICON[n.kind];
                 return (
                   <li key={n.id}>
-                    <Link href={n.href} onClick={() => setRead((r) => ({ ...r, [n.id]: true }))} style={{ padding: "14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${isNew ? "#E2C9B4" : "#EADFD2"}`, color: "#2B1B10", display: "flex", gap: "12px" }}>
+                    <Link href={n.href} onClick={() => setRead((r) => ({ ...r, [n.id]: true }))} style={{ padding: "14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${isNew ? "#E2C9B4" : "#EFE6DA"}`, color: "#2B1B10", display: "flex", gap: "12px" }}>
                       <span aria-hidden="true" style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: ic.bg, color: ic.fg, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d={ic.path} />

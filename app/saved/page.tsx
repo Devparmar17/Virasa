@@ -8,7 +8,11 @@ import Sheet from "@/components/Sheet";
 import { toast } from "@/components/Toast";
 import { useAsk } from "@/components/Tap";
 import { DEFAULT_SAVED, useStored } from "@/lib/store";
+import { Spinner } from "@/components/ui";
+import { useT } from "@/lib/i18n";
 import { cityPlan, planStops, type SavedPlan } from "@/lib/plans";
+import { SECRETS } from "@/lib/secrets";
+import { PLACES as MAP_PLACES } from "../explore/places";
 
 type Item = {
   id: string;
@@ -26,8 +30,22 @@ const PLACES: Item[] = [
   { id: "sidi", title: "Sidi Saiyyed Mosque", meta: "1.8 km · Old City", city: "Ahmedabad", km: 1.8, badge: "Visited · stamp collected", visited: true, img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
   { id: "dhal", title: "Dhal ni Pol", meta: "650 m · Khadia", city: "Ahmedabad", km: 0.65, badge: "Visited", visited: true, img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/secret?id=dhal" },
   { id: "sarkhej", title: "Sarkhej Roza", meta: "8 km · 20 min drive", city: "Ahmedabad", km: 8, badge: "Best at sunset", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg", href: "/secret?id=sarkhej" },
-  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "For your Jaipur trip", img: "/images/hawa-mahal.jpg" },
+  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "For your Jaipur trip", img: "/images/hawa-mahal.jpg", href: "/plan?city=jaipur" },
 ];
+
+// Distance in km from a line like "650 m · 8 min" or "18 km · 35 min drive".
+const kmIn = (text: string) => {
+  const m = text.match(/([d.]+)s*(km|m)/);
+  return m ? Number(m[1]) / (m[2] === "m" ? 1000 : 1) : 1;
+};
+
+// Everything else that can be saved around the app — the finds on Home and
+// the pins on the map — so a save anywhere shows up here.
+const MORE_PLACES: Item[] = [
+  ...SECRETS.map((s) => ({ id: s.id, title: s.title, meta: s.distance, city: "Ahmedabad", km: kmIn(s.distance), badge: s.tag, img: s.img, href: `/secret?id=${s.id}` })),
+  ...MAP_PLACES.map((p) => ({ id: p.id, title: p.name, meta: `${p.km < 1 ? `${Math.round(p.km * 1000)} m` : `${p.km} km`} · ${p.mins} min walk`, city: "Ahmedabad", km: p.km, badge: p.open, img: p.img, href: p.href || p.detail })),
+];
+const ALL_PLACES = [...PLACES, ...MORE_PLACES.filter((it, i, all) => !PLACES.some((p) => p.id === it.id) && all.findIndex((o) => o.id === it.id) === i)];
 
 const WALKS: Item[] = [
   { id: "walk-morning", title: "Old City in a morning", meta: "6 stops · 2.4 km · 2 h 40", city: "Ahmedabad", km: 1.8, badge: "Planned for you", img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/walk" },
@@ -37,6 +55,8 @@ const WALKS: Item[] = [
 const STORIES: Item[] = [
   { id: "story-tree", title: "Reading the Tree of Life", meta: "Sidi Saiyyed Mosque · 2:20", city: "Ahmedabad", km: 1.8, badge: "Chapter 2 of 4", img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/story" },
   { id: "reel-sidi", title: "Golden hour at Sidi Saiyyed", meta: "Reel · 0:42", city: "Ahmedabad", km: 1.8, badge: "Saved from Reels", img: "/images/358cd23211709da539c3303890c27e8b.jpg", href: "/reels" },
+  { id: "reel-sarkhej", title: "Sarkhej Roza, the Acropolis of Ahmedabad", meta: "Reel · 0:30", city: "Ahmedabad", km: 8, badge: "Saved from Reels", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg", href: "/reels" },
+  { id: "reel-pol", title: "Why every pol feeds the birds", meta: "Reel · 0:55", city: "Ahmedabad", km: 0.65, badge: "Saved from Reels", img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/reels" },
   { id: "story-sarkhej", title: "Why Sarkhej was built", meta: "Sarkhej Roza · 2:10", city: "Ahmedabad", km: 8, badge: "AR Tour narration", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg", href: "/ar" },
 ];
 
@@ -81,9 +101,11 @@ export default function SavedScreen() {
   const [query, setQuery] = useState("");
   const [manage, setManage] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [checking, setChecking] = useState(false);
   const [saved, setSaved] = useStored<Record<string, boolean>>("saved", DEFAULT_SAVED);
   const [pack, setPack] = useStored("pack", true);
   const ask = useAsk();
+  const t = useT();
 
   // Trip plans saved from the planner, newest first.
   const planItems: Item[] = Object.entries(plans)
@@ -95,7 +117,7 @@ export default function SavedScreen() {
       return [{ id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: id === "jaipur" ? "Your trip · in 12 days" : "Trip plan", img: city.img, href: `/plan?city=${id}` }];
     });
   const isSaved = (id: string) => id.startsWith("plan-") || (saved[id] ?? DEFAULTS[id] ?? false);
-  const source = tab === "Plans" ? planItems : tab === "Walks" ? WALKS : tab === "Stories" ? STORIES : tab === "Places" ? PLACES : pack ? [...PLACES, ...WALKS, ...STORIES].filter((it) => it.city === "Ahmedabad") : [];
+  const source = tab === "Plans" ? planItems : tab === "Walks" ? WALKS : tab === "Stories" ? STORIES : tab === "Places" ? ALL_PLACES : pack ? [...ALL_PLACES, ...WALKS, ...STORIES].filter((it) => it.city === "Ahmedabad") : [];
   let items = source.filter((it) => isSaved(it.id));
   const needle = query.trim().toLowerCase();
   if (needle) items = items.filter((it) => `${it.title} ${it.meta}`.toLowerCase().includes(needle));
@@ -106,14 +128,21 @@ export default function SavedScreen() {
   const count = `${items.length} ${NOUNS[tab][items.length === 1 ? 0 : 1]}${tab === "Offline" ? " available offline" : cities > 1 ? ` · ${cities} cities` : ""}`;
 
   const remove = (it: Item) => {
+    let undo: () => void;
     if (it.id.startsWith("plan-")) {
+      const id = it.id.slice(5);
+      const kept = plans[id];
       setPlans((p) => {
         const rest = { ...p };
-        delete rest[it.id.slice(5)];
+        delete rest[id];
         return rest;
       });
-    } else setSaved((m) => ({ ...m, [it.id]: false }));
-    toast(`Removed ${it.title}`);
+      undo = () => setPlans((p) => ({ ...p, [id]: kept }));
+    } else {
+      setSaved((m) => ({ ...m, [it.id]: false }));
+      undo = () => setSaved((m) => ({ ...m, [it.id]: true }));
+    }
+    toast(`Removed ${it.title}`, { action: { label: "Undo", run: undo } });
   };
 
   const row = (it: Item): ReactNode => {
@@ -131,14 +160,14 @@ export default function SavedScreen() {
               {it.badge}
             </span>
           ) : (
-            <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F5E6CC", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>{it.badge}</span>
+            <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>{it.badge}</span>
           )}
         </span>
       </>
     );
     const rowStyle = { flex: "1", minWidth: "0", minHeight: "88px", padding: "8px", borderRadius: "16px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", textAlign: "left" as const };
     return (
-      <li key={it.id} style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+      <li key={it.id} className="rise" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
         {it.href ? (
           <Link href={it.href} style={rowStyle}>
             {inner}
@@ -148,7 +177,15 @@ export default function SavedScreen() {
             {inner}
           </button>
         )}
-        <button type="button" aria-label={`Remove ${it.title} from saved`} onClick={() => remove(it)} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <button
+          type="button"
+          aria-label={`Remove ${it.title} from saved`}
+          onClick={(e) => {
+            // The row slides away first, then the list closes the gap.
+            const li = e.currentTarget.closest("li");
+            if (!li || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return remove(it);
+            li.animate([{ opacity: 1, translate: "0 0" }, { opacity: 0, translate: "-28px 0" }], { duration: 220, easing: "ease-in", fill: "forwards" }).finished.then(() => remove(it));
+          }} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
           </svg>
@@ -163,9 +200,9 @@ export default function SavedScreen() {
     <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10", display: "flex", flexDirection: "column" }}>
       <div style={{ padding: "54px 12px 0 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
         {searching ? (
-          <input autoFocus type="search" aria-label="Search saved" placeholder="Search saved places, walks, stories" value={query} onChange={(e) => setQuery(e.target.value)} className="fade-in" style={{ flex: "1", minWidth: "0", height: "44px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid #D9C7B3", background: "#FBF6EE", fontSize: "15px", color: "#2B1B10", outline: "none" }} />
+          <input autoFocus type="search" aria-label="Search saved" placeholder={t("sv.search")} value={query} onChange={(e) => setQuery(e.target.value)} className="fade-in" style={{ flex: "1", minWidth: "0", height: "44px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid #D9C7B3", background: "#F6F1EA", fontSize: "15px", color: "#2B1B10", outline: "none" }} />
         ) : (
-          <h1 style={{ margin: "0", fontSize: "28px", fontWeight: "800", letterSpacing: "-0.02em" }}>Saved</h1>
+          <h1 style={{ margin: "0", fontSize: "28px", fontWeight: "800", letterSpacing: "-0.02em" }}>{t("sv.title")}</h1>
         )}
         <button
           type="button"
@@ -189,15 +226,15 @@ export default function SavedScreen() {
           )}
         </button>
       </div>
-      <div role="tablist" aria-label="Saved items" style={{ marginTop: "8px", padding: "0 20px", display: "flex", gap: "18px", borderBottom: "1px solid #EADFD2" }}>
-        {TABS.map((t) => (
-          <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)} style={{ height: "44px", padding: "0", border: "0", borderBottom: `3px solid ${tab === t ? "#9A4E36" : "transparent"}`, background: "none", color: tab === t ? "#2B1B10" : "#6F5B4B", fontSize: "15px", fontWeight: tab === t ? 800 : 700, cursor: "pointer" }}>
-            {t}
+      <div role="tablist" aria-label="Saved items" style={{ marginTop: "8px", padding: "0 20px", display: "flex", gap: "18px", borderBottom: "1px solid #EFE6DA" }}>
+        {TABS.map((tb) => (
+          <button key={tb} type="button" role="tab" aria-selected={tab === tb} onClick={() => setTab(tb)} style={{ height: "44px", padding: "0", border: "0", borderBottom: `3px solid ${tab === tb ? "#9A4E36" : "transparent"}`, background: "none", color: tab === tb ? "#2B1B10" : "#6F5B4B", fontSize: "15px", fontWeight: tab === tb ? 800 : 700, cursor: "pointer" }}>
+            {t(`sv.${tb}`)}
           </button>
         ))}
       </div>
       <div style={{ flex: "1", minHeight: "0", overflowY: "auto", paddingBottom: "104px" }}>
-        <section aria-label="Offline pack" style={{ margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE" }}>
+        <section aria-label="Offline pack" aria-busy={downloading} style={{ position: "relative", overflow: "hidden", margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <span className={downloading ? "float" : undefined} style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -215,6 +252,8 @@ export default function SavedScreen() {
             </button>
           </div>
           <p style={{ margin: "12px 0 0", fontSize: "13px", lineHeight: "1.45", color: "#D9C6AE" }}>{pack ? "42 places, 30 stories and 2 walks work without internet. Add a pack for any city before you travel." : "Download the pack to use places, stories and walks without internet."}</p>
+          {/* How far the download has got (it takes as long as the timer in the sheet). */}
+          {downloading ? <div data-timer aria-hidden="true" style={{ position: "absolute", left: 0, bottom: 0, height: "4px", width: "100%", background: "#F3D9A8", animation: "fill 2.2s linear backwards" }} /> : null}
         </section>
         <div style={{ margin: "22px 20px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>{count}</span>
@@ -243,7 +282,7 @@ export default function SavedScreen() {
           </ul>
         ) : (
           <div className="rise" style={{ margin: "28px 32px 0", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "8px" }}>
-            <span style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#F5E6CC", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#F6EEE4", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
               </svg>
@@ -266,15 +305,23 @@ export default function SavedScreen() {
             <button
               type="button"
               className="sheet-row"
+              disabled={checking}
+              aria-busy={checking}
               onClick={() => {
-                setManage(false);
-                toast("Ahmedabad pack is up to date");
+                // A moment spent "checking" so the answer feels like it came from somewhere.
+                setChecking(true);
+                setTimeout(() => {
+                  setChecking(false);
+                  setManage(false);
+                  toast("Ahmedabad pack is up to date", "success");
+                }, 900);
               }}
             >
               <span>
-                Check for updates
+                {checking ? "Checking for updates…" : "Check for updates"}
                 <small>86 MB on this phone</small>
               </span>
+              {checking ? <Spinner color="#9A4E36" track="#EFE6DA" /> : null}
             </button>
             <button
               type="button"
@@ -283,7 +330,7 @@ export default function SavedScreen() {
               onClick={() => {
                 setPack(false);
                 setManage(false);
-                toast("Ahmedabad pack removed");
+                toast("Ahmedabad pack removed", { action: { label: "Undo", run: () => setPack(true) } });
               }}
             >
               Remove download
@@ -300,7 +347,7 @@ export default function SavedScreen() {
               setTimeout(() => {
                 setDownloading(false);
                 setPack(true);
-                toast("Ahmedabad pack downloaded");
+                toast("Ahmedabad pack downloaded", "success");
               }, 2200);
             }}
           >

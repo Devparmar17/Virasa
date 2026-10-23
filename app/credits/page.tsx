@@ -12,7 +12,7 @@ export default function CreditsScreen() {
       <ul className="stagger" style={{ listStyle: "none", margin: "16px 0 0", padding: "0 20px", display: "flex", flexDirection: "column", gap: "8px" }}>
         {CREDITS.map((c) => (
           <li key={c.file}>
-            <a href={c.source} target="_blank" rel="noopener noreferrer" style={{ padding: "10px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EADFD2", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px" }}>
+            <a href={c.source} target="_blank" rel="noopener noreferrer" style={{ padding: "10px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px" }}>
               <img src={`/images/${c.file}`} alt="" loading="lazy" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: 1, minWidth: 0 }}>
                 <span style={{ display: "block", fontSize: "14px", lineHeight: 1.3, fontWeight: 800 }}>{c.shows}</span>

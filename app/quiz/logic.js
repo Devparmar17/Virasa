@@ -19,10 +19,10 @@ export function renderVals(state, setState) {
     const opts = Q.options.map((label, i) => {
       const isAns = i === Q.answer;
       const isPick = i === pick;
-      let sty = { bg: '#FFFFFF', bd: '#E2D3C1', fg: '#2B1B10', lbg: '#F5E6CC', lfg: '#6E4E1E' };
+      let sty = { bg: '#FFFFFF', bd: '#E2D3C1', fg: '#2B1B10', lbg: '#F6EEE4', lfg: '#6E4E1E' };
       if (picked && isAns) sty = { bg: '#E3F1E7', bd: '#2F7A4A', fg: '#2B1B10', lbg: '#2F7A4A', lfg: '#FFFFFF' };
       else if (picked && isPick) sty = { bg: '#FBE4DE', bd: '#B3402A', fg: '#2B1B10', lbg: '#B3402A', lfg: '#FFFFFF' };
-      else if (picked) sty = { bg: '#FFFFFF', bd: '#EADFD2', fg: '#6F5B4B', lbg: '#F3EEE7', lfg: '#6F5B4B' };
+      else if (picked) sty = { bg: '#FFFFFF', bd: '#EFE6DA', fg: '#6F5B4B', lbg: '#F3EEE7', lfg: '#6F5B4B' };
       return Object.assign({}, sty, {
         label, letter: letters[i], chosen: isPick,
         showCheck: picked && isAns, showX: picked && isPick && !isAns,

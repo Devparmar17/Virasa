@@ -4,12 +4,14 @@ import { useState, type CSSProperties, type ReactNode } from "react";
 import Sheet from "./Sheet";
 import { toast } from "./Toast";
 import { LANGS, langOf, useStored } from "@/lib/store";
+import { translate, useT } from "@/lib/i18n";
 
 // The language pill: shows the current language and opens the picker.
 // `icon` is the pill's glyph, passed in so each screen keeps its own styling.
 export default function LangButton({ style, pillStyle, icon }: { style?: CSSProperties; pillStyle?: CSSProperties; icon?: ReactNode }) {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useStored("lang", "en");
+  const t = useT();
   return (
     <>
       <button type="button" aria-label={`Language: ${langOf(lang).label}. Change language`} aria-haspopup="dialog" onClick={() => setOpen(true)} style={style}>
@@ -18,8 +20,8 @@ export default function LangButton({ style, pillStyle, icon }: { style?: CSSProp
           <span>{langOf(lang).short}</span>
         </span>
       </button>
-      <Sheet open={open} onClose={() => setOpen(false)} title="Language">
-        <p>Stories, the AI Guide and voice directions use this language.</p>
+      <Sheet open={open} onClose={() => setOpen(false)} title={t("lang.title")}>
+        <p>{t("lang.body")}</p>
         {LANGS.map((l) => (
           <button
             key={l.id}
@@ -29,7 +31,8 @@ export default function LangButton({ style, pillStyle, icon }: { style?: CSSProp
             onClick={() => {
               setLang(l.id);
               setOpen(false);
-              toast(`Language: ${l.label}`);
+              // Said in the language just chosen, so it confirms itself.
+              toast(translate(l.id, "lang.changed", { name: l.native }), "success");
             }}
           >
             <span>
