@@ -41,7 +41,7 @@ function SectionHead({ title, more }: { title: Key; more?: { href: string; label
 
 const ACTIONS: { href: string; label: Key; icon: ReactNode }[] = [
   {
-    href: "/ar",
+    href: "/lens",
     label: "home.ar",
     icon: (
       <>
@@ -92,13 +92,6 @@ const SECRETS: { href: string; img: string; alt: string; tag: Key; title: string
   { href: "/secret?id=dhal", img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", alt: "Carved wooden facades in Dhal ni Pol", tag: "home.tag_gem", title: "Dhal ni Pol woodcarvings", meta: <><T k="unit.m" v={{ n: 650 }} /> · <T k="unit.min_walk" v={{ n: 8 }} /></> },
   { href: "/secret?id=manek", img: "/images/manek-chowk.jpg", alt: "Food stalls at Manek Chowk at night", tag: "home.tag_taste", title: "Manek Chowk night market", meta: <><T k="home.from_8pm" /> · <T k="unit.km" v={{ n: 1.1 }} /></> },
   { href: "/secret?id=bhadra", img: "/images/bhadra-fort.jpg", alt: "The gate and tower of Bhadra Fort", tag: "home.tag_folk", title: "Bhadra Fort's secret tunnels", meta: <><T k="unit.km" v={{ n: 1.4 }} /> · <T k="unit.min_walk" v={{ n: 18 }} /></> },
-];
-
-const CITIES: { id: "jaipur" | "varanasi" | "hampi" | "kolkata"; img: string; alt: string }[] = [
-  { id: "jaipur", img: "/images/amber-fort.jpg", alt: "Amber Fort, Jaipur" },
-  { id: "varanasi", img: "/images/varanasi-ghats.jpg", alt: "Boats on the Ganga at Varanasi at sunrise" },
-  { id: "hampi", img: "/images/hampi-chariot.jpg", alt: "The stone chariot at Vittala Temple, Hampi" },
-  { id: "kolkata", img: "/images/victoria-memorial.jpg", alt: "Victoria Memorial, Kolkata" },
 ];
 
 const shade: CSSProperties = { position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 30%, rgba(20, 12, 6, 0.82) 100%)" };
@@ -198,8 +191,8 @@ export default function HomeScreen() {
           <Link href="/discover" style={{ minHeight: "96px", padding: "14px", borderRadius: "20px", background: "#F6EEE4", color: INK, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none" }}>
             <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "#FFFFFF", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" />
-                <path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z" />
+                <path d="M6 3h12l4 6-10 13L2 9Z" />
+                <path d="M11 3 8 9l4 13 4-13-3-6M2 9h20" />
               </svg>
             </span>
             <span>
@@ -285,44 +278,7 @@ export default function HomeScreen() {
             ))}
           </ul>
         </section>
-
-        <section aria-label="Play and learn" style={{ margin: "26px 20px 0" }}>
-          <Link href="/quiz" style={{ minHeight: "84px", padding: "14px 14px 14px 16px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none" }}>
-            <span style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "14px", background: "#F3D9A8", color: INK, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-                <path d="M12 17h.01" />
-              </svg>
-            </span>
-            <span style={{ flex: 1, minWidth: 0 }}>
-              <span style={{ display: "block", fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", color: "#E7B98A" }}>
-                <T k="home.quiz_label" />
-              </span>
-              <span style={{ display: "block", marginTop: "3px", fontSize: "16px", fontWeight: 800 }}>
-                <T k="home.quiz_title" />
-              </span>
-            </span>
-            <Chevron size={18} />
-          </Link>
-        </section>
         </HereGate>
-
-        <section style={{ marginTop: "28px" }}>
-          <SectionHead title="home.next_city" more={{ href: "/city", label: "home.all_cities" }} />
-          <div className="hscroll" style={{ display: "flex", gap: "12px", padding: "10px 20px 4px" }}>
-            {CITIES.map((c) => (
-              <Link key={c.id} href={`/plan?city=${c.id}`} style={{ position: "relative", flex: "0 0 148px", height: "184px", borderRadius: "18px", overflow: "hidden", display: "block", color: "#FFFFFF", textDecoration: "none" }}>
-                <img src={c.img} alt={c.alt} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                <span aria-hidden="true" style={shade} />
-                <span style={{ position: "absolute", left: "12px", right: "12px", bottom: "12px" }}>
-                  <span style={{ display: "block", fontSize: "17px", fontWeight: 800, letterSpacing: "-0.01em" }}><T k={`city.${c.id}`} /></span>
-                  <span style={{ display: "block", marginTop: "1px", fontSize: "12px", fontWeight: 600, color: "rgba(255, 255, 255, 0.85)" }}><T k={`city.${c.id}_tag`} /></span>
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
       </main>
       <MainNav active="home" />
       <MarkOnboarded />

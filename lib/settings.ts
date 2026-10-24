@@ -14,7 +14,7 @@ export const DEFAULT_SETTINGS: Settings = {
   alerts: { nearby: true, trips: true, digest: false },
 };
 
-export const LENGTHS: Record<Settings["length"], string> = { quick: "Quick · 1 min", classic: "Classic · 3 min", deep: "Deep dive · 10 min" };
+export const LENGTHS: Record<Settings["length"], string> = { quick: "Quick · 1 min", classic: "Classic · 2 min", deep: "Deep dive · 4 min" };
 export const PACES: Record<Settings["pace"], string> = { relaxed: "Relaxed", steady: "Steady", brisk: "Brisk" };
 export const TEXT_SIZES: Record<Settings["text"], string> = { default: "Default", large: "Large", xlarge: "Extra large" };
 

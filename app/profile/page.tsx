@@ -141,7 +141,7 @@ export default function ProfileScreen() {
             </span>
           </Link>
           </li>
-          <li style={{ borderBottom: "1px solid #F3ECE2" }}>
+          <li>
             <Link href="/settings#stories" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
               Story length
@@ -153,16 +153,6 @@ export default function ProfileScreen() {
               </svg>
             </span>
           </Link>
-          </li>
-          <li style={{ minHeight: "56px", padding: "0 10px 0 14px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Play story on arrival
-            </span>
-            <button type="button" role="switch" aria-checked={v.sw.auto} aria-label="Play story on arrival" onClick={v.tog.auto} style={{ width: "56px", height: "44px", border: "0", background: "none", padding: "0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-              <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.auto.track, display: "flex", alignItems: "center", padding: "3px", transition: "background-color 0.2s ease" }}>
-                <span className="switch-knob" style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)", translate: v.sw.auto ? "20px 0" : "0 0" }} />
-              </span>
-            </button>
           </li>
         </ul>
       </section>

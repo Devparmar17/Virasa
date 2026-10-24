@@ -21,8 +21,8 @@ import { nextTrack, track, type Track } from "./tracks";
 const SPEEDS = [1, 1.25, 1.5, 0.75];
 const DEPTHS: [Depth, string][] = [
   ["quick", "Quick · 1 min"],
-  ["classic", "Classic"],
-  ["deep", "Deep · 4 min"],
+  ["classic", "Classic · 2 min"],
+  ["deep", "Deep dive · 4 min"],
 ];
 const LANG_SHORT: Record<Lang, string> = { en: "EN", hi: "हिं", gu: "ગુ" };
 const COUNTDOWN = 5;

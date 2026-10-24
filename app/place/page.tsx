@@ -1,8 +1,8 @@
 // 09 · Place detail
 import Link from "next/link";
+import OpenStatus from "@/components/OpenStatus";
 import BackLink from "@/components/Back";
 import { Tap, Toggle } from "@/components/Tap";
-import Speak from "@/components/Speak";
 import SheetButton from "@/components/SheetButton";
 
 export default function PlaceScreen() {
@@ -67,16 +67,10 @@ export default function PlaceScreen() {
           Home of the Tree of Life jali
         </p>
         <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", fontWeight: "600", color: "#5A4434" }}>
-          <a href="https://www.google.com/maps/search/?api=1&query=Sidi%20Saiyyed%20Mosque%2C%20Ahmedabad" target="_blank" rel="noopener noreferrer" style={{ minHeight: "32px", display: "flex", alignItems: "center", gap: "4px", color: "#2F7A4A", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "3px" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 6v6l4 2" />
-            </svg>
-            Hours on Maps
-          </a>
+          <OpenStatus opens={7} closes={18} />
           <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#B9A894" }} />
           <span>
-            22 min walk
+            1.8 km · 22 min walk
           </span>
         </div>
         <div style={{ marginTop: "18px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
@@ -96,7 +90,7 @@ export default function PlaceScreen() {
               <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
               <circle cx="12" cy="12" r="3" />
             </svg>
-            {" Scan with AI Lens "}
+            {" Open Lens "}
           </Link>
         </div>
         <section style={{ marginTop: "22px", padding: "18px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
@@ -107,13 +101,7 @@ export default function PlaceScreen() {
             {"Built in 1573 by Sidi Saiyyed, an Abyssinian noble in the Gujarat Sultanate's army, this small mosque was left unfinished when the Mughals took the city. Its carved stone jalis — above all the Tree of Life — became Ahmedabad's unofficial symbol."}
           </p>
           <div style={{ marginTop: "14px", display: "flex", alignItems: "center", gap: "6px" }}>
-            <Speak text="Built in 1573 by Sidi Saiyyed, an Abyssinian noble in the Gujarat Sultanate&apos;s army, this small mosque was left unfinished when the Mughals took the city. Its carved stone jalis, above all the Tree of Life, became Ahmedabad&apos;s unofficial symbol." style={{ height: "44px", padding: "0 14px 0 10px", border: "0", borderRadius: "12px", background: "#2B1B10", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-              </svg>
-              {" Listen · 0:30 "}
-            </Speak>
+            
             <SheetButton title="History of the mosque" label="Read full history" style={{ height: "44px", padding: "0 10px", border: "0", background: "none", color: "#9A4E36", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
               <p>Sidi Saiyyed came to Gujarat from Abyssinia (today&apos;s Ethiopia) and rose in the service of the Gujarat Sultanate. In 1572–73, the sultanate&apos;s final year, he began this small mosque beside the city wall at Lal Darwaja.</p>
               <p>The building is modest — a single arcaded prayer hall with no courtyard minarets — but its west wall holds ten stone screens. Eight are geometric. Two, flanking the central arch, show trees whose branches fold back on themselves like lace: the Tree of Life.</p>
@@ -334,7 +322,7 @@ export default function PlaceScreen() {
                 Visit with a heritage guide
               </span>
               <span style={{ display: "block", marginTop: "2px", fontSize: "12px", color: "#D9C6AE" }}>
-                45 min · from ₹150 · reserve now, pay there
+                45 min · from ₹150 · book ahead
               </span>
             </span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -347,7 +335,7 @@ export default function PlaceScreen() {
             Nearby, on foot
           </h2>
           <div className="hscroll" style={{ margin: "12px -20px 0", padding: "0 20px", display: "flex", gap: "12px", overflowX: "auto", scrollbarWidth: "none" }}>
-            <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            <Link href="/secret?id=bhadra" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "#2B1B10", textDecoration: "none" }}>
               <img src="/images/bhadra-fort.jpg" alt="The gate and tower of Bhadra Fort" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Bhadra Fort
@@ -355,8 +343,8 @@ export default function PlaceScreen() {
               <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                 450 m · 6 min
               </span>
-            </article>
-            <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            </Link>
+            <Link href="/secret?id=teen" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "#2B1B10", textDecoration: "none" }}>
               <img src="/images/teen-darwaza.jpg" alt="The three arches of Teen Darwaza" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Teen Darwaza
@@ -364,8 +352,8 @@ export default function PlaceScreen() {
               <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                 750 m · 9 min
               </span>
-            </article>
-            <article style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px" }}>
+            </Link>
+            <Link href="/secret?id=jama" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "#2B1B10", textDecoration: "none" }}>
               <img src="/images/jama-masjid.jpg" alt="The courtyard of Jama Masjid, Ahmedabad" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Jama Masjid
@@ -373,17 +361,18 @@ export default function PlaceScreen() {
               <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                 1.1 km · 13 min
               </span>
-            </article>
+            </Link>
           </div>
         </section>
       </main>
       <div className="nav-rail">
         <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
-        <Link href="/walk" aria-label="Add to a heritage walk" style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "14px", border: "1.5px solid #E2D3C1", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Link href="/walk" style={{ flex: "0 0 auto", height: "52px", padding: "0 14px", gap: "6px", fontSize: "14px", fontWeight: 700, textDecoration: "none", borderRadius: "14px", border: "1.5px solid #E2D3C1", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />
             <path d="M12 5v14" />
           </svg>
+          Add to walk
         </Link>
         <Link href="/navigate" style={{ flex: "1", height: "52px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 8px 18px rgba(154, 78, 54, 0.26)" }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

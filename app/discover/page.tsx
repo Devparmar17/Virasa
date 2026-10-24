@@ -11,12 +11,13 @@ import Link from "next/link";
 import BackLink from "@/components/Back";
 import VoiceSearch from "@/components/VoiceSearch";
 import { pop, useAsk } from "@/components/Tap";
+import { toast } from "@/components/Toast";
 import { frame } from "@/components/ui";
 import { travellerProfile, useStored } from "@/lib/store";
 import { DEFAULT_HERE, type Here } from "@/lib/here";
 import { useT, type Key } from "@/lib/i18n";
 import { POPULAR_CITIES } from "@/lib/trip";
-import { FIND_KINDS, mapsUrl, type Discovery, type Find, type FindKind } from "@/lib/discover";
+import { FIND_KINDS, mapsUrl, type Discovery, type Find, type FindKind, type SavedFind } from "@/lib/discover";
 import { lookOf } from "@/lib/kinds";
 
 const INK = "#2B1B10";
@@ -54,6 +55,19 @@ const smallBtn: CSSProperties = { height: "40px", padding: "0 12px", borderRadiu
 function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void }) {
   const t = useT();
   const look = lookOf(f.kind);
+  const [finds, setFinds] = useStored<Record<string, SavedFind>>("savedFinds", {});
+  const key = `${city}|${f.name}`.toLowerCase();
+  const saved = Boolean(finds[key]);
+  const toggle = (el: Element) => {
+    pop(el, !saved);
+    setFinds((m) => {
+      const next = { ...m };
+      if (saved) delete next[key];
+      else next[key] = { ...f, city, savedAt: Date.now() };
+      return next;
+    });
+    toast(saved ? `Removed ${f.name}` : `Saved ${f.name}`, saved ? "info" : "success");
+  };
   return (
     <li style={{ padding: "14px", borderRadius: "20px", border: "1px solid #EFE6DA", background: "#FFFFFF" }}>
       <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
@@ -110,6 +124,11 @@ function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void
           <Icon d={ICON.map} size={15} />
           {t("trip.map")}
         </a>
+        <button type="button" aria-pressed={saved} aria-label={saved ? `Remove ${f.name} from Saved` : `Save ${f.name}`} onClick={(e) => toggle(e.currentTarget)} style={{ ...smallBtn, marginLeft: "auto", width: "40px", padding: 0, justifyContent: "center", borderColor: saved ? "#9A4E36" : "#E2D3C1", background: saved ? "#FBEDE6" : "#FFFFFF", color: saved ? "#9A4E36" : INK }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+          </svg>
+        </button>
       </div>
     </li>
   );

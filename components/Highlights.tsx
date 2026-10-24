@@ -47,7 +47,7 @@ const CARDS: Card[] = [
     title: "Sidi Saiyyed Mosque",
     line: "Famous Tree of Life jali stonework",
     fact: "1573 · Gujarat Sultanate",
-    distance: "22 min · 1.8 km",
+    distance: "1.8 km · 22 min walk",
     walk: true,
     rating: "",
     open: "Visit by day",
@@ -143,7 +143,7 @@ export default function Highlights() {
               <p style={{ margin: "3px 0 0", fontSize: "13px", lineHeight: 1.35, color: "#6F5B4B", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.line}</p>
               <p style={{ margin: "6px 0 0", display: "flex", alignItems: "center", gap: "5px", fontSize: "13px", fontWeight: 700, color: "#2B1B10", whiteSpace: "nowrap" }}>
                 {c.open ? <span style={{ color: "#2F7A4A" }}>{c.open}</span> : null}
-                <span style={{ fontWeight: 600, color: "#6F5B4B" }}>{c.open ? "· " : ""}{c.fact.split(" · ")[0]}</span>
+                <span style={{ fontWeight: 600, color: "#6F5B4B" }}>{c.open ? "· " : ""}{(/^\d{4}$/.test(c.fact.split(" · ")[0]) ? `Built ${c.fact.split(" · ")[0]}` : c.fact.split(" · ")[0])}</span>
               </p>
             </div>
             {c.listen}

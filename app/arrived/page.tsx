@@ -1,14 +1,12 @@
 // 14 · Arrival
 import Link from "next/link";
 import BackLink from "@/components/Back";
-import { AutoStory } from "@/components/Prefs";
 import { Confetti, Tick } from "@/components/ui";
 import { StampCheck } from "../navigate/parts";
 
 export default function ArrivedScreen() {
   return (
     <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
-      <AutoStory href="/story" />
       <div style={{ position: "relative", height: "272px" }}>
         <img src="/images/358cd23211709da539c3303890c27e8b.jpg" alt="Sidi Saiyyed Mosque, Tree of Life jali" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", top: "0", height: "120px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0.45) 0%, rgba(20, 12, 6, 0) 100%)" }} />

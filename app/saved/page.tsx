@@ -13,6 +13,7 @@ import { useT } from "@/lib/i18n";
 import { cityPlan, planStops, type SavedPlan } from "@/lib/plans";
 import { cityImage, type SavedTrip } from "@/lib/trip";
 import type { Stamp } from "@/lib/stamps";
+import type { SavedFind } from "@/lib/discover";
 import { SECRETS } from "@/lib/secrets";
 import { PLACES as MAP_PLACES } from "../explore/places";
 
@@ -31,7 +32,7 @@ const PLACES: Item[] = [
   { id: "sidi", title: "Sidi Saiyyed Mosque", meta: "1.8 km · Old City", city: "Ahmedabad", km: 1.8, badge: "Tree of Life jali", img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
   { id: "dhal", title: "Dhal ni Pol", meta: "650 m · Khadia", city: "Ahmedabad", km: 0.65, badge: "Carved havelis", img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/secret?id=dhal" },
   { id: "sarkhej", title: "Sarkhej Roza", meta: "8 km · 20 min drive", city: "Ahmedabad", km: 8, badge: "Best at sunset", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg", href: "/secret?id=sarkhej" },
-  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "Jaipur", img: "/images/hawa-mahal.jpg", href: "/plan?city=jaipur" },
+  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "Jaipur", img: "/images/hawa-mahal.jpg", href: "/trip?city=Jaipur" },
 ];
 
 // Distance in km from a line like "650 m · 8 min" or "18 km · 35 min drive".
@@ -98,6 +99,11 @@ export default function SavedScreen() {
   const tab: TabName = tabPicked ?? (hash === "#plans" ? "Plans" : "Places");
   const [plans, setPlans] = useStored<Record<string, SavedPlan>>("plans", {});
   const [aiTrips, setAiTrips] = useStored<Record<string, SavedTrip>>("aiTrips", {});
+  // Finds saved from Discover.
+  const [finds, setFinds] = useStored<Record<string, SavedFind>>("savedFinds", {});
+  const findItems: Item[] = Object.entries(finds)
+    .sort((a, b) => b[1].savedAt - a[1].savedAt)
+    .map(([key, f]) => ({ id: `find-${key}`, title: f.name, meta: [f.area, f.city].filter(Boolean).join(" · "), city: f.city, km: 0, badge: f.tryThis ? `Try: ${f.tryThis}` : "Saved from Discover", href: `/discover?city=${encodeURIComponent(f.city)}` }));
   const [sort, setSort] = useState(0);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState("");
@@ -126,8 +132,8 @@ export default function SavedScreen() {
   ]
     .sort((a, b) => b.at - a.at)
     .map((x) => x.item);
-  const isSaved = (id: string) => id.startsWith("plan-") || id.startsWith("trip-") || (saved[id] ?? DEFAULTS[id] ?? false);
-  const source = tab === "Plans" ? planItems : tab === "Walks" ? WALKS : tab === "Stories" ? STORIES : tab === "Places" ? ALL_PLACES : pack ? [...ALL_PLACES, ...WALKS, ...STORIES].filter((it) => it.city === "Ahmedabad") : [];
+  const isSaved = (id: string) => id.startsWith("plan-") || id.startsWith("trip-") || id.startsWith("find-") || (saved[id] ?? DEFAULTS[id] ?? false);
+  const source = tab === "Plans" ? planItems : tab === "Walks" ? WALKS : tab === "Stories" ? STORIES : tab === "Places" ? [...findItems, ...ALL_PLACES] : pack ? [...ALL_PLACES, ...WALKS, ...STORIES].filter((it) => it.city === "Ahmedabad") : [];
   let items = source.filter((it) => isSaved(it.id));
   const needle = query.trim().toLowerCase();
   if (needle) items = items.filter((it) => `${it.title} ${it.meta}`.toLowerCase().includes(needle));
@@ -139,7 +145,16 @@ export default function SavedScreen() {
 
   const remove = (it: Item) => {
     let undo: () => void;
-    if (it.id.startsWith("trip-")) {
+    if (it.id.startsWith("find-")) {
+      const key = it.id.slice(5);
+      const kept = finds[key];
+      setFinds((m) => {
+        const rest = { ...m };
+        delete rest[key];
+        return rest;
+      });
+      undo = () => setFinds((m) => ({ ...m, [key]: kept }));
+    } else if (it.id.startsWith("trip-")) {
       const id = it.id.slice(5);
       const kept = aiTrips[id];
       setAiTrips((m) => {
@@ -267,7 +282,7 @@ export default function SavedScreen() {
               <span style={{ fontSize: "12px", fontWeight: "700", color: pack && !downloading ? "#9FD3B0" : "#F3D9A8" }}>{packStatus}</span>
             </span>
             <button type="button" onClick={() => setManage(true)} style={{ height: "44px", padding: "0 12px", border: "0", borderRadius: "12px", background: "rgba(251, 246, 238, 0.12)", color: "#FBF6EE", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
-              Manage
+              {pack ? "Manage" : "Download · 86 MB"}
             </button>
           </div>
           <p style={{ margin: "12px 0 0", fontSize: "13px", lineHeight: "1.45", color: "#D9C6AE" }}>{pack ? "42 places, 30 stories and 2 walks work without internet. Add a pack for any city before you travel." : "Download the pack to use places, stories and walks without internet."}</p>
@@ -276,6 +291,7 @@ export default function SavedScreen() {
         </section>
         <div style={{ margin: "22px 20px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>{count}</span>
+          {items.length > 1 ? (
           <button
             type="button"
             aria-label={`Sorted by ${SORTS[sort]}. Change sort order`}
@@ -294,6 +310,7 @@ export default function SavedScreen() {
             </svg>
             {sort === 0 ? "Sort" : SORTS[sort]}
           </button>
+          ) : null}
         </div>
         {items.length ? (
           <ul key={`${tab}-${sort}`} className="stagger" style={{ listStyle: "none", margin: "6px 0 0", padding: "0 12px", display: "flex", flexDirection: "column", gap: "2px" }}>

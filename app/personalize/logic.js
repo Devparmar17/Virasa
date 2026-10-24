@@ -1,7 +1,7 @@
 // Screen logic, ported from the design prototype.
 export function renderVals(state, setState) {
     const st = state || {};
-    const sel = st.sel || { arch: true, food: true, legend: true };
+    const sel = st.sel || {};
     const len = st.len || 'classic';
     const lang = st.lang || 'en';
     const ids = ['arch', 'well', 'food', 'craft', 'legend', 'spirit', 'fest', 'photo'];

@@ -115,7 +115,7 @@ export default function WalkScreen() {
   const NOTES = { steps: ["Step-free route on", "Step-free route off"], food: ["Added a snack stop at Chandravilas", "Snack stop removed"], short: ["Trimmed to the first three stops", "Back to the full walk"] };
   const v = {
     opt,
-    optS: Object.fromEntries(Object.entries(opt).map(([k, on]) => [k, on ? { bg: "#2B1B10", bd: "#2B1B10", fg: "#FFFFFF" } : { bg: "#FFFFFF", bd: "#E2D3C1", fg: "#2B1B10" }])) as Record<keyof typeof opt, { bg: string; bd: string; fg: string }>,
+    optS: Object.fromEntries(Object.entries(opt).map(([k, on]) => [k, on ? { bg: "#FBEDE6", bd: "#9A4E36", fg: "#7E3D29" } : { bg: "#FFFFFF", bd: "#E2D3C1", fg: "#2B1B10" }])) as Record<keyof typeof opt, { bg: string; bd: string; fg: string }>,
     tog: Object.fromEntries(
       (Object.keys(opt) as (keyof typeof opt)[]).map((k) => [
         k,
@@ -274,6 +274,11 @@ export default function WalkScreen() {
             <span>
               Step-free route
             </span>
+            {v.opt.steps ? (
+              <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            ) : null}
           </button>
           <button type="button" aria-pressed={v.opt.food} onClick={v.tog.food} style={{ height: "40px", padding: "0 12px", borderRadius: "999px", border: `1.5px solid ${v.optS.food.bd}`, background: v.optS.food.bg, color: v.optS.food.fg, fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -284,6 +289,11 @@ export default function WalkScreen() {
             <span>
               More food stops
             </span>
+            {v.opt.food ? (
+              <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            ) : null}
           </button>
           <button type="button" aria-pressed={v.opt.short} onClick={v.tog.short} style={{ height: "40px", padding: "0 12px", borderRadius: "999px", border: `1.5px solid ${v.optS.short.bd}`, background: v.optS.short.bg, color: v.optS.short.fg, fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -293,6 +303,11 @@ export default function WalkScreen() {
             <span>
               Only 1 hour
             </span>
+            {v.opt.short ? (
+              <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            ) : null}
           </button>
         </div>
         <Link href="/tickets?book=morning-walk" style={{ marginTop: "14px", minHeight: "60px", padding: "10px 14px", borderRadius: "16px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>

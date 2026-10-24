@@ -186,7 +186,7 @@ export default function LoginScreen() {
             <img src="/images/845c09135def6279c007582842533707.png" alt="Virasa" style={{ width: "66px", height: "72px", objectFit: "contain", display: "block" }} />
           </div>
           <h1 style={{ margin: "26px 0 0", fontSize: "30px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textAlign: "center" }}>Your journey, saved</h1>
-          <p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: 1.5, color: "#5A4434", textAlign: "center", textWrap: "balance" }}>Sign in to keep your saved places, passport stamps and walks.</p>
+          <p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: 1.5, color: "#5A4434", textAlign: "center", textWrap: "balance" }}>Sign in so Virasa greets you by name.</p>
           <div style={{ marginTop: "34px", display: "flex", flexDirection: "column", gap: "12px" }}>
             {googleButton}
             <button type="button" onClick={() => switchTo("signup")} style={primary}>
@@ -257,7 +257,6 @@ export default function LoginScreen() {
         </form>
       )}
 
-      <p style={{ position: "absolute", left: "32px", right: "32px", bottom: "26px", margin: 0, fontSize: "12px", lineHeight: 1.5, color: "#6F5B4B", textAlign: "center" }}>Your account is kept on this phone. Location is only used while the app is open.</p>
 
       <Sheet open={setup} onClose={() => setSetup(false)} title="Google sign-in isn't set up yet">
         <p>Google sign-in uses Firebase, and this copy of Virasa isn&apos;t connected to a Firebase project yet. Add the project&apos;s settings to .env.local to switch it on (the README has the steps), or use email for now.</p>

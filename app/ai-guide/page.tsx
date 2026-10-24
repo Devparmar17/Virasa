@@ -268,12 +268,6 @@ export default function AIGuideScreen() {
         <span style={{ flex: 1, minWidth: 0 }}>
           <span style={{ display: "flex", alignItems: "center", gap: "7px", fontSize: "17px", fontWeight: 800, whiteSpace: "nowrap" }}>
             AI Guide
-            {gemini ? (
-              <span className="fade-in" style={{ height: "20px", padding: "0 7px", borderRadius: "999px", background: "#EEF2FE", color: "#3457C9", fontSize: "11px", fontWeight: 800, display: "flex", alignItems: "center", gap: "3px" }}>
-                <Spark size={10} />
-                Gemini
-              </span>
-            ) : null}
           </span>
           <span style={{ marginTop: "2px", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B", whiteSpace: "nowrap", overflow: "hidden" }}>
             <span aria-hidden="true" style={{ flex: "0 0 7px", width: "7px", height: "7px", borderRadius: "50%", background: "#2F7A4A" }} />
@@ -332,11 +326,6 @@ export default function AIGuideScreen() {
             <p style={{ margin: "6px 0 0", maxWidth: "290px", fontSize: "14px", lineHeight: 1.5, color: "#6F5B4B" }}>
               {gemini ? "Ask me anything — I can plan walks, tell the stories behind what you see and find good food." : "Ask me about the places around you — I can plan walks, tell their stories and find good food."}
             </p>
-            {gemini === false ? (
-              <p role="note" style={{ margin: "12px 0 0", maxWidth: "320px", padding: "8px 12px", borderRadius: "12px", background: "#F6F1EA", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>
-                Gemini isn&apos;t connected, so answers come from Virasa&apos;s built-in library.
-              </p>
-            ) : null}
             {/* The whole-trip planner leads: any city, planned around who is going. */}
             <Link href="/trip" style={{ marginTop: "20px", width: "100%", minHeight: "76px", padding: "14px 14px 14px 16px", borderRadius: "20px", background: "linear-gradient(140deg, #9A4E36, #7E3D29)", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)", boxSizing: "border-box" }}>
               <span style={{ flex: "0 0 44px", height: "44px", borderRadius: "14px", background: "rgba(255, 255, 255, 0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -445,7 +434,7 @@ export default function AIGuideScreen() {
                     {m.source ? (
                       <span style={{ flex: 1, minWidth: 0, fontSize: "11px", fontWeight: 700, color: m.source === "gemini" ? "#3457C9" : "#8A7563", display: "flex", alignItems: "center", gap: "4px" }}>
                         {m.source === "gemini" ? <Spark size={10} /> : null}
-                        {m.source === "gemini" ? "Gemini" : m.source === "claude" ? "Claude" : "Virasa library"}
+                        {m.source === "library" ? "Virasa library" : "AI Guide"}
                       </span>
                     ) : (
                       <span style={{ flex: 1 }} />
@@ -522,7 +511,7 @@ export default function AIGuideScreen() {
           type="text"
           enterKeyHint="send"
           aria-label="Ask the AI Guide"
-          placeholder={listening ? "Listening… speak now" : gemini ? "Ask Gemini anything…" : "Ask about any place in India…"}
+          placeholder={listening ? "Listening… speak now" : "Ask me anything…"}
           value={q}
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => {

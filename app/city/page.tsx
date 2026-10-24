@@ -27,7 +27,7 @@ export default function CityScreen() {
   const [here, setHere] = useStored<Here>("here", DEFAULT_HERE);
   const [query, setQuery] = useState("");
   const needle = query.trim().toLowerCase();
-  const list = ORDERED.filter((c) => !needle || `${c.city} ${c.state}`.toLowerCase().includes(needle));
+  const list = ORDERED.filter((c) => c.city.toLowerCase() !== here.city.toLowerCase() && (!needle || `${c.city} ${c.state}`.toLowerCase().includes(needle)));
   const exact = list.some((c) => c.city.toLowerCase() === needle);
 
   const choose = (name: string) => {
@@ -94,11 +94,8 @@ export default function CityScreen() {
             <li style={{ padding: "6px 6px 6px 14px", borderRadius: "16px", background: "#FBEDE6", border: "1px solid #F0D3C6", display: "flex", alignItems: "center", gap: "8px" }}>
               <button type="button" onClick={() => choose(query)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
                 <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>I&apos;m in {query.trim()}</span>
-                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>Use this as my city</span>
+                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>Tap to use this city</span>
               </button>
-              <Link href={`/trip?city=${encodeURIComponent(query.trim())}`} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", textDecoration: "none" }}>
-                Plan trip
-              </Link>
             </li>
           ) : null}
           {list.map((c) => {
@@ -112,9 +109,6 @@ export default function CityScreen() {
                   </span>
                   <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{c.city === "Ahmedabad" ? "Gujarat · walks, stories and the map" : c.state}</span>
                 </button>
-                <Link href={`/trip?city=${encodeURIComponent(c.city)}`} aria-label={`Plan a trip to ${c.city}`} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", color: "#2B1B10", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", textDecoration: "none" }}>
-                  Plan trip
-                </Link>
               </li>
             );
           })}

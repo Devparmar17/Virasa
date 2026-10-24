@@ -108,7 +108,7 @@ export default function NavigateScreen() {
   const step = d < TURN1 ? 0 : d < TURN2 ? 1 : 2;
   const steps = [
     { kind: "left" as const, text: t("nav.turn_left_relief"), dist: toM(TURN1 - d) },
-    { kind: "right" as const, text: t("nav.turn_right_teen"), dist: toM(TURN2 - d) },
+    { kind: "right" as const, text: trip.id === "teen" ? t("nav.turn_right") : t("nav.turn_right_teen"), dist: toM(TURN2 - d) },
     { kind: "arrive" as const, text: t("nav.arrive_at", { dest: trip.name }), dist: toM(LEN - d) },
   ];
   const now = steps[step];
@@ -237,6 +237,7 @@ export default function NavigateScreen() {
       </Link>
 
       {/* The story stop: counts down as you approach, glows when you reach it. */}
+      {trip.id === "teen" ? null : (
       <section aria-label="Story on your way" className={Math.abs(teenAhead) <= 12 ? "nav-here" : undefined} style={{ position: "absolute", left: "12px", right: "12px", bottom: "222px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid #EFE6DA", boxShadow: "0 10px 26px rgba(90, 60, 30, 0.16)", padding: "10px 10px 10px 12px", display: "flex", alignItems: "center", gap: "12px" }}>
         <span style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: "#F6EEE4", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -251,6 +252,7 @@ export default function NavigateScreen() {
         </span>
         <StoryPreview style={{ flex: "0 0 auto", minWidth: "64px", height: "44px", padding: "0 12px 0 10px", border: 0, borderRadius: "12px", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }} />
       </section>
+      )}
 
       {/* Trip progress. */}
       <section aria-label="Trip progress" style={{ position: "absolute", left: 0, right: 0, bottom: 0, background: "#FFFFFF", borderRadius: "26px 26px 0 0", boxShadow: "0 -10px 30px rgba(90, 60, 30, 0.14)", padding: "14px 20px 26px" }}>

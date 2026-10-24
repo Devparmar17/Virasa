@@ -367,12 +367,6 @@ export default function TripScreen() {
           <div style={{ padding: "16px 18px 18px" }}>
             <p style={{ margin: 0, display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "#E7B98A" }}>
               {trip.city.toUpperCase()}
-              {trip.source === "gemini" ? (
-                <span style={{ height: "22px", padding: "0 8px", borderRadius: "999px", background: "rgba(238, 242, 254, 0.14)", color: "#C9D6FF", display: "inline-flex", alignItems: "center", gap: "4px", letterSpacing: 0, fontSize: "11px" }}>
-                  <Spark size={10} />
-                  Gemini
-                </span>
-              ) : null}
             </p>
             <h2 style={{ margin: "6px 0 0", fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textWrap: "balance" }}>{trip.title}</h2>
             <p style={{ margin: "8px 0 0", fontSize: "calc(14px * var(--read-scale, 1))", lineHeight: 1.5, color: "#D9C6AE" }}>{trip.summary}</p>

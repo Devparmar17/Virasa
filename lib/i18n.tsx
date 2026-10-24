@@ -43,7 +43,7 @@ const D = {
   "home.walk_title": { en: "Old City in a morning", hi: "एक सुबह में पुराना शहर", gu: "એક સવારમાં જૂનું શહેર", ta: "ஒரு காலையில் பழைய நகரம்", bn: "এক সকালে পুরনো শহর" },
   "home.walk_meta": { en: "6 stops · 2.4 km · 2 h 40", hi: "6 पड़ाव · 2.4 किमी · 2 घं 40 मि", gu: "6 સ્ટોપ · 2.4 કિમી · 2 ક 40 મિ", ta: "6 நிறுத்தங்கள் · 2.4 கி.மீ · 2 ம 40 நி", bn: "6টি স্টপ · 2.4 কিমি · 2 ঘ 40 মি" },
   "home.start_walk": { en: "Start walk", hi: "सैर शुरू करें", gu: "ચાલ શરૂ કરો", ta: "நடையைத் தொடங்கு", bn: "হাঁটা শুরু করুন" },
-  "home.ar": { en: "AR Tour", hi: "AR टूर", gu: "AR ટૂર", ta: "AR சுற்றுலா", bn: "AR ট্যুর" },
+  "home.ar": { en: "Lens", hi: "लेंस", gu: "લેન્સ", ta: "லென்ஸ்", bn: "লেন্স" },
   "home.stories": { en: "Stories", hi: "कहानियाँ", gu: "વાર્તાઓ", ta: "கதைகள்", bn: "গল্প" },
   "home.reels": { en: "Reels", hi: "रील्स", gu: "રીલ્સ", ta: "ரீல்கள்", bn: "রিলস" },
   "home.tickets": { en: "Tickets", hi: "टिकट", gu: "ટિકિટ", ta: "டிக்கெட்", bn: "টিকিট" },
@@ -84,6 +84,7 @@ const D = {
   "nav.turn_left_relief": { en: "Turn left onto Relief Road", hi: "रिलीफ़ रोड पर बाएँ मुड़ें", gu: "રિલીફ રોડ પર ડાબે વળો", ta: "ரிலீஃப் சாலையில் இடதுபுறம் திரும்பவும்", bn: "রিলিফ রোডে বাঁ দিকে ঘুরুন" },
   "nav.turn_right_teen": { en: "Turn right at Teen Darwaza", hi: "तीन दरवाज़ा पर दाएँ मुड़ें", gu: "ત્રણ દરવાજા પાસે જમણે વળો", ta: "தீன் தர்வாசாவில் வலதுபுறம் திரும்பவும்", bn: "তিন দরওয়াজায় ডান দিকে ঘুরুন" },
   "nav.ahead": { en: "{dest} is ahead", hi: "{dest} आगे है", gu: "{dest} આગળ છે", ta: "{dest} முன்னால் உள்ளது", bn: "{dest} সামনে" },
+  "nav.turn_right": { en: "Turn right", hi: "दाएँ मुड़ें", gu: "જમણે વળો", ta: "வலது பக்கம் திரும்புங்கள்", bn: "ডানদিকে ঘুরুন" },
   "nav.then": { en: "Then", hi: "फिर", gu: "પછી", ta: "பிறகு", bn: "তারপর" },
   "nav.arrive_at": { en: "Arrive at {dest}", hi: "{dest} पहुँचें", gu: "{dest} પહોંચો", ta: "{dest} சென்றடையவும்", bn: "{dest}-এ পৌঁছান" },
   "nav.pocket": {

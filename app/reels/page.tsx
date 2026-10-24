@@ -35,7 +35,7 @@ export default function ReelsScreen() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [captions, setCaptions] = useStored("captions", true);
-  const [liked, setLiked] = useStored<Record<string, boolean>>("liked", { "reel-sidi": true });
+  const [liked, setLiked] = useStored<Record<string, boolean>>("liked", {});
   const [saved, setSaved] = useStored<Record<string, boolean>>("saved", {});
   const ask = useAsk();
   const touchY = useRef<number | null>(null);
@@ -182,7 +182,7 @@ export default function ReelsScreen() {
           </span>
           <span style={label}>Share</span>
         </button>
-        <button type="button" aria-label="Ask Virasa AI about this reel" onClick={() => ask(reel.question)} style={action}>
+        <button type="button" aria-label="Ask the AI Guide Guide about this reel" onClick={() => ask(reel.question)} style={action}>
           <span style={{ ...round, background: "#F3D9A8", color: "#2B1B10" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
               <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />

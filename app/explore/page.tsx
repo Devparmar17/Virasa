@@ -143,7 +143,7 @@ export default function ExploreScreen() {
           <path d="M232 0 C226 200 238 500 232 844" />
           <path d="M120 844 L340 110" />
         </g>
-        <g fontFamily="Plus Jakarta Sans, system-ui, sans-serif" fontSize="10" fontWeight="700" fill="#7F776B" stroke="#F4F1EA" strokeWidth="3" paintOrder="stroke" letterSpacing="0.3">
+        <g fontFamily="Plus Jakarta Sans, system-ui, sans-serif" fontSize="11" fontWeight="700" fill="#6F665A" stroke="#F4F1EA" strokeWidth="3" paintOrder="stroke" letterSpacing="0.3">
           <text x="300" y="320">
             Relief Rd
           </text>
@@ -384,7 +384,7 @@ export default function ExploreScreen() {
               <span style={{ fontSize: "18px", fontWeight: "800", letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{place.name}</span>
               <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", fontWeight: "600", color: "#5A4434" }}>
                 <span>
-                  {place.fact} · {place.mins} min walk
+                  {(/^\d{4}$/.test(place.fact) ? `Built ${place.fact}` : place.fact)} · {place.km < 1 ? `${Math.round(place.km * 1000)} m` : `${place.km} km`} · {place.mins} min walk
                 </span>
               </span>
             </span>

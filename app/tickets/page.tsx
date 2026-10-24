@@ -162,7 +162,7 @@ export default function TicketsScreen() {
 
   const [date, setDate] = useState("");
   const [slot, setSlot] = useState("");
-  const [adults, setAdults] = useState(2);
+  const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [guideLang, setGuideLang] = useState("en");
   const [nameTyped, setName] = useState<string | null>(null);
@@ -342,18 +342,6 @@ export default function TicketsScreen() {
             </p>
           ) : null}
 
-          <div style={{ marginTop: "18px", padding: "14px", borderRadius: "14px", background: "#FBEDE6", fontSize: "13px", lineHeight: 1.5, color: "#5A4434" }}>
-            {total ? (
-              <>
-                <strong style={{ color: "#2B1B10" }}>Cancelling:</strong> You can cancel from My tickets, but a {Math.round(CANCEL_FEE_RATE * 100)}% cancellation charge applies: you would get {rupees(cancelTerms(total).refund)} back.
-              </>
-            ) : (
-              <>
-                <strong style={{ color: "#2B1B10" }}>Free, but places are limited.</strong> Cancel any time from My tickets at no charge.
-              </>
-            )}
-          </div>
-
           <div className="nav-rail">
             <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", alignItems: "center", gap: "14px" }}>
               <span style={{ flex: "0 0 auto" }}>
@@ -362,12 +350,15 @@ export default function TicketsScreen() {
                   {rupees(total)}
                 </span>
               </span>
-              <button type="button" onClick={reserve} disabled={!chosenDate || reserving} aria-busy={reserving} style={{ ...primary, flex: 1, width: "auto" }}>
-                <span key={reserving ? "busy" : "idle"} className="btn-swap">
-                  {reserving ? <Spinner /> : null}
-                  {reserving ? "Booking…" : total ? `Book · ${rupees(total)}` : "Book"}
-                </span>
-              </button>
+              <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
+                <button type="button" onClick={reserve} disabled={!chosenDate || reserving} aria-busy={reserving} style={{ ...primary, width: "100%" }}>
+                  <span key={reserving ? "busy" : "idle"} className="btn-swap">
+                    {reserving ? <Spinner /> : null}
+                    {reserving ? "Booking…" : total ? `Book · ${rupees(total)}` : "Book"}
+                  </span>
+                </button>
+                <span style={{ fontSize: "12px", fontWeight: 600, color: "#6F5B4B", textAlign: "center" }}>{total ? `Cancel later and get ${rupees(cancelTerms(total).refund)} back (50%)` : "Free · cancel any time"}</span>
+              </span>
             </div>
           </div>
         </div>

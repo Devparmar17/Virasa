@@ -77,7 +77,7 @@ export default function ARTimeScreen() {
 
         {/* Top bar and modes */}
         <div style={{ position: "absolute", top: "50px", left: "12px", right: "12px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#FFFFFF" }}>
-          <BackLink href="/lens" aria-label="Close time travel" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(20, 12, 6, 0.45)", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
+          <BackLink href="/home" aria-label="Close time travel" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(20, 12, 6, 0.45)", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
@@ -114,11 +114,6 @@ export default function ARTimeScreen() {
               {label}
             </button>
           ))}
-        </div>
-        <input aria-label="Travel through time: 1573 to today" type="range" min="0" max="100" step="1" value={v} onChange={(e) => { setV(Number(e.target.value)); setMoved(true); }} style={{ margin: "12px 0 0", width: "100%", height: "28px", accentColor: "#9A4E36", cursor: "pointer" }} />
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px", fontWeight: 700, color: "#5A4434" }}>
-          <span>1573</span>
-          <span>Today</span>
         </div>
 
         <h2 style={{ margin: "18px 0 0", fontSize: "15px", fontWeight: 800 }}>What changed</h2>

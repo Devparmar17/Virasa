@@ -143,7 +143,7 @@ export default function ARScreen() {
       <ol aria-label="Tour progress" style={{ listStyle: "none", position: "absolute", top: "162px", left: "40px", right: "40px", margin: 0, padding: 0, display: "flex", alignItems: "center", gap: "6px" }}>
         {STOPS.map((x, i) => (
           <li key={x.name} aria-current={i === stop ? "step" : undefined} style={{ flex: 1, display: "flex", alignItems: "center", gap: "6px" }}>
-            <button type="button" aria-label={`Stop ${i + 1}: ${x.name}${done[i] ? ", done" : ""}`} onClick={() => goTo(i)} style={{ flex: "0 0 28px", width: "28px", height: "28px", border: i === stop ? "2px solid #FFFFFF" : 0, borderRadius: "50%", background: done[i] ? "#2F7A4A" : i === stop ? "#9A4E36" : "rgba(20, 12, 6, 0.6)", color: "#FFFFFF", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "background-color 0.3s ease" }}>
+            <button type="button" aria-label={`Stop ${i + 1}: ${x.name}${done[i] ? ", done" : ""}`} onClick={() => goTo(i)} style={{ flex: "0 0 40px", width: "40px", height: "40px", border: i === stop ? "2px solid #FFFFFF" : 0, borderRadius: "50%", background: done[i] ? "#2F7A4A" : i === stop ? "#9A4E36" : "rgba(20, 12, 6, 0.6)", color: "#FFFFFF", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "background-color 0.3s ease" }}>
               {done[i] ? <Tick size={14} width={3.2} /> : i + 1}
             </button>
             {i < STOPS.length - 1 ? <span aria-hidden="true" style={{ flex: 1, height: "3px", borderRadius: "999px", background: done[i] ? "#9FD3B0" : "rgba(255, 255, 255, 0.3)", transition: "background-color 0.3s ease" }} /> : null}
@@ -163,14 +163,6 @@ export default function ARScreen() {
         <span aria-hidden="true" style={{ width: "2px", height: "56px", background: "rgba(255, 255, 255, 0.85)" }} />
         <span aria-hidden="true" style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 0 0 6px rgba(255, 255, 255, 0.25)" }} />
       </div>
-      {!last ? (
-        <button type="button" onClick={next} style={{ ...glass, position: "absolute", right: "12px", top: "430px", height: "40px", padding: "0 12px 0 14px", border: "1px solid rgba(255, 255, 255, 0.25)", borderRadius: "999px", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}>
-          Next: {STOPS[stop + 1].name} · {STOPS[stop + 1].dist - s.dist} m
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
-        </button>
-      ) : null}
 
       {/* Bottom: the stop's narration and one clear next step. */}
       <section aria-label="Tour narration" style={{ position: "absolute", left: "12px", right: "12px", bottom: "20px", padding: "16px", borderRadius: "24px", background: "rgba(30, 19, 11, 0.92)", WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
@@ -238,7 +230,12 @@ export default function ARScreen() {
             </svg>
           </button>
           <Capture style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "50%", border: "3px solid #FFFFFF", background: "transparent", padding: "3px", cursor: "pointer" }}>
-            <span style={{ display: "block", width: "100%", height: "100%", borderRadius: "50%", background: "#FFFFFF" }} />
+            <span style={{ width: "100%", height: "100%", borderRadius: "50%", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                <circle cx="12" cy="13" r="3" />
+              </svg>
+            </span>
           </Capture>
         </div>
       </section>

@@ -27,12 +27,11 @@ function Seal({ state, line, index, ink, locked, size = 92 }: { state: string; l
   return (
     <span aria-hidden="true" style={{ position: "relative", width: `${size}px`, height: `${size}px`, borderRadius: "50%", border: `2px dashed ${ink}`, padding: "5px", display: "block", rotate: `${TILT[index % TILT.length]}deg`, background: "#FFFDF8", opacity: locked ? 0.5 : 1 }}>
       <span style={{ width: "100%", height: "100%", borderRadius: "50%", border: `1.5px solid ${ink}`, color: ink, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1px" }}>
-        <span style={{ fontSize: `${size * 0.09}px`, fontWeight: 800, letterSpacing: "0.14em" }}>VIRASA</span>
-        <span style={{ fontSize: `${size * 0.3}px`, lineHeight: 1, fontWeight: 800, letterSpacing: "-0.02em" }}>{stateCode(state)}</span>
-        <span style={{ maxWidth: "80%", fontSize: `${size * 0.09}px`, fontWeight: 700, letterSpacing: "0.08em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line.toUpperCase()}</span>
+        <span style={{ fontSize: `${size * 0.32}px`, lineHeight: 1, fontWeight: 800, letterSpacing: "-0.02em" }}>{stateCode(state)}</span>
+        <span style={{ maxWidth: "88%", marginTop: "3px", fontSize: `${Math.max(11, size * 0.12)}px`, fontWeight: 700, letterSpacing: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line.toUpperCase()}</span>
       </span>
       {locked ? (
-        <span style={{ position: "absolute", right: "-2px", bottom: "2px", width: `${size * 0.3}px`, height: `${size * 0.3}px`, borderRadius: "50%", background: "#FFFFFF", border: `1.5px solid ${LOCKED}`, color: "#A8927C", display: "flex", alignItems: "center", justifyContent: "center", rotate: `${-TILT[index % TILT.length]}deg` }}>
+        <span style={{ position: "absolute", right: "-2px", top: "2px", width: `${size * 0.3}px`, height: `${size * 0.3}px`, borderRadius: "50%", background: "#FFFFFF", border: `1.5px solid ${LOCKED}`, color: "#A8927C", display: "flex", alignItems: "center", justifyContent: "center", rotate: `${-TILT[index % TILT.length]}deg` }}>
           <svg width={size * 0.15} height={size * 0.15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
             <rect width="18" height="11" x="3" y="11" rx="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -46,7 +45,6 @@ function Seal({ state, line, index, ink, locked, size = 92 }: { state: string; l
 export default function PassportScreen() {
   const [stampMap, setStamps] = useStored<Record<string, Stamp>>("stamps", {});
   const stamps = Object.values(stampMap).sort((a, b) => b.at - a.at);
-  const states = [...new Set(stamps.map((s) => s.state))];
   const cities = new Set(stamps.map((s) => s.city)).size;
   const [open, setOpen] = useState<Spot | null>(null);
   const [checking, setChecking] = useState(false);
@@ -103,9 +101,11 @@ export default function PassportScreen() {
         <p style={{ margin: "8px 0 0", fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>
           {stamps.length} of {SPOTS.length} stamps
         </p>
-        <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#D9C6AE" }}>
-          {states.length} of 36 states &amp; UTs{stamps.length ? ` · ${cities} ${cities === 1 ? "city" : "cities"}` : ""}
-        </p>
+        {stamps.length ? (
+          <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#D9C6AE" }}>
+            {cities} {cities === 1 ? "city" : "cities"}
+          </p>
+        ) : null}
         <div style={{ marginTop: "14px", height: "6px", borderRadius: "999px", background: "rgba(251, 246, 238, 0.16)", overflow: "hidden" }}>
           <div className="splash-bar" style={{ width: `${Math.max(2, (stamps.length / SPOTS.length) * 100)}%`, height: "100%", borderRadius: "999px", background: "#F3D9A8" }} />
         </div>
@@ -117,7 +117,7 @@ export default function PassportScreen() {
           return (
             <li key={s.id}>
               <button type="button" onClick={() => setOpen(s)} aria-label={`${s.name}, ${s.city}${have ? `, collected ${when(have.at)}` : ", not collected yet"}`} style={{ width: "100%", padding: "4px 2px", border: "0", background: "none", color: "#2B1B10", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", cursor: "pointer" }}>
-                <Seal state={s.state} line={have ? when(have.at) : s.city} index={i} ink={inkOf(s.state)} locked={!have} />
+                <Seal state={s.state} line={have ? when(have.at) : ""} index={i} ink={inkOf(s.state)} locked={!have} />
                 <span style={{ fontSize: "13px", lineHeight: 1.25, fontWeight: 700, textAlign: "center", color: have ? "#2B1B10" : "#6F5B4B" }}>{s.name}</span>
                 <span style={{ marginTop: "-5px", fontSize: "12px", color: "#6F5B4B" }}>{s.city}</span>
               </button>
@@ -131,7 +131,7 @@ export default function PassportScreen() {
           <>
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
               <span className="pop-in">
-                <Seal state={open.state} line={got ? when(got.at) : open.city} index={0} ink={inkOf(open.state)} locked={!got} size={104} />
+                <Seal state={open.state} line={got ? when(got.at) : ""} index={0} ink={inkOf(open.state)} locked={!got} size={104} />
               </span>
               <p style={{ margin: 0 }}>
                 <strong style={{ color: "#2B1B10" }}>

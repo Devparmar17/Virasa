@@ -12,7 +12,8 @@ import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 import { logOut, useUser } from "@/lib/auth";
 import { Avatar } from "@/components/User";
 import { translate, useT, type Key } from "@/lib/i18n";
-import { BUDGETS, DEFAULT_PROFILE, DIETS, PACES, PARTIES, type Profile } from "@/lib/profile";
+import { BUDGETS, DEFAULT_PROFILE, DIETS, PACES, type Profile } from "@/lib/profile";
+import PartyChips from "@/components/PartyChips";
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -82,37 +83,18 @@ export default function SettingsScreen() {
             <span>
               AI Guide and Search
               <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>
-                {ai === null ? "Checking…" : ai.gemini ? `Google Gemini (${ai.model}) answers your questions` : ai.claude ? "Claude answers your questions" : "Using Virasa's built-in library. Add GEMINI_API_KEY to .env.local to switch on Gemini"}
+                {ai === null ? "Checking…" : ai.gemini || ai.claude ? "Answers any question, in your language" : "Using Virasa's built-in library. Add GEMINI_API_KEY to .env.local to switch on Gemini"}
               </span>
             </span>
             <span style={{ flex: "0 0 auto", height: "26px", padding: "0 10px", borderRadius: "999px", background: ai?.gemini ? "#EEF2FE" : "#F6EEE4", color: ai?.gemini ? "#3457C9" : "#6E4E1E", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center" }}>
-              {ai === null ? "…" : ai.gemini ? "Gemini on" : "Library"}
+              {ai === null ? "…" : ai.gemini || ai.claude ? "On" : "Library"}
             </span>
           </div>
         </Card>
 
         {/* Who's travelling: the AI Guide, trip planner and Discover all follow it. */}
         <SectionLabel id="traveller">{t("trip.who").toUpperCase()}</SectionLabel>
-        <Card>
-          <div role="radiogroup" aria-label={t("trip.who")}>
-            {PARTIES.map((p, i) => (
-              <button key={p.id} type="button" role="radio" aria-checked={profile.party === p.id} onClick={() => setP({ party: p.id })} style={rowStyle(i === PARTIES.length - 1)}>
-                <span style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  <span aria-hidden="true" style={{ flex: "0 0 36px", height: "36px", borderRadius: "11px", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-                      <path d={p.icon} />
-                    </svg>
-                  </span>
-                  <span>
-                    {t(`who.${p.id}` as Key)}
-                    <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>{t(`who.${p.id}_hint` as Key)}</span>
-                  </span>
-                </span>
-                <span aria-hidden="true" style={{ flex: "0 0 22px", width: "22px", height: "22px", borderRadius: "50%", border: profile.party === p.id ? "7px solid #9A4E36" : "2px solid #CDBFAE", background: "#FFFFFF", transition: "border 0.18s ease" }} />
-              </button>
-            ))}
-          </div>
-        </Card>
+        <PartyChips />
         <Card style={{ marginTop: "10px", padding: "14px", display: "flex", flexDirection: "column", gap: "14px" }}>
           <div>
             <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>{t("trip.budget")}</div>
@@ -158,13 +140,10 @@ export default function SettingsScreen() {
             onChange={(length) => set({ length })}
             options={[
               ["quick", "Quick · 1 min"],
-              ["classic", "Classic · 3 min"],
-              ["deep", "Deep · 10 min"],
+              ["classic", "Classic · 2 min"],
+              ["deep", "Deep dive · 4 min"],
             ]}
           />
-        </Card>
-        <Card style={{ marginTop: "10px" }}>
-          <SwitchRow label={t("st.auto")} hint={t("st.auto_hint")} on={sw.auto} onToggle={() => setSw((s) => ({ ...s, auto: !s.auto }))} last />
         </Card>
 
         <SectionLabel id="travel">{t("st.travel")}</SectionLabel>

@@ -143,7 +143,7 @@ export default function SearchScreen() {
           {" is a stone screen carved into a lattice. It lets in light and breeze while keeping rooms cool and private. Famous ones range from Sidi Saiyyed Mosque here in Ahmedabad to Salim Chishti's Tomb at Fatehpur Sikri."}
         </p>
         <p style={{ margin: "8px 0 0", fontSize: "12px", color: "#6F5B4B" }}>
-          {"From Virasa's verified heritage library"}
+          {"From Virasa's heritage library"}
         </p>
         <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
           <Link href="/story" style={{ height: "44px", padding: "0 14px 0 10px", borderRadius: "12px", border: "1.5px solid #9A4E36", color: "#9A4E36", display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: "700", textDecoration: "none", background: "#FFFFFF" }}>
@@ -181,7 +181,7 @@ export default function SearchScreen() {
                   Ten carved jalis, incl. the Tree of Life
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-                  {"22 min walk · "}
+                  {"1.8 km · 22 min walk · "}
                   <span style={{ color: "#2F7A4A" }}>
                     Visit by day
                   </span>
@@ -203,7 +203,7 @@ export default function SearchScreen() {
                   Slender minarets and fine jalis, 1514
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-                  {"2.4 km · "}
+                  {"2.4 km · 30 min walk · "}
                   <span style={{ color: "#2F7A4A" }}>
                     Visit by day
                   </span>
@@ -372,7 +372,7 @@ export default function SearchScreen() {
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
                 </svg>
-                {answering ? "THINKING…" : answer?.source === "gemini" ? "AI ANSWER · GEMINI" : answer?.source === "claude" ? "AI ANSWER · CLAUDE" : "FROM VIRASA'S LIBRARY"}
+                {answering ? "THINKING…" : answer?.source === "library" ? "FROM VIRASA'S LIBRARY" : "AI GUIDE"}
               </div>
               {answering ? (
                 <div aria-hidden="true" style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "8px" }}>

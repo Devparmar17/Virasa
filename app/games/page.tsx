@@ -2,6 +2,7 @@
 import Link from "next/link";
 import BackLink from "@/components/Back";
 import MainNav from "@/components/MainNav";
+import { Tap } from "@/components/Tap";
 import { Points, StampBar, StampCount } from "@/components/Stamps";
 
 export default function GamesScreen() {
@@ -77,7 +78,7 @@ export default function GamesScreen() {
             </span>
           </span>
         </Link>
-        <article style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+        <Tap ask="Let's play Guess the state: describe an Indian heritage site in two clues and I'll guess which state it's in. Keep score." style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" , textAlign: "left", cursor: "pointer", width: "100%" }}>
           <span role="img" aria-label="Illustration placeholder: guess the state" style={{ height: "104px", borderRadius: "12px", background: "#F6EEE4", display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center", gap: "6px", padding: "0 12px" }}>
             <span style={{ height: "28px", padding: "0 10px", borderRadius: "8px", background: "#FFFFFF", fontSize: "12px", fontWeight: "800", display: "flex", alignItems: "center" }}>
               Rajasthan?
@@ -103,7 +104,7 @@ export default function GamesScreen() {
               All India
             </span>
           </span>
-        </article>
+        </Tap>
         <Link href="/lens" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
           <span style={{ height: "104px", borderRadius: "12px", background: "#2B1B10", color: "#F3D9A8", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -116,7 +117,7 @@ export default function GamesScreen() {
             </svg>
           </span>
           <span style={{ marginTop: "4px", fontSize: "15px", fontWeight: "800" }}>
-            Spot it in AR
+            Spot it with Lens
           </span>
           <span style={{ fontSize: "12px", lineHeight: "1.4", color: "#5A4434" }}>
             Find 3 carved details with your camera on site
@@ -130,7 +131,7 @@ export default function GamesScreen() {
             </span>
           </span>
         </Link>
-        <article style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+        <Tap ask="Let's play Legend match: tell me a short Indian legend without naming the place, and I'll guess which monument it belongs to. Give me three rounds." style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" , textAlign: "left", cursor: "pointer", width: "100%" }}>
           <span style={{ height: "104px", borderRadius: "12px", background: "#EDE4DA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
@@ -151,7 +152,7 @@ export default function GamesScreen() {
               1 min
             </span>
           </span>
-        </article>
+        </Tap>
       </div>
       <section style={{ margin: "22px 20px 0", padding: "16px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
