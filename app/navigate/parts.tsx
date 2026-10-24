@@ -4,8 +4,8 @@ import { useEffect, useState, useSyncExternalStore, type CSSProperties } from "r
 import { useRouter } from "next/navigation";
 import { canGoBack, replacingScreen } from "@/components/Back";
 import { toast } from "@/components/Toast";
-import { asLang, tr, useT, VOICE } from "@/lib/i18n";
-import { readStored, useStored } from "@/lib/store";
+import { tr, useT } from "@/lib/i18n";
+import { readStored, speechLocale, useStored } from "@/lib/store";
 import { placeById } from "../explore/places";
 
 const noop = () => () => {};
@@ -49,7 +49,7 @@ export function say(text: string, onEnd?: () => void) {
   if (!synth) return false;
   synth.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = VOICE[asLang(readStored("lang", "en"))];
+  u.lang = speechLocale(readStored("lang", "en"));
   if (onEnd) u.onend = onEnd;
   synth.speak(u);
   return true;

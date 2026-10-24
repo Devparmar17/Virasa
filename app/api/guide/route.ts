@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { isFallback, libraryAnswer, type GuideMessage } from "@/lib/guide";
 import { langOf } from "@/lib/store-shared";
 import { gemini, geminiKey } from "@/lib/gemini";
+import { cleanProfile, describeProfile } from "@/lib/profile";
 
 // Answers a question for the AI Guide. Google Gemini answers when
 // GEMINI_API_KEY is set in .env.local; otherwise Claude does when
@@ -20,9 +21,9 @@ const hasKey = () => Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHRO
 // Search asks for a short, glanceable answer; the guide chat can say a little more.
 const SEARCH_NOTE = "This question comes from the app's search box: answer in at most 45 words, two or three plain sentences.";
 
-async function askGemini(history: GuideMessage[], lang: string, mode: string): Promise<string | null> {
+async function askGemini(history: GuideMessage[], lang: string, mode: string, who: string): Promise<string | null> {
   return gemini({
-    system: `${SYSTEM}
+    system: `${SYSTEM}${who}
 
 Reply in ${langOf(lang).label} unless the traveller asks for another language.${mode === "search" ? `
 
@@ -36,6 +37,8 @@ export async function POST(request: Request) {
   let messages: GuideMessage[] = [];
   let lang = "en";
   let mode = "chat";
+  // Who is travelling, so answers suit them (children, elders, solo…).
+  let who = "";
   try {
     const body = await request.json();
     if (Array.isArray(body.messages)) {
@@ -46,6 +49,7 @@ export async function POST(request: Request) {
     }
     if (typeof body.lang === "string") lang = body.lang;
     if (body.mode === "search") mode = "search";
+    if (body.profile) who = `\n\n${describeProfile(cleanProfile(body.profile))} Shape every answer to suit them; for young children, explain simply and playfully.`;
   } catch {
     return Response.json({ error: "Invalid request" }, { status: 400 });
   }
@@ -65,7 +69,7 @@ export async function POST(request: Request) {
 
   if (geminiKey()) {
     try {
-      const text = await askGemini(history, lang, mode);
+      const text = await askGemini(history, lang, mode, who);
       if (text) return Response.json({ text, source: "gemini" });
     } catch (error) {
       console.error("AI Guide: Gemini request failed.", error);
@@ -82,7 +86,7 @@ export async function POST(request: Request) {
       // If a safety classifier declines, retry on Anthropic's recommended fallback model.
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
-      system: `${SYSTEM}\n\nReply in ${langOf(lang).label} unless the traveller asks for another language.`,
+      system: `${SYSTEM}${who}\n\nReply in ${langOf(lang).label} unless the traveller asks for another language.`,
       messages: history.map((m) => ({ role: m.role === "user" ? ("user" as const) : ("assistant" as const), content: m.text })),
     });
     if (response.stop_reason === "refusal") return fromLibrary();

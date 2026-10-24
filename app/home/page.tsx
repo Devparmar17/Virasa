@@ -175,6 +175,41 @@ export default function HomeScreen() {
           </VoiceSearch>
         </div>
 
+        {/* AI first: plan a whole trip, or find what locals love, in any city. */}
+        <nav aria-label="Plan with AI" style={{ margin: "14px 20px 0", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
+          <Link href="/trip" style={{ minHeight: "96px", padding: "14px", borderRadius: "20px", background: "linear-gradient(140deg, #9A4E36 0%, #7E3D29 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.26)" }}>
+            <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "rgba(255, 255, 255, 0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
+              </svg>
+            </span>
+            <span>
+              <span style={{ display: "block", fontSize: "16px", fontWeight: 800, lineHeight: 1.2 }}>
+                <T k="home.plan_ai" />
+              </span>
+              <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "rgba(255, 255, 255, 0.86)", lineHeight: 1.3 }}>
+                <T k="home.plan_ai_sub" />
+              </span>
+            </span>
+          </Link>
+          <Link href="/discover" style={{ minHeight: "96px", padding: "14px", borderRadius: "20px", background: "#F6EEE4", color: INK, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none" }}>
+            <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "#FFFFFF", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z" />
+              </svg>
+            </span>
+            <span>
+              <span style={{ display: "block", fontSize: "16px", fontWeight: 800, lineHeight: 1.2 }}>
+                <T k="home.discover" />
+              </span>
+              <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: MUTED, lineHeight: 1.3 }}>
+                <T k="home.discover_sub" />
+              </span>
+            </span>
+          </Link>
+        </nav>
+
         {/* The one thing to do next: today's planned walk. */}
         <section aria-label="Planned for you" style={{ margin: "20px 20px 0" }}>
           <Link href="/walk" style={{ position: "relative", height: "216px", borderRadius: "22px", overflow: "hidden", display: "block", color: "#FFFFFF", textDecoration: "none", boxShadow: "0 14px 30px rgba(60, 36, 20, 0.18)" }}>

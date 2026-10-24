@@ -2,7 +2,7 @@
 
 // 06 · Search results
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { useStored } from "@/lib/store";
+import { speechLocale, useStored } from "@/lib/store";
 import Link from "next/link";
 import BackLink from "@/components/Back";
 import { useAsk } from "@/components/Tap";
@@ -72,7 +72,7 @@ export default function SearchScreen() {
       return;
     }
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = { hi: "hi-IN", gu: "gu-IN", ta: "ta-IN", bn: "bn-IN" }[lang] || "en-IN";
+    u.lang = speechLocale(lang);
     u.onend = () => setSpeaking(false);
     setSpeaking(true);
     synth.speak(u);

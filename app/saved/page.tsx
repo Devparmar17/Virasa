@@ -11,6 +11,7 @@ import { DEFAULT_SAVED, useStored } from "@/lib/store";
 import { Spinner } from "@/components/ui";
 import { useT } from "@/lib/i18n";
 import { cityPlan, planStops, type SavedPlan } from "@/lib/plans";
+import { cityImage, type SavedTrip } from "@/lib/trip";
 import { SECRETS } from "@/lib/secrets";
 import { PLACES as MAP_PLACES } from "../explore/places";
 
@@ -96,6 +97,7 @@ export default function SavedScreen() {
   const [tabPicked, setTab] = useState<TabName | null>(null);
   const tab: TabName = tabPicked ?? (hash === "#plans" ? "Plans" : "Places");
   const [plans, setPlans] = useStored<Record<string, SavedPlan>>("plans", {});
+  const [aiTrips, setAiTrips] = useStored<Record<string, SavedTrip>>("aiTrips", {});
   const [sort, setSort] = useState(0);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState("");
@@ -107,16 +109,22 @@ export default function SavedScreen() {
   const ask = useAsk();
   const t = useT();
 
-  // Trip plans saved from the planner, newest first.
-  const planItems: Item[] = Object.entries(plans)
-    .sort((a, b) => b[1].savedAt - a[1].savedAt)
-    .flatMap(([id, p]) => {
+  // Trip plans saved from the city planner and the AI trip planner, newest first.
+  const planItems: Item[] = [
+    ...Object.entries(plans).flatMap(([id, p]) => {
       const city = cityPlan(id);
       if (!city) return [];
       const stops = planStops(city, p.days, p.interests).length;
-      return [{ id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: id === "jaipur" ? "Your trip · in 12 days" : "Trip plan", img: city.img, href: `/plan?city=${id}` }];
-    });
-  const isSaved = (id: string) => id.startsWith("plan-") || (saved[id] ?? DEFAULTS[id] ?? false);
+      return [{ at: p.savedAt, item: { id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: id === "jaipur" ? "Your trip · in 12 days" : "Trip plan", img: city.img, href: `/plan?city=${id}` } }];
+    }),
+    ...Object.values(aiTrips).map((p) => {
+      const stops = p.trip.days.reduce((n, d) => n + d.stops.length, 0);
+      return { at: p.savedAt, item: { id: `trip-${p.id}`, title: p.trip.title, meta: `${p.trip.days.length} ${p.trip.days.length === 1 ? "day" : "days"} · ${stops} stops · ${p.trip.city}`, city: p.trip.city, km: 0, badge: "AI trip plan", img: cityImage(p.trip.city), href: `/trip?id=${encodeURIComponent(p.id)}` } };
+    }),
+  ]
+    .sort((a, b) => b.at - a.at)
+    .map((x) => x.item);
+  const isSaved = (id: string) => id.startsWith("plan-") || id.startsWith("trip-") || (saved[id] ?? DEFAULTS[id] ?? false);
   const source = tab === "Plans" ? planItems : tab === "Walks" ? WALKS : tab === "Stories" ? STORIES : tab === "Places" ? ALL_PLACES : pack ? [...ALL_PLACES, ...WALKS, ...STORIES].filter((it) => it.city === "Ahmedabad") : [];
   let items = source.filter((it) => isSaved(it.id));
   const needle = query.trim().toLowerCase();
@@ -129,7 +137,16 @@ export default function SavedScreen() {
 
   const remove = (it: Item) => {
     let undo: () => void;
-    if (it.id.startsWith("plan-")) {
+    if (it.id.startsWith("trip-")) {
+      const id = it.id.slice(5);
+      const kept = aiTrips[id];
+      setAiTrips((m) => {
+        const rest = { ...m };
+        delete rest[id];
+        return rest;
+      });
+      undo = () => setAiTrips((m) => ({ ...m, [id]: kept }));
+    } else if (it.id.startsWith("plan-")) {
       const id = it.id.slice(5);
       const kept = plans[id];
       setPlans((p) => {
@@ -288,9 +305,9 @@ export default function SavedScreen() {
               </svg>
             </span>
             <span style={{ fontSize: "17px", fontWeight: "800" }}>{needle ? "No matches" : tab === "Offline" ? "Nothing offline yet" : `No saved ${tab.toLowerCase()} yet`}</span>
-            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? `Nothing saved matches "${query.trim()}".` : tab === "Offline" ? "Download the Ahmedabad pack to keep your saved items for when there's no signal." : tab === "Plans" ? "Pick a city, choose how long you have, and save the plan. It will wait for you here." : "Tap the bookmark on any place, walk or story and it will wait for you here."}</span>
+            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? `Nothing saved matches "${query.trim()}".` : tab === "Offline" ? "Download the Ahmedabad pack to keep your saved items for when there's no signal." : tab === "Plans" ? "Tell the AI where you're going and who's coming, and it plans each day. Save the plan and it will wait for you here." : "Tap the bookmark on any place, walk or story and it will wait for you here."}</span>
             {!needle ? (
-              <Link href={tab === "Plans" ? "/city" : "/explore"} style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
+              <Link href={tab === "Plans" ? "/trip" : "/explore"} style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
                 {tab === "Plans" ? "Plan a trip" : "Explore nearby"}
               </Link>
             ) : null}

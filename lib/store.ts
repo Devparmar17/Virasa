@@ -83,4 +83,11 @@ import { DEFAULT_SAVED } from "./store-shared";
 // Registered up front so every reader of "saved" starts from the same places.
 defaults.set("saved", DEFAULT_SAVED);
 
-export { DEFAULT_SAVED, LANGS, langOf } from "./store-shared";
+export { DEFAULT_SAVED, LANGS, langOf, speechLocale } from "./store-shared";
+
+import { DEFAULT_PROFILE, type Profile } from "./profile";
+
+// Who is travelling, as sent to the AI: the profile, plus the step-free switch
+// that Settings, walks and the trip planner share.
+// The first default registered for a key is the one every reader gets, so these match the other readers.
+export const travellerProfile = (): Profile => ({ ...DEFAULT_PROFILE, ...readStored<Profile>("profile", DEFAULT_PROFILE), stepFree: readStored("switches", { auto: true, desc: false, steps: false }).steps });

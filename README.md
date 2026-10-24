@@ -17,6 +17,10 @@ npm run dev      # http://localhost:3000
 - **Voice search** — the mic on Home and Search listens with the browser's speech recognition (Chrome, Edge, Safari) and searches for what it hears.
 - **Tickets and guided walks** — `/tickets`: pick a date, time and guests, pay, and keep the booking code under My tickets. Cancelling keeps a 50% cancellation charge and refunds the rest; cancelled bookings stay listed with the refund. Prices are sample values and payment is simulated; bookings are stored in the browser only.
 - **Local secrets** — the three cards on Home open `/secret?id=…`, a description page shaped to the find: things to spot, dishes to eat, or legend set beside the record.
+- **AI trip planner** — `/trip`: three short steps (where and for how many days, who is travelling, what they love, plus anything else typed or spoken), then Gemini plans each day around them — stops with why each suits this traveller, a tip, time and cost, local food to try, hidden gems and practical tips. Plans can be listened to, shared, saved to Saved › Plans, and any stop explained by the AI Guide or opened in Google Maps. Without Gemini it plans the cities Virasa knows (Ahmedabad, Jaipur, Varanasi, Hampi, Kolkata) from its own data.
+- **Discover like a local** — `/discover?city=…`: hidden places, local food, markets, festivals and experiences in any city, shaped to who is travelling. No ratings are invented; each find says why locals love it, and Maps opens the real place with its reviews and opening hours.
+- **Who's travelling** — just me, a couple, a family with kids, with elders or friends, plus budget, pace, food (vegetarian, Jain) and step-free routes. Chosen in onboarding, the planner or Settings; the AI Guide, the planner and Discover all follow it (simpler and playful for children, gentle and step-free for elders).
+- **Languages** — the interface in English, हिन्दी, ગુજરાતી, தமிழ் and বাংলা; AI answers, plans and voice also in मराठी, తెలుగు, ಕನ್ನಡ, മലയാളം and ਪੰਜਾਬੀ.
 - **Trip plans** — the city cards on Home open `/plan?city=…`: choose 1–3 days and interests for a day-by-day outline, and save it to Saved › Plans.
 - **Saved, Profile, Settings, Passport, Notifications, City packs, Gallery.**
 
@@ -56,7 +60,7 @@ GEMINI_API_KEY=your-key
 GEMINI_MODEL=gemini-3.8-flash
 ```
 
-Claude can answer instead with `ANTHROPIC_API_KEY=your-key`. When both are set Gemini answers first and Claude takes over if it fails; with neither, or if a request fails, the library answers. The route is `app/api/guide/route.ts`.
+Claude can answer instead with `ANTHROPIC_API_KEY=your-key`. When both are set Gemini answers first and Claude takes over if it fails; with neither, or if a request fails, the library answers. The routes are `app/api/guide/route.ts`, `app/api/trip/route.ts` and `app/api/discover/route.ts`. Trip plans and Discover ask Gemini Flash-Lite first (it writes long answers in seconds) and fall back to `GEMINI_MODEL`. Google's free tier has a daily limit per model; when Flash is used up the guide moves on to Flash-Lite by itself.
 
 Answers are read aloud in the chosen language as well as shown (the speaker button in the guide's header turns this off), and questions can be asked by voice with the mic.
 
