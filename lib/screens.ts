@@ -204,6 +204,13 @@ export const screens = [
     "interactive": true
   },
   {
+    "route": "/safety",
+    "title": "36 · Safety & help",
+    "w": 390,
+    "h": 844,
+    "interactive": true
+  },
+  {
     "route": "/credits",
     "title": "33 · Photo credits",
     "w": 390,

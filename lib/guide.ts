@@ -179,6 +179,9 @@ const FALLBACK = {
 // True when the library had nothing specific to say.
 export const isFallback = (text: string) => text === FALLBACK.en || text === FALLBACK.hi;
 
+// Greetings, thanks and the like, which the library can answer anywhere.
+export const isSmallTalk = (text: string) => SMALL_TALK.some((x) => x.test.test(text));
+
 function find(text: string) {
   const q = text.toLowerCase();
   let best: Entry | null = null;

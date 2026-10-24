@@ -52,6 +52,15 @@ const INDEX: Entry[] = [
     detail: [],
   })),
   {
+    id: "safety",
+    kind: "Safety & help",
+    title: "Safety & help numbers",
+    sub: "112 emergency, tourist and women's helplines, hospitals near you",
+    href: "/safety",
+    words: "safety help emergency sos police ambulance hospital doctor medical pharmacy medicine chemist toilet washroom restroom bathroom atm cash money lost helpline women child tourist danger unsafe fire 112 108 1091 1363 1098 water",
+    detail: [],
+  },
+  {
     id: "ai-trip",
     kind: "AI trip planner",
     title: "Plan my trip with AI",

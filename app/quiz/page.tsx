@@ -6,10 +6,16 @@ import Link from "next/link";
 import { Confetti } from "@/components/ui";
 import BackLink from "@/components/Back";
 import { renderVals } from "./logic";
+import { useStored } from "@/lib/store";
 
 export default function QuizScreen() {
   const [state, setAll] = useState<Record<string, any>>({});
-  const setState = (patch: Record<string, any>) => setAll((s) => ({ ...s, ...patch }));
+  const [points, setPoints] = useStored<number>("points", 0);
+  const setState = (patch: Record<string, any>) => {
+    // Finishing the quiz adds what was earned, once.
+    if (patch.done && !state.done) setPoints((p) => p + (state.score || 0) * 10);
+    setAll((s) => ({ ...s, ...patch }));
+  };
   const v: any = renderVals(state, setState);
   return (
     <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
@@ -125,7 +131,7 @@ export default function QuizScreen() {
               {v.resultTitle}
             </h1>
             <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.5", color: "#5A4434" }}>
-              +{v.points}{" points added to your heritage passport."}
+              +{v.points}{" points added."}
             </p>
             <div style={{ marginTop: "18px", padding: "12px 16px", borderRadius: "16px", background: "#F6F1EA", border: "1px solid #EFE6DA", display: "flex", alignItems: "center", gap: "12px", textAlign: "left" }}>
               <span style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "#8A6424", border: "2px dashed #F3D9A8", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -136,10 +142,10 @@ export default function QuizScreen() {
               </span>
               <span style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                 <span style={{ fontSize: "14px", fontWeight: "800" }}>
-                  60 pts to your next stamp
+                  {points} points in total
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-                  Gujarat gold stamp at 300 pts
+                  Keep playing to learn more
                 </span>
               </span>
             </div>

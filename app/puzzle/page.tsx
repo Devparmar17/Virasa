@@ -6,10 +6,18 @@ import Link from "next/link";
 import { Confetti, Tick } from "@/components/ui";
 import BackLink from "@/components/Back";
 import { renderVals } from "./logic";
+import { useStored } from "@/lib/store";
 
 export default function PuzzleScreen() {
   const [state, setAll] = useState<Record<string, any>>({});
-  const setState = (patch: Record<string, any>) => setAll((s) => ({ ...s, ...patch }));
+  const [, setPoints] = useStored<number>("points", 0);
+  const setState = (patch: Record<string, any>) => {
+    // Solving the puzzle earns 20 points, once per solve.
+    const was = (state.board as number[] | undefined)?.every((n, i) => n === i);
+    const now = (patch.board as number[] | undefined)?.every((n, i) => n === i);
+    if (now && !was) setPoints((p) => p + 20);
+    setAll((s) => ({ ...s, ...patch }));
+  };
   const v: any = renderVals(state, setState);
   return (
     <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>

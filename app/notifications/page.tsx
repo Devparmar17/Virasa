@@ -10,12 +10,10 @@ type Kind = keyof Settings["alerts"] | "you";
 type Note = { id: string; kind: Kind; title: string; body: string; when: string; href: string; day: "Today" | "Earlier" };
 
 const NOTES: Note[] = [
-  { id: "teen", kind: "nearby", title: "Teen Darwaza is 2 minutes ahead", body: "A 1-minute legend about the lamp that has burned for 600 years.", when: "Now", href: "/navigate", day: "Today" },
-  { id: "stamp", kind: "you", title: "Stamp collected: Sidi Saiyyed Mosque", body: "That's 14 stamps. 60 more points for Gujarat gold.", when: "22 min ago", href: "/passport", day: "Today" },
-  { id: "light", kind: "nearby", title: "Golden hour at the Tree of Life", body: "The jali glows from about 5:40 PM today. You're a 22-minute walk away.", when: "1 h ago", href: "/place", day: "Today" },
-  { id: "quiz", kind: "digest", title: "New quiz: Sidi Saiyyed Mosque", body: "3 questions from the story you just heard · +30 pts", when: "2 h ago", href: "/quiz", day: "Today" },
-  { id: "jaipur", kind: "trips", title: "Jaipur in 12 days", body: "Download the Jaipur pack on Wi-Fi so stories work without signal.", when: "Yesterday", href: "/city", day: "Earlier" },
-  { id: "pack", kind: "you", title: "Ahmedabad pack updated", body: "4 new stories and a refreshed Old City map.", when: "2 days ago", href: "/saved", day: "Earlier" },
+  { id: "welcome", kind: "you", title: "Welcome to Virasa", body: "Tell the AI where you're going and who's coming, and it plans each day for you.", when: "New", href: "/trip", day: "Today" },
+  { id: "light", kind: "nearby", title: "Golden hour at the Tree of Life", body: "In Ahmedabad? The jali at Sidi Saiyyed Mosque glows in the late-afternoon light.", when: "Tip", href: "/place", day: "Today" },
+  { id: "quiz", kind: "digest", title: "Quiz: Sidi Saiyyed Mosque", body: "3 questions about the Tree of Life jali.", when: "Tip", href: "/quiz", day: "Today" },
+  { id: "safety", kind: "you", title: "Help numbers, one tap away", body: "112 for any emergency, plus helplines for tourists, women and children.", when: "Tip", href: "/safety", day: "Earlier" },
 ];
 
 const ICON: Record<Kind, { bg: string; fg: string; path: string }> = {
@@ -26,7 +24,7 @@ const ICON: Record<Kind, { bg: string; fg: string; path: string }> = {
 };
 
 export default function NotificationsScreen() {
-  const [read, setRead] = useStored<Record<string, boolean>>("notesRead", { pack: true, jaipur: true });
+  const [read, setRead] = useStored<Record<string, boolean>>("notesRead", { safety: true });
   const [settings] = useStored<Settings>("settings", DEFAULT_SETTINGS);
   const notes = NOTES.filter((n) => n.kind === "you" || settings.alerts[n.kind]);
   const muted = NOTES.length - notes.length;

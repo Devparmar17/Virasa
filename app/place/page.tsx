@@ -67,25 +67,13 @@ export default function PlaceScreen() {
           Home of the Tree of Life jali
         </p>
         <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", fontWeight: "600", color: "#5A4434" }}>
-          <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#C8902B" stroke="none" aria-hidden="true">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          <a href="https://www.google.com/maps/search/?api=1&query=Sidi%20Saiyyed%20Mosque%2C%20Ahmedabad" target="_blank" rel="noopener noreferrer" style={{ minHeight: "32px", display: "flex", alignItems: "center", gap: "4px", color: "#2F7A4A", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: "3px" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 6v6l4 2" />
             </svg>
-            <strong style={{ color: "#2B1B10" }}>
-              4.9
-            </strong>
-            {" "}
-            <span>
-              (2.1k)
-            </span>
-          </span>
-          <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#B9A894" }} />
-          <span>
-            <strong style={{ color: "#2F7A4A" }}>
-              Open
-            </strong>
-            {" till 6 PM"}
-          </span>
+            Hours on Maps
+          </a>
           <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#B9A894" }} />
           <span>
             22 min walk

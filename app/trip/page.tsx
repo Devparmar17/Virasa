@@ -507,9 +507,7 @@ export default function TripScreen() {
             </>
           ) : null}
 
-          <p style={{ margin: "22px 0 0", padding: "12px 14px", borderRadius: "14px", background: "#FBF6EE", fontSize: "12px", lineHeight: 1.5, color: MUTED }}>{trip.source === "gemini" ? t("trip.ai_note") : t("trip.lib_note")}</p>
-
-          <div style={{ marginTop: "14px", display: "flex", flexDirection: "column", gap: "8px" }}>
+          <div style={{ marginTop: "22px", display: "flex", flexDirection: "column", gap: "8px" }}>
             <button type="button" className="sheet-row" style={{ marginTop: 0 }} onClick={() => ask(`I'm planning ${trip.title}. ${trip.days.map((d) => `Day ${d.day}: ${d.stops.map((s) => s.name).join(", ")}.`).join(" ")} What else should I know before I go?`)}>
               <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Icon d={ICON.chat} />

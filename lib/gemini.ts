@@ -9,7 +9,8 @@ export const LITE_MODEL = "gemini-flash-lite-latest";
 const FALLBACK_MODELS = ["gemini-flash-latest", LITE_MODEL];
 // Long JSON answers (trip plans, Discover): Flash-Lite writes them in seconds,
 // where Flash can take half a minute when it's busy, so Flash is the backup.
-export const FAST_MODELS = [LITE_MODEL, GEMINI_MODEL];
+// Lite now and then gets stuck repeating itself, so it gets a second try.
+export const FAST_MODELS = [LITE_MODEL, GEMINI_MODEL, LITE_MODEL];
 // Answers worth retrying on another model: not found, rate-limited, overloaded, or a server fault.
 const TRY_NEXT = new Set([404, 429, 500, 503]);
 
@@ -24,19 +25,23 @@ type Reply = { candidates?: { content?: { parts?: { text?: string }[] }; finishR
 export async function gemini({ system, contents, schema, maxTokens = 600, temperature = 0.6, timeoutMs = 12000, models = [GEMINI_MODEL, ...FALLBACK_MODELS] }: { system: string; contents: GeminiTurn[]; schema?: object; maxTokens?: number; temperature?: number; timeoutMs?: number; models?: string[] }): Promise<string | null> {
   const key = geminiKey();
   if (!key) return null;
-  const body = JSON.stringify({
-    systemInstruction: { parts: [{ text: system }] },
-    contents,
-    generationConfig: { temperature, maxOutputTokens: maxTokens, ...(schema ? { responseMimeType: "application/json", responseSchema: schema } : {}) },
-  });
+  const config = { temperature, maxOutputTokens: maxTokens, ...(schema ? { responseMimeType: "application/json", responseSchema: schema } : {}) };
+  // Lite thinks briefly: just as complete, faster, and it no longer gets stuck repeating itself.
+  const bodyFor = (model: string) =>
+    JSON.stringify({
+      systemInstruction: { parts: [{ text: system }] },
+      contents,
+      generationConfig: model === LITE_MODEL ? { ...config, thinkingConfig: { thinkingLevel: "low" } } : config,
+    });
   try {
-    for (const model of [...new Set(models)]) {
+    // The same model twice in a row is tried once; a model listed again later is a retry.
+    for (const model of models.filter((m, i) => m !== models[i - 1])) {
       let res: Response;
       try {
         res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-          body,
+          body: bodyFor(model),
           // Don't hang a traveller's screen on a slow model: move on to the next one.
           signal: AbortSignal.timeout(timeoutMs),
         });

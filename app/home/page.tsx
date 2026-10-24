@@ -7,9 +7,10 @@ import LangButton from "@/components/LangButton";
 import VoiceSearch from "@/components/VoiceSearch";
 import Highlights from "@/components/Highlights";
 import { MarkOnboarded } from "@/components/Prefs";
-import { Avatar, Greeting } from "@/components/User";
+import { Greeting } from "@/components/User";
 import { frame } from "@/components/ui";
 import { T, type Key } from "@/lib/i18n";
+import { Elsewhere, HereCity, HereGate } from "@/components/Here";
 
 const INK = "#2B1B10";
 const MUTED = "#6F5B4B";
@@ -106,7 +107,7 @@ export default function HomeScreen() {
   return (
     <div style={frame({ background: "#FFFFFF", paddingBottom: "112px" })}>
       <header style={{ padding: "50px 12px 0 12px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
-        <Link href="/city" aria-label="Change location, currently Ahmedabad, Old City" style={{ minWidth: 0, height: "44px", padding: "0 12px 0 8px", borderRadius: "999px", display: "flex", alignItems: "center", gap: "8px", color: INK, textDecoration: "none" }}>
+        <Link href="/city" aria-label="Change city" style={{ flex: "1 1 auto", minWidth: 0, height: "44px", padding: "0 8px", borderRadius: "999px", display: "flex", alignItems: "center", gap: "8px", color: INK, textDecoration: "none" }}>
           <span style={{ flex: "0 0 30px", width: "30px", height: "30px", borderRadius: "50%", background: "#E3F1E7", color: "#2F7A4A", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
@@ -117,18 +118,18 @@ export default function HomeScreen() {
             <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: MUTED }}>
               <T k="home.youre_in" />
             </span>
-            <span style={{ fontSize: "15px", fontWeight: 800, whiteSpace: "nowrap" }}>
-              <T k="home.city" />
+            <span style={{ fontSize: "15px", fontWeight: 800, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              <HereCity />
             </span>
           </span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flex: "0 0 16px" }}>
             <path d="m6 9 6 6 6-6" />
           </svg>
         </Link>
-        <div style={{ display: "flex", alignItems: "center", gap: "2px" }}>
+        <div style={{ flex: "0 0 auto", display: "flex", alignItems: "center", gap: "2px" }}>
           <LangButton
             style={{ height: "44px", padding: "0 4px", border: "0", background: "none", display: "flex", alignItems: "center", cursor: "pointer" }}
-            pillStyle={{ height: "34px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", display: "flex", alignItems: "center", gap: "5px", fontSize: "13px", fontWeight: 700 }}
+            pillStyle={{ height: "34px", padding: "0 10px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", display: "flex", alignItems: "center", gap: "5px", fontSize: "13px", fontWeight: 700 }}
             icon={
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m5 8 6 6" />
@@ -140,8 +141,10 @@ export default function HomeScreen() {
               </svg>
             }
           />
-          <Link href="/profile" aria-label="Your profile" style={{ width: "44px", height: "44px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Avatar style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover", display: "block", boxShadow: "0 0 0 2px #FFFFFF, 0 0 0 3.5px #E2D3C1" }} />
+          <Link href="/safety" aria-label="SOS: emergency numbers and help" style={{ height: "44px", padding: "0 0 0 4px", display: "flex", alignItems: "center" }}>
+            <span style={{ height: "34px", padding: "0 11px", borderRadius: "999px", background: "#B03A2E", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, letterSpacing: "0.06em", boxShadow: "0 4px 10px rgba(176, 58, 46, 0.28)" }}>
+              SOS
+            </span>
           </Link>
         </div>
       </header>
@@ -210,6 +213,8 @@ export default function HomeScreen() {
           </Link>
         </nav>
 
+        {/* Away from Ahmedabad, Home is about the city the traveller is in. */}
+        <HereGate elsewhere={<Elsewhere />}>
         {/* The one thing to do next: today's planned walk. */}
         <section aria-label="Planned for you" style={{ margin: "20px 20px 0" }}>
           <Link href="/walk" style={{ position: "relative", height: "216px", borderRadius: "22px", overflow: "hidden", display: "block", color: "#FFFFFF", textDecoration: "none", boxShadow: "0 14px 30px rgba(60, 36, 20, 0.18)" }}>
@@ -235,6 +240,7 @@ export default function HomeScreen() {
             </span>
           </Link>
         </section>
+        </HereGate>
 
         <nav aria-label="Quick actions" style={{ margin: "22px 12px 0", display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))" }}>
           {ACTIONS.map((a) => (
@@ -251,6 +257,7 @@ export default function HomeScreen() {
           ))}
         </nav>
 
+        <HereGate>
         <section style={{ marginTop: "30px" }}>
           <SectionHead title="home.highlights" more={{ href: "/explore", label: "home.map" }} />
           <Highlights />
@@ -299,6 +306,7 @@ export default function HomeScreen() {
             <Chevron size={18} />
           </Link>
         </section>
+        </HereGate>
 
         <section style={{ marginTop: "28px" }}>
           <SectionHead title="home.next_city" more={{ href: "/city", label: "home.all_cities" }} />

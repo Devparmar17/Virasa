@@ -7,6 +7,8 @@ import { toast } from "@/components/Toast";
 import { tr, useT } from "@/lib/i18n";
 import { readStored, speechLocale, useStored } from "@/lib/store";
 import { placeById } from "../explore/places";
+import { kmBetween } from "@/lib/here";
+import { ARRIVED_KM, PLACE_SPOTS, type Stamp } from "@/lib/stamps";
 
 const noop = () => () => {};
 
@@ -137,5 +139,48 @@ export function StoryPreview({ style }: { style: CSSProperties }) {
       )}
       <span>{playing ? "" : "1:10"}</span>
     </button>
+  );
+}
+
+// Real walking directions in Google Maps, for when the traveller is really going.
+export function directionsUrl(id: string, name: string) {
+  const spot = PLACE_SPOTS[id];
+  const to = spot ? `${spot.lat},${spot.lon}` : `${name}, Ahmedabad`;
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(to)}&travelmode=walking`;
+}
+
+// On arrival: a stamp, shown only when the phone's location shows the
+// traveller is really at the place.
+export function StampCheck({ id, name }: { id: string; name: string }) {
+  const t = useT();
+  const [, setStamps] = useStored<Record<string, Stamp>>("stamps", {});
+  const [yes, setYes] = useState(false);
+  useEffect(() => {
+    const spot = PLACE_SPOTS[id];
+    if (!spot || !navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      (p) => {
+        const here = kmBetween({ lat: p.coords.latitude, lon: p.coords.longitude }, spot) <= ARRIVED_KM;
+        if (!here) return;
+        setStamps((m) => (m[id] ? m : { ...m, [id]: { id, name: spot.name, city: spot.city, state: spot.state, at: Date.now() } }));
+        setYes(true);
+      },
+      () => {},
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+  }, [id, setStamps]);
+  if (!yes) return null;
+  return (
+    <div aria-live="polite" style={{ marginTop: "16px", width: "100%", padding: "12px 14px", borderRadius: "16px", background: "#E3F1E7", display: "flex", alignItems: "center", gap: "12px", textAlign: "left" }}>
+      <span className="stamp-in" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "#8A6424", border: "2px dashed #F3D9A8", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <circle cx="12" cy="8" r="6" />
+          <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+        </svg>
+      </span>
+      <span style={{ fontSize: "14px", lineHeight: 1.4, fontWeight: 800, color: "#2B1B10" }}>
+        {t("nav.stamp")} · {name}
+      </span>
+    </div>
   );
 }

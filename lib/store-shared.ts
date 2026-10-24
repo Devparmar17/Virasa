@@ -1,7 +1,7 @@
 // Plain data shared by client screens and server routes.
 
-// Places saved in the design's Saved screen start out saved.
-export const DEFAULT_SAVED: Record<string, boolean> = { sidi: true, dhal: true, sarkhej: true, hawa: true };
+// A new traveller starts with nothing saved.
+export const DEFAULT_SAVED: Record<string, boolean> = {};
 
 export const LANGS = [
   { id: "en", short: "EN", label: "English", native: "English" },

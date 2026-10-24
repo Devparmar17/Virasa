@@ -11,6 +11,7 @@ import { toast } from "@/components/Toast";
 import { pop } from "@/components/Tap";
 import { Greeting } from "@/components/User";
 import { LANGS, langOf, readStored, speechLocale, travellerProfile, useStored } from "@/lib/store";
+import { DEFAULT_HERE, isAhmedabad, type Here } from "@/lib/here";
 import type { GuideMessage } from "@/lib/guide";
 
 // A message in the thread: who said it, what, and for answers where it came from.
@@ -90,6 +91,7 @@ export default function AIGuideScreen() {
   const [listening, setListening] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [lang, setLang] = useStored("lang", "en");
+  const [here] = useStored<Here>("here", DEFAULT_HERE);
   // Answers are read aloud as well as shown, unless the traveller turns it off.
   const [prefs, setPrefs] = useStored<Record<string, boolean>>("prefs", {});
   const readAloud = prefs.guideVoice ?? true;
@@ -144,7 +146,7 @@ export default function AIGuideScreen() {
         const res = await fetch("/api/guide", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: asked.map(({ role, text }) => ({ role, text })), lang: replyLang || lang, profile: travellerProfile() }),
+          body: JSON.stringify({ messages: asked.map(({ role, text }) => ({ role, text })), lang: replyLang || lang, profile: travellerProfile(), place: readStored<Here>("here", DEFAULT_HERE) }),
         });
         const data = await res.json();
         answer = data.text || "";
@@ -275,7 +277,7 @@ export default function AIGuideScreen() {
           </span>
           <span style={{ marginTop: "2px", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B", whiteSpace: "nowrap", overflow: "hidden" }}>
             <span aria-hidden="true" style={{ flex: "0 0 7px", width: "7px", height: "7px", borderRadius: "50%", background: "#2F7A4A" }} />
-            <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>Near Sidi Saiyyed Mosque</span>
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{isAhmedabad(here) ? "Near Sidi Saiyyed Mosque" : `In ${here.city}`}</span>
           </span>
         </span>
         {thread.length ? (

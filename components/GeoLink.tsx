@@ -5,21 +5,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "./Toast";
 import { Spinner } from "./ui";
 import { useStored } from "@/lib/store";
+import { DEFAULT_HERE, nearestCity, type Here } from "@/lib/here";
 
-// Ahmedabad's Old City, the area Virasa currently covers.
-const OLD_CITY = { lat: 23.0258, lon: 72.5873 };
-
-export function kmFromOldCity(lat: number, lon: number) {
-  const rad = (d: number) => (d * Math.PI) / 180;
-  const a = Math.sin(rad(lat - OLD_CITY.lat) / 2) ** 2 + Math.cos(rad(OLD_CITY.lat)) * Math.cos(rad(lat)) * Math.sin(rad(lon - OLD_CITY.lon) / 2) ** 2;
-  return 6371 * 2 * Math.asin(Math.sqrt(a));
-}
-
-// Asks the browser for the traveller's location, says what it found, then moves on.
+// Asks the browser for the traveller's location, sets the city the app
+// follows to the nearest one it knows, says what it found, then moves on.
 export default function GeoLink({ href, style, children }: { href?: string; style?: CSSProperties; children: ReactNode }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
-  const [, setGeo] = useStored<{ lat: number; lon: number } | null>("geo", null);
+  const [, setHere] = useStored<Here>("here", DEFAULT_HERE);
   const next = () => {
     setBusy(false);
     if (href) router.push(href);
@@ -38,9 +31,10 @@ export default function GeoLink({ href, style, children }: { href?: string; styl
         setBusy(true);
         navigator.geolocation.getCurrentPosition(
           (p) => {
-            setGeo({ lat: p.coords.latitude, lon: p.coords.longitude });
-            const km = kmFromOldCity(p.coords.latitude, p.coords.longitude);
-            toast(km < 30 ? "Location on — showing stories around you" : `Location on — you're about ${Math.round(km).toLocaleString("en-IN")} km from Ahmedabad's Old City`, "success");
+            const { latitude: lat, longitude: lon } = p.coords;
+            const near = nearestCity(lat, lon);
+            setHere({ city: near.city, state: near.state, lat, lon, km: Math.round(near.km), source: "gps" });
+            toast(near.km < 60 ? `Location on — you're in ${near.city}` : `Location on — the nearest city Virasa knows is ${near.city}, ${Math.round(near.km)} km away`, "success");
             next();
           },
           () => {

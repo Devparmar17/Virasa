@@ -12,6 +12,7 @@ import { Spinner } from "@/components/ui";
 import { useT } from "@/lib/i18n";
 import { cityPlan, planStops, type SavedPlan } from "@/lib/plans";
 import { cityImage, type SavedTrip } from "@/lib/trip";
+import type { Stamp } from "@/lib/stamps";
 import { SECRETS } from "@/lib/secrets";
 import { PLACES as MAP_PLACES } from "../explore/places";
 
@@ -22,21 +23,20 @@ type Item = {
   city: string;
   km: number;
   badge: string;
-  visited?: boolean;
   img?: string;
   href?: string;
 };
 
 const PLACES: Item[] = [
-  { id: "sidi", title: "Sidi Saiyyed Mosque", meta: "1.8 km · Old City", city: "Ahmedabad", km: 1.8, badge: "Visited · stamp collected", visited: true, img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
-  { id: "dhal", title: "Dhal ni Pol", meta: "650 m · Khadia", city: "Ahmedabad", km: 0.65, badge: "Visited", visited: true, img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/secret?id=dhal" },
+  { id: "sidi", title: "Sidi Saiyyed Mosque", meta: "1.8 km · Old City", city: "Ahmedabad", km: 1.8, badge: "Tree of Life jali", img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
+  { id: "dhal", title: "Dhal ni Pol", meta: "650 m · Khadia", city: "Ahmedabad", km: 0.65, badge: "Carved havelis", img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/secret?id=dhal" },
   { id: "sarkhej", title: "Sarkhej Roza", meta: "8 km · 20 min drive", city: "Ahmedabad", km: 8, badge: "Best at sunset", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg", href: "/secret?id=sarkhej" },
-  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "For your Jaipur trip", img: "/images/hawa-mahal.jpg", href: "/plan?city=jaipur" },
+  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "Jaipur", img: "/images/hawa-mahal.jpg", href: "/plan?city=jaipur" },
 ];
 
 // Distance in km from a line like "650 m · 8 min" or "18 km · 35 min drive".
 const kmIn = (text: string) => {
-  const m = text.match(/([d.]+)s*(km|m)/);
+  const m = text.match(/([\d.]+)\s*(km|m)\b/);
   return m ? Number(m[1]) / (m[2] === "m" ? 1000 : 1) : 1;
 };
 
@@ -67,7 +67,7 @@ const NOUNS: Record<TabName, [string, string]> = { Places: ["place", "places"], 
 const SORTS = ["Recently saved", "Nearest first", "A to Z"];
 
 // What counts as saved before the traveller changes anything.
-const DEFAULTS: Record<string, boolean> = { ...DEFAULT_SAVED, "walk-morning": true, "walk-loop": true, "story-tree": true, "story-sarkhej": true };
+const DEFAULTS: Record<string, boolean> = { ...DEFAULT_SAVED };
 
 function Thumb({ item }: { item: Item }) {
   if (item.img) {
@@ -105,7 +105,9 @@ export default function SavedScreen() {
   const [downloading, setDownloading] = useState(false);
   const [checking, setChecking] = useState(false);
   const [saved, setSaved] = useStored<Record<string, boolean>>("saved", DEFAULT_SAVED);
-  const [pack, setPack] = useStored("pack", true);
+  const [pack, setPack] = useStored("pack", false);
+  // Places really visited: a stamp was collected there.
+  const [stamps] = useStored<Record<string, Stamp>>("stamps", {});
   const ask = useAsk();
   const t = useT();
 
@@ -115,7 +117,7 @@ export default function SavedScreen() {
       const city = cityPlan(id);
       if (!city) return [];
       const stops = planStops(city, p.days, p.interests).length;
-      return [{ at: p.savedAt, item: { id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: id === "jaipur" ? "Your trip · in 12 days" : "Trip plan", img: city.img, href: `/plan?city=${id}` } }];
+      return [{ at: p.savedAt, item: { id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: "Trip plan", img: city.img, href: `/plan?city=${id}` } }];
     }),
     ...Object.values(aiTrips).map((p) => {
       const stops = p.trip.days.reduce((n, d) => n + d.stops.length, 0);
@@ -169,12 +171,12 @@ export default function SavedScreen() {
         <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "4px" }}>
           <span style={{ fontSize: "16px", fontWeight: "800" }}>{it.title}</span>
           <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>{it.meta}</span>
-          {it.visited ? (
+          {stamps[it.id] ? (
             <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px 0 6px", borderRadius: "7px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center", gap: "4px" }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M20 6 9 17l-5-5" />
               </svg>
-              {it.badge}
+              Visited · stamp collected
             </span>
           ) : (
             <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>{it.badge}</span>

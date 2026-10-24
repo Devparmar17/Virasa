@@ -5,7 +5,7 @@
 // travelling. No ratings are made up: each find says why locals love it, and
 // Maps opens the real place with its reviews and opening hours.
 //
-// /discover?city=Jaipur opens on that city; otherwise Ahmedabad, where you are.
+// /discover?city=Jaipur opens on that city; otherwise the city you are in.
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Link from "next/link";
 import BackLink from "@/components/Back";
@@ -13,6 +13,7 @@ import VoiceSearch from "@/components/VoiceSearch";
 import { pop, useAsk } from "@/components/Tap";
 import { frame } from "@/components/ui";
 import { travellerProfile, useStored } from "@/lib/store";
+import { DEFAULT_HERE, type Here } from "@/lib/here";
 import { useT, type Key } from "@/lib/i18n";
 import { POPULAR_CITIES } from "@/lib/trip";
 import { FIND_KINDS, mapsUrl, type Discovery, type Find, type FindKind } from "@/lib/discover";
@@ -21,7 +22,6 @@ import { lookOf } from "@/lib/kinds";
 const INK = "#2B1B10";
 const MUTED = "#6F5B4B";
 const BRAND = "#9A4E36";
-const HERE = "Ahmedabad";
 
 const noop = () => () => {};
 
@@ -143,8 +143,10 @@ export default function DiscoverScreen() {
   const search = useSyncExternalStore(noop, () => window.location.search, () => "");
   const fromLink = new URLSearchParams(search).get("city");
   const [lang] = useStored("lang", "en");
+  // Opens on the city the traveller is in, unless a link names another.
+  const [here] = useStored<Here>("here", DEFAULT_HERE);
   const [picked, setPicked] = useState<string | null>(null);
-  const city = picked ?? (fromLink || HERE);
+  const city = picked ?? (fromLink || here.city);
   const [draft, setDraft] = useState<string | null>(null);
   const typed = draft ?? city;
   const [kind, setKind] = useState<FindKind | "all">("all");
@@ -297,12 +299,6 @@ export default function DiscoverScreen() {
             ) : (
               <p style={{ margin: 0, fontSize: "15px", color: MUTED }}>{t("disc.none")}</p>
             )}
-            <p style={{ margin: "16px 0 0", padding: "12px 14px", borderRadius: "14px", background: "#FBF6EE", display: "flex", gap: "8px", fontSize: "12px", lineHeight: 1.5, color: MUTED }}>
-              <span style={{ flex: "0 0 auto" }}>
-                <Icon d={ICON.info} size={16} />
-              </span>
-              {t("disc.note")}
-            </p>
             <Link href={`/trip?city=${encodeURIComponent(result.data?.city || city)}`} style={{ marginTop: "14px", height: "56px", borderRadius: "16px", background: BRAND, color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: 800, textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" }}>
               <Icon d={ICON.route} />
               {t("disc.plan", { city: result.data?.city || city })}
