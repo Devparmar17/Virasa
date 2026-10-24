@@ -6,6 +6,8 @@ import BackLink from "@/components/Back";
 import { useStored } from "@/lib/store";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 import { renderVals } from "./logic";
+import { DEFAULT_PROFILE, PARTIES, type Profile } from "@/lib/profile";
+import { useT, type Key } from "@/lib/i18n";
 
 export default function PersonalizeScreen() {
   // Choices are remembered, and length and language are the same ones Settings edits.
@@ -22,6 +24,8 @@ export default function PersonalizeScreen() {
     if (patch.lang && !(patch.lang === "gu" && local)) setLang(patch.lang);
   };
   const v: any = renderVals(state, setState);
+  const t = useT();
+  const [profile, setProfile] = useStored<Profile>("profile", DEFAULT_PROFILE);
   return (
     <div style={{ width: "390px", minHeight: "844px", paddingBottom: "120px", position: "relative", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
@@ -55,6 +59,25 @@ export default function PersonalizeScreen() {
         </p>
       </div>
       <fieldset style={{ border: "0", margin: "20px 0 0", padding: "0 20px", minWidth: "0" }}>
+        <legend style={{ padding: "0", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
+          {t("trip.who")}
+        </legend>
+        <div role="radiogroup" aria-label={t("trip.who")} style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "8px" }}>
+          {PARTIES.map((p) => {
+            const on = profile.party === p.id;
+            return (
+              <button key={p.id} type="button" role="radio" aria-checked={on} onClick={() => setProfile((x) => ({ ...DEFAULT_PROFILE, ...x, party: p.id }))} style={{ height: "48px", padding: "0 14px 0 10px", borderRadius: "999px", border: `1.5px solid ${on ? "#9A4E36" : "#E2D3C1"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: on ? "#7E3D29" : "#2B1B10", display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: "700", cursor: "pointer", transition: "background-color 0.18s ease, border-color 0.18s ease" }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d={p.icon} />
+                </svg>
+                {t(`who.${p.id}` as Key)}
+              </button>
+            );
+          })}
+        </div>
+        <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: "1.4", color: "#6F5B4B" }}>{t("trip.who_hint")}</p>
+      </fieldset>
+      <fieldset style={{ border: "0", margin: "22px 0 0", padding: "0 20px", minWidth: "0" }}>
         <legend style={{ padding: "0", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
           <span>
             Interests

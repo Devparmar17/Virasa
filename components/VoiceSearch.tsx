@@ -4,9 +4,8 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { useRouter } from "next/navigation";
 import Sheet from "./Sheet";
 import { toast } from "./Toast";
-import { useStored } from "@/lib/store";
+import { useStored, speechLocale } from "@/lib/store";
 
-const LOCALE: Record<string, string> = { en: "en-IN", hi: "hi-IN", gu: "gu-IN", ta: "ta-IN", bn: "bn-IN" };
 
 // The microphone on a search bar. Listens with the browser's speech
 // recognition, shows what it hears, then searches for it: by default it opens
@@ -35,7 +34,7 @@ export default function VoiceSearch({ style, children, onResult, label = "Search
     }
     const r = new Recognition();
     rec.current = r;
-    r.lang = LOCALE[lang] || "en-IN";
+    r.lang = speechLocale(lang);
     r.interimResults = true;
     r.maxAlternatives = 1;
     let final = "";

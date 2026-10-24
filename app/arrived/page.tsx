@@ -3,6 +3,7 @@ import Link from "next/link";
 import BackLink from "@/components/Back";
 import { AutoStory } from "@/components/Prefs";
 import { Confetti, Tick } from "@/components/ui";
+import { StampCheck } from "../navigate/parts";
 
 export default function ArrivedScreen() {
   return (
@@ -29,27 +30,7 @@ export default function ArrivedScreen() {
         <h1 style={{ margin: "6px 0 0", textAlign: "center", fontSize: "26px", lineHeight: "1.2", fontWeight: "800", letterSpacing: "-0.02em" }}>
           Sidi Saiyyed Mosque
         </h1>
-        <div style={{ marginTop: "16px", padding: "12px 14px", borderRadius: "16px", background: "#F6F1EA", border: "1px solid #EFE6DA", display: "flex", alignItems: "center", gap: "12px" }}>
-          <span className="stamp-in" style={{ flex: "0 0 46px", width: "46px", height: "46px", borderRadius: "50%", background: "#8A6424", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", border: "2px dashed #F3D9A8" }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="12" cy="8" r="6" />
-              <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
-            </svg>
-          </span>
-          <span style={{ flex: "1", display: "flex", flexDirection: "column", gap: "6px" }}>
-            <span style={{ display: "flex", justifyContent: "space-between", fontSize: "14px", fontWeight: "800" }}>
-              <span>
-                Ahmedabad stamp collected
-              </span>
-              <span style={{ fontWeight: "700", color: "#6F5B4B", whiteSpace: "nowrap" }}>
-                4 / 12
-              </span>
-            </span>
-            <span style={{ height: "6px", borderRadius: "999px", background: "#EFE6DA", overflow: "hidden" }}>
-              <span className="step-fill" style={{ display: "block", width: "33%", height: "100%", borderRadius: "999px", background: "#8A6424" }} />
-            </span>
-          </span>
-        </div>
+        <StampCheck id="sidi" name="Sidi Saiyyed Mosque" />
         <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "10px" }}>
           <Link href="/story" style={{ height: "52px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 8px 18px rgba(154, 78, 54, 0.26)" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">

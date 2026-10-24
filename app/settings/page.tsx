@@ -11,7 +11,8 @@ import { LANGS, resetStored, useStored } from "@/lib/store";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 import { logOut, useUser } from "@/lib/auth";
 import { Avatar } from "@/components/User";
-import { translate, useT } from "@/lib/i18n";
+import { translate, useT, type Key } from "@/lib/i18n";
+import { BUDGETS, DEFAULT_PROFILE, DIETS, PACES, PARTIES, type Profile } from "@/lib/profile";
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -32,6 +33,8 @@ export default function SettingsScreen() {
   const alert = (k: keyof Settings["alerts"]) => set({ alerts: { ...settings.alerts, [k]: !settings.alerts[k] } });
   const voice = prefs.voice ?? true;
   const [user] = useUser();
+  const [profile, setProfile] = useStored<Profile>("profile", DEFAULT_PROFILE);
+  const setP = (patch: Partial<Profile>) => setProfile((p) => ({ ...DEFAULT_PROFILE, ...p, ...patch }));
 
   return (
     <div style={frame({ paddingBottom: "48px" })}>
@@ -87,6 +90,44 @@ export default function SettingsScreen() {
             </span>
           </div>
         </Card>
+
+        {/* Who's travelling: the AI Guide, trip planner and Discover all follow it. */}
+        <SectionLabel id="traveller">{t("trip.who").toUpperCase()}</SectionLabel>
+        <Card>
+          <div role="radiogroup" aria-label={t("trip.who")}>
+            {PARTIES.map((p, i) => (
+              <button key={p.id} type="button" role="radio" aria-checked={profile.party === p.id} onClick={() => setP({ party: p.id })} style={rowStyle(i === PARTIES.length - 1)}>
+                <span style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  <span aria-hidden="true" style={{ flex: "0 0 36px", height: "36px", borderRadius: "11px", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                      <path d={p.icon} />
+                    </svg>
+                  </span>
+                  <span>
+                    {t(`who.${p.id}` as Key)}
+                    <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>{t(`who.${p.id}_hint` as Key)}</span>
+                  </span>
+                </span>
+                <span aria-hidden="true" style={{ flex: "0 0 22px", width: "22px", height: "22px", borderRadius: "50%", border: profile.party === p.id ? "7px solid #9A4E36" : "2px solid #CDBFAE", background: "#FFFFFF", transition: "border 0.18s ease" }} />
+              </button>
+            ))}
+          </div>
+        </Card>
+        <Card style={{ marginTop: "10px", padding: "14px", display: "flex", flexDirection: "column", gap: "14px" }}>
+          <div>
+            <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>{t("trip.budget")}</div>
+            <Segmented label={t("trip.budget")} value={profile.budget} onChange={(budget) => setP({ budget })} options={BUDGETS.map(([id, sign]) => [id, `${sign} ${t(`pf.${id}` as Key)}`])} />
+          </div>
+          <div>
+            <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>{t("trip.pace")}</div>
+            <Segmented label={t("trip.pace")} value={profile.pace} onChange={(pace) => setP({ pace })} options={PACES.map(([id]) => [id, t(`pf.${id}` as Key)])} />
+          </div>
+          <div>
+            <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>{t("trip.food")}</div>
+            <Segmented label={t("trip.food")} value={profile.diet} onChange={(diet) => setP({ diet })} options={DIETS.map(([id]) => [id, t(`pf.${id}` as Key)])} />
+          </div>
+        </Card>
+        <p style={{ margin: "8px 2px 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>{t("trip.who_hint")}</p>
 
         <SectionLabel id="language">{t("st.language")}</SectionLabel>
         <Card>

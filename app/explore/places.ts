@@ -28,13 +28,13 @@ export type Place = {
 };
 
 export const PLACES: Place[] = [
-  { id: "sidi", name: "Sidi Saiyyed Mosque", cat: "monument", x: 160, y: 306, rating: "4.9", fact: "1573", mins: 22, km: 1.8, open: "Open now", img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
-  { id: "bhadra", name: "Bhadra Fort", cat: "legend", x: 180, y: 368, rating: "4.6", fact: "1411", mins: 18, km: 1.4, open: "Open now", img: "/images/bhadra-fort.jpg", detail: "/secret?id=bhadra" },
+  { id: "sidi", name: "Sidi Saiyyed Mosque", cat: "monument", x: 160, y: 306, rating: "4.9", fact: "1573", mins: 22, km: 1.8, open: "Visit by day", img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
+  { id: "bhadra", name: "Bhadra Fort", cat: "legend", x: 180, y: 368, rating: "4.6", fact: "1411", mins: 18, km: 1.4, open: "Visit by day", img: "/images/bhadra-fort.jpg", detail: "/secret?id=bhadra" },
   { id: "teen", name: "Teen Darwaza", cat: "monument", x: 218, y: 380, rating: "4.5", fact: "1415", mins: 14, km: 1.1, open: "Always open", img: "/images/teen-darwaza.jpg", detail: "/secret?id=teen" },
-  { id: "jama", name: "Jama Masjid", cat: "monument", x: 256, y: 388, rating: "4.8", fact: "1424", mins: 11, km: 0.9, open: "Open now", img: "/images/jama-masjid.jpg", detail: "/secret?id=jama" },
+  { id: "jama", name: "Jama Masjid", cat: "monument", x: 256, y: 388, rating: "4.8", fact: "1424", mins: 11, km: 0.9, open: "Visit by day", img: "/images/jama-masjid.jpg", detail: "/secret?id=jama" },
   { id: "manek", name: "Manek Chowk", cat: "food", x: 268, y: 432, rating: "4.7", fact: "Night market", mins: 14, km: 1.1, open: "Food from 8 PM", img: "/images/manek-chowk.jpg", detail: "/secret?id=manek" },
   { id: "dhal", name: "Dhal ni Pol woodcarvings", cat: "craft", x: 300, y: 476, rating: "4.6", fact: "Carved havelis", mins: 8, km: 0.65, open: "Best in the morning", img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", detail: "/secret?id=dhal" },
-  { id: "kalupur", name: "Kalupur Swaminarayan Temple", cat: "monument", x: 344, y: 290, rating: "4.7", fact: "1822", mins: 16, km: 1.3, open: "Open now", img: "/images/kalupur-temple.jpg", detail: "/secret?id=kalupur" },
+  { id: "kalupur", name: "Kalupur Swaminarayan Temple", cat: "monument", x: 344, y: 290, rating: "4.7", fact: "1822", mins: 16, km: 1.3, open: "Visit by day", img: "/images/kalupur-temple.jpg", detail: "/secret?id=kalupur" },
 ];
 
 export const placeById = (id: string) => PLACES.find((p) => p.id === id) || PLACES[0];

@@ -383,11 +383,8 @@ export default function ExploreScreen() {
               </span>
               <span style={{ fontSize: "18px", fontWeight: "800", letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{place.name}</span>
               <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", fontWeight: "600", color: "#5A4434" }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="#C8902B" stroke="none" aria-hidden="true">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
                 <span>
-                  {place.rating} · {place.fact} · {place.mins} min walk
+                  {place.fact} · {place.mins} min walk
                 </span>
               </span>
             </span>

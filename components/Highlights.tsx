@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import Speak from "./Speak";
 import { Toggle } from "./Tap";
-import { T } from "@/lib/i18n";
 import { HIGHLIGHTS, KIND, listenMins, type Secret } from "@/lib/secrets";
 
 // Home's "Heritage highlights" row: one card per monument, each opening its
@@ -50,8 +49,8 @@ const CARDS: Card[] = [
     fact: "1573 · Gujarat Sultanate",
     distance: "22 min · 1.8 km",
     walk: true,
-    rating: "4.9",
-    open: "Open now",
+    rating: "",
+    open: "Visit by day",
     img: "/images/358cd23211709da539c3303890c27e8b.jpg",
     alt: "The Tree of Life stone jali inside Sidi Saiyyed Mosque",
     listen: (
@@ -69,7 +68,7 @@ const CARDS: Card[] = [
       fact: h.fact || h.tag,
       distance: h.distance,
       walk: h.walk,
-      rating: h.rating || "4.7",
+      rating: "",
       open: h.open,
       img: h.img,
       alt: h.alt,
@@ -143,12 +142,8 @@ export default function Highlights() {
               </Link>
               <p style={{ margin: "3px 0 0", fontSize: "13px", lineHeight: 1.35, color: "#6F5B4B", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.line}</p>
               <p style={{ margin: "6px 0 0", display: "flex", alignItems: "center", gap: "5px", fontSize: "13px", fontWeight: 700, color: "#2B1B10", whiteSpace: "nowrap" }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="#E0A23A" stroke="none" aria-hidden="true">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                {c.rating}
-                {c.open ? <span style={{ color: "#2F7A4A" }}>· {c.open === "Open now" ? <T k="place.open_now" /> : c.open}</span> : null}
-                <span style={{ fontWeight: 600, color: "#6F5B4B" }}>· {c.fact.split(" · ")[0]}</span>
+                {c.open ? <span style={{ color: "#2F7A4A" }}>{c.open}</span> : null}
+                <span style={{ fontWeight: 600, color: "#6F5B4B" }}>{c.open ? "· " : ""}{c.fact.split(" · ")[0]}</span>
               </p>
             </div>
             {c.listen}

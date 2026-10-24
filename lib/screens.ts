@@ -190,6 +190,27 @@ export const screens = [
     "interactive": true
   },
   {
+    "route": "/trip",
+    "title": "34 · AI trip planner",
+    "w": 390,
+    "h": 844,
+    "interactive": true
+  },
+  {
+    "route": "/discover",
+    "title": "35 · Discover like a local",
+    "w": 390,
+    "h": 844,
+    "interactive": true
+  },
+  {
+    "route": "/safety",
+    "title": "36 · Safety & help",
+    "w": 390,
+    "h": 844,
+    "interactive": true
+  },
+  {
     "route": "/credits",
     "title": "33 · Photo credits",
     "w": 390,

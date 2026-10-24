@@ -11,7 +11,7 @@ body {
 body {
   min-height: 100vh;
   background: #e9e0d4;
-  font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Plus Jakarta Sans", "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil", "Noto Sans Bengali", "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Gurmukhi", system-ui, -apple-system, "Segoe UI", sans-serif;
   color: #2b1b10;
 }
 
@@ -1180,5 +1180,17 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   50% {
     translate: 10px 0;
+  }
+}
+
+/* Trip planner: the wait bar creeps towards the end while Gemini plans. */
+.trip-progress {
+  width: 92%;
+  animation: trip-progress 40s cubic-bezier(0.1, 0.6, 0.3, 1) backwards;
+}
+
+@keyframes trip-progress {
+  from {
+    width: 4%;
   }
 }

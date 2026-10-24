@@ -2,7 +2,8 @@
 
 // 06 · Search results
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { useStored } from "@/lib/store";
+import { readStored, speechLocale, useStored } from "@/lib/store";
+import { DEFAULT_HERE, type Here } from "@/lib/here";
 import Link from "next/link";
 import BackLink from "@/components/Back";
 import { useAsk } from "@/components/Tap";
@@ -15,7 +16,6 @@ const TABS = [
   ["places", "Places 5"],
   ["stories", "Stories 2"],
   ["reels", "Reels 3"],
-  ["open", "Open now"],
 ] as const;
 type Tab = (typeof TABS)[number][0];
 
@@ -53,7 +53,7 @@ export default function SearchScreen() {
     if (!wantAnswer || answers[key] !== undefined) return;
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch("/api/guide", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: [{ role: "user", text: key }], lang, mode: "search" }) });
+        const res = await fetch("/api/guide", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: [{ role: "user", text: key }], lang, mode: "search", place: readStored<Here>("here", DEFAULT_HERE) }) });
         const data = await res.json();
         setAnswers((a) => ({ ...a, [key]: data.text && !data.fallback ? { text: data.text, source: data.source } : null }));
       } catch {
@@ -72,13 +72,13 @@ export default function SearchScreen() {
       return;
     }
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = { hi: "hi-IN", gu: "gu-IN", ta: "ta-IN", bn: "bn-IN" }[lang] || "en-IN";
+    u.lang = speechLocale(lang);
     u.onend = () => setSpeaking(false);
     setSpeaking(true);
     synth.speak(u);
   };
   useEffect(() => () => window.speechSynthesis?.cancel(), []);
-  const openOnly = tab === "open";
+  const openOnly = false;
   const show = {
     answer: tab === "all",
     places: tab === "all" || tab === "places" || openOnly,
@@ -183,7 +183,7 @@ export default function SearchScreen() {
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                   {"22 min walk · "}
                   <span style={{ color: "#2F7A4A" }}>
-                    Open now
+                    Visit by day
                   </span>
                 </span>
               </span>
@@ -205,7 +205,7 @@ export default function SearchScreen() {
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
                   {"2.4 km · "}
                   <span style={{ color: "#2F7A4A" }}>
-                    Open now
+                    Visit by day
                   </span>
                 </span>
               </span>

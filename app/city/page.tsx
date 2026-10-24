@@ -1,65 +1,47 @@
 "use client";
 
-// Choose a city — where you are now, and packs for where you're going.
+// Choose a city — where you are now (by location or by name), and a trip plan
+// for anywhere else. The city chosen here is the one Home, the AI Guide,
+// search and Discover follow.
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import GeoLink from "@/components/GeoLink";
 import { toast } from "@/components/Toast";
-import { useRouter } from "next/navigation";
-import { useAsk } from "@/components/Tap";
-import { frame, ScreenHeader, Spinner, Tick } from "@/components/ui";
+import { frame, ScreenHeader } from "@/components/ui";
 import { useStored } from "@/lib/store";
-import { cityPlan } from "@/lib/plans";
+import { cityByName, DEFAULT_HERE, hereLabel, isAhmedabad, KNOWN_CITIES, type Here } from "@/lib/here";
 
-type City = { id: string; name: string; tag: string; mb: number; trip?: string };
+// Listed first: the cities Virasa has the most for.
+const FEATURED = ["Ahmedabad", "Jaipur", "Varanasi", "Udaipur", "Delhi", "Hampi", "Kolkata", "Mysuru", "Kochi", "Amritsar", "Agra", "Mumbai"];
+const ORDERED = [...FEATURED.map((n) => KNOWN_CITIES.find((c) => c.city === n)!), ...KNOWN_CITIES.filter((c) => !FEATURED.includes(c.city))];
 
-const CITIES: City[] = [
-  { id: "jaipur", name: "Jaipur", tag: "Rajasthan · forts & bazaars", mb: 112, trip: "Your trip · in 12 days" },
-  { id: "varanasi", name: "Varanasi", tag: "Uttar Pradesh · ghats", mb: 94 },
-  { id: "hampi", name: "Hampi", tag: "Karnataka · Vijayanagara ruins", mb: 78 },
-  { id: "kolkata", name: "Kolkata", tag: "West Bengal · colonial lanes", mb: 126 },
-  { id: "delhi", name: "Delhi", tag: "Seven cities in one", mb: 148 },
-  { id: "udaipur", name: "Udaipur", tag: "Rajasthan · lakes & palaces", mb: 71 },
-  { id: "mysuru", name: "Mysuru", tag: "Karnataka · palaces & silk", mb: 66 },
-  { id: "kochi", name: "Kochi", tag: "Kerala · spice port", mb: 59 },
-];
+const Chevron = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="m9 18 6-6-6-6" />
+  </svg>
+);
 
 export default function CityScreen() {
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState<string | null>(null);
-  const [packs, setPacks] = useStored<Record<string, boolean>>("packs", {});
-  const ask = useAsk();
   const router = useRouter();
+  const [here, setHere] = useStored<Here>("here", DEFAULT_HERE);
+  const [query, setQuery] = useState("");
   const needle = query.trim().toLowerCase();
-  const list = CITIES.filter((c) => !needle || `${c.name} ${c.tag}`.toLowerCase().includes(needle));
+  const list = ORDERED.filter((c) => !needle || `${c.city} ${c.state}`.toLowerCase().includes(needle));
+  const exact = list.some((c) => c.city.toLowerCase() === needle);
 
-  const download = (c: City) => {
-    if (packs[c.id]) {
-      setPacks((p) => ({ ...p, [c.id]: false }));
-      toast(`${c.name} pack removed`, { action: { label: "Undo", run: () => setPacks((p) => ({ ...p, [c.id]: true })) } });
-      return;
-    }
-    setLoading(c.id);
-    setTimeout(() => {
-      setPacks((p) => ({ ...p, [c.id]: true }));
-      setLoading(null);
-      toast(`${c.name} pack ready — ${c.mb} MB`, "success");
-    }, 2200);
+  const choose = (name: string) => {
+    const next = cityByName(name);
+    setHere(next);
+    toast(`You're in ${next.city}`, "success");
+    router.push("/home");
   };
 
   return (
     <div style={frame({ paddingBottom: "48px" })}>
       <ScreenHeader title="Choose a city" back="/home" />
       <div style={{ padding: "0 20px" }}>
-        <label style={{ height: "52px", padding: "0 14px", borderRadius: "16px", background: "#FFFFFF", border: "1.5px solid #D9C7B3", display: "flex", alignItems: "center", gap: "10px" }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-          <input type="search" aria-label="Search cities" placeholder="Search cities" value={query} onChange={(e) => setQuery(e.target.value)} style={{ flex: 1, minWidth: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "16px", color: "#2B1B10" }} />
-        </label>
-
-        <GeoLink style={{ marginTop: "10px", height: "52px", padding: "0 14px", borderRadius: "16px", background: "#E3EEF8", color: "#1F5A93", display: "flex", alignItems: "center", gap: "10px", fontSize: "15px", fontWeight: 700 }}>
+        <GeoLink href="/home" style={{ height: "54px", padding: "0 14px", borderRadius: "16px", background: "#E3EEF8", color: "#1F5A93", display: "flex", alignItems: "center", gap: "10px", fontSize: "15px", fontWeight: 700 }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <line x1="2" x2="5" y1="12" y2="12" />
             <line x1="19" x2="22" y1="12" y2="12" />
@@ -72,64 +54,71 @@ export default function CityScreen() {
         </GeoLink>
 
         <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>YOU ARE HERE</h2>
-        <Link href="/home" style={{ padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", gap: "14px" }}>
+        <Link href="/home" style={{ padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none" }}>
           <span className="pulse" aria-hidden="true" style={{ flex: "0 0 14px", width: "14px", height: "14px", borderRadius: "50%", background: "#9FD3B0" }} />
           <span style={{ flex: 1, minWidth: 0 }}>
-            <span style={{ display: "block", fontSize: "18px", fontWeight: 800 }}>Ahmedabad, Old City</span>
-            <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "#D9C6AE" }}>Gujarat · 42 places, 30 stories, 2 walks</span>
+            <span style={{ display: "block", fontSize: "18px", fontWeight: 800 }}>{hereLabel(here)}</span>
+            <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "#D9C6AE" }}>
+              {here.source === "gps" ? "From your location" : here.source === "picked" ? "Chosen by you" : "Virasa's home city"}
+              {isAhmedabad(here) ? " · walks, stories and the map" : " · plans, local finds and the AI Guide"}
+            </span>
           </span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FD3B0" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M20 6 9 17l-5-5" />
-          </svg>
+          <span style={{ color: "#9FD3B0" }}>
+            <Chevron />
+          </span>
         </Link>
 
-        <h2 style={{ margin: "24px 0 4px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>PLAN YOUR NEXT CITY</h2>
-        <p style={{ margin: "0 0 10px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>Tap a city to plan the trip, and download its pack before you travel.</p>
-        {list.length ? (
-          <ul className="stagger" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
-            {list.map((c) => {
-              const have = !!packs[c.id];
-              const busy = loading === c.id;
-              return (
-                <li key={c.id} style={{ padding: "12px 12px 12px 14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${have ? "#BFDCC8" : "#EFE6DA"}`, overflow: "hidden", position: "relative" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <button type="button" onClick={() => (cityPlan(c.id) ? router.push(`/plan?city=${c.id}`) : ask(`What should I see in ${c.name}? Plan me a first day.`))} style={{ flex: 1, minWidth: 0, padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
-                      <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{c.name}</span>
-                      <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{c.tag}</span>
-                      {c.trip ? <span style={{ display: "inline-flex", marginTop: "6px", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: 700, alignItems: "center" }}>{c.trip}</span> : null}
-                    </button>
-                    <button type="button" disabled={busy} aria-busy={busy} aria-label={have ? `Remove ${c.name} pack` : `Download ${c.name} pack, ${c.mb} megabytes`} onClick={() => download(c)} style={{ flex: "0 0 auto", minWidth: "104px", height: "44px", padding: "0 12px", borderRadius: "12px", border: have ? "1.5px solid #BFDCC8" : "0", background: have ? "#E3F1E7" : "#9A4E36", color: have ? "#2F7A4A" : "#FFFFFF", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer" }}>
-                      <span key={busy ? "busy" : have ? "have" : "get"} className="btn-swap" style={{ gap: "6px" }}>
-                        {busy ? (
-                          <>
-                            <Spinner size={14} color="#FFFFFF" track="rgba(255, 255, 255, 0.4)" />
-                            Downloading
-                          </>
-                        ) : have ? (
-                          <>
-                            <Tick size={14} width={3} />
-                            Offline
-                          </>
-                        ) : (
-                          `Get · ${c.mb} MB`
-                        )}
-                      </span>
-                    </button>
-                  </div>
-                  {busy ? <div data-timer style={{ position: "absolute", left: 0, bottom: 0, height: "3px", width: "100%", background: "#9A4E36", animation: "fill 2.2s linear backwards" }} /> : null}
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <div className="rise" style={{ padding: "18px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
-            <p style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>No pack for “{query.trim()}” yet</p>
-            <p style={{ margin: "6px 0 12px", fontSize: "14px", lineHeight: 1.45, color: "#5A4434" }}>The AI Guide can still tell you what to see there.</p>
-            <button type="button" onClick={() => ask(`What heritage places should I see in ${query.trim()}?`)} style={{ height: "46px", padding: "0 16px", border: 0, borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", fontSize: "14px", fontWeight: 800, cursor: "pointer" }}>
-              Ask the guide
-            </button>
-          </div>
-        )}
+        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>I&apos;M IN ANOTHER CITY</h2>
+        <label style={{ height: "54px", padding: "0 14px", borderRadius: "16px", background: "#FFFFFF", border: "1.5px solid #D9C7B3", display: "flex", alignItems: "center", gap: "10px" }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input
+            type="search"
+            aria-label="Type any city"
+            placeholder="Type any city or town"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && query.trim()) choose(list[0]?.city ?? query);
+            }}
+            enterKeyHint="go"
+            style={{ flex: 1, minWidth: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "16px", color: "#2B1B10" }}
+          />
+        </label>
+        <p style={{ margin: "8px 2px 10px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>Tap a city to make it yours. Home, the AI Guide and Discover follow it.</p>
+
+        <ul className="stagger" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
+          {needle && !exact ? (
+            <li style={{ padding: "6px 6px 6px 14px", borderRadius: "16px", background: "#FBEDE6", border: "1px solid #F0D3C6", display: "flex", alignItems: "center", gap: "8px" }}>
+              <button type="button" onClick={() => choose(query)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
+                <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>I&apos;m in {query.trim()}</span>
+                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>Use this as my city</span>
+              </button>
+              <Link href={`/trip?city=${encodeURIComponent(query.trim())}`} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", textDecoration: "none" }}>
+                Plan trip
+              </Link>
+            </li>
+          ) : null}
+          {list.map((c) => {
+            const mine = c.city.toLowerCase() === here.city.toLowerCase();
+            return (
+              <li key={c.city} style={{ padding: "6px 6px 6px 14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${mine ? "#BFDCC8" : "#EFE6DA"}`, display: "flex", alignItems: "center", gap: "8px" }}>
+                <button type="button" aria-pressed={mine} onClick={() => choose(c.city)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
+                  <span style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "16px", fontWeight: 800 }}>
+                    {c.city}
+                    {mine ? <span style={{ height: "22px", padding: "0 8px", borderRadius: "999px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "12px", fontWeight: 800, display: "inline-flex", alignItems: "center" }}>You&apos;re here</span> : null}
+                  </span>
+                  <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{c.city === "Ahmedabad" ? "Gujarat · walks, stories and the map" : c.state}</span>
+                </button>
+                <Link href={`/trip?city=${encodeURIComponent(c.city)}`} aria-label={`Plan a trip to ${c.city}`} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", color: "#2B1B10", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", textDecoration: "none" }}>
+                  Plan trip
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );

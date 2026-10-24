@@ -8,7 +8,7 @@ import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties }
 import Link from "next/link";
 import { Confetti, SuccessBadge } from "@/components/ui";
 import { useT } from "@/lib/i18n";
-import { say, StoryPreview, useEndWalk, useTrip, useVoice, VoiceButton } from "./parts";
+import { directionsUrl, say, StampCheck, StoryPreview, useEndWalk, useTrip, useVoice, VoiceButton } from "./parts";
 
 const noop = () => () => {};
 // How long the simulated walk takes, start to finish.
@@ -278,6 +278,11 @@ export default function NavigateScreen() {
               {paused ? <polygon points="7 4 19 12 7 20 7 4" /> : <path d="M7 4h3.5v16H7zM13.5 4H17v16h-3.5z" />}
             </svg>
           </button>
+          <a href={directionsUrl(trip.id, trip.name)} target="_blank" rel="noopener noreferrer" aria-label={`Directions to ${trip.name} in Google Maps`} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "16px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3ZM9 3v15M15 6v15" />
+            </svg>
+          </a>
           <button type="button" onClick={() => end()} style={{ height: "48px", padding: "0 18px", borderRadius: "16px", border: "1.5px solid #F1D5CC", background: "#FBEDE6", color: "#A23A2A", fontSize: "15px", fontWeight: 800, cursor: "pointer" }}>
             {t("nav.end")}
           </button>
@@ -292,7 +297,6 @@ export default function NavigateScreen() {
             <path d="m9 18 6-6-6-6" />
           </svg>
         </Link>
-        <p style={{ margin: "10px 0 0", textAlign: "center", fontSize: "12px", fontWeight: 600, color: "#8A7563" }}>{t("nav.sim")}</p>
       </section>
 
       {/* Arrived: the walk's finish, with the stamp and what to do next. */}
@@ -309,15 +313,7 @@ export default function NavigateScreen() {
             </h2>
             <p style={{ margin: "4px 0 0", fontSize: "17px", fontWeight: 700 }}>{trip.name}</p>
             <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#6F5B4B" }}>{t("nav.walked", { km: fmt(metres), m: trip.mins })}</p>
-            <div style={{ marginTop: "16px", width: "100%", padding: "12px 14px", borderRadius: "16px", background: "#F6F1EA", display: "flex", alignItems: "center", gap: "12px", textAlign: "left" }}>
-              <span className="stamp-in" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "#8A6424", border: "2px dashed #F3D9A8", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="8" r="6" />
-                  <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
-                </svg>
-              </span>
-              <span style={{ fontSize: "14px", fontWeight: 800 }}>{t("nav.stamp")}</span>
-            </div>
+            <StampCheck id={trip.id} name={trip.name} />
             <Link href={trip.id === "sidi" ? "/story" : trip.arrive} style={{ marginTop: "18px", width: "100%", height: "54px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "16px", fontWeight: 800, textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                 <polygon points="7 4 19 12 7 20 7 4" />

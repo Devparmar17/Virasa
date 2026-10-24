@@ -1,7 +1,7 @@
 import BackLink from "./Back";
 import type { CSSProperties, ReactNode } from "react";
 
-export const FONT = "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif";
+export const FONT = "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', 'Noto Sans Telugu', 'Noto Sans Kannada', 'Noto Sans Malayalam', 'Noto Sans Gurmukhi', system-ui, -apple-system, 'Segoe UI', sans-serif";
 
 // The frame every phone screen is drawn in.
 export const frame = (extra?: CSSProperties): CSSProperties => ({ width: "390px", minHeight: "844px", position: "relative", background: "#FFFFFF", fontFamily: FONT, color: "#2B1B10", ...extra });

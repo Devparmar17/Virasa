@@ -2,6 +2,7 @@
 import Link from "next/link";
 import BackLink from "@/components/Back";
 import MainNav from "@/components/MainNav";
+import { Points, StampBar, StampCount } from "@/components/Stamps";
 
 export default function GamesScreen() {
   return (
@@ -21,7 +22,7 @@ export default function GamesScreen() {
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
           </svg>
           <span>
-            240 pts
+            <Points />
           </span>
         </span>
       </div>
@@ -155,14 +156,14 @@ export default function GamesScreen() {
       <section style={{ margin: "22px 20px 0", padding: "16px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span style={{ fontSize: "15px", fontWeight: "800" }}>
-            Next stamp: Gujarat gold
+            Your passport
           </span>
           <span style={{ fontSize: "13px", fontWeight: "700", color: "#6F5B4B" }}>
-            240 / 300
+            <StampCount />
           </span>
         </div>
         <div style={{ marginTop: "10px", height: "8px", borderRadius: "999px", background: "#EFE6DA", overflow: "hidden" }}>
-          <div style={{ width: "80%", height: "100%", borderRadius: "999px", background: "#8A6424" }} />
+          <StampBar />
         </div>
         <p style={{ margin: "10px 0 0", fontSize: "12px", color: "#6F5B4B" }}>
           No streaks, no timers — play whenever you like.

@@ -11,6 +11,8 @@ import { DEFAULT_SAVED, useStored } from "@/lib/store";
 import { Spinner } from "@/components/ui";
 import { useT } from "@/lib/i18n";
 import { cityPlan, planStops, type SavedPlan } from "@/lib/plans";
+import { cityImage, type SavedTrip } from "@/lib/trip";
+import type { Stamp } from "@/lib/stamps";
 import { SECRETS } from "@/lib/secrets";
 import { PLACES as MAP_PLACES } from "../explore/places";
 
@@ -21,21 +23,20 @@ type Item = {
   city: string;
   km: number;
   badge: string;
-  visited?: boolean;
   img?: string;
   href?: string;
 };
 
 const PLACES: Item[] = [
-  { id: "sidi", title: "Sidi Saiyyed Mosque", meta: "1.8 km · Old City", city: "Ahmedabad", km: 1.8, badge: "Visited · stamp collected", visited: true, img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
-  { id: "dhal", title: "Dhal ni Pol", meta: "650 m · Khadia", city: "Ahmedabad", km: 0.65, badge: "Visited", visited: true, img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/secret?id=dhal" },
+  { id: "sidi", title: "Sidi Saiyyed Mosque", meta: "1.8 km · Old City", city: "Ahmedabad", km: 1.8, badge: "Tree of Life jali", img: "/images/a9558385034112d0e27f39ea353dd7ed.jpg", href: "/place" },
+  { id: "dhal", title: "Dhal ni Pol", meta: "650 m · Khadia", city: "Ahmedabad", km: 0.65, badge: "Carved havelis", img: "/images/6b114a4ce322f517be6c561ea38233e8.jpg", href: "/secret?id=dhal" },
   { id: "sarkhej", title: "Sarkhej Roza", meta: "8 km · 20 min drive", city: "Ahmedabad", km: 8, badge: "Best at sunset", img: "/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg", href: "/secret?id=sarkhej" },
-  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "For your Jaipur trip", img: "/images/hawa-mahal.jpg", href: "/plan?city=jaipur" },
+  { id: "hawa", title: "Hawa Mahal", meta: "Jaipur, Rajasthan", city: "Jaipur", km: 660, badge: "Jaipur", img: "/images/hawa-mahal.jpg", href: "/plan?city=jaipur" },
 ];
 
 // Distance in km from a line like "650 m · 8 min" or "18 km · 35 min drive".
 const kmIn = (text: string) => {
-  const m = text.match(/([d.]+)s*(km|m)/);
+  const m = text.match(/([\d.]+)\s*(km|m)\b/);
   return m ? Number(m[1]) / (m[2] === "m" ? 1000 : 1) : 1;
 };
 
@@ -66,7 +67,7 @@ const NOUNS: Record<TabName, [string, string]> = { Places: ["place", "places"], 
 const SORTS = ["Recently saved", "Nearest first", "A to Z"];
 
 // What counts as saved before the traveller changes anything.
-const DEFAULTS: Record<string, boolean> = { ...DEFAULT_SAVED, "walk-morning": true, "walk-loop": true, "story-tree": true, "story-sarkhej": true };
+const DEFAULTS: Record<string, boolean> = { ...DEFAULT_SAVED };
 
 function Thumb({ item }: { item: Item }) {
   if (item.img) {
@@ -96,6 +97,7 @@ export default function SavedScreen() {
   const [tabPicked, setTab] = useState<TabName | null>(null);
   const tab: TabName = tabPicked ?? (hash === "#plans" ? "Plans" : "Places");
   const [plans, setPlans] = useStored<Record<string, SavedPlan>>("plans", {});
+  const [aiTrips, setAiTrips] = useStored<Record<string, SavedTrip>>("aiTrips", {});
   const [sort, setSort] = useState(0);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState("");
@@ -103,20 +105,28 @@ export default function SavedScreen() {
   const [downloading, setDownloading] = useState(false);
   const [checking, setChecking] = useState(false);
   const [saved, setSaved] = useStored<Record<string, boolean>>("saved", DEFAULT_SAVED);
-  const [pack, setPack] = useStored("pack", true);
+  const [pack, setPack] = useStored("pack", false);
+  // Places really visited: a stamp was collected there.
+  const [stamps] = useStored<Record<string, Stamp>>("stamps", {});
   const ask = useAsk();
   const t = useT();
 
-  // Trip plans saved from the planner, newest first.
-  const planItems: Item[] = Object.entries(plans)
-    .sort((a, b) => b[1].savedAt - a[1].savedAt)
-    .flatMap(([id, p]) => {
+  // Trip plans saved from the city planner and the AI trip planner, newest first.
+  const planItems: Item[] = [
+    ...Object.entries(plans).flatMap(([id, p]) => {
       const city = cityPlan(id);
       if (!city) return [];
       const stops = planStops(city, p.days, p.interests).length;
-      return [{ id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: id === "jaipur" ? "Your trip · in 12 days" : "Trip plan", img: city.img, href: `/plan?city=${id}` }];
-    });
-  const isSaved = (id: string) => id.startsWith("plan-") || (saved[id] ?? DEFAULTS[id] ?? false);
+      return [{ at: p.savedAt, item: { id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: "Trip plan", img: city.img, href: `/plan?city=${id}` } }];
+    }),
+    ...Object.values(aiTrips).map((p) => {
+      const stops = p.trip.days.reduce((n, d) => n + d.stops.length, 0);
+      return { at: p.savedAt, item: { id: `trip-${p.id}`, title: p.trip.title, meta: `${p.trip.days.length} ${p.trip.days.length === 1 ? "day" : "days"} · ${stops} stops · ${p.trip.city}`, city: p.trip.city, km: 0, badge: "AI trip plan", img: cityImage(p.trip.city), href: `/trip?id=${encodeURIComponent(p.id)}` } };
+    }),
+  ]
+    .sort((a, b) => b.at - a.at)
+    .map((x) => x.item);
+  const isSaved = (id: string) => id.startsWith("plan-") || id.startsWith("trip-") || (saved[id] ?? DEFAULTS[id] ?? false);
   const source = tab === "Plans" ? planItems : tab === "Walks" ? WALKS : tab === "Stories" ? STORIES : tab === "Places" ? ALL_PLACES : pack ? [...ALL_PLACES, ...WALKS, ...STORIES].filter((it) => it.city === "Ahmedabad") : [];
   let items = source.filter((it) => isSaved(it.id));
   const needle = query.trim().toLowerCase();
@@ -129,7 +139,16 @@ export default function SavedScreen() {
 
   const remove = (it: Item) => {
     let undo: () => void;
-    if (it.id.startsWith("plan-")) {
+    if (it.id.startsWith("trip-")) {
+      const id = it.id.slice(5);
+      const kept = aiTrips[id];
+      setAiTrips((m) => {
+        const rest = { ...m };
+        delete rest[id];
+        return rest;
+      });
+      undo = () => setAiTrips((m) => ({ ...m, [id]: kept }));
+    } else if (it.id.startsWith("plan-")) {
       const id = it.id.slice(5);
       const kept = plans[id];
       setPlans((p) => {
@@ -152,12 +171,12 @@ export default function SavedScreen() {
         <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "4px" }}>
           <span style={{ fontSize: "16px", fontWeight: "800" }}>{it.title}</span>
           <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>{it.meta}</span>
-          {it.visited ? (
+          {stamps[it.id] ? (
             <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px 0 6px", borderRadius: "7px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center", gap: "4px" }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M20 6 9 17l-5-5" />
               </svg>
-              {it.badge}
+              Visited · stamp collected
             </span>
           ) : (
             <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>{it.badge}</span>
@@ -288,9 +307,9 @@ export default function SavedScreen() {
               </svg>
             </span>
             <span style={{ fontSize: "17px", fontWeight: "800" }}>{needle ? "No matches" : tab === "Offline" ? "Nothing offline yet" : `No saved ${tab.toLowerCase()} yet`}</span>
-            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? `Nothing saved matches "${query.trim()}".` : tab === "Offline" ? "Download the Ahmedabad pack to keep your saved items for when there's no signal." : tab === "Plans" ? "Pick a city, choose how long you have, and save the plan. It will wait for you here." : "Tap the bookmark on any place, walk or story and it will wait for you here."}</span>
+            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? `Nothing saved matches "${query.trim()}".` : tab === "Offline" ? "Download the Ahmedabad pack to keep your saved items for when there's no signal." : tab === "Plans" ? "Tell the AI where you're going and who's coming, and it plans each day. Save the plan and it will wait for you here." : "Tap the bookmark on any place, walk or story and it will wait for you here."}</span>
             {!needle ? (
-              <Link href={tab === "Plans" ? "/city" : "/explore"} style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
+              <Link href={tab === "Plans" ? "/trip" : "/explore"} style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
                 {tab === "Plans" ? "Plan a trip" : "Explore nearby"}
               </Link>
             ) : null}

@@ -81,7 +81,7 @@ function TicketCard({ ticket, onCancel }: { ticket: Ticket; onCancel?: () => voi
           ["Date", longDate(ticket.date)],
           ["Time", ticket.slot],
           ["Guests", people],
-          [ticket.total ? "Paid" : "Price", rupees(ticket.total)],
+          ["Price", rupees(ticket.total)],
         ].map(([k, v]) => (
           <div key={k}>
             <dt style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "#8A6424" }}>{k.toUpperCase()}</dt>
@@ -181,7 +181,7 @@ export default function TicketsScreen() {
       setTickets((list) => list.map((x) => (x.ref === t.ref ? { ...x, cancelled: { at: Date.now(), ...terms } } : x)));
       setCancelBusy(false);
       setCancelling(null);
-      toast(t.total ? `Booking cancelled · ${rupees(terms.refund)} refunded` : "Booking cancelled", "success");
+      toast("Booking cancelled", "success");
     }, 700);
   };
   const name = nameTyped ?? user?.name ?? "";
@@ -243,7 +243,7 @@ export default function TicketsScreen() {
             </svg>
           </button>
         )}
-        <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>{done ? "Booking confirmed" : item ? "Book" : "Tickets & guided walks"}</h1>
+        <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>{done ? "Booking saved" : item ? "Book" : "Tickets & guided walks"}</h1>
         <span style={{ width: "44px" }} />
       </div>
 
@@ -251,8 +251,8 @@ export default function TicketsScreen() {
         <div key="done" style={{ padding: "4px 20px 0" }}>
           <div className="rise" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "6px 12px 20px" }}>
             <SuccessBadge />
-            <h2 style={{ margin: "16px 0 0", fontSize: "24px", fontWeight: 800, letterSpacing: "-0.01em" }}>You&apos;re booked</h2>
-            <p style={{ margin: "6px 0 0", fontSize: "14px", lineHeight: 1.5, color: "#5A4434" }}>{done.total ? `Paid ${rupees(done.total)}.` : "Nothing to pay."} Show the code below at the gate.</p>
+            <h2 style={{ margin: "16px 0 0", fontSize: "24px", fontWeight: 800, letterSpacing: "-0.01em" }}>Booking saved</h2>
+            <p style={{ margin: "6px 0 0", fontSize: "14px", lineHeight: 1.5, color: "#5A4434" }}>Find it any time under My tickets.</p>
           </div>
           <TicketCard ticket={done} />
           <button
@@ -345,7 +345,7 @@ export default function TicketsScreen() {
           <div style={{ marginTop: "18px", padding: "14px", borderRadius: "14px", background: "#FBEDE6", fontSize: "13px", lineHeight: 1.5, color: "#5A4434" }}>
             {total ? (
               <>
-                <strong style={{ color: "#2B1B10" }}>Pay now, show the code at the gate.</strong> You can cancel from My tickets, but a {Math.round(CANCEL_FEE_RATE * 100)}% cancellation charge applies: you would get {rupees(cancelTerms(total).refund)} back. Payment is simulated in this preview.
+                <strong style={{ color: "#2B1B10" }}>Cancelling:</strong> You can cancel from My tickets, but a {Math.round(CANCEL_FEE_RATE * 100)}% cancellation charge applies: you would get {rupees(cancelTerms(total).refund)} back.
               </>
             ) : (
               <>
@@ -365,7 +365,7 @@ export default function TicketsScreen() {
               <button type="button" onClick={reserve} disabled={!chosenDate || reserving} aria-busy={reserving} style={{ ...primary, flex: 1, width: "auto" }}>
                 <span key={reserving ? "busy" : "idle"} className="btn-swap">
                   {reserving ? <Spinner /> : null}
-                  {reserving ? (total ? "Paying…" : "Reserving…") : total ? `Pay ${rupees(total)}` : "Reserve"}
+                  {reserving ? "Booking…" : total ? `Book · ${rupees(total)}` : "Book"}
                 </span>
               </button>
             </div>

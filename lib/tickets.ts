@@ -26,7 +26,7 @@ export const BOOKABLES: Bookable[] = [
   { id: "adalaj", kind: "entry", title: "Adalaj Stepwell", place: "Adalaj, 18 km from Ahmedabad", blurb: "Skip the counter queue with entry reserved for the day.", duration: "Any time, 8 AM – 6 PM", adult: 25, child: 0, slots: ["Any time"], meet: "Show your code at the ticket window", img: "/images/adalaj-stepwell.jpg" },
   { id: "ranikivav", kind: "entry", title: "Rani ki Vav", place: "Patan, Gujarat", blurb: "Entry to the UNESCO-listed stepwell. Allow two hours.", duration: "Any time, 8 AM – 6 PM", adult: 40, child: 0, slots: ["Any time"], meet: "Show your code at the ticket window", img: "/images/rani-ki-vav.jpg" },
   { id: "calico", kind: "entry", title: "Calico Museum of Textiles tour", place: "Shahibaug, Ahmedabad", blurb: "A guided tour of one of the finest textile collections in India. Free, but places are limited.", duration: "2 h", adult: 0, child: 0, slots: ["10:30 AM"], meet: "Arrive 15 minutes early at the museum gate", img: "/images/calico-museum.jpg", closed: [3], tag: "Free · book ahead" },
-  { id: "hawamahal", kind: "entry", title: "Hawa Mahal", place: "Jaipur, Rajasthan", blurb: "Entry to the Palace of Winds. Best at sunrise.", duration: "Any time, 9 AM – 5 PM", adult: 50, child: 0, slots: ["Any time"], meet: "Show your code at the ticket window", img: "/images/hawa-mahal.jpg", tag: "For your Jaipur trip" },
+  { id: "hawamahal", kind: "entry", title: "Hawa Mahal", place: "Jaipur, Rajasthan", blurb: "Entry to the Palace of Winds. Best at sunrise.", duration: "Any time, 9 AM – 5 PM", adult: 50, child: 0, slots: ["Any time"], meet: "Show your code at the ticket window", img: "/images/hawa-mahal.jpg", tag: "Jaipur" },
 ];
 
 export type Ticket = {
