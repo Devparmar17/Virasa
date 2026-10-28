@@ -11,6 +11,7 @@
 // /trip?city=…     the planner with the city filled in
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import BackLink from "@/components/Back";
 import VoiceSearch from "@/components/VoiceSearch";
 import { toast } from "@/components/Toast";
@@ -176,6 +177,7 @@ function StopCard({ s, city, last, onAsk }: { s: TripStop; city: string; last: b
 export default function TripScreen() {
   const t = useT();
   const ask = useAsk();
+  const router = useRouter();
   const search = useSyncExternalStore(noop, () => window.location.search, () => "");
   const params = new URLSearchParams(search);
   const openId = params.get("id");
@@ -244,6 +246,9 @@ export default function TripScreen() {
       if (!res.ok || !data.trip) throw new Error(data.error || tr("trip.error"));
       const made: SavedTrip = { id: tripId(where), trip: data.trip as Trip, lang, savedAt: Date.now(), profile: who };
       setLast(made);
+      // Saved straight away, so it's always waiting under Saved › Plans.
+      setSaved((m) => ({ ...m, [made.id]: made }));
+      toast(t("trip.saved_toast"), { tone: "success", action: { label: "View", run: () => router.push("/saved#plans") } });
       // The plan gets its own address, so Back from the guide comes back to it.
       window.history.replaceState(null, "", "/trip?view=last");
       setPhase(null);
