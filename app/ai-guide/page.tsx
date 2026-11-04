@@ -13,9 +13,12 @@ import { Greeting } from "@/components/User";
 import { LANGS, langOf, readStored, speechLocale, travellerProfile, useStored } from "@/lib/store";
 import { DEFAULT_HERE, isAhmedabad, type Here } from "@/lib/here";
 import type { GuideMessage } from "@/lib/guide";
+import BookingCard from "@/components/BookingCard";
+import { BOOKING_WORDS, type BookingDraft } from "@/lib/booking";
+import { dayKey } from "@/lib/tickets";
 
 // A message in the thread: who said it, what, and for answers where it came from.
-type Msg = GuideMessage & { kind?: "plan"; source?: string; vote?: "up" | "down" };
+type Msg = GuideMessage & { kind?: "plan" | "booking"; source?: string; vote?: "up" | "down"; draft?: BookingDraft; bookedRef?: string };
 
 const THREAD = "guideThread";
 
@@ -142,6 +145,24 @@ export default function AIGuideScreen() {
       setBusy(true);
       let answer = "";
       let source = "";
+      // Asking to book something: the guide puts the booking together for a tap to confirm.
+      if (BOOKING_WORDS.test(question)) {
+        try {
+          const res = await fetch("/api/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: question, today: dayKey(new Date()), lang: replyLang || lang }) });
+          const data = await res.json();
+          if (data.intent === "book" || data.intent === "unavailable") {
+            const reply: Msg = data.intent === "book" ? { role: "guide", text: data.reply, kind: "booking", draft: data.draft, source: "booking" } : { role: "guide", text: data.reply, source: "booking" };
+            const answered = [...readStored<Msg[]>(THREAD, []), reply];
+            setThread(answered);
+            setBusy(false);
+            busyRef.current = false;
+            if (readAloud || byVoice) say(data.reply, answered.length - 1, replyLang);
+            return;
+          }
+        } catch {
+          // Couldn't put a booking together: answer as usual below.
+        }
+      }
       try {
         const res = await fetch("/api/guide", {
           method: "POST",
@@ -164,6 +185,9 @@ export default function AIGuideScreen() {
     },
     [lang, readAloud, say, setThread]
   );
+
+  // A booking confirmed from its card is marked as booked in the conversation.
+  const markBooked = (i: number, ref: string) => setThread(current().map((m, n) => (n === i ? { ...m, bookedRef: ref } : m)));
 
   // "Plan 2 hours here" answers with the walk card straight away.
   const askPlan = () => {
@@ -324,7 +348,7 @@ export default function AIGuideScreen() {
               <Greeting />
             </h1>
             <p style={{ margin: "6px 0 0", maxWidth: "290px", fontSize: "14px", lineHeight: 1.5, color: "#6F5B4B" }}>
-              {gemini ? "Ask me anything — I can plan walks, tell the stories behind what you see and find good food." : "Ask me about the places around you — I can plan walks, tell their stories and find good food."}
+              {gemini ? "Ask me anything — I can plan walks, tell the stories behind what you see, find good food and book tickets or a car." : "Ask me about the places around you — I can plan walks, tell their stories and find good food."}
             </p>
             {/* The whole-trip planner leads: any city, planned around who is going. */}
             <Link href="/trip" style={{ marginTop: "20px", width: "100%", minHeight: "76px", padding: "14px 14px 14px 16px", borderRadius: "20px", background: "linear-gradient(140deg, #9A4E36, #7E3D29)", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)", boxSizing: "border-box" }}>
@@ -375,7 +399,12 @@ export default function AIGuideScreen() {
               <div key={i} className="rise" style={{ alignSelf: "stretch", display: "flex", gap: "8px", alignItems: "flex-start" }}>
                 <GuideMark />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  {m.kind === "plan" ? (
+                  {m.kind === "booking" && m.draft ? (
+                    <>
+                      <div style={{ marginBottom: "8px", padding: "11px 14px", borderRadius: "6px 20px 20px 20px", background: "#F6F1EA", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.5 }}>{m.text}</div>
+                      <BookingCard draft={m.draft} bookedRef={m.bookedRef} onBooked={(ref) => markBooked(i, ref)} />
+                    </>
+                  ) : m.kind === "plan" ? (
                     <div style={{ padding: "12px", borderRadius: "6px 20px 20px 20px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
                       <p style={{ margin: "0 2px", fontSize: "15px", lineHeight: 1.45 }}>Here&apos;s a 4-stop loop that ends with chai at Manek Chowk.</p>
                       <div style={{ marginTop: "10px", padding: "12px", borderRadius: "14px", background: "#F6F1EA" }}>
@@ -434,7 +463,7 @@ export default function AIGuideScreen() {
                     {m.source ? (
                       <span style={{ flex: 1, minWidth: 0, fontSize: "11px", fontWeight: 700, color: m.source === "gemini" ? "#3457C9" : "#8A7563", display: "flex", alignItems: "center", gap: "4px" }}>
                         {m.source === "gemini" ? <Spark size={10} /> : null}
-                        {m.source === "library" ? "Virasa library" : "AI Guide"}
+                        {m.source === "library" ? "Virasa library" : m.source === "booking" ? "AI Guide · booking" : "AI Guide"}
                       </span>
                     ) : (
                       <span style={{ flex: 1 }} />

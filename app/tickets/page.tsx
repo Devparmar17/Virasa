@@ -1,6 +1,7 @@
 "use client";
 
-// Tickets & guided walks — browse, reserve, and keep your bookings.
+// Tickets & bookings — guided walks, entry, activities and cars with a driver:
+// browse, book, and keep your bookings.
 import { useState, useSyncExternalStore, type CSSProperties } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,7 +11,7 @@ import { toast } from "@/components/Toast";
 import { frame, Spinner, SuccessBadge } from "@/components/ui";
 import { useUser } from "@/lib/auth";
 import { useStored } from "@/lib/store";
-import { bookable, BOOKABLES, cancelTerms, CANCEL_FEE_RATE, dayKey, longDate, newRef, nextDays, priceOf, rupees, type Bookable, type Ticket } from "@/lib/tickets";
+import { addonPrice, bookable, BOOKABLES, CAR_ADDONS, CAR_HELP, cancelTerms, CANCEL_FEE_RATE, dayKey, KIND_LABEL, longDate, newRef, nextDays, priceOf, rupees, type Bookable, type Ticket } from "@/lib/tickets";
 
 const noop = () => () => {};
 const GUIDE_LANGS = [
@@ -23,14 +24,21 @@ const chip = (on: boolean): CSSProperties => ({ flex: "0 0 auto", minHeight: "44
 const label: CSSProperties = { margin: "22px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" };
 const primary: CSSProperties = { width: "100%", height: "56px", border: 0, borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: 700, cursor: "pointer", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" };
 
+// Line icons for each kind, used when there's no photo.
+const KIND_ICON: Record<Bookable["kind"], string> = {
+  guided: "M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2ZM13 5v2M13 17v2M13 11v2",
+  entry: "M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2ZM13 5v2M13 17v2M13 11v2",
+  activity: "M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z",
+  car: "M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2M7 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0M9 17h6",
+};
+
 function Thumb({ item, size }: { item: Bookable; size: number }) {
   const box: CSSProperties = { flex: `0 0 ${size}px`, width: `${size}px`, height: `${size}px`, borderRadius: "14px", display: "block" };
   if (item.img) return <img src={item.img} alt="" style={{ ...box, objectFit: "cover" }} />;
   return (
-    <span aria-hidden="true" style={{ ...box, background: "#EFE1C9", color: "#9C7A55", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <span aria-hidden="true" style={{ ...box, background: item.kind === "car" ? "#E3EEF8" : item.kind === "activity" ? "#FBE5EE" : "#EFE1C9", color: item.kind === "car" ? "#2F6FB0" : item.kind === "activity" ? "#B03A6B" : "#9C7A55", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <svg width={size * 0.5} height={size * 0.5} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
-        <path d="M13 5v2M13 17v2M13 11v2" />
+        <path d={KIND_ICON[item.kind]} />
       </svg>
     </span>
   );
@@ -63,7 +71,8 @@ function Stepper({ name, hint, value, min, max, onChange }: { name: string; hint
 function TicketCard({ ticket, onCancel }: { ticket: Ticket; onCancel?: () => void }) {
   const item = bookable(ticket.item);
   if (!item) return null;
-  const people = `${ticket.adults} adult${ticket.adults === 1 ? "" : "s"}${ticket.children ? `, ${ticket.children} child${ticket.children === 1 ? "" : "ren"}` : ""}`;
+  const car = item.kind === "car";
+  const people = car ? `${ticket.adults} passenger${ticket.adults === 1 ? "" : "s"}` : `${ticket.adults} adult${ticket.adults === 1 ? "" : "s"}${ticket.children ? `, ${ticket.children} child${ticket.children === 1 ? "" : "ren"}` : ""}`;
   // The stripes are decoration drawn from the code; staff read the code itself.
   const bars = [...ticket.ref.replace("VR-", "").repeat(4)].map((c) => (c.charCodeAt(0) % 4) + 1);
   return (
@@ -79,8 +88,9 @@ function TicketCard({ ticket, onCancel }: { ticket: Ticket; onCancel?: () => voi
       <dl style={{ margin: 0, padding: "0 16px 14px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px 12px" }}>
         {[
           ["Date", longDate(ticket.date)],
-          ["Time", ticket.slot],
-          ["Guests", people],
+          [car ? "Pickup" : "Time", ticket.slot],
+          [car ? "Passengers" : "Guests", people],
+          ...(ticket.car ? [["Car", ticket.car.label]] : []),
           ["Price", rupees(ticket.total)],
         ].map(([k, v]) => (
           <div key={k}>
@@ -126,6 +136,8 @@ function TicketCard({ ticket, onCancel }: { ticket: Ticket; onCancel?: () => voi
           ) : null}
         </div>
         <p style={{ margin: "10px 0 0", fontSize: "12px", lineHeight: 1.45, color: "#5A4434" }}>
+          {ticket.pickup ? `Pickup from ${ticket.pickup}. ` : ""}
+          {ticket.help?.length ? `Help: ${ticket.help.join(", ").toLowerCase()}. ` : ""}
           {item.meet}. Name on booking: {ticket.name}.
         </p>
       </div>
@@ -139,7 +151,7 @@ export default function TicketsScreen() {
   const [user] = useUser();
   const [tickets, setTickets] = useStored<Ticket[]>("tickets", []);
   const [tab, setTab] = useState<"book" | "mine" | null>(null);
-  const [filter, setFilter] = useState<"all" | Bookable["kind"]>("all");
+  const [filter, setFilter] = useState<"all" | "senior" | Bookable["kind"]>("all");
   const [picked, setPicked] = useState<string | null | undefined>(undefined);
   const [done, setDone] = useState<Ticket | null>(null);
 
@@ -165,6 +177,10 @@ export default function TicketsScreen() {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [guideLang, setGuideLang] = useState("en");
+  const [pickup, setPickup] = useState("");
+  const [help, setHelp] = useState<string[]>([]);
+  // A car there and back with a tour or ticket: null for none.
+  const [carAdd, setCarAdd] = useState<string | null>(null);
   const [nameTyped, setName] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [reserving, setReserving] = useState(false);
@@ -189,7 +205,9 @@ export default function TicketsScreen() {
   const days = today && item ? nextDays(today).map((d) => ({ ...d, off: !!item.closed?.includes(d.weekday) })) : [];
   const chosenDate = days.find((d) => d.key === date && !d.off)?.key || days.find((d) => !d.off)?.key || "";
   const chosenSlot = item?.slots.includes(slot) ? slot : item?.slots[0] || "";
-  const total = item ? priceOf(item, adults, children) : 0;
+  const carCost = item ? addonPrice(item, carAdd) : 0;
+  const total = item ? priceOf(item, adults, children) + carCost : 0;
+  const needsPickup = item?.kind === "car" || carCost > 0;
 
   const open = (id: string | null) => {
     setPicked(id);
@@ -197,16 +215,25 @@ export default function TicketsScreen() {
     setError("");
     setDate("");
     setSlot("");
+    setAdults(1);
+    setChildren(0);
+    setPickup("");
+    setHelp([]);
+    setCarAdd(null);
     window.scrollTo({ top: 0 });
   };
 
   const reserve = () => {
     if (!item) return;
+    if (needsPickup && pickup.trim().length < 3) {
+      setError("Enter where the driver should pick you up.");
+      return;
+    }
     if (name.trim().length < 2) {
       setError("Enter the name the booking should be under.");
       return;
     }
-    const ticket: Ticket = { ref: newRef(), item: item.id, date: chosenDate, slot: chosenSlot, adults, children, name: name.trim(), guideLang: item.kind === "guided" ? guideLang : undefined, total };
+    const ticket: Ticket = { ref: newRef(), item: item.id, date: chosenDate, slot: chosenSlot, adults, children, name: name.trim(), guideLang: item.kind === "guided" ? guideLang : undefined, ...(needsPickup ? { pickup: pickup.trim(), help } : {}), ...(carCost ? { car: { id: carAdd!, label: CAR_ADDONS.find((c) => c.id === carAdd)!.label, price: carCost } } : {}), total };
     // A short "Reserving…" beat before the confirmation, as a real booking would take.
     setReserving(true);
     setTimeout(() => {
@@ -218,7 +245,43 @@ export default function TicketsScreen() {
     }, 700);
   };
 
-  const shown = BOOKABLES.filter((b) => filter === "all" || b.kind === filter);
+  // Where the driver picks up, and the help asked for: for a car, or a car added to a tour.
+  const pickupFields = (
+    <>
+            <h3 style={label}>PICK ME UP FROM</h3>
+            <input
+              type="text"
+              aria-label="Pickup address"
+              placeholder="Hotel name or address"
+              autoComplete="street-address"
+              value={pickup}
+              onChange={(e) => {
+                setPickup(e.target.value);
+                setError("");
+              }}
+              style={{ width: "100%", height: "54px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid #D9C7B3", background: "#FFFFFF", fontSize: "16px", color: "#2B1B10", outline: "none", boxSizing: "border-box" }}
+            />
+
+            <h3 style={label}>HELP FROM THE DRIVER</h3>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+              {CAR_HELP.map((h) => {
+                const on = help.includes(h);
+                return (
+                  <button key={h} type="button" aria-pressed={on} onClick={() => setHelp((x) => (on ? x.filter((y) => y !== h) : [...x, h]))} style={{ minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "#9A4E36" : "#E2D3C1"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: on ? "#7E3D29" : "#2B1B10", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+                    {on ? (
+                      <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    ) : null}
+                    {h}
+                  </button>
+                );
+              })}
+            </div>
+    </>
+  );
+
+  const shown = BOOKABLES.filter((b) => filter === "all" || (filter === "senior" ? b.senior : b.kind === filter));
   const back = done || item ? null : "/home";
 
   return (
@@ -243,7 +306,7 @@ export default function TicketsScreen() {
             </svg>
           </button>
         )}
-        <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>{done ? "Booking saved" : item ? "Book" : "Tickets & guided walks"}</h1>
+        <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>{done ? "Booking saved" : item ? "Book" : "Tickets & bookings"}</h1>
         <span style={{ width: "44px" }} />
       </div>
 
@@ -274,7 +337,8 @@ export default function TicketsScreen() {
           <div className="rise" style={{ display: "flex", gap: "14px", alignItems: "center" }}>
             <Thumb item={item} size={84} />
             <div style={{ flex: 1, minWidth: 0 }}>
-              <span style={{ display: "inline-flex", height: "22px", padding: "0 8px", borderRadius: "6px", background: item.kind === "guided" ? "#F6E3DA" : "#F6EEE4", color: item.kind === "guided" ? "#7E3D29" : "#6E4E1E", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>{item.kind === "guided" ? "Guided walk" : "Entry ticket"}</span>
+              <span style={{ display: "inline-flex", height: "22px", padding: "0 8px", borderRadius: "6px", background: item.kind === "guided" ? "#F6E3DA" : "#F6EEE4", color: item.kind === "guided" ? "#7E3D29" : "#6E4E1E", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>{KIND_LABEL[item.kind]}</span>
+              {item.senior ? <span style={{ display: "inline-flex", height: "22px", marginLeft: "6px", padding: "0 8px", borderRadius: "6px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>Senior-friendly</span> : null}
               <h2 style={{ margin: "6px 0 0", fontSize: "20px", lineHeight: 1.2, fontWeight: 800, letterSpacing: "-0.01em" }}>{item.title}</h2>
               <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#5A4434" }}>
                 {item.place} · {item.duration}
@@ -294,7 +358,7 @@ export default function TicketsScreen() {
             ))}
           </div>
 
-          <h3 style={label}>TIME</h3>
+          <h3 style={label}>{item.kind === "car" ? "PICKUP TIME" : "TIME"}</h3>
           <div role="radiogroup" aria-label="Time" style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
             {item.slots.map((s) => (
               <button key={s} type="button" role="radio" aria-checked={chosenSlot === s} onClick={() => setSlot(s)} style={chip(chosenSlot === s)}>
@@ -303,12 +367,25 @@ export default function TicketsScreen() {
             ))}
           </div>
 
-          <h3 style={label}>GUESTS</h3>
-          <div style={{ padding: "4px 14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
-            <Stepper name="Adults" hint={`${rupees(item.adult)}${item.adult ? " each" : ""}`} value={adults} min={1} max={10} onChange={setAdults} />
-            <div style={{ height: "1px", background: "#F3ECE2" }} />
-            <Stepper name="Children" hint={`Age 5–15 · ${rupees(item.child)}${item.child ? " each" : ""}`} value={children} min={0} max={10} onChange={setChildren} />
-          </div>
+          {item.kind === "car" ? (
+            <>
+              <h3 style={label}>PASSENGERS</h3>
+              <div style={{ padding: "4px 14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
+                <Stepper name="Passengers" hint={`Up to ${item.seats ?? 4} · ${rupees(item.adult)} for the car`} value={Math.min(adults, item.seats ?? 4)} min={1} max={item.seats ?? 4} onChange={setAdults} />
+              </div>
+
+              {pickupFields}
+            </>
+          ) : (
+            <>
+              <h3 style={label}>GUESTS</h3>
+              <div style={{ padding: "4px 14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
+                <Stepper name="Adults" hint={`${rupees(item.adult)}${item.adult ? " each" : ""}`} value={adults} min={1} max={10} onChange={setAdults} />
+                <div style={{ height: "1px", background: "#F3ECE2" }} />
+                <Stepper name="Children" hint={`Age 5–15 · ${rupees(item.child)}${item.child ? " each" : ""}`} value={children} min={0} max={10} onChange={setChildren} />
+              </div>
+            </>
+          )}
 
           {item.kind === "guided" ? (
             <>
@@ -320,6 +397,29 @@ export default function TicketsScreen() {
                   </button>
                 ))}
               </div>
+            </>
+          ) : null}
+
+          {item.kind !== "car" ? (
+            <>
+              <h3 style={label}>CAR TO GET THERE</h3>
+              <div role="radiogroup" aria-label="Car to get there" style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                {[{ id: null, text: "No car" }, ...CAR_ADDONS.map((c) => ({ id: c.id as string | null, text: `${c.label} · ${rupees(addonPrice(item, c.id))}` }))].map((c) => {
+                  const on = carAdd === c.id;
+                  return (
+                    <button key={c.id ?? "none"} type="button" role="radio" aria-checked={on} onClick={() => setCarAdd(c.id)} style={{ minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "#9A4E36" : "#E2D3C1"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: on ? "#7E3D29" : "#2B1B10", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+                      {on ? (
+                        <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                      ) : null}
+                      {c.text}
+                    </button>
+                  );
+                })}
+              </div>
+              {carCost ? <p style={{ margin: "8px 2px 0", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>The driver takes you there for your {chosenSlot === "Any time" ? "visit" : chosenSlot + " start"}, waits, and brings you back.</p> : null}
+              {carCost ? pickupFields : null}
             </>
           ) : null}
 
@@ -383,6 +483,9 @@ export default function TicketsScreen() {
                 {(
                   [
                     ["all", "All"],
+                    ["senior", "Senior-friendly"],
+                    ["car", "Cars"],
+                    ["activity", "Activities"],
                     ["guided", "Guided walks"],
                     ["entry", "Entry tickets"],
                   ] as const
@@ -402,7 +505,7 @@ export default function TicketsScreen() {
                         <span style={{ display: "block", fontSize: "16px", lineHeight: 1.25, fontWeight: 800 }}>{b.title}</span>
                         <span style={{ display: "block", marginTop: "3px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{b.place}</span>
                         <span style={{ display: "block", marginTop: "6px", fontSize: "13px", fontWeight: 700, color: "#9A4E36" }}>
-                          {b.adult ? `From ${rupees(b.adult)}` : "Free"} · {b.kind === "guided" ? b.duration : "Entry"}
+                          {b.kind === "car" ? `${rupees(b.adult)} per car` : b.adult ? `From ${rupees(b.adult)}` : "Free"} · {b.kind === "entry" ? "Entry" : b.duration}
                         </span>
                       </span>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6F5B4B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -432,7 +535,7 @@ export default function TicketsScreen() {
                 </svg>
               </span>
               <span style={{ fontSize: "18px", fontWeight: 800 }}>No tickets yet</span>
-              <span style={{ fontSize: "14px", lineHeight: 1.45, color: "#5A4434" }}>Book a guided walk or monument entry and it will be kept here, ready to show at the gate.</span>
+              <span style={{ fontSize: "14px", lineHeight: 1.45, color: "#5A4434" }}>Book a walk, an entry ticket, an activity or a car with a driver, and it will be kept here.</span>
               <button type="button" onClick={() => setTab("book")} style={{ ...primary, marginTop: "10px", width: "auto", padding: "0 24px", height: "50px" }}>
                 Browse tickets
               </button>
