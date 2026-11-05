@@ -50,7 +50,7 @@ export default function SettingsScreen() {
                 <span style={{ minWidth: 0 }}>
                   <span style={{ display: "block", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.name}</span>
                   <span style={{ display: "block", marginTop: "2px", fontSize: "13px", fontWeight: 500, color: "#6F5B4B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {user.email} · {user.provider === "google" ? "Google" : "Email"}
+                    {user.email} · {user.provider === "google" ? "Google" : t("st.email")}
                   </span>
                 </span>
               </div>
@@ -58,19 +58,19 @@ export default function SettingsScreen() {
                 type="button"
                 onClick={() => {
                   logOut();
-                  toast("You're logged out");
+                  toast(t("lg.logged_out"));
                   router.push("/login");
                 }}
                 style={{ ...rowStyle(true), color: "#A23A2A" }}
               >
-                Log out
+                {t("us.logout")}
               </button>
             </>
           ) : (
             <Link href="/login" style={rowStyle(true)}>
               <span>
-                Log in or sign up
-                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>You&apos;re exploring as a guest</span>
+                {t("us.join")}
+                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>{t("st.guest")}</span>
               </span>
               <Chevron />
             </Link>
@@ -81,13 +81,13 @@ export default function SettingsScreen() {
         <Card>
           <div style={{ ...rowStyle(true), cursor: "default" }}>
             <span>
-              AI Guide and Search
+              {t("st.ai")}
               <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>
-                {ai === null ? "Checking…" : ai.gemini || ai.claude ? "Answers any question, in your language" : "Using Virasa's built-in library. Add GEMINI_API_KEY to .env.local to switch on Gemini"}
+                {ai === null ? t("st.checking") : ai.gemini || ai.claude ? t("st.ai_on") : t("st.ai_lib")}
               </span>
             </span>
             <span style={{ flex: "0 0 auto", height: "26px", padding: "0 10px", borderRadius: "999px", background: ai?.gemini ? "#EEF2FE" : "#F6EEE4", color: ai?.gemini ? "#3457C9" : "#6E4E1E", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center" }}>
-              {ai === null ? "…" : ai.gemini || ai.claude ? "On" : "Library"}
+              {ai === null ? "…" : ai.gemini || ai.claude ? t("st.on") : t("st.library")}
             </span>
           </div>
         </Card>
@@ -113,7 +113,7 @@ export default function SettingsScreen() {
 
         <SectionLabel id="language">{t("st.language")}</SectionLabel>
         <Card>
-          <div role="radiogroup" aria-label="App language">
+          <div role="radiogroup" aria-label={t("st.app_lang")}>
             {LANGS.map((l, i) => (
               <button key={l.id} type="button" role="radio" aria-checked={lang === l.id} onClick={() => {
                   if (lang === l.id) return;
@@ -133,33 +133,33 @@ export default function SettingsScreen() {
 
         <SectionLabel id="stories">{t("st.stories")}</SectionLabel>
         <Card style={{ padding: "14px" }}>
-          <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>Story length</div>
+          <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>{t("st.story_length")}</div>
           <Segmented
             label={t("st.story_length")}
             value={settings.length}
             onChange={(length) => set({ length })}
             options={[
-              ["quick", "Quick · 1 min"],
-              ["classic", "Classic · 2 min"],
-              ["deep", "Deep dive · 4 min"],
+              ["quick", t("st.len.quick")],
+              ["classic", t("st.len.classic")],
+              ["deep", t("st.len.deep")],
             ]}
           />
         </Card>
 
         <SectionLabel id="travel">{t("st.travel")}</SectionLabel>
         <Card style={{ padding: "14px" }}>
-          <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>Walking pace</div>
+          <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>{t("st.pace")}</div>
           <Segmented
             label={t("st.pace")}
             value={settings.pace}
             onChange={(pace) => set({ pace })}
             options={[
-              ["relaxed", "Relaxed"],
-              ["steady", "Steady"],
-              ["brisk", "Brisk"],
+              ["relaxed", t("st.pace.relaxed")],
+              ["steady", t("st.pace.steady")],
+              ["brisk", t("st.pace.brisk")],
             ]}
           />
-          <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>Walk times in your plans are worked out at this pace.</p>
+          <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>{t("st.pace_note")}</p>
         </Card>
         <Card style={{ marginTop: "10px" }}>
           <SwitchRow label={t("st.voice")} hint={t("st.voice_hint")} on={voice} onToggle={() => setPrefs((p) => ({ ...p, voice: !voice }))} />
@@ -168,19 +168,19 @@ export default function SettingsScreen() {
 
         <SectionLabel id="access">{t("st.access")}</SectionLabel>
         <Card style={{ padding: "14px" }}>
-          <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>Text size</div>
+          <div style={{ marginBottom: "8px", fontSize: "15px", fontWeight: 600 }}>{t("st.text")}</div>
           <Segmented
             label={t("st.text")}
             value={settings.text}
             onChange={(text) => set({ text })}
             options={[
-              ["default", "Default"],
-              ["large", "Large"],
-              ["xlarge", "Extra large"],
+              ["default", t("st.size.default")],
+              ["large", t("st.size.large")],
+              ["xlarge", t("st.size.xlarge")],
             ]}
           />
-          <p style={{ margin: "10px 0 0", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.45, color: "#2B1B10" }}>See how the branches curl like palm fronds, rising from one trunk.</p>
-          <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#6F5B4B" }}>Applies to story transcripts and AI Guide answers.</p>
+          <p style={{ margin: "10px 0 0", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.45, color: "#2B1B10" }}>{t("st.text_sample")}</p>
+          <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#6F5B4B" }}>{t("st.text_note")}</p>
         </Card>
         <Card style={{ marginTop: "10px" }}>
           <SwitchRow label={t("st.desc")} hint={t("st.desc_hint")} on={sw.desc} onToggle={() => setSw((s) => ({ ...s, desc: !s.desc }))} last />
@@ -192,7 +192,7 @@ export default function SettingsScreen() {
           <SwitchRow label={t("st.trips")} hint={t("st.trips_hint")} on={settings.alerts.trips} onToggle={() => alert("trips")} />
           <SwitchRow label={t("st.digest")} hint={t("st.digest_hint")} on={settings.alerts.digest} onToggle={() => alert("digest")} />
           <Link href="/notifications" style={rowStyle(true)}>
-            See your notifications
+            {t("st.see_notes")}
             <Chevron />
           </Link>
         </Card>
@@ -200,15 +200,15 @@ export default function SettingsScreen() {
         <SectionLabel>{t("st.data")}</SectionLabel>
         <Card>
           <Link href="/personalize" style={rowStyle()}>
-            Edit interests
+            {t("st.interests")}
             <Chevron />
           </Link>
           <Link href="/saved" style={rowStyle()}>
-            Offline city packs
+            {t("st.packs")}
             <Chevron />
           </Link>
           <Link href="/welcome" style={rowStyle()}>
-            Replay the welcome tour
+            {t("st.replay")}
             <Chevron />
           </Link>
           <button
@@ -216,29 +216,29 @@ export default function SettingsScreen() {
             onClick={() => setConfirmReset(true)}
             style={{ ...rowStyle(true), color: "#A23A2A" }}
           >
-            Reset app data
+            {t("st.reset")}
           </button>
         </Card>
 
         <SectionLabel>{t("st.about")}</SectionLabel>
         <Card>
           <Link href="/screens" style={rowStyle()}>
-            All screens
+            {t("st.all_screens")}
             <Chevron />
           </Link>
           <Link href="/credits" style={rowStyle()}>
-            Photo credits
+            {t("st.credits")}
             <Chevron />
           </Link>
           <div style={{ ...rowStyle(true), cursor: "default" }}>
-            Version
+            {t("st.version")}
             <span style={{ fontSize: "14px", fontWeight: 500, color: "#6F5B4B" }}>0.1.0</span>
           </div>
         </Card>
       </div>
       {/* Reset can't be undone, so it asks first, in the app's own sheet rather than a browser dialog. */}
-      <Sheet open={confirmReset} onClose={() => setConfirmReset(false)} title="Reset Virasa?">
-        <p>Saved places, plans, tickets, downloads and settings on this phone will be cleared. This can&apos;t be undone.</p>
+      <Sheet open={confirmReset} onClose={() => setConfirmReset(false)} title={t("st.reset_q")}>
+        <p>{t("st.reset_body")}</p>
         <button
           type="button"
           className="sheet-cta"
@@ -246,14 +246,14 @@ export default function SettingsScreen() {
           onClick={() => {
             setConfirmReset(false);
             resetStored();
-            toast("Virasa has been reset", "success");
+            toast(t("st.reset_done"), "success");
             router.push("/");
           }}
         >
-          Reset app data
+          {t("st.reset")}
         </button>
         <button type="button" className="sheet-row" onClick={() => setConfirmReset(false)} style={{ justifyContent: "center" }}>
-          Keep my data
+          {t("st.keep")}
         </button>
       </Sheet>
     </div>

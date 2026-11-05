@@ -140,7 +140,7 @@ export default function NavigateScreen() {
 
   return (
     <div style={{ width: "390px", height: "min(844px, 100dvh)", minHeight: "680px", position: "relative", overflow: "hidden", background: "#F4F1EA", color: "#2B1B10" }}>
-      <svg role="img" aria-label={`Walking route to ${trip.name}`} width="390" height="844" viewBox="0 0 390 844" style={{ position: "absolute", inset: 0, display: "block" }}>
+      <svg role="img" aria-label={t("nv.route", { name: trip.name })} width="390" height="844" viewBox="0 0 390 844" style={{ position: "absolute", inset: 0, display: "block" }}>
         <rect width="390" height="844" fill="#F4F1EA" />
         <g fill="#ECE6DB">
           {[-10, 70, 206, 310].flatMap((x, i) =>
@@ -206,7 +206,7 @@ export default function NavigateScreen() {
       <span style={{ position: "absolute", left: "143px", top: "200px", transform: "translateX(-50%)", height: "28px", padding: "0 11px", borderRadius: "999px", background: "#2B1B10", color: "#FFFFFF", fontSize: "12px", fontWeight: 700, display: "flex", alignItems: "center", whiteSpace: "nowrap", boxShadow: "0 4px 10px rgba(43, 27, 16, 0.25)" }}>{trip.name}</span>
 
       {/* The instruction: big distance, what to do, and what comes after. */}
-      <section aria-label="Next instruction" aria-live="polite" style={{ position: "absolute", top: "50px", left: "12px", right: "12px", borderRadius: "24px", background: "#2B1B10", color: "#FBF6EE", boxShadow: "0 14px 30px rgba(43, 27, 16, 0.3)", overflow: "hidden" }}>
+      <section aria-label={t("nv.next")} aria-live="polite" style={{ position: "absolute", top: "50px", left: "12px", right: "12px", borderRadius: "24px", background: "#2B1B10", color: "#FBF6EE", boxShadow: "0 14px 30px rgba(43, 27, 16, 0.3)", overflow: "hidden" }}>
         <div style={{ padding: "16px", display: "flex", gap: "14px", alignItems: "center" }}>
           <span key={now.kind} className="pop-in" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "18px", background: now.kind === "arrive" ? "#9FD3B0" : "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <TurnIcon kind={now.kind} />
@@ -228,7 +228,7 @@ export default function NavigateScreen() {
         ) : null}
       </section>
 
-      <Link href="/ar" aria-label="Switch to AR view" style={{ ...glass, right: "16px", bottom: "308px", background: "#2B1B10", color: "#FBF6EE", boxShadow: "0 8px 18px rgba(43, 27, 16, 0.3)" }}>
+      <Link href="/ar" aria-label={t("nv.ar")} style={{ ...glass, right: "16px", bottom: "308px", background: "#2B1B10", color: "#FBF6EE", boxShadow: "0 8px 18px rgba(43, 27, 16, 0.3)" }}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M2 9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4.5l-2-2.5h-3l-2 2.5H4a2 2 0 0 1-2-2z" />
           <path d="M6 7V5.5A1.5 1.5 0 0 1 7.5 4h9A1.5 1.5 0 0 1 18 5.5V7" />
@@ -238,7 +238,7 @@ export default function NavigateScreen() {
 
       {/* The story stop: counts down as you approach, glows when you reach it. */}
       {trip.id === "teen" ? null : (
-      <section aria-label="Story on your way" className={Math.abs(teenAhead) <= 12 ? "nav-here" : undefined} style={{ position: "absolute", left: "12px", right: "12px", bottom: "222px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid #EFE6DA", boxShadow: "0 10px 26px rgba(90, 60, 30, 0.16)", padding: "10px 10px 10px 12px", display: "flex", alignItems: "center", gap: "12px" }}>
+      <section aria-label={t("nv.story")} className={Math.abs(teenAhead) <= 12 ? "nav-here" : undefined} style={{ position: "absolute", left: "12px", right: "12px", bottom: "222px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid #EFE6DA", boxShadow: "0 10px 26px rgba(90, 60, 30, 0.16)", padding: "10px 10px 10px 12px", display: "flex", alignItems: "center", gap: "12px" }}>
         <span style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: "#F6EEE4", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
@@ -255,8 +255,8 @@ export default function NavigateScreen() {
       )}
 
       {/* Trip progress. */}
-      <section aria-label="Trip progress" style={{ position: "absolute", left: 0, right: 0, bottom: 0, background: "#FFFFFF", borderRadius: "26px 26px 0 0", boxShadow: "0 -10px 30px rgba(90, 60, 30, 0.14)", padding: "14px 20px 26px" }}>
-        <div role="progressbar" aria-label="Walk progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(walked * 100)} style={{ height: "6px", borderRadius: "999px", background: "#F3ECE2", overflow: "hidden" }}>
+      <section aria-label={t("nv.progress")} style={{ position: "absolute", left: 0, right: 0, bottom: 0, background: "#FFFFFF", borderRadius: "26px 26px 0 0", boxShadow: "0 -10px 30px rgba(90, 60, 30, 0.14)", padding: "14px 20px 26px" }}>
+        <div role="progressbar" aria-label={t("nv.progress")} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(walked * 100)} style={{ height: "6px", borderRadius: "999px", background: "#F3ECE2", overflow: "hidden" }}>
           <div style={{ width: `${walked * 100}%`, height: "100%", borderRadius: "999px", background: "linear-gradient(90deg, #2F7A4A, #4E9A68)", transition: `width ${TICK}ms linear` }} />
         </div>
         <div style={{ marginTop: "14px", display: "flex", alignItems: "center", gap: "10px" }}>
@@ -280,7 +280,7 @@ export default function NavigateScreen() {
               {paused ? <polygon points="7 4 19 12 7 20 7 4" /> : <path d="M7 4h3.5v16H7zM13.5 4H17v16h-3.5z" />}
             </svg>
           </button>
-          <a href={directionsUrl(trip.id, trip.name)} target="_blank" rel="noopener noreferrer" aria-label={`Directions to ${trip.name} in Google Maps`} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "16px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <a href={directionsUrl(trip.id, trip.name)} target="_blank" rel="noopener noreferrer" aria-label={t("nv.dirs", { name: trip.name })} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "16px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3-6-3ZM9 3v15M15 6v15" />
             </svg>

@@ -1,6 +1,7 @@
 // 01 · Splash
 import Link from "next/link";
 import AutoAdvance from "@/components/AutoAdvance";
+import { T } from "@/lib/i18n";
 
 export default function MainScreen() {
   return (
@@ -29,10 +30,10 @@ export default function MainScreen() {
             Virasa
           </div>
           <div style={{ marginTop: "10px", fontSize: "14px", fontWeight: "700", letterSpacing: "0.32em", color: "#8A6424", paddingLeft: "0.32em" }}>
-            HERITAGE AI
+            <span style={{ textTransform: "uppercase" }}><T k="sp.tag" /></span>
           </div>
           <div style={{ marginTop: "26px", fontSize: "17px", fontWeight: "500", color: "#5A4434" }}>
-            Every street has a story.
+            <T k="sp.line" />
           </div>
         </Link>
         <div style={{ position: "absolute", left: "0", right: "0", bottom: "58px", display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", pointerEvents: "none" }}>
@@ -40,7 +41,7 @@ export default function MainScreen() {
             <div className="splash-bar" style={{ width: "100%", height: "100%", borderRadius: "999px", background: "#9A4E36" }} />
           </div>
           <div style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B", letterSpacing: "0.02em" }}>
-            Heritage stories from every corner of India
+            <T k="sp.sub" />
           </div>
         </div>
       </div>

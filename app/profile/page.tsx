@@ -6,11 +6,13 @@ import MainNav from "@/components/MainNav";
 import { Tap } from "@/components/Tap";
 import { AccountCard, Avatar, UserName } from "@/components/User";
 import { langOf, useStored } from "@/lib/store";
-import { LENGTHS, PACES, TEXT_SIZES, DEFAULT_SETTINGS } from "@/lib/settings";
+import { DEFAULT_SETTINGS } from "@/lib/settings";
 import { renderVals } from "./logic";
 import { PLACE_SPOTS, STAMP_ORDER, stateCode, type Stamp } from "@/lib/stamps";
+import { useT, type Key } from "@/lib/i18n";
 
 export default function ProfileScreen() {
+  const t = useT();
   // The three switches are remembered on this phone.
   const [sw, setSw] = useStored("switches", { auto: true, desc: false, steps: false });
   const [lang] = useStored("lang", "en");
@@ -35,16 +37,16 @@ export default function ProfileScreen() {
             <UserName />
           </span>
           <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
-            Heritage explorer
+            {t("pr.explorer")}
           </span>
         </span>
-        <Link href="/notifications" aria-label="Notifications" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <Link href="/notifications" aria-label={t("nt.title")} style={{ width: "44px", height: "44px", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
             <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
           </svg>
         </Link>
-        <Tap aria-label="Settings" href="/settings" style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <Tap aria-label={t("st.title")} href="/settings" style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="3" />
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
@@ -61,16 +63,16 @@ export default function ProfileScreen() {
           </span>
           <span style={{ flex: 1, minWidth: 0 }}>
             <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>
-              Safety & help
+              {t("pr.safety")}
             </span>
-            <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "#6F5B4B" }}>112 · helplines · hospitals near you</span>
+            <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "#6F5B4B" }}>{t("pr.safety_sub")}</span>
           </span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B5A391" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m9 18 6-6-6-6" />
           </svg>
         </Link>
       </div>
-      <section aria-label="Heritage passport" style={{ position: "relative", overflow: "hidden", margin: "20px 20px 0", padding: "18px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE" }}>
+      <section aria-label={t("pr.passport")} style={{ position: "relative", overflow: "hidden", margin: "20px 20px 0", padding: "18px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE" }}>
         <svg aria-hidden="true" width="160" height="160" viewBox="0 0 160 160" style={{ position: "absolute", right: "-30px", top: "-30px", opacity: "0.14" }}>
           <defs>
             <pattern id="pp" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -81,13 +83,13 @@ export default function ProfileScreen() {
           <rect width="160" height="160" fill="url(#pp)" />
         </svg>
         <p style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.12em", color: "#E7B98A" }}>
-          HERITAGE PASSPORT
+          {t("pr.passport").toUpperCase()}
         </p>
         <p style={{ margin: "6px 0 0", fontSize: "20px", fontWeight: "800" }}>
-          {states.length} of 36 states &amp; UTs
+          {t("pr.states", { n: states.length })}
         </p>
         <p style={{ margin: "2px 0 0", fontSize: "13px", color: "#D9C6AE" }}>
-          {`${stamps.length} of ${STAMP_ORDER.length} stamps${stamps.length ? ` · ${cities} ${cities === 1 ? "city" : "cities"}` : ""}`}
+          {`${t("pr.stamps", { n: stamps.length, total: STAMP_ORDER.length })}${stamps.length ? ` · ${t("pr.cities", { n: cities })}` : ""}`}
         </p>
         <ul style={{ listStyle: "none", margin: "16px 0 0", padding: "0", display: "flex", gap: "10px" }}>
           {seals.map((st, i) => (
@@ -105,7 +107,7 @@ export default function ProfileScreen() {
                 <path d="M12 5v14" />
               </svg>
             </span>
-            <span style={{ fontSize: "12px", fontWeight: "700", color: "#D9C6AE" }}>Next</span>
+            <span style={{ fontSize: "12px", fontWeight: "700", color: "#D9C6AE" }}>{t("pr.next")}</span>
           </li>
         </ul>
         <div style={{ marginTop: "14px", height: "6px", borderRadius: "999px", background: "rgba(251, 246, 238, 0.16)", overflow: "hidden" }}>
@@ -113,28 +115,28 @@ export default function ProfileScreen() {
         </div>
         <div style={{ marginTop: "6px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
           <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
-            Architecture
+            {t("on.i.arch")}
           </span>
           <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
-            Street food
+            {t("on.i.food")}
           </span>
           <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center" }}>
-            Legends
+            {t("on.i.legend")}
           </span>
         </div>
       </section>
       <section style={{ margin: "24px 20px 0" }}>
         <h2 style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
-          STORIES
+          {t("st.stories")}
         </h2>
         <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden" }}>
           <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/settings#language" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Language
+              {t("lang.title")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
-              {`${langOf(lang).label} + local`}
+              {t("pr.local", { name: langOf(lang).label })}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m9 18 6-6-6-6" />
               </svg>
@@ -144,10 +146,10 @@ export default function ProfileScreen() {
           <li>
             <Link href="/settings#stories" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Story length
+              {t("st.story_length")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
-              {LENGTHS[settings.length]}
+              {t(`st.len.${settings.length}` as Key)}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m9 18 6-6-6-6" />
               </svg>
@@ -158,16 +160,16 @@ export default function ProfileScreen() {
       </section>
       <section style={{ margin: "24px 20px 0" }}>
         <h2 style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
-          TRAVEL
+          {t("st.travel")}
         </h2>
         <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden" }}>
           <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/saved" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Offline city packs
+              {t("st.packs")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
-              {pack ? "1 city · 86 MB" : "None yet"}
+              {pack ? t("pr.pack_one") : t("pr.none")}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m9 18 6-6-6-6" />
               </svg>
@@ -176,9 +178,9 @@ export default function ProfileScreen() {
           </li>
           <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/tickets#mine" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
-              <span style={{ fontSize: "15px", fontWeight: "600" }}>My tickets</span>
+              <span style={{ fontSize: "15px", fontWeight: "600" }}>{t("tk.mine")}</span>
               <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
-                {tickets.length ? `${tickets.length} booked` : "Book a visit"}
+                {tickets.length ? t("pr.booked", { n: tickets.length }) : t("pr.book_visit")}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m9 18 6-6-6-6" />
                 </svg>
@@ -188,7 +190,7 @@ export default function ProfileScreen() {
           <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/city" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Upcoming trips
+              {t("pr.upcoming")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
               Jaipur
@@ -201,10 +203,10 @@ export default function ProfileScreen() {
           <li style={{  }}>
             <Link href="/settings#travel" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Walking pace
+              {t("st.pace")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
-              {PACES[settings.pace]}
+              {t(`st.pace.${settings.pace}` as Key)}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m9 18 6-6-6-6" />
               </svg>
@@ -215,16 +217,16 @@ export default function ProfileScreen() {
       </section>
       <section style={{ margin: "24px 20px 0" }}>
         <h2 style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
-          ACCESSIBILITY
+          {t("st.access")}
         </h2>
         <ul style={{ listStyle: "none", margin: "8px 0 0", padding: "0", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden" }}>
           <li style={{ borderBottom: "1px solid #F3ECE2" }}>
             <Link href="/settings#access" style={{ minHeight: "56px", padding: "0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#2B1B10", textDecoration: "none" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Text size
+              {t("st.text")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "14px", color: "#6F5B4B" }}>
-              {TEXT_SIZES[settings.text]}
+              {t(`st.size.${settings.text}` as Key)}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m9 18 6-6-6-6" />
               </svg>
@@ -233,9 +235,9 @@ export default function ProfileScreen() {
           </li>
           <li style={{ minHeight: "56px", padding: "0 10px 0 14px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #F3ECE2" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Audio descriptions
+              {t("st.desc")}
             </span>
-            <button type="button" role="switch" aria-checked={v.sw.desc} aria-label="Audio descriptions" onClick={v.tog.desc} style={{ width: "56px", height: "44px", border: "0", background: "none", padding: "0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <button type="button" role="switch" aria-checked={v.sw.desc} aria-label={t("st.desc")} onClick={v.tog.desc} style={{ width: "56px", height: "44px", border: "0", background: "none", padding: "0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.desc.track, display: "flex", alignItems: "center", padding: "3px", transition: "background-color 0.2s ease" }}>
                 <span className="switch-knob" style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)", translate: v.sw.desc ? "20px 0" : "0 0" }} />
               </span>
@@ -243,9 +245,9 @@ export default function ProfileScreen() {
           </li>
           <li style={{ minHeight: "56px", padding: "0 10px 0 14px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: "15px", fontWeight: "600" }}>
-              Step-free routes
+              {t("st.steps")}
             </span>
-            <button type="button" role="switch" aria-checked={v.sw.steps} aria-label="Step-free routes" onClick={v.tog.steps} style={{ width: "56px", height: "44px", border: "0", background: "none", padding: "0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <button type="button" role="switch" aria-checked={v.sw.steps} aria-label={t("st.steps")} onClick={v.tog.steps} style={{ width: "56px", height: "44px", border: "0", background: "none", padding: "0", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <span style={{ width: "50px", height: "30px", borderRadius: "999px", background: v.swS.steps.track, display: "flex", alignItems: "center", padding: "3px", transition: "background-color 0.2s ease" }}>
                 <span className="switch-knob" style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)", translate: v.sw.steps ? "20px 0" : "0 0" }} />
               </span>

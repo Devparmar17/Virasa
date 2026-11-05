@@ -14,7 +14,7 @@ export default function LangButton({ style, pillStyle, icon }: { style?: CSSProp
   const t = useT();
   return (
     <>
-      <button type="button" aria-label={`Language: ${langOf(lang).label}. Change language`} aria-haspopup="dialog" onClick={() => setOpen(true)} style={style}>
+      <button type="button" aria-label={t("c.lang_aria", { name: langOf(lang).label })} aria-haspopup="dialog" onClick={() => setOpen(true)} style={style}>
         <span style={pillStyle}>
           {icon}
           <span>{langOf(lang).short}</span>

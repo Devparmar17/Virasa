@@ -12,6 +12,7 @@ import { UserName } from "@/components/User";
 import { useStored } from "@/lib/store";
 import { kmBetween } from "@/lib/here";
 import { ARRIVED_KM, PLACE_SPOTS, STAMP_ORDER, stateCode, type Stamp } from "@/lib/stamps";
+import { useT } from "@/lib/i18n";
 
 const INKS: Record<string, string> = { Gujarat: "#9A4E36", Rajasthan: "#B4552A", Delhi: "#8A6424", "Uttar Pradesh": "#2F7A4A", Punjab: "#B5841E", "West Bengal": "#3457C9", Maharashtra: "#7A4E9A", Karnataka: "#2B7A85" };
 const inkOf = (state: string) => INKS[state] ?? "#9A4E36";
@@ -43,6 +44,7 @@ function Seal({ state, line, index, ink, locked, size = 92 }: { state: string; l
 }
 
 export default function PassportScreen() {
+  const t = useT();
   const [stampMap, setStamps] = useStored<Record<string, Stamp>>("stamps", {});
   const stamps = Object.values(stampMap).sort((a, b) => b.at - a.at);
   const cities = new Set(stamps.map((s) => s.city)).size;
@@ -55,7 +57,7 @@ export default function PassportScreen() {
 
   // Collect a stamp where the traveller is standing, if it's the place.
   const collect = (spot: Spot, el: Element) => {
-    if (!navigator.geolocation) return toast("Turn on location to collect stamps.", "error");
+    if (!navigator.geolocation) return toast(t("pp.need_loc"), "error");
     setChecking(true);
     navigator.geolocation.getCurrentPosition(
       (p) => {
@@ -64,14 +66,14 @@ export default function PassportScreen() {
         if (km <= ARRIVED_KM) {
           pop(el, true);
           setStamps((m) => ({ ...m, [spot.id]: { id: spot.id, name: spot.name, city: spot.city, state: spot.state, at: Date.now() } }));
-          toast(`Stamp collected · ${spot.name}`, "success");
+          toast(t("pp.got", { name: spot.name }), "success");
         } else {
-          toast(km < 10 ? `You're ${km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1)} km`} away — get closer to collect it` : `Collect this one when you're at ${spot.name}, ${spot.city}`);
+          toast(km < 10 ? t("pp.away", { d: km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(1)} km` }) : t("pp.later", { place: `${spot.name}, ${spot.city}` }));
         }
       },
       () => {
         setChecking(false);
-        toast("Turn on location to collect stamps.", "error");
+        toast(t("pp.need_loc"), "error");
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
@@ -80,11 +82,11 @@ export default function PassportScreen() {
   return (
     <div style={frame({ paddingBottom: "48px" })}>
       <ScreenHeader
-        title="Heritage passport"
+        title={t("pr.passport")}
         back="/profile"
         action={
           stamps.length ? (
-            <button type="button" aria-label="Share passport" onClick={() => share("My Virasa heritage passport", `${stamps.length} ${stamps.length === 1 ? "stamp" : "stamps"} across ${cities} ${cities === 1 ? "city" : "cities"}`)} style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <button type="button" aria-label={t("pp.share")} onClick={() => share(t("pp.share_title"), t("pp.share_text", { n: stamps.length, c: cities }))} style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
                 <polyline points="16 6 12 2 8 6" />
@@ -94,16 +96,16 @@ export default function PassportScreen() {
           ) : null
         }
       />
-      <section aria-label="Progress" style={{ margin: "8px 20px 0", padding: "18px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE" }}>
+      <section aria-label={t("pp.progress")} style={{ margin: "8px 20px 0", padding: "18px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE" }}>
         <p style={{ margin: 0, fontSize: "12px", fontWeight: 700, letterSpacing: "0.12em", color: "#E7B98A" }}>
           <UserName upper />
         </p>
         <p style={{ margin: "8px 0 0", fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>
-          {stamps.length} of {SPOTS.length} stamps
+          {t("pr.stamps", { n: stamps.length, total: SPOTS.length })}
         </p>
         {stamps.length ? (
           <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#D9C6AE" }}>
-            {cities} {cities === 1 ? "city" : "cities"}
+            {t("pr.cities", { n: cities })}
           </p>
         ) : null}
         <div style={{ marginTop: "14px", height: "6px", borderRadius: "999px", background: "rgba(251, 246, 238, 0.16)", overflow: "hidden" }}>
@@ -116,7 +118,7 @@ export default function PassportScreen() {
           const have = stampMap[s.id];
           return (
             <li key={s.id}>
-              <button type="button" onClick={() => setOpen(s)} aria-label={`${s.name}, ${s.city}${have ? `, collected ${when(have.at)}` : ", not collected yet"}`} style={{ width: "100%", padding: "4px 2px", border: "0", background: "none", color: "#2B1B10", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+              <button type="button" onClick={() => setOpen(s)} aria-label={`${s.name}, ${s.city}, ${have ? t("pp.collected", { date: when(have.at) }) : t("pp.not_yet")}`} style={{ width: "100%", padding: "4px 2px", border: "0", background: "none", color: "#2B1B10", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", cursor: "pointer" }}>
                 <Seal state={s.state} line={have ? when(have.at) : ""} index={i} ink={inkOf(s.state)} locked={!have} />
                 <span style={{ fontSize: "13px", lineHeight: 1.25, fontWeight: 700, textAlign: "center", color: have ? "#2B1B10" : "#6F5B4B" }}>{s.name}</span>
                 <span style={{ marginTop: "-5px", fontSize: "12px", color: "#6F5B4B" }}>{s.city}</span>
@@ -138,25 +140,25 @@ export default function PassportScreen() {
                   {open.city}, {open.state}
                 </strong>
                 <br />
-                {got ? `Collected ${new Date(got.at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}` : "Not collected yet"}
+                {got ? t("pp.collected", { date: new Date(got.at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) }) : t("pp.not_yet")}
               </p>
             </div>
             {got ? null : (
               <button type="button" className="sheet-cta" disabled={checking} aria-busy={checking} onClick={(e) => collect(open, e.currentTarget)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
                 {checking ? <Spinner /> : null}
-                {checking ? "Checking where you are…" : "I'm here — collect stamp"}
+                {checking ? t("pp.checking") : t("pp.here")}
               </button>
             )}
             {got ? null : (
               <a href={`https://www.google.com/maps/dir/?api=1&destination=${open.lat},${open.lon}`} target="_blank" rel="noopener noreferrer" className="sheet-row">
-                Directions in Google Maps
+                {t("pp.dirs")}
                 <span aria-hidden="true">›</span>
               </a>
             )}
-            <button type="button" className="sheet-row" onClick={() => ask(`Tell me the story of ${open.name} in ${open.city}`)}>
+            <button type="button" className="sheet-row" onClick={() => ask(t("pp.ask", { name: open.name, city: open.city }))}>
               <span>
-                Hear its story
-                <small>The AI Guide tells it</small>
+                {t("pp.hear")}
+                <small>{t("pp.hear_sub")}</small>
               </span>
               <span aria-hidden="true">›</span>
             </button>

@@ -11,13 +11,16 @@ import { Spinner } from "./ui";
 import { useUser } from "@/lib/auth";
 import { useStored } from "@/lib/store";
 import { draftTicket, draftTotal, type BookingDraft } from "@/lib/booking";
-import { bookable, CAR_ADDONS, KIND_LABEL, longDate, rupees, type Ticket } from "@/lib/tickets";
+import { bookable, CAR_ADDONS, longDate, rupees, type Ticket } from "@/lib/tickets";
+import { useT, type Key } from "@/lib/i18n";
 
 const field = { width: "100%", height: "48px", padding: "0 12px", borderRadius: "12px", border: "1.5px solid #D9C7B3", background: "#FFFFFF", fontSize: "15px", color: "#2B1B10", outline: "none", boxSizing: "border-box" } as const;
 
 export default function BookingCard({ draft, bookedRef, onBooked }: { draft: BookingDraft; bookedRef?: string; onBooked: (ref: string) => void }) {
   const router = useRouter();
   const [user] = useUser();
+  const t = useT();
+  const [uiLang] = useStored("lang", "en");
   const [, setTickets] = useStored<Ticket[]>("tickets", []);
   const [pickup, setPickup] = useState(draft.pickup);
   const [name, setName] = useState<string | null>(null);
@@ -28,12 +31,12 @@ export default function BookingCard({ draft, bookedRef, onBooked }: { draft: Boo
   const who = name ?? user?.name ?? "";
   const needsPickup = item.kind === "car" || Boolean(draft.car);
   const car = draft.car ? CAR_ADDONS.find((c) => c.id === draft.car) : undefined;
-  const people = item.kind === "car" ? `${draft.adults} passenger${draft.adults === 1 ? "" : "s"}` : `${draft.adults} adult${draft.adults === 1 ? "" : "s"}${draft.children ? `, ${draft.children} child${draft.children === 1 ? "" : "ren"}` : ""}`;
+  const people = item.kind === "car" ? String(draft.adults) : `${t("bk.adults", { n: draft.adults })}${draft.children ? ` · ${t("bk.kids", { n: draft.children })}` : ""}`;
   const total = draftTotal(draft);
 
   const confirm = (el: Element) => {
-    if (needsPickup && pickup.trim().length < 3) return setError("Where should the driver pick you up?");
-    if (who.trim().length < 2) return setError("Whose name should the booking be under?");
+    if (needsPickup && pickup.trim().length < 3) return setError(t("bk.need_pickup"));
+    if (who.trim().length < 2) return setError(t("bk.need_name"));
     setBusy(true);
     setTimeout(() => {
       const ticket = draftTicket({ ...draft, pickup: pickup.trim() }, who.trim());
@@ -41,7 +44,7 @@ export default function BookingCard({ draft, bookedRef, onBooked }: { draft: Boo
       setBusy(false);
       pop(el, true);
       onBooked(ticket.ref);
-      toast(`Booked · ${ticket.ref}`, { tone: "success", action: { label: "View", run: () => router.push("/tickets#mine") } });
+      toast(t("bk.booked", { ref: ticket.ref }), { tone: "success", action: { label: t("bk.view"), run: () => router.push("/tickets#mine") } });
     }, 600);
   };
 
@@ -50,18 +53,18 @@ export default function BookingCard({ draft, bookedRef, onBooked }: { draft: Boo
       <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
         {item.img ? <img src={item.img} alt="" style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "12px", objectFit: "cover" }} /> : null}
         <span style={{ minWidth: 0 }}>
-          <span style={{ display: "block", fontSize: "11px", fontWeight: 800, letterSpacing: "0.06em", color: "#8A6424" }}>{KIND_LABEL[item.kind].toUpperCase()}</span>
+          <span style={{ display: "block", fontSize: "11px", fontWeight: 800, letterSpacing: "0.06em", color: "#8A6424" }}>{t(`tk.kind.${item.kind}` as Key).toUpperCase()}</span>
           <span style={{ display: "block", fontSize: "15px", lineHeight: 1.25, fontWeight: 800 }}>{item.title}</span>
           <span style={{ display: "block", fontSize: "12px", color: "#6F5B4B" }}>{item.place}</span>
         </span>
       </div>
       <dl style={{ margin: "12px 0 0", padding: "10px 12px", borderRadius: "12px", background: "#F6F1EA", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px 10px" }}>
         {[
-          ["Date", longDate(draft.date)],
-          [item.kind === "car" ? "Pickup" : "Time", draft.slot],
-          [item.kind === "car" ? "Passengers" : "Guests", people],
-          ...(car ? [["Car", car.label]] : []),
-          ["Total", rupees(total)],
+          [t("tk.date"), longDate(draft.date, uiLang)],
+          [item.kind === "car" ? t("tk.pickup") : t("tk.time"), draft.slot === "Any time" ? t("tk.any_time") : draft.slot],
+          [item.kind === "car" ? t("tk.passengers") : t("tk.guests"), people],
+          ...(car ? [[t("tk.car"), t(`tk.carl.${car.id}` as Key)]] : []),
+          [t("tk.total"), rupees(total)],
         ].map(([k, v]) => (
           <div key={k}>
             <dt style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.06em", color: "#8A6424" }}>{k.toUpperCase()}</dt>
@@ -75,19 +78,19 @@ export default function BookingCard({ draft, bookedRef, onBooked }: { draft: Boo
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M20 6 9 17l-5-5" />
             </svg>
-            Booked · {bookedRef}
+            {t("bk.booked", { ref: bookedRef })}
           </span>
           <Link href="/tickets#mine" style={{ height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", color: "#2B1B10", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, textDecoration: "none" }}>
-            See ticket
+            {t("bk.see")}
           </Link>
         </div>
       ) : (
         <>
           {needsPickup ? (
-            <input aria-label="Pickup address" placeholder="Pick me up from (hotel or address)" value={pickup} onChange={(e) => { setPickup(e.target.value); setError(""); }} style={{ ...field, marginTop: "10px" }} />
+            <input aria-label={t("bk.pickup_ph")} placeholder={t("bk.pickup_ph")} value={pickup} onChange={(e) => { setPickup(e.target.value); setError(""); }} style={{ ...field, marginTop: "10px" }} />
           ) : null}
           {user?.name && name === null ? null : (
-            <input aria-label="Name on booking" placeholder="Name on booking" autoComplete="name" value={who} onChange={(e) => { setName(e.target.value); setError(""); }} style={{ ...field, marginTop: "8px" }} />
+            <input aria-label={t("bk.name_ph")} placeholder={t("bk.name_ph")} autoComplete="name" value={who} onChange={(e) => { setName(e.target.value); setError(""); }} style={{ ...field, marginTop: "8px" }} />
           )}
           {error ? (
             <p role="alert" style={{ margin: "6px 2px 0", fontSize: "13px", fontWeight: 600, color: "#A23A2A" }}>
@@ -97,10 +100,10 @@ export default function BookingCard({ draft, bookedRef, onBooked }: { draft: Boo
           <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
             <button type="button" disabled={busy} aria-busy={busy} onClick={(e) => confirm(e.currentTarget)} style={{ flex: 1, height: "46px", border: 0, borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "14px", fontWeight: 800, cursor: "pointer" }}>
               {busy ? <Spinner /> : null}
-              {busy ? "Booking…" : `Confirm · ${rupees(total)}`}
+              {busy ? t("bk.booking") : t("bk.confirm", { price: rupees(total) })}
             </button>
             <Link href={`/tickets?book=${item.id}`} style={{ height: "46px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", color: "#2B1B10", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, textDecoration: "none" }}>
-              Change
+              {t("trip.change")}
             </Link>
           </div>
         </>

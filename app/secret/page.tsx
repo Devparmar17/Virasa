@@ -10,6 +10,7 @@ import { pop, share, useAsk } from "@/components/Tap";
 import { frame } from "@/components/ui";
 import { useStored } from "@/lib/store";
 import { KIND, secret, SECRETS, type Secret } from "@/lib/secrets";
+import { useT } from "@/lib/i18n";
 
 const noop = () => () => {};
 const round = { width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(43, 27, 16, 0.18)", cursor: "pointer" } as const;
@@ -33,6 +34,7 @@ function Art({ item, size }: { item: Secret; size: number }) {
 }
 
 export default function SecretScreen() {
+  const t = useT();
   // Which find comes from the address: /secret?id=manek
   const id = useSyncExternalStore(
     noop,
@@ -45,7 +47,7 @@ export default function SecretScreen() {
   const isSaved = saved[item.id] ?? false;
   const ask = useAsk();
   const others = SECRETS.filter((s) => s.id !== item.id && s.group === item.group);
-  const go = item.go || { label: `Walk there · ${item.mins} min`, href: `/navigate?to=${item.id}` };
+  const go = item.go || { label: t("sc.walk", { n: item.mins }), href: `/navigate?to=${item.id}` };
 
   return (
     <div key={item.id} style={frame({ background: "#FFFFFF", paddingBottom: "124px" })}>
@@ -62,12 +64,12 @@ export default function SecretScreen() {
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               type="button"
-              aria-label={isSaved ? "Saved. Remove from saved" : "Save"}
+              aria-label={isSaved ? t("c.saved_rm") : t("c.save")}
               aria-pressed={isSaved}
               onClick={(e) => {
                 pop(e.currentTarget, !isSaved);
                 setSaved((m) => ({ ...m, [item.id]: !isSaved }));
-                toast(isSaved ? "Removed from Saved" : "Saved — find it under Saved", isSaved ? "info" : "success");
+                toast(isSaved ? t("c.removed_saved") : t("c.saved_find"), isSaved ? "info" : "success");
               }}
               style={round}
             >
@@ -75,7 +77,7 @@ export default function SecretScreen() {
                 <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
               </svg>
             </button>
-            <button type="button" aria-label="Share" onClick={() => share(item.title, item.line)} style={round}>
+            <button type="button" aria-label={t("c.share")} onClick={() => share(item.title, item.line)} style={round}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
                 <polyline points="16 6 12 2 8 6" />
@@ -95,12 +97,12 @@ export default function SecretScreen() {
         <p style={{ margin: "6px 0 0", fontSize: "15px", color: "#6F5B4B" }}>{item.line}</p>
 
         <div style={{ marginTop: "16px" }}>
-          <Speak text={`${item.title}. ${item.story.join(" ")}`} playingLabel="Stop listening" style={{ height: "46px", padding: "0 16px 0 12px", border: "1.5px solid #9A4E36", borderRadius: "14px", background: "#FFFFFF", color: "#9A4E36", display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}>
+          <Speak text={`${item.title}. ${item.story.join(" ")}`} playingLabel={t("gd.stop_listen")} style={{ height: "46px", padding: "0 16px 0 12px", border: "1.5px solid #9A4E36", borderRadius: "14px", background: "#FFFFFF", color: "#9A4E36", display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
               <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
             </svg>
-            Listen to this
+            {t("sc.listen")}
           </Speak>
         </div>
 
@@ -149,7 +151,7 @@ export default function SecretScreen() {
         ) : null}
 
         <section style={{ marginTop: "26px" }}>
-          <h2 style={{ margin: 0, fontSize: "19px", fontWeight: 800 }}>Before you go</h2>
+          <h2 style={{ margin: 0, fontSize: "19px", fontWeight: 800 }}>{t("pc.before")}</h2>
           <dl style={{ margin: "12px 0 0", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
             {item.know.map((row) => (
               <div key={row.label} style={{ padding: "12px 14px", borderRadius: "14px", background: "#F6F1EA" }}>
@@ -159,16 +161,16 @@ export default function SecretScreen() {
             ))}
           </dl>
           <p style={{ margin: "12px 0 0", padding: "12px 14px", borderRadius: "14px", background: "#FBEDE6", fontSize: "13px", lineHeight: 1.5, color: "#5A4434" }}>
-            <strong style={{ color: "#2B1B10" }}>Tip. </strong>
+            <strong style={{ color: "#2B1B10" }}>{t("sc.tip")} </strong>
             {item.tip}
           </p>
           <button type="button" onClick={() => ask(item.question)} style={{ marginTop: "8px", minHeight: "44px", padding: "0 4px", border: 0, background: "none", color: "#9A4E36", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}>
-            Still curious? Ask the AI Guide
+            {t("sc.ask")}
           </button>
         </section>
 
         <section style={{ marginTop: "22px" }}>
-          <h2 style={{ margin: 0, fontSize: "19px", fontWeight: 800 }}>{item.group === "highlight" ? "More heritage highlights" : item.group === "stop" ? "More stops on the walk" : "More local secrets"}</h2>
+          <h2 style={{ margin: 0, fontSize: "19px", fontWeight: 800 }}>{item.group === "highlight" ? t("sc.more_hl") : item.group === "stop" ? t("sc.more_stops") : t("sc.more_secrets")}</h2>
           <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "10px" }}>
             {others.map((o) => (
               <Link key={o.id} href={`/secret?id=${o.id}`} style={{ padding: "12px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", gap: "14px" }}>

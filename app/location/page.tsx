@@ -2,6 +2,7 @@
 import Link from "next/link";
 import BackLink from "@/components/Back";
 import GeoLink from "@/components/GeoLink";
+import { T } from "@/lib/i18n";
 
 export default function LocationScreen() {
   return (
@@ -21,7 +22,7 @@ export default function LocationScreen() {
             </span>
           </div>
           <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-            Step 2 of 2
+            <T k="on.step" v={{ n: 2, total: 2 }} />
           </span>
         </div>
         <span style={{ width: "54px" }} />
@@ -68,33 +69,33 @@ export default function LocationScreen() {
           <circle cx="190" cy="128" r="8" fill="#2F6FB0" stroke="#FFFFFF" strokeWidth="3" />
         </svg>
         <span style={{ position: "absolute", left: "152px", top: "40px", height: "22px", padding: "0 8px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.92)", fontSize: "11px", fontWeight: "700", color: "#2F5F95", display: "flex", alignItems: "center" }}>
-          10-min walk
+          <T k="unit.min_walk" v={{ n: 10 }} />
         </span>
         <span style={{ position: "absolute", left: "20px", top: "84px", height: "28px", padding: "0 10px", borderRadius: "9px", background: "#FFFFFF", boxShadow: "0 4px 12px rgba(90, 52, 28, 0.14)", fontSize: "12px", fontWeight: "700", color: "#2B1B10", display: "flex", alignItems: "center", gap: "4px" }}>
           {"Teen Darwaza "}
           <span style={{ color: "#6F5B4B", fontWeight: "600" }}>
-            · 5 min
+            · <T k="unit.min" v={{ n: 5 }} />
           </span>
         </span>
         <span style={{ position: "absolute", right: "14px", top: "106px", height: "28px", padding: "0 10px", borderRadius: "9px", background: "#FFFFFF", boxShadow: "0 4px 12px rgba(90, 52, 28, 0.14)", fontSize: "12px", fontWeight: "700", color: "#2B1B10", display: "flex", alignItems: "center", gap: "4px" }}>
           {"Manek Chowk "}
           <span style={{ color: "#6F5B4B", fontWeight: "600" }}>
-            · 8 min
+            · <T k="unit.min" v={{ n: 8 }} />
           </span>
         </span>
         <span style={{ position: "absolute", left: "116px", top: "208px", height: "28px", padding: "0 10px", borderRadius: "9px", background: "#FFFFFF", boxShadow: "0 4px 12px rgba(90, 52, 28, 0.14)", fontSize: "12px", fontWeight: "700", color: "#2B1B10", display: "flex", alignItems: "center", gap: "4px" }}>
           {"Dhal ni Pol "}
           <span style={{ color: "#6F5B4B", fontWeight: "600" }}>
-            · 9 min
+            · <T k="unit.min" v={{ n: 9 }} />
           </span>
         </span>
       </div>
       <div style={{ padding: "26px 24px 0" }}>
         <h1 style={{ margin: "0", fontSize: "26px", lineHeight: "1.2", fontWeight: "800", letterSpacing: "-0.02em", textWrap: "balance" }}>
-          See the stories around you
+          <T k="loc.title" />
         </h1>
         <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.45", color: "#5A4434" }}>
-          Allow location while you use Virasa so we can:
+          <T k="loc.sub" />
         </p>
       </div>
       <ul style={{ listStyle: "none", margin: "14px 0 0", padding: "0 24px", display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -105,7 +106,7 @@ export default function LocationScreen() {
             </svg>
           </span>
           <span>
-            Show places within a short walk
+            <T k="loc.b1" />
           </span>
         </li>
         <li style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "15px", fontWeight: "600" }}>
@@ -115,7 +116,7 @@ export default function LocationScreen() {
             </svg>
           </span>
           <span>
-            Start a story the moment you arrive
+            <T k="loc.b2" />
           </span>
         </li>
         <li style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "15px", fontWeight: "600" }}>
@@ -125,7 +126,7 @@ export default function LocationScreen() {
             </svg>
           </span>
           <span>
-            Guide you there, turn by turn
+            <T k="loc.b3" />
           </span>
         </li>
       </ul>
@@ -134,7 +135,7 @@ export default function LocationScreen() {
           <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
         </svg>
         <span>
-          Only while the app is open. Never sold or shared.
+          <T k="loc.privacy" />
         </span>
       </div>
       <div style={{ position: "absolute", left: "24px", right: "24px", bottom: "30px", display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -143,11 +144,11 @@ export default function LocationScreen() {
             <polygon points="3 11 22 2 13 21 11 13 3 11" />
           </svg>
           <span>
-            Allow while using the app
+            <T k="loc.allow" />
           </span>
         </GeoLink>
         <Link href="/city" style={{ height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: "700", color: "#5A4434", textDecoration: "none" }}>
-          Choose a city instead
+          <T k="loc.city" />
         </Link>
       </div>
     </div>

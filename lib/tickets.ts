@@ -110,14 +110,15 @@ const fromKey = (key: string) => {
   const [y, m, d] = key.split("-").map(Number);
   return new Date(y, m - 1, d);
 };
-export function nextDays(todayKey: string, count = 7) {
+// Weekday and month names follow `lang` (the app language), English by default.
+export function nextDays(todayKey: string, count = 7, lang = "en") {
   const start = fromKey(todayKey);
   return Array.from({ length: count }, (_, i) => {
     const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
-    return { key: dayKey(d), weekday: d.getDay(), top: i === 0 ? "Today" : i === 1 ? "Tomorrow" : d.toLocaleDateString("en-IN", { weekday: "short" }), day: d.getDate(), month: d.toLocaleDateString("en-IN", { month: "short" }) };
+    return { key: dayKey(d), weekday: d.getDay(), top: i === 0 ? "Today" : i === 1 ? "Tomorrow" : d.toLocaleDateString(`${lang}-IN`, { weekday: "short" }), day: d.getDate(), month: d.toLocaleDateString(`${lang}-IN`, { month: "short" }) };
   });
 }
-export const longDate = (key: string) => fromKey(key).toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+export const longDate = (key: string, lang = "en") => fromKey(key).toLocaleDateString(`${lang}-IN`, { weekday: "short", day: "numeric", month: "short", year: "numeric" });
 
 const ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 export function newRef() {

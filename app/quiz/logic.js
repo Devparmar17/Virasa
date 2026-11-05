@@ -1,12 +1,10 @@
 // Screen logic, ported from the design prototype.
-export function renderVals(state, setState) {
+// `t` turns a phrase key into the traveller's language.
+export function renderVals(state, setState, t) {
     const QS = [
-      { q: 'When was Sidi Saiyyed Mosque built?', options: ['1411', '1573', '1857'], answer: 1,
-        why: 'It was completed in 1573, the last year of the Gujarat Sultanate.' },
-      { q: 'What is a jali?', options: ['A stone screen carved into a lattice', 'A stepped water tank', 'A temple bell'], answer: 0,
-        why: 'Jalis let in light and breeze while keeping rooms cool and private.' },
-      { q: "Which institute's logo was inspired by the Tree of Life jali?", options: ['IIM Ahmedabad', 'ISRO', 'IIT Bombay'], answer: 0,
-        why: "IIM Ahmedabad's logo is based on the jali's intertwined trees." }
+      { q: t('qz.q1'), options: ['1411', '1573', '1857'], answer: 1, why: t('qz.w1') },
+      { q: t('qz.q2'), options: [t('qz.o2a'), t('qz.o2b'), t('qz.o2c')], answer: 0, why: t('qz.w2') },
+      { q: t('qz.q3'), options: ['IIM Ahmedabad', 'ISRO', 'IIT Bombay'], answer: 0, why: t('qz.w3') }
     ];
     const st = state || {};
     const qi = st.qi || 0;
@@ -31,18 +29,18 @@ export function renderVals(state, setState) {
     });
     const right = picked && pick === Q.answer;
     const last = qi === QS.length - 1;
-    const titles = ['Keep exploring!', 'Good start!', 'Nearly there!', 'Heritage expert!'];
+    const titles = [t('qz.t0'), t('qz.t1'), t('qz.t2'), t('qz.t3')];
     return {
       playing: !done, done, picked, notPicked: !picked,
-      stepLabel: done ? 'Quiz complete' : 'Question ' + (qi + 1) + ' of ' + QS.length,
+      stepLabel: done ? t('qz.complete') : t('qz.step', { n: qi + 1, total: QS.length }),
       pct: done ? 100 : Math.round(((qi + (picked ? 1 : 0)) / QS.length) * 100),
       score, question: Q.q, opts,
-      fbTitle: right ? 'Correct! +10 pts' : 'Not quite',
+      fbTitle: right ? t('qz.right') : t('qz.wrong'),
       fbText: Q.why,
       fbBg: right ? '#E3F1E7' : '#FBE4DE',
       fbBd: right ? '#2F7A4A' : '#B3402A',
       fbFg: right ? '#1F5C36' : '#8A2E1C',
-      nextLabel: last ? 'See results' : 'Next question',
+      nextLabel: last ? t('qz.results') : t('qz.next'),
       next: () => { if (last) setState({ done: true }); else setState({ qi: qi + 1, pick: null }); },
       resultTitle: titles[score],
       points: score * 10,

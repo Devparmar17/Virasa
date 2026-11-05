@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { useT } from "@/lib/i18n";
 
 const noop = () => () => {};
 const hour = (h: number) => `${h % 12 || 12} ${h < 12 ? "AM" : "PM"}`;
@@ -10,6 +11,7 @@ const hour = (h: number) => `${h % 12 || 12} ${h < 12 ? "AM" : "PM"}`;
 export default function OpenStatus({ opens, closes }: { opens: number; closes: number }) {
   const now = useSyncExternalStore(noop, () => new Date().getHours() + new Date().getMinutes() / 60, () => -1);
   const open = now >= opens && now < closes;
+  const t = useT();
   return (
     <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>
       {now < 0 ? (
@@ -18,8 +20,8 @@ export default function OpenStatus({ opens, closes }: { opens: number; closes: n
         </span>
       ) : (
         <>
-          <strong style={{ color: open ? "#2F7A4A" : "#A23A2A" }}>{open ? "Open now" : "Closed"}</strong>
-          <span>· {open ? `closes ${hour(closes)}` : `opens ${hour(opens)}`}</span>
+          <strong style={{ color: open ? "#2F7A4A" : "#A23A2A" }}>{open ? t("place.open_now") : t("tk.closed")}</strong>
+          <span>· {open ? t("op.closes", { time: hour(closes) }) : t("op.opens", { time: hour(opens) })}</span>
         </>
       )}
     </span>

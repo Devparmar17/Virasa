@@ -29,7 +29,7 @@ export default function PersonalizeScreen() {
     <div style={{ width: "390px", minHeight: "844px", paddingBottom: "120px", position: "relative", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       {/* Sticks once scrolled, so Skip and the progress stay in reach. */}
       <div style={{ position: "sticky", top: "-54px", zIndex: 10, background: "#FFFFFF", padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <BackLink href="/welcome" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/welcome" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
@@ -43,19 +43,19 @@ export default function PersonalizeScreen() {
             <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1" }} />
           </div>
           <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-            Step 1 of 2
+            {t("on.step", { n: 1, total: 2 })}
           </span>
         </div>
         <Link href="/location" style={{ height: "44px", padding: "0 10px", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "700", color: "#5A4434" }}>
-          Skip
+          {t("on.skip")}
         </Link>
       </div>
       <div style={{ padding: "18px 20px 0" }}>
         <h1 style={{ margin: "0", fontSize: "26px", lineHeight: "1.2", fontWeight: "800", letterSpacing: "-0.02em", textWrap: "balance" }}>
-          What pulls you into a place?
+          {t("on.title")}
         </h1>
         <p style={{ margin: "8px 0 0", fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>
-          Pick a few. Your feed, walks and stories will follow them — change anytime.
+          {t("on.sub")}
         </p>
       </div>
       <fieldset style={{ border: "0", margin: "20px 0 0", padding: "0 20px", minWidth: "0" }}>
@@ -70,10 +70,10 @@ export default function PersonalizeScreen() {
       <fieldset style={{ border: "0", margin: "22px 0 0", padding: "0 20px", minWidth: "0" }}>
         <legend style={{ padding: "0", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
           <span>
-            Interests
+            {t("on.interests")}
           </span>
           <span style={{ letterSpacing: "0", fontWeight: "600", color: "#6F5B4B" }}>
-            {v.count}{" selected"}
+            {t("on.selected", { n: v.count })}
           </span>
         </legend>
         <div className="stagger" style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
@@ -87,7 +87,7 @@ export default function PersonalizeScreen() {
               <polygon points="12 2 20 7 4 7" />
             </svg>
             <span style={{ flex: "1" }}>
-              Architecture
+              {t("on.i.arch")}
             </span>
             {v.on.arch ? (
               <>
@@ -106,7 +106,7 @@ export default function PersonalizeScreen() {
               <path d="M11 20h2" />
             </svg>
             <span style={{ flex: "1" }}>
-              Stepwells
+              {t("on.i.well")}
             </span>
             {v.on.well ? (
               <>
@@ -123,7 +123,7 @@ export default function PersonalizeScreen() {
               <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
             </svg>
             <span style={{ flex: "1" }}>
-              Street food
+              {t("on.i.food")}
             </span>
             {v.on.food ? (
               <>
@@ -142,7 +142,7 @@ export default function PersonalizeScreen() {
               <path d="M14.8 14.8 20 20" />
             </svg>
             <span style={{ flex: "1" }}>
-              {"Crafts & textiles"}
+              {t("on.i.craft")}
             </span>
             {v.on.craft ? (
               <>
@@ -158,7 +158,7 @@ export default function PersonalizeScreen() {
               <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
             </svg>
             <span style={{ flex: "1" }}>
-              Legends
+              {t("on.i.legend")}
             </span>
             {v.on.legend ? (
               <>
@@ -173,7 +173,7 @@ export default function PersonalizeScreen() {
               <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
             </svg>
             <span style={{ flex: "1" }}>
-              Spiritual places
+              {t("on.i.spirit")}
             </span>
             {v.on.spirit ? (
               <>
@@ -189,7 +189,7 @@ export default function PersonalizeScreen() {
               <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" />
             </svg>
             <span style={{ flex: "1" }}>
-              Festivals
+              {t("on.i.fest")}
             </span>
             {v.on.fest ? (
               <>
@@ -205,7 +205,7 @@ export default function PersonalizeScreen() {
               <circle cx="12" cy="13" r="3" />
             </svg>
             <span style={{ flex: "1" }}>
-              Photo spots
+              {t("on.i.photo")}
             </span>
             {v.on.photo ? (
               <>
@@ -221,7 +221,7 @@ export default function PersonalizeScreen() {
         <div style={{ padding: "28px 20px 24px", background: "linear-gradient(180deg, rgba(251, 246, 238, 0) 0%, #FBF6EE 34%)" }}>
         <Link href="/location" style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
           <span>
-            {v.cta}
+            {v.count ? t("on.continue") : t("on.skip_now")}
           </span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />

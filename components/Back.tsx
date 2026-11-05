@@ -3,6 +3,7 @@
 import { useEffect, type ComponentProps } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { isKey, useT } from "@/lib/i18n";
 
 // The screens visited in this tab, so Back can return to wherever the
 // traveller actually came from. Kept for the tab's session, so a reload doesn't
@@ -50,10 +51,15 @@ export function replacingScreen() {
 // part of the app, otherwise opens `href`, so a shared link still has a way in.
 export default function BackLink({ href, onClick, ...rest }: ComponentProps<typeof Link> & { href: string }) {
   const router = useRouter();
+  const t = useT();
+  // "Back" and "Close" (or any phrase key) are read out in the traveller's language.
+  const label = rest["aria-label"];
+  const said = label === "Back" ? t("on.back") : label === "Close" ? t("c.close") : label && isKey(label) ? t(label) : label;
   return (
     <Link
       href={href}
       {...rest}
+      aria-label={said}
       onClick={(e) => {
         onClick?.(e);
         if (e.defaultPrevented || !canGoBack()) return;

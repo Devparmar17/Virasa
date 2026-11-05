@@ -16,6 +16,7 @@ import type { Stamp } from "@/lib/stamps";
 import type { SavedFind } from "@/lib/discover";
 import { SECRETS } from "@/lib/secrets";
 import { PLACES as MAP_PLACES } from "../explore/places";
+import type { Key } from "@/lib/i18n";
 
 type Item = {
   id: string;
@@ -64,8 +65,9 @@ const STORIES: Item[] = [
 
 const TABS = ["Places", "Walks", "Stories", "Plans", "Offline"] as const;
 type TabName = (typeof TABS)[number];
-const NOUNS: Record<TabName, [string, string]> = { Places: ["place", "places"], Walks: ["walk", "walks"], Stories: ["story", "stories"], Plans: ["plan", "plans"], Offline: ["saved item", "saved items"] };
 const SORTS = ["Recently saved", "Nearest first", "A to Z"];
+// Labels on saved things, in the traveller's language.
+const BADGES: Record<string, Key> = { "Planned for you": "sv.b.planned", "From AI Guide": "sv.b.guide", "Saved from Reels": "sv.b.reels", "AR Tour narration": "sv.b.ar", "Saved from Discover": "sv.b.discover", "Trip plan": "sv.b.plan", "AI trip plan": "sv.b.aiplan" };
 
 // What counts as saved before the traveller changes anything.
 const DEFAULTS: Record<string, boolean> = { ...DEFAULT_SAVED };
@@ -75,7 +77,7 @@ function Thumb({ item }: { item: Item }) {
     return <img src={item.img} alt="" style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "14px", objectFit: "cover", display: "block" }} />;
   }
   return (
-    <div role="img" aria-label={`Photo placeholder: ${item.title}`} style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "14px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div role="img" aria-label={item.title} style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "14px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <svg width="44" height="44" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M8 70V36h64v34" />
         <path d="M16 36V26h48v10" />
@@ -89,6 +91,7 @@ function Thumb({ item }: { item: Item }) {
 }
 
 export default function SavedScreen() {
+  const t = useT();
   // The planner's "View in Saved" link opens this screen on the Plans tab (/saved#plans).
   const hash = useSyncExternalStore(
     () => () => {},
@@ -103,7 +106,7 @@ export default function SavedScreen() {
   const [finds, setFinds] = useStored<Record<string, SavedFind>>("savedFinds", {});
   const findItems: Item[] = Object.entries(finds)
     .sort((a, b) => b[1].savedAt - a[1].savedAt)
-    .map(([key, f]) => ({ id: `find-${key}`, title: f.name, meta: [f.area, f.city].filter(Boolean).join(" · "), city: f.city, km: 0, badge: f.tryThis ? `Try: ${f.tryThis}` : "Saved from Discover", href: `/discover?city=${encodeURIComponent(f.city)}` }));
+    .map(([key, f]) => ({ id: `find-${key}`, title: f.name, meta: [f.area, f.city].filter(Boolean).join(" · "), city: f.city, km: 0, badge: f.tryThis ? t("sv.b.try", { name: f.tryThis }) : "Saved from Discover", href: `/discover?city=${encodeURIComponent(f.city)}` }));
   const [sort, setSort] = useState(0);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState("");
@@ -115,7 +118,6 @@ export default function SavedScreen() {
   // Places really visited: a stamp was collected there.
   const [stamps] = useStored<Record<string, Stamp>>("stamps", {});
   const ask = useAsk();
-  const t = useT();
 
   // Trip plans saved from the city planner and the AI trip planner, newest first.
   const planItems: Item[] = [
@@ -123,11 +125,11 @@ export default function SavedScreen() {
       const city = cityPlan(id);
       if (!city) return [];
       const stops = planStops(city, p.days, p.interests).length;
-      return [{ at: p.savedAt, item: { id: `plan-${id}`, title: `${p.days} ${p.days === 1 ? "day" : "days"} in ${city.name}`, meta: `${stops} stops · ${city.tag}`, city: city.name, km: 0, badge: "Trip plan", img: city.img, href: `/plan?city=${id}` } }];
+      return [{ at: p.savedAt, item: { id: `plan-${id}`, title: t("sv.plan_title", { days: p.days === 1 ? t("trip.day_n", { n: 1 }) : t("trip.days_n", { n: p.days }), city: city.name }), meta: `${t("sv.stops", { n: stops })} · ${city.tag}`, city: city.name, km: 0, badge: "Trip plan", img: city.img, href: `/plan?city=${id}` } }];
     }),
     ...Object.values(aiTrips).map((p) => {
       const stops = p.trip.days.reduce((n, d) => n + d.stops.length, 0);
-      return { at: p.savedAt, item: { id: `trip-${p.id}`, title: p.trip.title, meta: `${p.trip.days.length} ${p.trip.days.length === 1 ? "day" : "days"} · ${stops} stops · ${p.trip.city}`, city: p.trip.city, km: 0, badge: "AI trip plan", img: cityImage(p.trip.city), href: `/trip?id=${encodeURIComponent(p.id)}` } };
+      return { at: p.savedAt, item: { id: `trip-${p.id}`, title: p.trip.title, meta: `${p.trip.days.length === 1 ? t("trip.day_n", { n: 1 }) : t("trip.days_n", { n: p.trip.days.length })} · ${t("sv.stops", { n: stops })} · ${p.trip.city}`, city: p.trip.city, km: 0, badge: "AI trip plan", img: cityImage(p.trip.city), href: `/trip?id=${encodeURIComponent(p.id)}` } };
     }),
   ]
     .sort((a, b) => b.at - a.at)
@@ -141,7 +143,7 @@ export default function SavedScreen() {
   if (sort === 2) items = [...items].sort((a, b) => a.title.localeCompare(b.title));
 
   const cities = new Set(items.map((it) => it.city)).size;
-  const count = `${items.length} ${NOUNS[tab][items.length === 1 ? 0 : 1]}${tab === "Offline" ? " available offline" : cities > 1 ? ` · ${cities} cities` : ""}`;
+  const count = `${tab === "Offline" ? t("sv.count_off", { n: items.length }) : t("sv.count", { n: items.length })}${tab !== "Offline" && cities > 1 ? ` · ${t("pr.cities", { n: cities })}` : ""}`;
 
   const remove = (it: Item) => {
     let undo: () => void;
@@ -176,7 +178,7 @@ export default function SavedScreen() {
       setSaved((m) => ({ ...m, [it.id]: false }));
       undo = () => setSaved((m) => ({ ...m, [it.id]: true }));
     }
-    toast(`Removed ${it.title}`, { action: { label: "Undo", run: undo } });
+    toast(t("sv.removed", { name: it.title }), { action: { label: t("sv.undo"), run: undo } });
   };
 
   const row = (it: Item): ReactNode => {
@@ -191,10 +193,10 @@ export default function SavedScreen() {
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M20 6 9 17l-5-5" />
               </svg>
-              Visited · stamp collected
+              {t("sv.visited")}
             </span>
           ) : (
-            <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>{it.badge}</span>
+            <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>{BADGES[it.badge] ? t(BADGES[it.badge]) : it.badge}</span>
           )}
         </span>
       </>
@@ -207,13 +209,13 @@ export default function SavedScreen() {
             {inner}
           </Link>
         ) : (
-          <button type="button" onClick={() => ask(`Tell me about ${it.title}`)} style={{ ...rowStyle, border: "0", background: "none", cursor: "pointer" }}>
+          <button type="button" onClick={() => ask(t("sv.ask_about", { name: it.title }))} style={{ ...rowStyle, border: "0", background: "none", cursor: "pointer" }}>
             {inner}
           </button>
         )}
         <button
           type="button"
-          aria-label={`Remove ${it.title} from saved`}
+          aria-label={t("sv.remove_aria", { name: it.title })}
           onClick={(e) => {
             // The row slides away first, then the list closes the gap.
             const li = e.currentTarget.closest("li");
@@ -228,19 +230,19 @@ export default function SavedScreen() {
     );
   };
 
-  const packStatus = downloading ? "Downloading…" : pack ? "Downloaded · 86 MB" : "Not downloaded · 86 MB";
+  const packStatus = downloading ? t("sv.downloading") : pack ? t("sv.downloaded") : t("sv.not_downloaded");
 
   return (
     <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10", display: "flex", flexDirection: "column" }}>
       <div style={{ padding: "54px 12px 0 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
         {searching ? (
-          <input autoFocus type="search" aria-label="Search saved" placeholder={t("sv.search")} value={query} onChange={(e) => setQuery(e.target.value)} className="fade-in" style={{ flex: "1", minWidth: "0", height: "44px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid #D9C7B3", background: "#F6F1EA", fontSize: "15px", color: "#2B1B10", outline: "none" }} />
+          <input autoFocus type="search" aria-label={t("sv.search_aria")} placeholder={t("sv.search")} value={query} onChange={(e) => setQuery(e.target.value)} className="fade-in" style={{ flex: "1", minWidth: "0", height: "44px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid #D9C7B3", background: "#F6F1EA", fontSize: "15px", color: "#2B1B10", outline: "none" }} />
         ) : (
           <h1 style={{ margin: "0", fontSize: "28px", fontWeight: "800", letterSpacing: "-0.02em" }}>{t("sv.title")}</h1>
         )}
         <button
           type="button"
-          aria-label={searching ? "Close search" : "Search saved"}
+          aria-label={searching ? t("sv.close_search") : t("sv.search_aria")}
           onClick={() => {
             setSearching(!searching);
             setQuery("");
@@ -260,7 +262,7 @@ export default function SavedScreen() {
           )}
         </button>
       </div>
-      <div role="tablist" aria-label="Saved items" style={{ marginTop: "8px", padding: "0 20px", display: "flex", gap: "18px", borderBottom: "1px solid #EFE6DA" }}>
+      <div role="tablist" aria-label={t("sv.items")} style={{ marginTop: "8px", padding: "0 20px", display: "flex", gap: "18px", borderBottom: "1px solid #EFE6DA" }}>
         {TABS.map((tb) => (
           <button key={tb} type="button" role="tab" aria-selected={tab === tb} onClick={() => setTab(tb)} style={{ height: "44px", padding: "0", border: "0", borderBottom: `3px solid ${tab === tb ? "#9A4E36" : "transparent"}`, background: "none", color: tab === tb ? "#2B1B10" : "#6F5B4B", fontSize: "15px", fontWeight: tab === tb ? 800 : 700, cursor: "pointer" }}>
             {t(`sv.${tb}`)}
@@ -268,7 +270,7 @@ export default function SavedScreen() {
         ))}
       </div>
       <div style={{ flex: "1", minHeight: "0", overflowY: "auto", paddingBottom: "104px" }}>
-        <section aria-label="Offline pack" aria-busy={downloading} style={{ position: "relative", overflow: "hidden", margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE" }}>
+        <section aria-label={t("sv.pack_aria")} aria-busy={downloading} style={{ position: "relative", overflow: "hidden", margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <span className={downloading ? "float" : undefined} style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -278,14 +280,14 @@ export default function SavedScreen() {
               </svg>
             </span>
             <span style={{ flex: "1", display: "flex", flexDirection: "column", gap: "2px" }}>
-              <span style={{ fontSize: "16px", fontWeight: "800" }}>Ahmedabad pack</span>
+              <span style={{ fontSize: "16px", fontWeight: "800" }}>{t("sv.pack_name")}</span>
               <span style={{ fontSize: "12px", fontWeight: "700", color: pack && !downloading ? "#9FD3B0" : "#F3D9A8" }}>{packStatus}</span>
             </span>
             <button type="button" onClick={() => setManage(true)} style={{ height: "44px", padding: "0 12px", border: "0", borderRadius: "12px", background: "rgba(251, 246, 238, 0.12)", color: "#FBF6EE", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
-              {pack ? "Manage" : "Download · 86 MB"}
+              {pack ? t("sv.manage") : t("sv.download")}
             </button>
           </div>
-          <p style={{ margin: "12px 0 0", fontSize: "13px", lineHeight: "1.45", color: "#D9C6AE" }}>{pack ? "42 places, 30 stories and 2 walks work without internet. Add a pack for any city before you travel." : "Download the pack to use places, stories and walks without internet."}</p>
+          <p style={{ margin: "12px 0 0", fontSize: "13px", lineHeight: "1.45", color: "#D9C6AE" }}>{pack ? t("sv.pack_have") : t("sv.pack_get")}</p>
           {/* How far the download has got (it takes as long as the timer in the sheet). */}
           {downloading ? <div data-timer aria-hidden="true" style={{ position: "absolute", left: 0, bottom: 0, height: "4px", width: "100%", background: "#F3D9A8", animation: "fill 2.2s linear backwards" }} /> : null}
         </section>
@@ -294,11 +296,11 @@ export default function SavedScreen() {
           {items.length > 1 ? (
           <button
             type="button"
-            aria-label={`Sorted by ${SORTS[sort]}. Change sort order`}
+            aria-label={t("sv.sort_aria", { name: t(`sv.sort.${sort}` as Key) })}
             onClick={() => {
               const next = (sort + 1) % SORTS.length;
               setSort(next);
-              toast(`Sorted: ${SORTS[next]}`);
+              toast(t("sv.sorted", { name: t(`sv.sort.${next}` as Key) }));
             }}
             style={{ height: "36px", padding: "0 4px", border: "0", background: "none", display: "flex", alignItems: "center", gap: "4px", color: "#9A4E36", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}
           >
@@ -308,7 +310,7 @@ export default function SavedScreen() {
               <path d="m3 8 4-4 4 4" />
               <path d="M7 4v16" />
             </svg>
-            {sort === 0 ? "Sort" : SORTS[sort]}
+            {sort === 0 ? t("sv.sort") : t(`sv.sort.${sort}` as Key)}
           </button>
           ) : null}
         </div>
@@ -323,19 +325,19 @@ export default function SavedScreen() {
                 <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
               </svg>
             </span>
-            <span style={{ fontSize: "17px", fontWeight: "800" }}>{needle ? "No matches" : tab === "Offline" ? "Nothing offline yet" : `No saved ${tab.toLowerCase()} yet`}</span>
-            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? `Nothing saved matches "${query.trim()}".` : tab === "Offline" ? "Download the Ahmedabad pack to keep your saved items for when there's no signal." : tab === "Plans" ? "Tell the AI where you're going and who's coming, and it plans each day. Save the plan and it will wait for you here." : "Tap the bookmark on any place, walk or story and it will wait for you here."}</span>
+            <span style={{ fontSize: "17px", fontWeight: "800" }}>{needle ? t("sv.no_match") : tab === "Offline" ? t("sv.no_offline") : t("sv.none_tab")}</span>
+            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? t("sv.no_match_sub", { q: query.trim() }) : tab === "Offline" ? t("sv.offline_sub") : tab === "Plans" ? t("sv.plans_sub") : t("sv.empty_sub")}</span>
             {!needle ? (
               <Link href={tab === "Plans" ? "/trip" : "/explore"} style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
-                {tab === "Plans" ? "Plan a trip" : "Explore nearby"}
+                {tab === "Plans" ? t("sv.plan_trip") : t("sv.explore")}
               </Link>
             ) : null}
           </div>
         )}
       </div>
       <MainNav active="saved" />
-      <Sheet open={manage} onClose={() => setManage(false)} title="Ahmedabad pack">
-        <p>42 places, 30 stories, 2 walks and the Old City map. Updated 2 days ago.</p>
+      <Sheet open={manage} onClose={() => setManage(false)} title={t("sv.pack_name")}>
+        <p>{t("sv.pack_body")}</p>
         {pack ? (
           <>
             <button
@@ -349,13 +351,13 @@ export default function SavedScreen() {
                 setTimeout(() => {
                   setChecking(false);
                   setManage(false);
-                  toast("Ahmedabad pack is up to date", "success");
+                  toast(t("sv.up_to_date"), "success");
                 }, 900);
               }}
             >
               <span>
-                {checking ? "Checking for updates…" : "Check for updates"}
-                <small>86 MB on this phone</small>
+                {checking ? t("sv.checking") : t("sv.check")}
+                <small>{t("sv.on_phone")}</small>
               </span>
               {checking ? <Spinner color="#9A4E36" track="#EFE6DA" /> : null}
             </button>
@@ -366,10 +368,10 @@ export default function SavedScreen() {
               onClick={() => {
                 setPack(false);
                 setManage(false);
-                toast("Ahmedabad pack removed", { action: { label: "Undo", run: () => setPack(true) } });
+                toast(t("sv.pack_removed"), { action: { label: t("sv.undo"), run: () => setPack(true) } });
               }}
             >
-              Remove download
+              {t("sv.remove_dl")}
             </button>
           </>
         ) : (
@@ -383,16 +385,16 @@ export default function SavedScreen() {
               setTimeout(() => {
                 setDownloading(false);
                 setPack(true);
-                toast("Ahmedabad pack downloaded", "success");
+                toast(t("sv.pack_done"), "success");
               }, 2200);
             }}
           >
-            Download · 86 MB
+            {t("sv.download")}
           </button>
         )}
         <Link href="/city" className="sheet-row" onClick={() => setManage(false)}>
           <span>
-            Add another city
+            {t("sv.add_city")}
             <small>Jaipur, Varanasi, Hampi, Kolkata…</small>
           </span>
           <span aria-hidden="true">›</span>

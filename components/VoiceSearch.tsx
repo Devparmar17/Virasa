@@ -5,14 +5,16 @@ import { useRouter } from "next/navigation";
 import Sheet from "./Sheet";
 import { toast } from "./Toast";
 import { useStored, speechLocale } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 
 
 // The microphone on a search bar. Listens with the browser's speech
 // recognition, shows what it hears, then searches for it: by default it opens
 // /search?q=…, or hands the words to `onResult` when a screen wants them itself.
-export default function VoiceSearch({ style, children, onResult, label = "Search by voice" }: { style?: CSSProperties; children: ReactNode; onResult?: (text: string) => void; label?: string }) {
+export default function VoiceSearch({ style, children, onResult, label }: { style?: CSSProperties; children: ReactNode; onResult?: (text: string) => void; label?: string }) {
   const router = useRouter();
   const [lang] = useStored("lang", "en");
+  const t = useT();
   const [listening, setListening] = useState(false);
   const [heard, setHeard] = useState("");
   const rec = useRef<any>(null);
@@ -29,7 +31,7 @@ export default function VoiceSearch({ style, children, onResult, label = "Search
     const w = window as any;
     const Recognition = w.SpeechRecognition || w.webkitSpeechRecognition;
     if (!Recognition) {
-      toast("Voice search isn't available in this browser. Type your search instead.", "error");
+      toast(t("vs.none"), "error");
       return;
     }
     const r = new Recognition();
@@ -46,7 +48,7 @@ export default function VoiceSearch({ style, children, onResult, label = "Search
     };
     r.onerror = (e: any) => {
       if (e.error === "aborted") return;
-      toast(e.error === "not-allowed" ? "Allow the microphone to search by voice." : e.error === "no-speech" ? "Didn't hear anything. Tap the mic and try again." : "Voice search didn't work this time. Try again.", "error");
+      toast(e.error === "not-allowed" ? t("vs.allow") : e.error === "no-speech" ? t("vs.quiet") : t("vs.fail"), "error");
     };
     r.onend = () => {
       rec.current = null;
@@ -62,10 +64,10 @@ export default function VoiceSearch({ style, children, onResult, label = "Search
 
   return (
     <>
-      <button type="button" aria-label={label} onClick={start} style={style}>
+      <button type="button" aria-label={label || t("vs.label")} onClick={start} style={style}>
         {children}
       </button>
-      <Sheet open={listening} onClose={stop} title="Listening…">
+      <Sheet open={listening} onClose={stop} title={t("vs.listening")}>
         <div style={{ padding: "8px 0 4px", display: "flex", flexDirection: "column", alignItems: "center", gap: "18px", textAlign: "center" }}>
           <span className="pulse" aria-hidden="true" style={{ width: "84px", height: "84px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -75,12 +77,12 @@ export default function VoiceSearch({ style, children, onResult, label = "Search
             </svg>
           </span>
           <p aria-live="polite" style={{ margin: 0, minHeight: "52px", fontSize: "20px", lineHeight: 1.3, fontWeight: 800, color: "#2B1B10" }}>
-            {heard || "Say a place, a story or a food"}
+            {heard || t("vs.say")}
           </p>
-          <p style={{ margin: 0 }}>Try “stepwells near me” or “Manek Chowk food”.</p>
+          <p style={{ margin: 0 }}>{t("vs.try")}</p>
         </div>
         <button type="button" className="sheet-row" onClick={stop} style={{ justifyContent: "center" }}>
-          Cancel
+          {t("trip.cancel")}
         </button>
       </Sheet>
     </>

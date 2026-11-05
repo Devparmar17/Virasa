@@ -7,8 +7,10 @@ import { Confetti, Tick } from "@/components/ui";
 import BackLink from "@/components/Back";
 import { renderVals } from "./logic";
 import { useStored } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 
 export default function PuzzleScreen() {
+  const t = useT();
   const [state, setAll] = useState<Record<string, any>>({});
   const [, setPoints] = useStored<number>("points", 0);
   const setState = (patch: Record<string, any>) => {
@@ -22,29 +24,29 @@ export default function PuzzleScreen() {
   return (
     <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 16px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <BackLink href="/games" aria-label="Back to games" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/games" aria-label={t("pz.back")} style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
           </svg>
         </BackLink>
         <span style={{ flex: "1", fontSize: "18px", fontWeight: "800" }}>
-          Jali puzzle
+          {t("gm.puzzle")}
         </span>
         <span role="status" style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", gap: "4px" }}>
           <span>
             {v.moves}
           </span>
           <span>
-            moves
+            {t("pz.moves")}
           </span>
         </span>
       </div>
       <p style={{ margin: "8px 24px 0", fontSize: "15px", lineHeight: "1.45", color: "#5A4434" }}>
-        Tap a tile next to the gap to slide it. Rebuild the Tree of Life.
+        {t("pz.how")}
       </p>
       <div style={{ position: "relative", margin: "18px auto 0", width: "340px", padding: "8px", borderRadius: "20px", background: "#2B1B10", boxShadow: "0 14px 30px rgba(43, 27, 16, 0.25)" }}>
-        <div role="group" aria-label="Puzzle board" style={{ width: "324px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
+        <div role="group" aria-label={t("pz.board")} style={{ width: "324px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
           {v.cells.map((c: any, i: number) => (
             <Fragment key={i}>
               <button type="button" onClick={c.move} disabled={c.empty} aria-label={c.label} style={{ position: "relative", width: "104px", height: "104px", padding: "0", border: "0", borderRadius: "10px", overflow: "hidden", background: c.bg, outline: `3px solid ${c.ring}`, outlineOffset: "-3px", cursor: c.cursor }}>
@@ -64,13 +66,13 @@ export default function PuzzleScreen() {
       </div>
       <div style={{ margin: "16px 24px 0", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "8px" }}>
         <button type="button" aria-pressed={v.nums} onClick={v.toggleNums} style={{ height: "44px", borderRadius: "12px", border: `1.5px solid ${v.numsBd}`, background: v.numsBg, color: v.numsFg, fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
-          Numbers
+          {t("pz.numbers")}
         </button>
         <button type="button" aria-pressed={v.peek} onClick={v.togglePeek} style={{ height: "44px", borderRadius: "12px", border: `1.5px solid ${v.peekBd}`, background: v.peekBg, color: v.peekFg, fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
-          Peek
+          {t("pz.peek")}
         </button>
         <button type="button" onClick={v.reset} style={{ height: "44px", borderRadius: "12px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
-          Restart
+          {t("pz.restart")}
         </button>
       </div>
       {v.solved ? (
@@ -82,14 +84,14 @@ export default function PuzzleScreen() {
             </span>
             <span style={{ flex: "1", display: "flex", flexDirection: "column", gap: "2px" }}>
               <span style={{ fontSize: "15px", fontWeight: "800", color: "#1F5C36" }}>
-                {"Solved in "}{v.moves}{" moves! +20 pts"}
+                {t("pz.solved", { n: v.moves })}
               </span>
               <span style={{ fontSize: "13px", color: "#2B1B10" }}>
-                Now hear the story behind it.
+                {t("pz.hear")}
               </span>
             </span>
             <Link href="/story" style={{ height: "44px", padding: "0 12px", borderRadius: "12px", background: "#2F7A4A", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: "700" }}>
-              Listen
+              {t("trip.listen")}
             </Link>
           </div>
         </>
@@ -103,7 +105,7 @@ export default function PuzzleScreen() {
               <path d="M10 22h4" />
             </svg>
             <span>
-              Highlighted tiles can move. Solve the top row first, then the left column.
+              {t("pz.tip")}
             </span>
           </div>
         </>
