@@ -12,17 +12,17 @@ import Sheet from "@/components/Sheet";
 import { toast } from "@/components/Toast";
 import { Toggle } from "@/components/Tap";
 import { Tick } from "@/components/ui";
-import { useT } from "@/lib/i18n";
+import { useT, type Key } from "@/lib/i18n";
 import { useStored } from "@/lib/store";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
-import { DEPTH_LABEL, LANG_NAME, SPEECH_LOCALE, type Depth, type Lang } from "./script";
+import { LANG_NAME, SPEECH_LOCALE, type Depth, type Lang } from "./script";
 import { nextTrack, track, type Track } from "./tracks";
 
 const SPEEDS = [1, 1.25, 1.5, 0.75];
 const DEPTHS: [Depth, string][] = [
   ["quick", "Quick · 1 min"],
-  ["classic", "Classic"],
-  ["deep", "Deep · 4 min"],
+  ["classic", "Classic · 2 min"],
+  ["deep", "Deep dive · 4 min"],
 ];
 const LANG_SHORT: Record<Lang, string> = { en: "EN", hi: "हिं", gu: "ગુ" };
 const COUNTDOWN = 5;
@@ -151,7 +151,7 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
     <div style={{ width: "390px", minHeight: "844px", position: "relative", background: "#1E130B", color: "#FBF6EE", paddingBottom: "28px" }}>
       {/* Header */}
       <div style={{ padding: "50px 8px 0", height: "94px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <BackLink href="/stories" aria-label="Minimise player" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#FBF6EE" }}>
+        <BackLink href="/stories" aria-label={t("sy.min")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#FBF6EE" }}>
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m6 9 6 6 6-6" />
           </svg>
@@ -172,10 +172,10 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
         <Toggle
           storeKey="downloads"
           field={tr.id === "sidi" ? "story-tree" : `story-${tr.id}`}
-          onLabel="Downloaded. Remove download"
-          offLabel="Download for offline"
-          onToast="Story downloaded for offline listening"
-          offToast="Download removed"
+          onLabel="sy.dl_on"
+          offLabel="sy.dl_off"
+          onToast="sy.dl_toast"
+          offToast="c.dl_removed"
           style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", color: "#FBF6EE", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
           on={
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9FD3B0" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -215,7 +215,7 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
           {tr.chapters[cue.ch]}
         </h1>
         <p style={{ margin: "4px 0 0", fontSize: "13px", fontWeight: 600, color: "#C9B6A0" }}>
-          {tr.depths ? `${DEPTH_LABEL[depth]} · ` : ""}narrated in {LANG_NAME[lang]}
+          {tr.depths ? `${t(`st.len.${depth}` as Key)} · ` : ""}{t("sy.told_in", { lang: LANG_NAME[lang] })}
         </p>
       </div>
 
@@ -224,7 +224,7 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
         <div
           role="slider"
           tabIndex={0}
-          aria-label="Story position"
+          aria-label={t("sy.pos")}
           aria-valuemin={0}
           aria-valuemax={Math.round(total)}
           aria-valuenow={Math.round(pos)}
@@ -255,17 +255,17 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
       <div style={{ padding: "8px 18px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <button
           type="button"
-          aria-label={`Playback speed ${SPEEDS[speed]}x. Change speed`}
+          aria-label={t("sy.speed_aria", { n: SPEEDS[speed] })}
           onClick={() => {
             const n = (speed + 1) % SPEEDS.length;
             setSpeed(n);
-            toast(`Speed ${SPEEDS[n]}×`);
+            toast(t("sy.speed", { n: SPEEDS[n] }));
           }}
           style={{ ...icon, fontSize: "15px", fontWeight: 800 }}
         >
           {SPEEDS[speed]}×
         </button>
-        <button type="button" aria-label="Back 10 seconds" onClick={() => seek(pos - 10)} style={icon}>
+        <button type="button" aria-label={t("sy.back10")} onClick={() => seek(pos - 10)} style={icon}>
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
             <path d="M3 3v5h5" />
@@ -288,7 +288,7 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
             </svg>
           )}
         </button>
-        <button type="button" aria-label="Forward 10 seconds" onClick={() => seek(pos + 10)} style={icon}>
+        <button type="button" aria-label={t("sy.fwd10")} onClick={() => seek(pos + 10)} style={icon}>
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
             <path d="M21 3v5h-5" />
@@ -305,8 +305,8 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
 
       {/* Length (full story only) */}
       {tr.depths ? (
-        <div role="radiogroup" aria-label="Story length" style={{ margin: "14px 24px 0", padding: "4px", borderRadius: "14px", background: "rgba(251, 246, 238, 0.08)", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
-          {DEPTHS.map(([d, text]) => (
+        <div role="radiogroup" aria-label={t("st.story_length")} style={{ margin: "14px 24px 0", padding: "4px", borderRadius: "14px", background: "rgba(251, 246, 238, 0.08)", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
+          {DEPTHS.map(([d]) => (
             <button
               key={d}
               type="button"
@@ -320,20 +320,20 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
               }}
               style={{ height: "40px", border: 0, borderRadius: "10px", background: depth === d ? "#FBF6EE" : "transparent", color: depth === d ? "#2B1B10" : "#E7D3B5", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}
             >
-              {text}
+              {t(`st.len.${d}` as Key)}
             </button>
           ))}
         </div>
       ) : null}
 
       {/* Live transcript */}
-      <section aria-label="Transcript" style={{ margin: "14px 20px 0", padding: "14px 16px 16px", borderRadius: "18px", background: "rgba(251, 246, 238, 0.07)", border: "1px solid rgba(251, 246, 238, 0.10)" }}>
+      <section aria-label={t("sy.transcript")} style={{ margin: "14px 20px 0", padding: "14px 16px 16px", borderRadius: "18px", background: "rgba(251, 246, 238, 0.07)", border: "1px solid rgba(251, 246, 238, 0.10)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", minHeight: "40px" }}>
           <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.12em", color: "#C9B6A0" }}>{t("pl.transcript")}</span>
           {tr.langs.length > 1 ? (
             <div style={{ display: "flex", gap: "2px" }}>
               {tr.langs.map((l) => (
-                <button key={l} type="button" lang={l} aria-label={`Transcript in ${LANG_NAME[l]}`} aria-pressed={lang === l} onClick={() => setLang(l)} style={{ height: "40px", minWidth: "44px", padding: "0 8px", border: 0, borderRadius: "10px", background: lang === l ? "#F3D9A8" : "transparent", color: lang === l ? "#2B1B10" : "#E7D3B5", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
+                <button key={l} type="button" lang={l} aria-label={t("sy.tr_in", { lang: LANG_NAME[l] })} aria-pressed={lang === l} onClick={() => setLang(l)} style={{ height: "40px", minWidth: "44px", padding: "0 8px", border: 0, borderRadius: "10px", background: lang === l ? "#F3D9A8" : "transparent", color: lang === l ? "#2B1B10" : "#E7D3B5", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
                   {LANG_SHORT[l]}
                 </button>
               ))}
@@ -345,7 +345,7 @@ function Player({ tr, chosen }: { tr: Track; chosen: string | null }) {
         <div key={`${current}-${lang}`} className="rise" lang={lang} aria-live="off">
           <p style={{ margin: "8px 0 0", minHeight: "20px", fontSize: "14px", lineHeight: 1.45, color: "#A8927C" }}>{current > 0 ? cues[current - 1].text[lang] : ""}</p>
           <p style={{ margin: "8px 0 0", fontSize: "calc(17px * var(--read-scale, 1))", lineHeight: 1.4, fontWeight: 700, color: "#FBF6EE" }}>{cue.text[lang]}</p>
-          <p style={{ margin: "8px 0 0", fontSize: "14px", lineHeight: 1.45, color: "#A8927C" }}>{current < cues.length - 1 ? cues[current + 1].text[lang] : "End of story."}</p>
+          <p style={{ margin: "8px 0 0", fontSize: "14px", lineHeight: 1.45, color: "#A8927C" }}>{current < cues.length - 1 ? cues[current + 1].text[lang] : t("sy.end")}</p>
         </div>
       </section>
 

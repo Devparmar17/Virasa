@@ -5,16 +5,24 @@ import Link from "next/link";
 import { frame, ScreenHeader } from "@/components/ui";
 import { useStored } from "@/lib/store";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
+import { useT, type Key } from "@/lib/i18n";
 
 type Kind = keyof Settings["alerts"] | "you";
-type Note = { id: string; kind: Kind; title: string; body: string; when: string; href: string; day: "Today" | "Earlier" };
+type Note = { id: string; kind: Kind; title: Key; body: Key; when: Key; href: string; day: "Today" | "Earlier"; look?: keyof typeof LOOKS };
 
 const NOTES: Note[] = [
-  { id: "welcome", kind: "you", title: "Welcome to Virasa", body: "Tell the AI where you're going and who's coming, and it plans each day for you.", when: "New", href: "/trip", day: "Today" },
-  { id: "light", kind: "nearby", title: "Golden hour at the Tree of Life", body: "In Ahmedabad? The jali at Sidi Saiyyed Mosque glows in the late-afternoon light.", when: "Tip", href: "/place", day: "Today" },
-  { id: "quiz", kind: "digest", title: "Quiz: Sidi Saiyyed Mosque", body: "3 questions about the Tree of Life jali.", when: "Tip", href: "/quiz", day: "Today" },
-  { id: "safety", kind: "you", title: "Help numbers, one tap away", body: "112 for any emergency, plus helplines for tourists, women and children.", when: "Tip", href: "/safety", day: "Earlier" },
+  { id: "welcome", kind: "you", title: "nt.welcome", body: "nt.welcome_body", when: "nt.new", href: "/trip", day: "Today", look: "hello" },
+  { id: "light", kind: "nearby", title: "nt.light", body: "nt.light_body", when: "nt.tip", href: "/place", day: "Today", look: "tip" },
+  { id: "quiz", kind: "digest", title: "nt.quiz", body: "nt.quiz_body", when: "nt.tip", href: "/quiz", day: "Today" },
+  { id: "safety", kind: "you", title: "nt.help", body: "nt.help_body", when: "nt.tip", href: "/safety", day: "Earlier", look: "help" },
 ];
+
+// Icons for notes that aren't about something that happened.
+const LOOKS = {
+  hello: { bg: "#FBEDE6", fg: "#9A4E36", path: "M3 11l19-9-9 19-2-8-8-2z" },
+  tip: { bg: "#F6EEE4", fg: "#8A6424", path: "M9 18h6 M10 22h4 M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z" },
+  help: { bg: "#FBE7E4", fg: "#B03A2E", path: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" },
+};
 
 const ICON: Record<Kind, { bg: string; fg: string; path: string }> = {
   nearby: { bg: "#F6E3DA", fg: "#9A4E36", path: "M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" },
@@ -24,6 +32,7 @@ const ICON: Record<Kind, { bg: string; fg: string; path: string }> = {
 };
 
 export default function NotificationsScreen() {
+  const t = useT();
   const [read, setRead] = useStored<Record<string, boolean>>("notesRead", { safety: true });
   const [settings] = useStored<Settings>("settings", DEFAULT_SETTINGS);
   const notes = NOTES.filter((n) => n.kind === "you" || settings.alerts[n.kind]);
@@ -33,10 +42,10 @@ export default function NotificationsScreen() {
   return (
     <div style={frame({ paddingBottom: "48px" })}>
       <ScreenHeader
-        title="Notifications"
+        title={t("nt.title")}
         back="/profile"
         action={
-          <Link href="/settings#alerts" aria-label="Notification settings" style={{ width: "44px", height: "44px", borderRadius: "50%", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Link href="/settings#alerts" aria-label={t("nt.settings")} style={{ width: "44px", height: "44px", borderRadius: "50%", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="4" x2="20" y1="7" y2="7" />
               <line x1="4" x2="20" y1="17" y2="17" />
@@ -47,9 +56,9 @@ export default function NotificationsScreen() {
         }
       />
       <div style={{ padding: "4px 20px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>{unread ? `${unread} new` : "You're all caught up"}</span>
+        <span style={{ fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>{unread ? t("nt.n_new", { n: unread }) : t("nt.caught_up")}</span>
         <button type="button" disabled={!unread} onClick={() => setRead(Object.fromEntries(NOTES.map((n) => [n.id, true])))} style={{ height: "40px", padding: "0 4px", border: "0", background: "none", color: unread ? "#9A4E36" : "#A8927C", fontSize: "13px", fontWeight: 700, cursor: unread ? "pointer" : "default" }}>
-          Mark all read
+          {t("nt.read_all")}
         </button>
       </div>
       {(["Today", "Earlier"] as const).map((day) => {
@@ -57,11 +66,11 @@ export default function NotificationsScreen() {
         if (!list.length) return null;
         return (
           <section key={day} style={{ padding: "0 20px" }}>
-            <h2 style={{ margin: "14px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>{day.toUpperCase()}</h2>
+            <h2 style={{ margin: "14px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>{t(day === "Today" ? "nt.today" : "nt.earlier").toUpperCase()}</h2>
             <ul className="stagger" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
               {list.map((n) => {
                 const isNew = !read[n.id];
-                const ic = ICON[n.kind];
+                const ic = n.look ? LOOKS[n.look] : ICON[n.kind];
                 return (
                   <li key={n.id}>
                     <Link href={n.href} onClick={() => setRead((r) => ({ ...r, [n.id]: true }))} style={{ padding: "14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${isNew ? "#E2C9B4" : "#EFE6DA"}`, color: "#2B1B10", display: "flex", gap: "12px" }}>
@@ -72,12 +81,12 @@ export default function NotificationsScreen() {
                       </span>
                       <span style={{ flex: 1, minWidth: 0 }}>
                         <span style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "8px" }}>
-                          <span style={{ fontSize: "15px", lineHeight: 1.3, fontWeight: isNew ? 800 : 600 }}>{n.title}</span>
-                          <span style={{ flex: "0 0 auto", fontSize: "12px", color: "#6F5B4B" }}>{n.when}</span>
+                          <span style={{ fontSize: "15px", lineHeight: 1.3, fontWeight: isNew ? 800 : 600 }}>{t(n.title)}</span>
+                          <span style={{ flex: "0 0 auto", fontSize: "12px", color: "#6F5B4B" }}>{t(n.when)}</span>
                         </span>
-                        <span style={{ display: "block", marginTop: "4px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{n.body}</span>
+                        <span style={{ display: "block", marginTop: "4px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{t(n.body)}</span>
                       </span>
-                      {isNew ? <span aria-label="Unread" style={{ flex: "0 0 8px", width: "8px", height: "8px", marginTop: "6px", borderRadius: "50%", background: "#9A4E36" }} /> : null}
+                      {isNew ? <span aria-label={t("nt.unread")} style={{ flex: "0 0 8px", width: "8px", height: "8px", marginTop: "6px", borderRadius: "50%", background: "#9A4E36" }} /> : null}
                     </Link>
                   </li>
                 );
@@ -88,7 +97,7 @@ export default function NotificationsScreen() {
       })}
       {muted ? (
         <p style={{ margin: "18px 20px 0", fontSize: "13px", lineHeight: 1.45, color: "#6F5B4B" }}>
-          {muted} more hidden by your alert settings. <Link href="/settings#alerts">Change in Settings</Link>
+          {t("nt.hidden", { n: muted })} <Link href="/settings#alerts">{t("nt.change")}</Link>
         </p>
       ) : null}
     </div>

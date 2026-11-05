@@ -12,6 +12,7 @@ import Sheet from "@/components/Sheet";
 import { toast } from "@/components/Toast";
 import { SuccessBadge, Tick } from "@/components/ui";
 import { useStored } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 
 type Stop = { name: string; note: string; dist: number; seconds: number; text: string };
 
@@ -50,6 +51,7 @@ const glass: CSSProperties = { background: "rgba(20, 12, 6, 0.55)", WebkitBackdr
 const round: CSSProperties = { ...glass, width: "44px", height: "44px", border: 0, borderRadius: "50%", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" };
 
 export default function ARScreen() {
+  const t = useT();
   const [stop, setStop] = useState(0);
   const [done, setDone] = useStored<Record<number, boolean>>("arDone", {});
   const [playing, setPlaying] = useState(true);
@@ -87,9 +89,9 @@ export default function ARScreen() {
   useEffect(() => {
     if (complete && !done[stop]) {
       setDone((d) => ({ ...d, [stop]: true }));
-      toast(`Stop ${stop + 1} done · ${s.name}`, "success");
+      toast(t("ar.done_toast", { n: stop + 1, name: s.name }), "success");
     }
-  }, [complete, done, stop, s.name, setDone]);
+  }, [complete, done, stop, s.name, setDone, t]);
 
   const goTo = (i: number) => {
     window.speechSynthesis?.cancel();
@@ -117,17 +119,17 @@ export default function ARScreen() {
 
       {/* Top: close, what this is, and help. */}
       <div style={{ position: "absolute", top: "50px", left: "12px", right: "12px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <BackLink href="/home" aria-label="Close AR Tour" style={round}>
+        <BackLink href="/home" aria-label="Close" style={round}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
           </svg>
         </BackLink>
         <span style={{ textAlign: "center" }}>
-          <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>AR Tour</span>
-          <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#E7D3B5" }}>Sarkhej Roza · {doneCount} of {STOPS.length} done</span>
+          <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{t("lm.ar")}</span>
+          <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#E7D3B5" }}>Sarkhej Roza · {t("ar.of_done", { d: doneCount, n: STOPS.length })}</span>
         </span>
-        <button type="button" aria-label="How the AR Tour works" onClick={() => setHelp(true)} style={round}>
+        <button type="button" aria-label={t("ar.how")} onClick={() => setHelp(true)} style={round}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10" />
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
@@ -140,10 +142,10 @@ export default function ARScreen() {
       <LensModes active="ar" style={{ top: "108px" }} />
 
       {/* Progress: one segment per stop; finished ones are ticked. */}
-      <ol aria-label="Tour progress" style={{ listStyle: "none", position: "absolute", top: "162px", left: "40px", right: "40px", margin: 0, padding: 0, display: "flex", alignItems: "center", gap: "6px" }}>
+      <ol aria-label={t("ar.progress")} style={{ listStyle: "none", position: "absolute", top: "162px", left: "40px", right: "40px", margin: 0, padding: 0, display: "flex", alignItems: "center", gap: "6px" }}>
         {STOPS.map((x, i) => (
           <li key={x.name} aria-current={i === stop ? "step" : undefined} style={{ flex: 1, display: "flex", alignItems: "center", gap: "6px" }}>
-            <button type="button" aria-label={`Stop ${i + 1}: ${x.name}${done[i] ? ", done" : ""}`} onClick={() => goTo(i)} style={{ flex: "0 0 28px", width: "28px", height: "28px", border: i === stop ? "2px solid #FFFFFF" : 0, borderRadius: "50%", background: done[i] ? "#2F7A4A" : i === stop ? "#9A4E36" : "rgba(20, 12, 6, 0.6)", color: "#FFFFFF", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "background-color 0.3s ease" }}>
+            <button type="button" aria-label={`${t("ar.stop_aria", { n: i + 1, name: x.name })}${done[i] ? `, ${t("ar.done")}` : ""}`} onClick={() => goTo(i)} style={{ flex: "0 0 40px", width: "40px", height: "40px", border: i === stop ? "2px solid #FFFFFF" : 0, borderRadius: "50%", background: done[i] ? "#2F7A4A" : i === stop ? "#9A4E36" : "rgba(20, 12, 6, 0.6)", color: "#FFFFFF", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "background-color 0.3s ease" }}>
               {done[i] ? <Tick size={14} width={3.2} /> : i + 1}
             </button>
             {i < STOPS.length - 1 ? <span aria-hidden="true" style={{ flex: 1, height: "3px", borderRadius: "999px", background: done[i] ? "#9FD3B0" : "rgba(255, 255, 255, 0.3)", transition: "background-color 0.3s ease" }} /> : null}
@@ -157,27 +159,19 @@ export default function ARScreen() {
           <span style={{ width: "30px", height: "30px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{stop + 1}</span>
           <span>
             <span style={{ display: "block", fontSize: "15px", fontWeight: 800 }}>{s.name}</span>
-            <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{stop === 0 ? "You are here" : `${s.dist} m from the gate`}</span>
+            <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{stop === 0 ? t("ct.here") : t("ar.from_gate", { n: s.dist })}</span>
           </span>
         </span>
         <span aria-hidden="true" style={{ width: "2px", height: "56px", background: "rgba(255, 255, 255, 0.85)" }} />
         <span aria-hidden="true" style={{ width: "14px", height: "14px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 0 0 6px rgba(255, 255, 255, 0.25)" }} />
       </div>
-      {!last ? (
-        <button type="button" onClick={next} style={{ ...glass, position: "absolute", right: "12px", top: "430px", height: "40px", padding: "0 12px 0 14px", border: "1px solid rgba(255, 255, 255, 0.25)", borderRadius: "999px", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}>
-          Next: {STOPS[stop + 1].name} · {STOPS[stop + 1].dist - s.dist} m
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
-        </button>
-      ) : null}
 
       {/* Bottom: the stop's narration and one clear next step. */}
-      <section aria-label="Tour narration" style={{ position: "absolute", left: "12px", right: "12px", bottom: "20px", padding: "16px", borderRadius: "24px", background: "rgba(30, 19, 11, 0.92)", WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
+      <section aria-label={t("ar.narration")} style={{ position: "absolute", left: "12px", right: "12px", bottom: "20px", padding: "16px", borderRadius: "24px", background: "rgba(30, 19, 11, 0.92)", WebkitBackdropFilter: "blur(12px)", backdropFilter: "blur(12px)", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
         <div key={`card-${stop}`} className="fade-in" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <button
             type="button"
-            aria-label={playing && !complete ? "Pause narration" : complete ? "Play narration again" : "Play narration"}
+            aria-label={playing && !complete ? t("ar.pause") : complete ? t("ar.play_again") : t("ar.play")}
             onClick={() => {
               if (complete) {
                 spoken.current = -1;
@@ -201,27 +195,27 @@ export default function ARScreen() {
           </button>
           <span style={{ flex: 1, minWidth: 0 }}>
             <span style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", fontWeight: 800, letterSpacing: "0.1em", color: complete ? "#9FD3B0" : "#E7B98A" }}>
-              {complete ? "STOP DONE" : playing ? (
+              {complete ? t("ar.stop_done").toUpperCase() : playing ? (
                 <>
                   <span className="eq" aria-hidden="true" style={{ height: "10px" }}>
                     <i />
                     <i />
                     <i />
                   </span>
-                  NARRATING
+                  {t("ar.playing").toUpperCase()}
                 </>
-              ) : "PAUSED"}{" "}
-              · STOP {stop + 1} OF {STOPS.length}
+              ) : t("ar.paused").toUpperCase()}{" "}
+              · {t("ar.step", { n: stop + 1, total: STOPS.length }).toUpperCase()}
             </span>
             <span style={{ display: "block", marginTop: "3px", fontSize: "17px", fontWeight: 800 }}>{s.name}</span>
             <span style={{ display: "block", marginTop: "1px", fontSize: "13px", color: "#D9C6AE" }}>{s.note}</span>
           </span>
         </div>
-        <div role="progressbar" aria-label="Narration" aria-valuemin={0} aria-valuemax={s.seconds} aria-valuenow={Math.round(heard)} style={{ marginTop: "12px", height: "4px", borderRadius: "999px", background: "rgba(251, 246, 238, 0.2)", overflow: "hidden" }}>
+        <div role="progressbar" aria-label={t("ar.narration")} aria-valuemin={0} aria-valuemax={s.seconds} aria-valuenow={Math.round(heard)} style={{ marginTop: "12px", height: "4px", borderRadius: "999px", background: "rgba(251, 246, 238, 0.2)", overflow: "hidden" }}>
           <div style={{ width: `${(heard / s.seconds) * 100}%`, height: "100%", borderRadius: "999px", background: complete ? "#9FD3B0" : "#F3D9A8", transition: "width 0.25s linear" }} />
         </div>
         <div style={{ marginTop: "14px", display: "flex", alignItems: "center", gap: "10px" }}>
-          <button type="button" aria-label="All tour stops" onClick={() => setStopsOpen(true)} style={{ flex: "0 0 52px", width: "52px", height: "52px", border: 0, borderRadius: "16px", background: "rgba(251, 246, 238, 0.1)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <button type="button" aria-label={t("ar.all_stops")} onClick={() => setStopsOpen(true)} style={{ flex: "0 0 52px", width: "52px", height: "52px", border: 0, borderRadius: "16px", background: "rgba(251, 246, 238, 0.1)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="8" x2="21" y1="6" y2="6" />
               <line x1="8" x2="21" y1="12" y2="12" />
@@ -232,13 +226,18 @@ export default function ARScreen() {
             </svg>
           </button>
           <button type="button" onClick={next} style={{ flex: 1, height: "52px", border: 0, borderRadius: "16px", background: complete ? "#F3D9A8" : "rgba(251, 246, 238, 0.14)", color: complete ? "#2B1B10" : "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: 800, cursor: "pointer", transition: "background-color 0.3s ease, color 0.3s ease" }}>
-            {last ? "Finish tour" : `Next stop · ${STOPS[stop + 1].name}`}
+            {last ? t("ar.finish") : t("ar.next", { name: STOPS[stop + 1].name })}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m9 18 6-6-6-6" />
             </svg>
           </button>
           <Capture style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "50%", border: "3px solid #FFFFFF", background: "transparent", padding: "3px", cursor: "pointer" }}>
-            <span style={{ display: "block", width: "100%", height: "100%", borderRadius: "50%", background: "#FFFFFF" }} />
+            <span style={{ width: "100%", height: "100%", borderRadius: "50%", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+                <circle cx="12" cy="13" r="3" />
+              </svg>
+            </span>
           </Capture>
         </div>
       </section>
@@ -249,23 +248,23 @@ export default function ARScreen() {
           <div className="fade-in" style={{ position: "absolute", inset: 0, background: "rgba(20, 12, 6, 0.55)" }} />
           <div className="arrive-card" style={{ position: "relative", width: "100%", padding: "32px 22px 28px", borderRadius: "28px 28px 0 0", background: "#FFFFFF", color: "#2B1B10", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
             <SuccessBadge size={76} />
-            <h2 id="tour-done" style={{ margin: "16px 0 0", fontSize: "24px", fontWeight: 800 }}>Tour complete</h2>
+            <h2 id="tour-done" style={{ margin: "16px 0 0", fontSize: "24px", fontWeight: 800 }}>{t("ar.complete")}</h2>
             <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#6F5B4B" }}>You saw all {STOPS.length} stops at Sarkhej Roza.</p>
             <Link href="/explore" style={{ marginTop: "18px", width: "100%", height: "52px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: 800, textDecoration: "none" }}>
-              Back to the map
+              {t("ar.back_map")}
             </Link>
             <button type="button" onClick={() => goTo(0)} style={{ marginTop: "10px", width: "100%", height: "50px", borderRadius: "16px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", fontSize: "15px", fontWeight: 800, cursor: "pointer" }}>
-              Start again
+              {t("ar.restart")}
             </button>
           </div>
         </div>
       ) : null}
 
-      <Sheet open={help} onClose={() => setHelp(false)} title="How the AR Tour works">
+      <Sheet open={help} onClose={() => setHelp(false)} title={t("ar.how")}>
         {[
-          ["1", "Hold up your phone", "Point the camera at the building. The stop you are at is labelled on screen."],
-          ["2", "Listen", "The story of each stop plays by itself. Pause it any time."],
-          ["3", "Walk on", "When a stop is done it gets a tick. Tap Next stop and follow the arrows."],
+          ["1", t("ar.h1"), t("ar.h1s")],
+          ["2", t("trip.listen"), t("ar.h2s")],
+          ["3", t("ar.h3"), t("ar.h3s")],
         ].map(([n, title, body]) => (
           <div key={n} style={{ display: "flex", gap: "12px", padding: "8px 0" }}>
             <span style={{ flex: "0 0 30px", width: "30px", height: "30px", borderRadius: "50%", background: "#F6EEE4", color: "#7E3D29", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{n}</span>
@@ -276,13 +275,13 @@ export default function ARScreen() {
           </div>
         ))}
         <button type="button" className="sheet-cta" onClick={() => setHelp(false)}>
-          Got it
+          {t("ar.got")}
         </button>
       </Sheet>
 
-      <Sheet open={stopsOpen} onClose={() => setStopsOpen(false)} title="Tour stops">
+      <Sheet open={stopsOpen} onClose={() => setStopsOpen(false)} title={t("ar.stops")}>
         <p>
-          Sarkhej Roza · {STOPS.length} stops · {doneCount} done
+          Sarkhej Roza · {t("ar.summary", { n: STOPS.length, d: doneCount })}
         </p>
         {STOPS.map((x, i) => (
           <button key={x.name} type="button" className="sheet-row" aria-pressed={i === stop} onClick={() => goTo(i)}>
@@ -292,7 +291,7 @@ export default function ARScreen() {
               </span>
               <span>
                 {x.name}
-                <small>{done[i] ? "Done" : i === stop ? "You are here" : `${x.dist} m from the gate`}</small>
+                <small>{done[i] ? t("ar.done") : i === stop ? t("ct.here") : t("ar.from_gate", { n: x.dist })}</small>
               </span>
             </span>
           </button>

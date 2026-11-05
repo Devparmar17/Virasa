@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { useStored } from "@/lib/store";
 import { toast } from "./Toast";
+import { isKey, useT, type Key } from "@/lib/i18n";
 
 // Shares through the system share sheet, or copies the link when there isn't one.
 export async function share(title: string, text?: string) {
@@ -14,9 +15,9 @@ export async function share(title: string, text?: string) {
       return;
     }
     await navigator.clipboard.writeText(url);
-    toast("Link copied", "success");
+    toast("c.link_copied", "success");
   } catch (e) {
-    if ((e as Error)?.name !== "AbortError") toast("Couldn't share right now", "error");
+    if ((e as Error)?.name !== "AbortError") toast("c.share_fail", "error");
   }
 }
 
@@ -53,14 +54,17 @@ type TapProps =ButtonHTMLAttributes<HTMLButtonElement> & {
 export function Tap({ toastText, href, shareTitle, shareText, ask, children, ...rest }: TapProps) {
   const router = useRouter();
   const askGuide = useAsk();
+  const t = useT();
+  const label = rest["aria-label"];
   return (
     <button
       type="button"
       {...rest}
+      aria-label={label && isKey(label) ? t(label) : label}
       onClick={() => {
-        if (shareTitle) share(shareTitle, shareText);
+        if (shareTitle) share(shareTitle, shareText && isKey(shareText) ? t(shareText) : shareText);
         if (toastText) toast(toastText);
-        if (ask) askGuide(ask);
+        if (ask) askGuide(isKey(ask) ? t(ask) : ask);
         else if (href) router.push(href);
       }}
     >
@@ -83,6 +87,13 @@ type ToggleProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & {
 
 // A persisted on/off button (save, like, mute…) that swaps its content when pressed.
 export function Toggle({ storeKey, field, initial = false, on, off, onLabel, offLabel, onToast, offToast, ...rest }: ToggleProps) {
+  const t = useT();
+  // A label may be plain text, a phrase key, or a key with a name: "c.save_name|Dhal ni Pol".
+  const say = (s?: string) => {
+    if (!s) return s;
+    const [k, name] = s.split("|");
+    return isKey(k) ? t(k as Key, { name: name ?? "" }) : s;
+  };
   const [map, setMap] = useStored<Record<string, boolean>>(storeKey, {});
   const active = map[field] ?? initial;
   return (
@@ -90,7 +101,7 @@ export function Toggle({ storeKey, field, initial = false, on, off, onLabel, off
       type="button"
       {...rest}
       aria-pressed={active}
-      aria-label={(active ? onLabel : offLabel) || rest["aria-label"]}
+      aria-label={say(active ? onLabel : offLabel) || rest["aria-label"]}
       onClick={(e) => {
         pop(e.currentTarget, !active);
         setMap((m) => ({ ...m, [field]: !active }));

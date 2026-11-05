@@ -13,15 +13,17 @@ import { Greeting } from "@/components/User";
 import { LANGS, langOf, readStored, speechLocale, travellerProfile, useStored } from "@/lib/store";
 import { DEFAULT_HERE, isAhmedabad, type Here } from "@/lib/here";
 import type { GuideMessage } from "@/lib/guide";
+import BookingCard from "@/components/BookingCard";
+import { BOOKING_WORDS, type BookingDraft } from "@/lib/booking";
+import { dayKey } from "@/lib/tickets";
+import { useT, type Key } from "@/lib/i18n";
 
 // A message in the thread: who said it, what, and for answers where it came from.
-type Msg = GuideMessage & { kind?: "plan"; source?: string; vote?: "up" | "down" };
+type Msg = GuideMessage & { kind?: "plan" | "booking"; source?: string; vote?: "up" | "down"; draft?: BookingDraft; bookedRef?: string };
 
 const THREAD = "guideThread";
 
 // The walk the guide suggests for "Plan 2 hours here".
-const PLAN_ASK = "Plan 2 hours here. I love old architecture and street food.";
-const PLAN_TEXT = "Here's a 4-stop loop that ends with chai at Manek Chowk: Sidi Saiyyed Mosque (20 min), Bhadra Fort (25 min), Teen Darwaza (10 min), Manek Chowk for chai (20 min). 1 h 40, 1.4 km. Tip: carry a scarf — two stops are mosques.";
 const PLAN_STOPS: [string, string][] = [
   ["Sidi Saiyyed Mosque", "20 min"],
   ["Bhadra Fort", "25 min"],
@@ -46,16 +48,16 @@ const GuideMark = ({ size = 28 }: { size?: number }) => (
 );
 
 // The four ways into a new chat.
-const STARTERS: { title: string; sub: string; icon: ReactNode; ask?: string; plan?: boolean; href?: string }[] = [
+const STARTERS: { title: Key; sub: Key; icon: ReactNode; ask?: Key; plan?: boolean; href?: string }[] = [
   {
-    title: "Plan 2 hours here",
-    sub: "Architecture and street food",
+    title: "gd.s_plan",
+    sub: "gd.s_plan_sub",
     icon: <path d="M3 11l19-9-9 19-2-8-8-2z" />,
     plan: true,
   },
   {
-    title: "What am I looking at?",
-    sub: "Point your camera at it",
+    title: "gd.s_lens",
+    sub: "gd.s_lens_sub",
     icon: (
       <>
         <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
@@ -65,8 +67,8 @@ const STARTERS: { title: string; sub: string; icon: ReactNode; ask?: string; pla
     href: "/lens",
   },
   {
-    title: "Hidden gems & food",
-    sub: "What locals love, in any city",
+    title: "gd.s_disc",
+    sub: "gd.s_disc_sub",
     icon: (
       <>
         <path d="M6 3h12l4 6-10 13L2 9Z" />
@@ -76,15 +78,16 @@ const STARTERS: { title: string; sub: string; icon: ReactNode; ask?: string; pla
     href: "/discover",
   },
   {
-    title: "Tell me a legend",
-    sub: "Stories of the Old City",
+    title: "gd.s_legend",
+    sub: "gd.s_legend_sub",
     icon: <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />,
-    ask: "Tell me a legend from Ahmedabad's Old City",
+    ask: "gd.s_legend_ask",
   },
 ];
 
 export default function AIGuideScreen() {
   const [thread, setThread] = useStored<Msg[]>(THREAD, []);
+  const t = useT();
   const current = () => readStored<Msg[]>(THREAD, []);
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState(false);
@@ -142,6 +145,24 @@ export default function AIGuideScreen() {
       setBusy(true);
       let answer = "";
       let source = "";
+      // Asking to book something: the guide puts the booking together for a tap to confirm.
+      if (BOOKING_WORDS.test(question)) {
+        try {
+          const res = await fetch("/api/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text: question, today: dayKey(new Date()), lang: replyLang || lang }) });
+          const data = await res.json();
+          if (data.intent === "book" || data.intent === "unavailable") {
+            const reply: Msg = data.intent === "book" ? { role: "guide", text: data.reply, kind: "booking", draft: data.draft, source: "booking" } : { role: "guide", text: data.reply, source: "booking" };
+            const answered = [...readStored<Msg[]>(THREAD, []), reply];
+            setThread(answered);
+            setBusy(false);
+            busyRef.current = false;
+            if (readAloud || byVoice) say(data.reply, answered.length - 1, replyLang);
+            return;
+          }
+        } catch {
+          // Couldn't put a booking together: answer as usual below.
+        }
+      }
       try {
         const res = await fetch("/api/guide", {
           method: "POST",
@@ -154,7 +175,7 @@ export default function AIGuideScreen() {
       } catch {
         // Offline or the server is down: say so below.
       }
-      if (!answer) answer = "I couldn't reach the guide just now. Check your connection and try again.";
+      if (!answer) answer = t("gd.err_offline");
       const answered = [...readStored<Msg[]>(THREAD, []), { role: "guide" as const, text: answer, source }];
       setThread(answered);
       setBusy(false);
@@ -162,15 +183,19 @@ export default function AIGuideScreen() {
       // A question asked aloud is always answered aloud; typed ones too while read-aloud is on.
       if (readAloud || byVoice) say(answer, answered.length - 1, replyLang);
     },
-    [lang, readAloud, say, setThread]
+    [lang, readAloud, say, setThread, t]
   );
+
+  // A booking confirmed from its card is marked as booked in the conversation.
+  const markBooked = (i: number, ref: string) => setThread(current().map((m, n) => (n === i ? { ...m, bookedRef: ref } : m)));
 
   // "Plan 2 hours here" answers with the walk card straight away.
   const askPlan = () => {
     if (busyRef.current) return;
-    const next: Msg[] = [...current(), { role: "user", text: PLAN_ASK }, { role: "guide", text: PLAN_TEXT, kind: "plan", source: "library" }];
+    const text = `${t("gd.plan_intro")} ${PLAN_STOPS.map(([name, mins]) => `${name} (${mins})`).join(", ")}. 1 h 40, 1.4 km. ${t("gd.plan_tip")}`;
+    const next: Msg[] = [...current(), { role: "user", text: t("gd.plan_ask") }, { role: "guide", text, kind: "plan", source: "library" }];
     setThread(next);
-    if (readAloud) say(PLAN_TEXT, next.length - 1);
+    if (readAloud) say(text, next.length - 1);
   };
 
   const newChat = () => {
@@ -183,7 +208,7 @@ export default function AIGuideScreen() {
     const was = thread[i]?.vote;
     pop(el, was !== vote);
     setThread(current().map((m, n) => (n === i ? { ...m, vote: was === vote ? undefined : vote } : m)));
-    if (was !== vote) toast(vote === "up" ? "Thanks — glad that helped" : "Thanks — we'll use this to improve the guide", "success");
+    if (was !== vote) toast(vote === "up" ? t("gd.thanks_up") : t("gd.thanks_down"), "success");
   };
 
   // A question handed over from another screen (Lens, Reels, Search…) is asked on arrival.
@@ -216,7 +241,7 @@ export default function AIGuideScreen() {
     const w = window as unknown as { SpeechRecognition?: new () => SpeechRec; webkitSpeechRecognition?: new () => SpeechRec };
     const Recognition = w.SpeechRecognition || w.webkitSpeechRecognition;
     if (!Recognition) {
-      toast("Voice input isn't available in this browser. Type your question instead.", "error");
+      toast(t("gd.mic_none"), "error");
       return;
     }
     if (recRef.current) {
@@ -237,13 +262,13 @@ export default function AIGuideScreen() {
     };
     rec.onerror = (e) => {
       const why: Record<string, string> = {
-        "no-speech": "Didn't hear anything. Tap the mic and start speaking.",
-        "not-allowed": "Allow the microphone in your browser to talk to the guide.",
-        "service-not-allowed": "Allow the microphone in your browser to talk to the guide.",
-        "audio-capture": "No microphone was found on this device.",
-        network: "Voice input needs an internet connection. Type your question instead.",
+        "no-speech": t("gd.mic_quiet"),
+        "not-allowed": t("gd.mic_allow"),
+        "service-not-allowed": t("gd.mic_allow"),
+        "audio-capture": t("gd.mic_missing"),
+        network: t("gd.mic_net"),
       };
-      if (e.error !== "aborted") toast(why[e.error] || "Voice input stopped. Tap the mic to try again.", "error");
+      if (e.error !== "aborted") toast(why[e.error] || t("gd.mic_stopped"), "error");
     };
     rec.onend = () => {
       recRef.current = null;
@@ -267,21 +292,15 @@ export default function AIGuideScreen() {
         <GuideMark size={40} />
         <span style={{ flex: 1, minWidth: 0 }}>
           <span style={{ display: "flex", alignItems: "center", gap: "7px", fontSize: "17px", fontWeight: 800, whiteSpace: "nowrap" }}>
-            AI Guide
-            {gemini ? (
-              <span className="fade-in" style={{ height: "20px", padding: "0 7px", borderRadius: "999px", background: "#EEF2FE", color: "#3457C9", fontSize: "11px", fontWeight: 800, display: "flex", alignItems: "center", gap: "3px" }}>
-                <Spark size={10} />
-                Gemini
-              </span>
-            ) : null}
+            {t("tab.guide")}
           </span>
           <span style={{ marginTop: "2px", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B", whiteSpace: "nowrap", overflow: "hidden" }}>
             <span aria-hidden="true" style={{ flex: "0 0 7px", width: "7px", height: "7px", borderRadius: "50%", background: "#2F7A4A" }} />
-            <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{isAhmedabad(here) ? "Near Sidi Saiyyed Mosque" : `In ${here.city}`}</span>
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{isAhmedabad(here) ? t("gd.near_sidi") : t("gd.in_city", { city: here.city })}</span>
           </span>
         </span>
         {thread.length ? (
-          <button type="button" aria-label="New chat" onClick={newChat} className="fade-in" style={roundBtn(false)}>
+          <button type="button" aria-label={t("gd.new_chat")} onClick={newChat} className="fade-in" style={roundBtn(false)}>
             <Icon size={18}>
               <path d="M12 20h9" />
               <path d="M16.38 3.62a1 1 0 0 1 3 3L7.37 18.64a2 2 0 0 1-.86.5l-2.87.84a.5.5 0 0 1-.62-.62l.84-2.87a2 2 0 0 1 .5-.86z" />
@@ -291,11 +310,11 @@ export default function AIGuideScreen() {
         <button
           type="button"
           aria-pressed={readAloud}
-          aria-label={readAloud ? "Answers are read aloud. Turn off" : "Read answers aloud"}
+          aria-label={readAloud ? t("gd.voice_is_on") : t("gd.voice_turn_on")}
           onClick={() => {
             if (readAloud) hush();
             setPrefs((p) => ({ ...p, guideVoice: !readAloud }));
-            toast(readAloud ? "Answers will be shown only" : "Answers will be read aloud", readAloud ? "info" : "success");
+            toast(readAloud ? t("gd.toast_text") : t("gd.toast_voice"), readAloud ? "info" : "success");
           }}
           style={roundBtn(readAloud)}
         >
@@ -314,13 +333,13 @@ export default function AIGuideScreen() {
             )}
           </Icon>
         </button>
-        <button type="button" aria-label={`Guide language: ${langOf(lang).label}. Change`} onClick={() => setLangOpen(true)} style={{ flex: "0 0 auto", minWidth: "40px", height: "40px", padding: "0 10px", border: 0, borderRadius: "999px", background: "#F6F1EA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
+        <button type="button" aria-label={t("gd.lang_label", { name: langOf(lang).label })} onClick={() => setLangOpen(true)} style={{ flex: "0 0 auto", minWidth: "40px", height: "40px", padding: "0 10px", border: 0, borderRadius: "999px", background: "#F6F1EA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
           {langOf(lang).short}
         </button>
       </header>
 
       {/* The conversation, or a welcome with starters when it's new. */}
-      <div ref={log} role="log" aria-label="Conversation with AI Guide" className="chat-log" style={{ position: "absolute", left: 0, right: 0, top: "101px", bottom: lastIsGuide && !busy ? "214px" : "168px", overflowY: "auto", padding: "16px 16px 12px", display: "flex", flexDirection: "column", gap: "14px" }}>
+      <div ref={log} role="log" aria-label={t("gd.convo")} className="chat-log" style={{ position: "absolute", left: 0, right: 0, top: "101px", bottom: lastIsGuide && !busy ? "214px" : "168px", overflowY: "auto", padding: "16px 16px 12px", display: "flex", flexDirection: "column", gap: "14px" }}>
         {thread.length === 0 ? (
           <div className="stagger" style={{ margin: "auto 0", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
             <span style={{ width: "64px", height: "64px", borderRadius: "22px", background: "linear-gradient(140deg, #9A4E36, #C27A52)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 12px 26px rgba(154, 78, 54, 0.28)" }}>
@@ -330,13 +349,8 @@ export default function AIGuideScreen() {
               <Greeting />
             </h1>
             <p style={{ margin: "6px 0 0", maxWidth: "290px", fontSize: "14px", lineHeight: 1.5, color: "#6F5B4B" }}>
-              {gemini ? "Ask me anything — I can plan walks, tell the stories behind what you see and find good food." : "Ask me about the places around you — I can plan walks, tell their stories and find good food."}
+              {gemini ? t("gd.intro_ai") : t("gd.intro_lib")}
             </p>
-            {gemini === false ? (
-              <p role="note" style={{ margin: "12px 0 0", maxWidth: "320px", padding: "8px 12px", borderRadius: "12px", background: "#F6F1EA", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>
-                Gemini isn&apos;t connected, so answers come from Virasa&apos;s built-in library.
-              </p>
-            ) : null}
             {/* The whole-trip planner leads: any city, planned around who is going. */}
             <Link href="/trip" style={{ marginTop: "20px", width: "100%", minHeight: "76px", padding: "14px 14px 14px 16px", borderRadius: "20px", background: "linear-gradient(140deg, #9A4E36, #7E3D29)", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)", boxSizing: "border-box" }}>
               <span style={{ flex: "0 0 44px", height: "44px", borderRadius: "14px", background: "rgba(255, 255, 255, 0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -345,8 +359,8 @@ export default function AIGuideScreen() {
                 </Icon>
               </span>
               <span style={{ flex: 1, minWidth: 0 }}>
-                <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>Plan my whole trip</span>
-                <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "rgba(255, 255, 255, 0.85)" }}>Any city, day by day, made for you</span>
+                <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{t("gd.whole_trip")}</span>
+                <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "rgba(255, 255, 255, 0.85)" }}>{t("gd.whole_trip_sub")}</span>
               </span>
               <Icon size={18}>
                 <path d="m9 18 6-6-6-6" />
@@ -359,8 +373,8 @@ export default function AIGuideScreen() {
                     <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <Icon size={18}>{s.icon}</Icon>
                     </span>
-                    <span style={{ marginTop: "10px", display: "block", fontSize: "14px", lineHeight: 1.25, fontWeight: 800 }}>{s.title}</span>
-                    <span style={{ marginTop: "3px", display: "block", fontSize: "12px", lineHeight: 1.35, color: "#6F5B4B" }}>{s.sub}</span>
+                    <span style={{ marginTop: "10px", display: "block", fontSize: "14px", lineHeight: 1.25, fontWeight: 800 }}>{t(s.title)}</span>
+                    <span style={{ marginTop: "3px", display: "block", fontSize: "12px", lineHeight: 1.35, color: "#6F5B4B" }}>{t(s.sub)}</span>
                   </>
                 );
                 const card = { minHeight: "112px", padding: "14px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: "#2B1B10", display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left", textDecoration: "none", cursor: "pointer", boxShadow: "0 4px 14px rgba(90, 60, 30, 0.05)" } as const;
@@ -369,7 +383,7 @@ export default function AIGuideScreen() {
                     {inner}
                   </Link>
                 ) : (
-                  <button key={s.title} type="button" onClick={() => (s.plan ? askPlan() : s.ask ? ask(s.ask) : undefined)} style={card}>
+                  <button key={s.title} type="button" onClick={() => (s.plan ? askPlan() : s.ask ? ask(t(s.ask)) : undefined)} style={card}>
                     {inner}
                   </button>
                 );
@@ -386,12 +400,17 @@ export default function AIGuideScreen() {
               <div key={i} className="rise" style={{ alignSelf: "stretch", display: "flex", gap: "8px", alignItems: "flex-start" }}>
                 <GuideMark />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  {m.kind === "plan" ? (
+                  {m.kind === "booking" && m.draft ? (
+                    <>
+                      <div style={{ marginBottom: "8px", padding: "11px 14px", borderRadius: "6px 20px 20px 20px", background: "#F6F1EA", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.5 }}>{m.text}</div>
+                      <BookingCard draft={m.draft} bookedRef={m.bookedRef} onBooked={(ref) => markBooked(i, ref)} />
+                    </>
+                  ) : m.kind === "plan" ? (
                     <div style={{ padding: "12px", borderRadius: "6px 20px 20px 20px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
-                      <p style={{ margin: "0 2px", fontSize: "15px", lineHeight: 1.45 }}>Here&apos;s a 4-stop loop that ends with chai at Manek Chowk.</p>
+                      <p style={{ margin: "0 2px", fontSize: "15px", lineHeight: 1.45 }}>{t("gd.plan_intro")}</p>
                       <div style={{ marginTop: "10px", padding: "12px", borderRadius: "14px", background: "#F6F1EA" }}>
                         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-                          <span style={{ fontSize: "14px", fontWeight: 800 }}>Old City short loop</span>
+                          <span style={{ fontSize: "14px", fontWeight: 800 }}>{t("gd.plan_name")}</span>
                           <span style={{ fontSize: "12px", fontWeight: 700, color: "#6F5B4B" }}>1 h 40 · 1.4 km</span>
                         </div>
                         <ol style={{ listStyle: "none", margin: "8px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: "4px" }}>
@@ -408,14 +427,14 @@ export default function AIGuideScreen() {
                             <Icon size={16}>
                               <polygon points="3 11 22 2 13 21 11 13 3 11" />
                             </Icon>
-                            Start walk
+                            {t("home.start_walk")}
                           </Link>
                           <Link href="/walk?plan=loop&edit=1" style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", fontSize: "14px", fontWeight: 800, textDecoration: "none" }}>
-                            Edit plan
+                            {t("gd.edit_plan")}
                           </Link>
                         </div>
                       </div>
-                      <p style={{ margin: "10px 2px 0", fontSize: "13px", lineHeight: 1.4, color: "#5A4434" }}>Tip: carry a scarf — two stops are mosques.</p>
+                      <p style={{ margin: "10px 2px 0", fontSize: "13px", lineHeight: 1.4, color: "#5A4434" }}>{t("gd.plan_tip")}</p>
                     </div>
                   ) : (
                     <div style={{ padding: "11px 14px", borderRadius: "6px 20px 20px 20px", background: "#F6F1EA", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.5, whiteSpace: "pre-wrap" }}>{m.text}</div>
@@ -424,7 +443,7 @@ export default function AIGuideScreen() {
                   <div style={{ marginTop: "6px", display: "flex", alignItems: "center", gap: "6px" }}>
                     <button
                       type="button"
-                      aria-label={speaking === i ? "Stop reading this answer" : "Read this answer aloud"}
+                      aria-label={speaking === i ? t("gd.stop_reading") : t("gd.read_answer")}
                       aria-pressed={speaking === i}
                       onClick={() => (speaking === i ? hush() : say(m.text, i))}
                       style={{ height: "32px", padding: "0 11px 0 9px", border: 0, borderRadius: "999px", background: speaking === i ? "#9A4E36" : "transparent", color: speaking === i ? "#FFFFFF" : "#7E3D29", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 800, cursor: "pointer" }}
@@ -440,18 +459,18 @@ export default function AIGuideScreen() {
                           <polygon points="7 4 19 12 7 20 7 4" />
                         </svg>
                       )}
-                      {speaking === i ? "Stop" : "Listen"}
+                      {speaking === i ? t("trip.stop") : t("trip.listen")}
                     </button>
                     {m.source ? (
                       <span style={{ flex: 1, minWidth: 0, fontSize: "11px", fontWeight: 700, color: m.source === "gemini" ? "#3457C9" : "#8A7563", display: "flex", alignItems: "center", gap: "4px" }}>
                         {m.source === "gemini" ? <Spark size={10} /> : null}
-                        {m.source === "gemini" ? "Gemini" : m.source === "claude" ? "Claude" : "Virasa library"}
+                        {m.source === "library" ? t("gd.src_library") : m.source === "booking" ? t("gd.src_booking") : t("tab.guide")}
                       </span>
                     ) : (
                       <span style={{ flex: 1 }} />
                     )}
                     {(["up", "down"] as const).map((d) => (
-                      <button key={d} type="button" aria-label={d === "up" ? "Helpful" : "Not helpful"} aria-pressed={m.vote === d} onClick={(e) => rate(i, d, e.currentTarget)} style={{ width: "36px", height: "36px", border: 0, borderRadius: "50%", background: m.vote === d ? "#F6EEE4" : "transparent", color: m.vote === d ? "#9A4E36" : "#A8927C", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                      <button key={d} type="button" aria-label={d === "up" ? t("gd.helpful") : t("gd.not_helpful")} aria-pressed={m.vote === d} onClick={(e) => rate(i, d, e.currentTarget)} style={{ width: "36px", height: "36px", border: 0, borderRadius: "50%", background: m.vote === d ? "#F6EEE4" : "transparent", color: m.vote === d ? "#9A4E36" : "#A8927C", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                         <Icon size={15}>
                           {d === "up" ? (
                             <>
@@ -476,7 +495,7 @@ export default function AIGuideScreen() {
         {busy ? (
           <div className="rise" style={{ alignSelf: "flex-start", display: "flex", gap: "8px", alignItems: "center" }}>
             <GuideMark />
-            <span className="typing" aria-label="The guide is writing" style={{ padding: "14px 16px", borderRadius: "6px 20px 20px 20px", background: "#F6F1EA" }}>
+            <span className="typing" aria-label={t("gd.writing")} style={{ padding: "14px 16px", borderRadius: "6px 20px 20px 20px", background: "#F6F1EA" }}>
               <i />
               <i />
               <i />
@@ -487,15 +506,20 @@ export default function AIGuideScreen() {
 
       {/* Follow-ups, once there's an answer to follow up on. */}
       {lastIsGuide && !busy ? (
-        <div aria-label="Suggested follow-ups" className="hscroll fade-in" style={{ position: "absolute", left: 0, right: 0, bottom: "168px", padding: "0 16px", display: "flex", gap: "8px" }}>
-          <button type="button" onClick={() => ask("Tell me more")} style={chip}>
-            Tell me more
+        <div aria-label={t("gd.followups")} className="hscroll fade-in" style={{ position: "absolute", left: 0, right: 0, bottom: "168px", padding: "0 16px", display: "flex", gap: "8px" }}>
+          <button type="button" onClick={() => ask(t("gd.more"))} style={chip}>
+            {t("gd.more")}
           </button>
-          <button type="button" onClick={() => ask("Explain that in Hindi", "hi")} style={chip}>
-            Explain in <span lang="hi">हिन्दी</span>
+          <button type="button" onClick={() => ask(t("gd.simpler"))} style={chip}>
+            {t("gd.simpler")}
           </button>
-          <button type="button" onClick={() => ask("Give me the kid-friendly version")} style={chip}>
-            Kid-friendly
+          {lang !== "hi" ? (
+            <button type="button" onClick={() => ask(t("gd.hindi_ask"), "hi")} style={chip}>
+              {t("gd.in_hindi")}
+            </button>
+          ) : null}
+          <button type="button" onClick={() => ask(t("gd.kid_ask"))} style={chip}>
+            {t("gd.kid")}
           </button>
           <Link href="/lens" style={chip}>
             <span style={{ color: "#9A4E36", display: "flex" }}>
@@ -504,7 +528,7 @@ export default function AIGuideScreen() {
                 <circle cx="12" cy="13" r="3" />
               </Icon>
             </span>
-            What am I looking at?
+            {t("gd.s_lens")}
           </Link>
         </div>
       ) : null}
@@ -521,8 +545,8 @@ export default function AIGuideScreen() {
         <input
           type="text"
           enterKeyHint="send"
-          aria-label="Ask the AI Guide"
-          placeholder={listening ? "Listening… speak now" : gemini ? "Ask Gemini anything…" : "Ask about any place in India…"}
+          aria-label={t("gd.ask_label")}
+          placeholder={listening ? t("gd.listening") : t("gd.placeholder")}
           value={q}
           onChange={(e) => setQ(e.target.value)}
           onKeyDown={(e) => {
@@ -531,14 +555,14 @@ export default function AIGuideScreen() {
           style={{ flex: 1, minWidth: 0, width: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "15px", color: "#2B1B10" }}
         />
         {q.trim() ? (
-          <button type="button" aria-label="Send" disabled={busy} onClick={() => ask(q)} className="pop-in" style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", opacity: busy ? 0.5 : 1 }}>
+          <button type="button" aria-label={t("gd.send")} disabled={busy} onClick={() => ask(q)} className="pop-in" style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", opacity: busy ? 0.5 : 1 }}>
             <Icon size={20}>
               <path d="m5 12 7-7 7 7" />
               <path d="M12 19V5" />
             </Icon>
           </button>
         ) : (
-          <button type="button" aria-label={listening ? "Stop listening" : "Speak to the guide"} aria-pressed={listening} onClick={speak} className={listening ? "pulse" : undefined} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <button type="button" aria-label={listening ? t("gd.stop_listen") : t("gd.speak")} aria-pressed={listening} onClick={speak} className={listening ? "pulse" : undefined} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
             <Icon size={20}>
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
               <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
@@ -549,8 +573,8 @@ export default function AIGuideScreen() {
       </div>
 
       <MainNav active="ai-guide" />
-      <Sheet open={langOpen} onClose={() => setLangOpen(false)} title="Guide language">
-        <p>The guide answers and narrates in the language you pick.</p>
+      <Sheet open={langOpen} onClose={() => setLangOpen(false)} title={t("gd.lang_title")}>
+        <p>{t("gd.lang_sheet")}</p>
         {LANGS.map((l) => (
           <button
             key={l.id}
@@ -560,7 +584,7 @@ export default function AIGuideScreen() {
             onClick={() => {
               setLang(l.id);
               setLangOpen(false);
-              toast(`Guide language: ${l.label}`, "success");
+              toast(t("gd.lang_set", { name: l.label }), "success");
             }}
           >
             <span>

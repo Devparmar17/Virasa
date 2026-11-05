@@ -3,6 +3,8 @@ import type { CSSProperties, ReactNode } from "react";
 import Speak from "./Speak";
 import { Toggle } from "./Tap";
 import { HIGHLIGHTS, KIND, listenMins, type Secret } from "@/lib/secrets";
+import { T } from "@/lib/i18n";
+import Say from "./Say";
 
 // Home's "Heritage highlights" row: one card per monument, each opening its
 // description, with save and listen on the card itself.
@@ -47,7 +49,7 @@ const CARDS: Card[] = [
     title: "Sidi Saiyyed Mosque",
     line: "Famous Tree of Life jali stonework",
     fact: "1573 · Gujarat Sultanate",
-    distance: "22 min · 1.8 km",
+    distance: "1.8 km · 22 min walk",
     walk: true,
     rating: "",
     open: "Visit by day",
@@ -120,15 +122,15 @@ export default function Highlights() {
                   <path d="M9 17h6" />
                 </svg>
               )}
-              <span>{c.distance}</span>
+              <span><Say text={c.distance} /></span>
             </span>
             <Toggle
               storeKey="saved"
               field={c.id}
-              onLabel={`Saved. Remove ${c.title} from saved`}
-              offLabel={`Save ${c.title}`}
-              onToast="Saved — find it under Saved"
-              offToast="Removed from Saved"
+              onLabel={`c.unsave_name|${c.title}`}
+              offLabel={`c.save_name|${c.title}`}
+              onToast="c.saved_find"
+              offToast="c.removed_saved"
               style={{ position: "absolute", zIndex: 2, top: "8px", right: "8px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
               on={<Bookmark on />}
               off={<Bookmark on={false} />}
@@ -142,8 +144,8 @@ export default function Highlights() {
               </Link>
               <p style={{ margin: "3px 0 0", fontSize: "13px", lineHeight: 1.35, color: "#6F5B4B", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.line}</p>
               <p style={{ margin: "6px 0 0", display: "flex", alignItems: "center", gap: "5px", fontSize: "13px", fontWeight: 700, color: "#2B1B10", whiteSpace: "nowrap" }}>
-                {c.open ? <span style={{ color: "#2F7A4A" }}>{c.open}</span> : null}
-                <span style={{ fontWeight: 600, color: "#6F5B4B" }}>{c.open ? "· " : ""}{c.fact.split(" · ")[0]}</span>
+                {c.open ? <span style={{ color: "#2F7A4A" }}><Say text={c.open} /></span> : null}
+                <span style={{ fontWeight: 600, color: "#6F5B4B" }}>{c.open ? "· " : ""}{/^\d{4}$/.test(c.fact.split(" · ")[0]) ? <T k="c.built" v={{ year: c.fact.split(" · ")[0] }} /> : c.fact.split(" · ")[0]}</span>
               </p>
             </div>
             {c.listen}

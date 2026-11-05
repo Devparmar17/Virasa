@@ -100,7 +100,7 @@ export default function SearchScreen() {
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
           </svg>
-          <input type="search" autoFocus enterKeyHint="search" aria-label="Search places, stories or food" placeholder={t("se.placeholder")} value={v.q} onChange={v.onQ} onKeyDown={(e) => { if (e.key === "Enter" && query && !found && !hits.length) ask(query); }} style={{ flex: "1", minWidth: "0", width: "0", height: "44px", border: "0", outline: "none", background: "transparent", fontSize: "16px", fontWeight: "600", color: "#2B1B10" }} />
+          <input type="search" autoFocus enterKeyHint="search" aria-label={t("home.search")} placeholder={t("se.placeholder")} value={v.q} onChange={v.onQ} onKeyDown={(e) => { if (e.key === "Enter" && query && !found && !hits.length) ask(query); }} style={{ flex: "1", minWidth: "0", width: "0", height: "44px", border: "0", outline: "none", background: "transparent", fontSize: "16px", fontWeight: "600", color: "#2B1B10" }} />
           <VoiceSearch onResult={setQ} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#9A4E36" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
@@ -108,7 +108,7 @@ export default function SearchScreen() {
               <line x1="12" x2="12" y1="19" y2="22" />
             </svg>
           </VoiceSearch>
-          {q ? <button type="button" aria-label="Clear search" onClick={v.clear} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#6F5B4B" }}>
+          {q ? <button type="button" aria-label={t("ex.clear")} onClick={v.clear} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#6F5B4B" }}>
             <span style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#EFE6DA", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M18 6 6 18" />
@@ -123,17 +123,17 @@ export default function SearchScreen() {
       <div className="hscroll" style={{ padding: "12px 20px 0", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
         {TABS.map(([id, text]) => (
           <button key={id} type="button" aria-pressed={tab === id} onClick={() => setTab(id)} style={{ flex: "0 0 auto", height: "38px", padding: "0 14px", borderRadius: "999px", border: tab === id ? "1.5px solid #2B1B10" : "1.5px solid #E2D3C1", background: tab === id ? "#2B1B10" : "#FFFFFF", color: tab === id ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
-            {text}
+            {({ all: t("tk.all"), places: `${t("sr.places")} 5`, stories: `${t("home.stories")} 2`, reels: `${t("home.reels")} 3` } as Record<string, string>)[id] ?? text}
           </button>
         ))}
       </div>
-      <section hidden={!show.answer} aria-label="Quick answer" style={{ margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
+      <section hidden={!show.answer} aria-label={t("sr.quick")} style={{ margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: "700", letterSpacing: "0.08em", color: "#8A6424" }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="#8A6424" stroke="none" aria-hidden="true">
             <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
             <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
           </svg>
-          {" VIRASA AI · QUICK ANSWER "}
+          {" "}{t("sr.quick_h").toUpperCase()}{" "}
         </div>
         <p style={{ margin: "10px 0 0", fontSize: "15px", lineHeight: "1.5", color: "#2B1B10", textWrap: "pretty" }}>
           {"A "}
@@ -143,31 +143,31 @@ export default function SearchScreen() {
           {" is a stone screen carved into a lattice. It lets in light and breeze while keeping rooms cool and private. Famous ones range from Sidi Saiyyed Mosque here in Ahmedabad to Salim Chishti's Tomb at Fatehpur Sikri."}
         </p>
         <p style={{ margin: "8px 0 0", fontSize: "12px", color: "#6F5B4B" }}>
-          {"From Virasa's verified heritage library"}
+          {t("sr.from_lib")}
         </p>
         <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
           <Link href="/story" style={{ height: "44px", padding: "0 14px 0 10px", borderRadius: "12px", border: "1.5px solid #9A4E36", color: "#9A4E36", display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: "700", textDecoration: "none", background: "#FFFFFF" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
               <polygon points="7 4 19 12 7 20 7 4" />
             </svg>
-            {" Listen · 30 s "}
+            {" "}{t("sr.listen30")}{" "}
           </Link>
-          <button type="button" onClick={() => ask("Tell me more about jalis and where to see the best ones")} style={{ height: "44px", padding: "0 12px", borderRadius: "12px", border: "0", background: "none", color: "#5A4434", fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
-            Ask a follow-up
+          <button type="button" onClick={() => ask(t("sr.jali_ask"))} style={{ height: "44px", padding: "0 12px", borderRadius: "12px", border: "0", background: "none", color: "#5A4434", fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
+            {t("sr.follow")}
           </button>
         </div>
       </section>
       <section hidden={!show.places} style={{ marginTop: "26px" }}>
         <div style={{ padding: "0 20px", display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
           <h2 style={{ margin: "0", fontSize: "18px", fontWeight: "800" }}>
-            Places
+            {t("sr.places")}
           </h2>
           <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
-            Nearest first
+            {t("sv.sort.1")}
           </span>
         </div>
         <p style={{ margin: "12px 20px 0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
-          NEAR YOU · AHMEDABAD
+          {t("sr.near_you", { city: "Ahmedabad" }).toUpperCase()}
         </p>
         <ul style={{ listStyle: "none", margin: "4px 0 0", padding: "0 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
           <li>
@@ -181,9 +181,9 @@ export default function SearchScreen() {
                   Ten carved jalis, incl. the Tree of Life
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-                  {"22 min walk · "}
+                  {"1.8 km · 22 min walk · "}
                   <span style={{ color: "#2F7A4A" }}>
-                    Visit by day
+                    {t("c.visit_day")}
                   </span>
                 </span>
               </span>
@@ -203,9 +203,9 @@ export default function SearchScreen() {
                   Slender minarets and fine jalis, 1514
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-                  {"2.4 km · "}
+                  {"2.4 km · 30 min walk · "}
                   <span style={{ color: "#2F7A4A" }}>
-                    Visit by day
+                    {t("c.visit_day")}
                   </span>
                 </span>
               </span>
@@ -237,7 +237,7 @@ export default function SearchScreen() {
         {!openOnly ? (
           <>
         <p style={{ margin: "14px 20px 0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
-          ACROSS INDIA
+          {t("sr.across").toUpperCase()}
         </p>
         <ul style={{ listStyle: "none", margin: "4px 0 0", padding: "0 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
           <li>
@@ -285,12 +285,12 @@ export default function SearchScreen() {
       <section hidden={!show.stories} style={{ marginTop: "22px" }}>
         <div style={{ padding: "0 20px" }}>
           <h2 style={{ margin: "0", fontSize: "18px", fontWeight: "800" }}>
-            Audio stories
+            {t("sr.audio")}
           </h2>
         </div>
         <ul style={{ listStyle: "none", margin: "10px 0 0", padding: "0 20px", display: "flex", flexDirection: "column", gap: "4px" }}>
           <li style={{ minHeight: "64px", display: "flex", alignItems: "center", gap: "14px" }}>
-            <Link href="/story" aria-label="Play: How stone became lace" style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Link href="/story" aria-label={t("sr.play", { name: "How stone became lace" })} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                 <polygon points="7 4 19 12 7 20 7 4" />
               </svg>
@@ -305,7 +305,7 @@ export default function SearchScreen() {
             </span>
           </li>
           <li style={{ minHeight: "64px", display: "flex", alignItems: "center", gap: "14px" }}>
-            <Link href="/story" aria-label="Play: The noble who built Ahmedabad's symbol" style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Link href="/story" aria-label={t("sr.play", { name: "The noble who built Ahmedabad's symbol" })} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                 <polygon points="7 4 19 12 7 20 7 4" />
               </svg>
@@ -324,7 +324,7 @@ export default function SearchScreen() {
       <section hidden={!show.reels} style={{ marginTop: "22px" }}>
         <div style={{ padding: "0 20px" }}>
           <h2 style={{ margin: "0", fontSize: "18px", fontWeight: "800" }}>
-            Reels
+            {t("home.reels")}
           </h2>
         </div>
         <div style={{ marginTop: "12px", padding: "0 20px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "10px" }}>
@@ -367,12 +367,12 @@ export default function SearchScreen() {
       ) : (
         <div className="rise" style={{ padding: "22px 20px 0" }}>
           {answering || answer ? (
-            <section aria-label="AI answer" aria-busy={answering} className="fade-in" style={{ marginBottom: "18px", padding: "14px 16px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
+            <section aria-label={t("sr.answer")} aria-busy={answering} className="fade-in" style={{ marginBottom: "18px", padding: "14px 16px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.08em", color: answer?.source === "gemini" ? "#3457C9" : "#8A6424" }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
                 </svg>
-                {answering ? "THINKING…" : answer?.source === "gemini" ? "AI ANSWER · GEMINI" : answer?.source === "claude" ? "AI ANSWER · CLAUDE" : "FROM VIRASA'S LIBRARY"}
+                {(answering ? t("sr.thinking") : answer?.source === "library" ? t("sr.lib") : t("tab.guide")).toUpperCase()}
               </div>
               {answering ? (
                 <div aria-hidden="true" style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -396,10 +396,10 @@ export default function SearchScreen() {
                           <polygon points="7 4 19 12 7 20 7 4" />
                         </svg>
                       )}
-                      {speaking ? "Stop" : "Listen"}
+                      {speaking ? t("trip.stop") : t("trip.listen")}
                     </button>
                     <button type="button" onClick={() => ask(query)} style={{ height: "40px", padding: "0 14px", border: "1.5px solid #E2D3C1", borderRadius: "999px", background: "#FFFFFF", color: "#2B1B10", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
-                      Ask a follow-up
+                      {t("sr.follow")}
                     </button>
                   </div>
                 </>
@@ -407,7 +407,7 @@ export default function SearchScreen() {
             </section>
           ) : null}
           {hits.length ? (
-            <section aria-label={`Results for ${query}`} style={{ marginBottom: "22px" }}>
+            <section aria-label={t("sr.results", { q: query })} style={{ marginBottom: "22px" }}>
               <h2 style={{ margin: "0", fontSize: "18px", fontWeight: "800" }}>
                 {hits.length === 1 ? t("se.result", { q: query }) : t("se.results", { n: hits.length, q: query })}
               </h2>

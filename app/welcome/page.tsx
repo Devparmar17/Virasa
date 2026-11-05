@@ -1,5 +1,6 @@
 // 02 · Welcome
 import Link from "next/link";
+import { T } from "@/lib/i18n";
 
 export default function WelcomeScreen() {
   return (
@@ -12,7 +13,7 @@ export default function WelcomeScreen() {
             </svg>
           </span>
           <span>
-            Story · 2 min
+            <T k="wl.story" />
           </span>
         </div>
         <div className="hero-chip hero-chip-b" style={{ position: "absolute", right: "22px", top: "54px", height: "40px", padding: "0 14px 0 6px", borderRadius: "999px", background: "#FFFFFF", display: "flex", alignItems: "center", gap: "8px", boxShadow: "0 8px 22px rgba(90, 52, 28, 0.14)", fontSize: "13px", fontWeight: "700", color: "#2B1B10" }}>
@@ -23,17 +24,17 @@ export default function WelcomeScreen() {
             </svg>
           </span>
           <span>
-            22 min walk
+            <T k="unit.min_walk" v={{ n: 22 }} />
           </span>
         </div>
         <img className="hero-arch" src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="Tree of Life stone jali at Sidi Saiyyed Mosque" style={{ width: "236px", height: "258px", objectFit: "cover", borderRadius: "118px 118px 22px 22px", display: "block", boxShadow: "0 22px 44px rgba(90, 52, 28, 0.22)", objectPosition: "4.1984% 0%", objectViewBox: "inset(0% 54.2554% 31.8072% 2.3777%)" }} />
       </div>
       <div style={{ padding: "26px 24px 0" }}>
         <h1 style={{ margin: "0", fontSize: "28px", lineHeight: "1.18", fontWeight: "800", letterSpacing: "-0.02em", textWrap: "balance" }}>
-          {"India's heritage, all in one app"}
+          <T k="wl.title" />
         </h1>
         <p style={{ margin: "10px 0 0", fontSize: "15px", lineHeight: "1.45", color: "#5A4434", textWrap: "pretty" }}>
-          No more hopping between maps, search, YouTube and reels to understand one street.
+          <T k="wl.sub" />
         </p>
       </div>
       <ul style={{ listStyle: "none", margin: "22px 0 0", padding: "0 24px", display: "flex", flexDirection: "column", gap: "14px" }}>
@@ -46,10 +47,10 @@ export default function WelcomeScreen() {
           </span>
           <span style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
             <span style={{ fontSize: "15px", fontWeight: "700" }}>
-              Discover hidden places
+              <T k="wl.f1" />
             </span>
             <span style={{ fontSize: "13px", color: "#6F5B4B" }}>
-              Forts, temples, stepwells and food streets near you
+              <T k="wl.f1_sub" />
             </span>
           </span>
         </li>
@@ -63,10 +64,10 @@ export default function WelcomeScreen() {
           </span>
           <span style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
             <span style={{ fontSize: "15px", fontWeight: "700" }}>
-              Walk there, story by story
+              <T k="wl.f2" />
             </span>
             <span style={{ fontSize: "13px", color: "#6F5B4B" }}>
-              Routes with story stops along the way
+              <T k="wl.f2_sub" />
             </span>
           </span>
         </li>
@@ -78,18 +79,18 @@ export default function WelcomeScreen() {
           </span>
           <span style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
             <span style={{ fontSize: "15px", fontWeight: "700" }}>
-              Understand it in 2 minutes
+              <T k="wl.f3" />
             </span>
             <span style={{ fontSize: "13px", color: "#6F5B4B" }}>
-              In English, हिन्दी, தமிழ், বাংলা and more
+              <T k="wl.f3_sub" />
             </span>
           </span>
         </li>
       </ul>
       <div style={{ position: "absolute", left: "24px", right: "24px", bottom: "30px", display: "flex", flexDirection: "column", gap: "6px" }}>
-        <Link href="/login" style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
+        <Link href="/personalize" style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
           <span>
-            Get started
+            <T k="wl.start" />
           </span>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />
@@ -98,10 +99,10 @@ export default function WelcomeScreen() {
         </Link>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
           <Link href="/login#signin" style={{ height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: "700", color: "#9A4E36", textDecoration: "none" }}>
-            Sign in
+            <T k="wl.signin" />
           </Link>
           <Link href="/personalize" style={{ height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: "700", color: "#5A4434", textDecoration: "none" }}>
-            Explore as guest
+            <T k="wl.guest" />
           </Link>
         </div>
       </div>

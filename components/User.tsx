@@ -28,9 +28,10 @@ export function Greeting() {
 // Their picture: the Google photo, initials for an email account, or a plain figure for a guest.
 export function Avatar({ style }: { style: CSSProperties }) {
   const [user] = useUser();
+  const t = useT();
   if (!user) {
     return (
-      <span role="img" aria-label="Guest" style={{ ...style, background: "#F1E7DA", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span role="img" aria-label={t("us.guest")} style={{ ...style, background: "#F1E7DA", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <svg width="55%" height="55%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <circle cx="12" cy="8" r="4.5" />
           <path d="M20 21a8 8 0 0 0-16 0" />
@@ -67,16 +68,17 @@ export const GoogleMark = ({ size = 20 }: { size?: number }) => (
 // or an invitation to sign in for a guest.
 export function AccountCard() {
   const [user] = useUser();
+  const t = useT();
   const router = useRouter();
   const box: CSSProperties = { margin: "14px 20px 0", minHeight: "56px", padding: "8px 8px 8px 14px", borderRadius: "16px", border: "1px solid #EFE6DA", background: "#F6F1EA", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" };
   if (!user) {
     return (
       <Link href="/login" style={box}>
         <span style={{ flex: 1, minWidth: 0 }}>
-          <span style={{ display: "block", fontSize: "15px", fontWeight: 800 }}>Log in or sign up</span>
-          <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>Keep your stamps, plans and tickets</span>
+          <span style={{ display: "block", fontSize: "15px", fontWeight: 800 }}>{t("us.join")}</span>
+          <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{t("us.join_sub")}</span>
         </span>
-        <span style={{ flex: "0 0 auto", height: "40px", padding: "0 14px", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800 }}>Log in</span>
+        <span style={{ flex: "0 0 auto", height: "40px", padding: "0 14px", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800 }}>{t("lg.login")}</span>
       </Link>
     );
   }
@@ -93,19 +95,19 @@ export function AccountCard() {
         )}
       </span>
       <span style={{ flex: 1, minWidth: 0 }}>
-        <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{user.provider === "google" ? "Signed in with Google" : "Signed in with email"}</span>
+        <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{user.provider === "google" ? t("us.via_google") : t("us.via_email")}</span>
         <span style={{ display: "block", marginTop: "1px", fontSize: "14px", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.email}</span>
       </span>
       <button
         type="button"
         onClick={() => {
           logOut();
-          toast("You're logged out");
+          toast(t("lg.logged_out"));
           router.push("/login");
         }}
         style={{ flex: "0 0 auto", height: "40px", padding: "0 12px", border: "1.5px solid #E2D3C1", borderRadius: "12px", background: "#FFFFFF", color: "#A23A2A", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}
       >
-        Log out
+        {t("us.logout")}
       </button>
     </div>
   );

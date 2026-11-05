@@ -6,12 +6,14 @@ import { toast } from "./Toast";
 import { Spinner } from "./ui";
 import { useStored } from "@/lib/store";
 import { DEFAULT_HERE, nearestCity, type Here } from "@/lib/here";
+import { useT } from "@/lib/i18n";
 
 // Asks the browser for the traveller's location, sets the city the app
 // follows to the nearest one it knows, says what it found, then moves on.
 export default function GeoLink({ href, style, children }: { href?: string; style?: CSSProperties; children: ReactNode }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
+  const t = useT();
   const [, setHere] = useStored<Here>("here", DEFAULT_HERE);
   const next = () => {
     setBusy(false);
@@ -24,7 +26,7 @@ export default function GeoLink({ href, style, children }: { href?: string; styl
       aria-busy={busy}
       onClick={() => {
         if (!navigator.geolocation) {
-          toast("This browser can't share location. You can still pick a city by hand.", "error");
+          toast(t("geo.none"), "error");
           next();
           return;
         }
@@ -34,11 +36,11 @@ export default function GeoLink({ href, style, children }: { href?: string; styl
             const { latitude: lat, longitude: lon } = p.coords;
             const near = nearestCity(lat, lon);
             setHere({ city: near.city, state: near.state, lat, lon, km: Math.round(near.km), source: "gps" });
-            toast(near.km < 60 ? `Location on — you're in ${near.city}` : `Location on — the nearest city Virasa knows is ${near.city}, ${Math.round(near.km)} km away`, "success");
+            toast(near.km < 60 ? t("geo.on", { city: near.city }) : t("geo.near", { city: near.city, km: Math.round(near.km) }), "success");
             next();
           },
           () => {
-            toast("No location for now. You can turn it on later in your browser.");
+            toast(t("geo.off"));
             next();
           },
           { timeout: 8000, maximumAge: 600000 }
@@ -49,7 +51,7 @@ export default function GeoLink({ href, style, children }: { href?: string; styl
       {busy ? (
         <span key="busy" className="btn-swap">
           <Spinner />
-          Finding you…
+          {t("geo.finding")}
         </span>
       ) : (
         children

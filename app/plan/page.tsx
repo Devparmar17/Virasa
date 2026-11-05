@@ -9,6 +9,7 @@ import { pop, share, useAsk } from "@/components/Tap";
 import { frame } from "@/components/ui";
 import { useStored } from "@/lib/store";
 import { CITY_PLANS, cityPlan, DEFAULT_INTERESTS, INTERESTS, planStops, type Interest, type SavedPlan, type Slot } from "@/lib/plans";
+import { useT, type Key } from "@/lib/i18n";
 
 const noop = () => () => {};
 const SLOT_ICON: Record<Slot, string> = {
@@ -20,6 +21,7 @@ const chip = (on: boolean): CSSProperties => ({ flex: "0 0 auto", minHeight: "44
 const label: CSSProperties = { margin: "22px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" };
 
 export default function PlanScreen() {
+  const t = useT();
   // Which city comes from the address: /plan?city=jaipur
   const cityId = useSyncExternalStore(
     noop,
@@ -55,24 +57,24 @@ export default function PlanScreen() {
         delete rest[city.id];
         return rest;
       });
-      toast("Plan removed from Saved", { action: { label: "Undo", run: () => setPlans((p) => ({ ...p, [city.id]: kept })) } });
+      toast(t("pn.removed"), { action: { label: t("sv.undo"), run: () => setPlans((p) => ({ ...p, [city.id]: kept })) } });
     } else {
       setPlans((p) => ({ ...p, [city.id]: { days, interests, savedAt: Date.now() } }));
-      toast("Plan saved — find it under Saved › Plans", "success");
+      toast(t("trip.saved_toast"), "success");
     }
   };
 
   return (
     <div style={frame({ paddingBottom: "124px" })}>
       <div style={{ padding: "54px 8px 0", height: "98px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <BackLink href="/home" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/home" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
           </svg>
         </BackLink>
-        <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>Plan your trip</h1>
-        <button type="button" aria-label="Share plan" onClick={() => share(`${days} days in ${city.name}`, stops.map((s) => `Day ${s.day}: ${s.name}`).join("\n"))} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>{t("pn.title")}</h1>
+        <button type="button" aria-label={t("c.share_plan")} onClick={() => share(t("sv.plan_title", { days: days === 1 ? t("trip.day_n", { n: 1 }) : t("trip.days_n", { n: days }), city: city.name }), stops.map((s) => `${t("trip.day", { n: s.day })}: ${s.name}`).join("\n"))} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
             <polyline points="16 6 12 2 8 6" />
@@ -96,8 +98,8 @@ export default function PlanScreen() {
       </section>
 
       <div style={{ padding: "0 20px" }}>
-        <h3 style={label}>HOW LONG</h3>
-        <div role="radiogroup" aria-label="Trip length" style={{ padding: "4px", borderRadius: "14px", background: "#F1E7DA", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
+        <h3 style={label}>{t("pn.how_long").toUpperCase()}</h3>
+        <div role="radiogroup" aria-label={t("pn.how_long")} style={{ padding: "4px", borderRadius: "14px", background: "#F1E7DA", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
           {[1, 2, 3].map((n) => (
             <button key={n} type="button" role="radio" aria-checked={days === n} onClick={() => change({ days: n })} style={{ height: "46px", border: 0, borderRadius: "10px", background: days === n ? "#FFFFFF" : "transparent", color: days === n ? "#2B1B10" : "#5A4434", fontSize: "14px", fontWeight: days === n ? 800 : 600, boxShadow: days === n ? "0 2px 6px rgba(90, 60, 30, 0.14)" : "none", cursor: "pointer" }}>
               {n} {n === 1 ? "day" : "days"}
@@ -105,13 +107,18 @@ export default function PlanScreen() {
           ))}
         </div>
 
-        <h3 style={label}>WHAT YOU LIKE</h3>
+        <h3 style={label}>{t("pn.like").toUpperCase()}</h3>
       </div>
       <div className="hscroll" style={{ padding: "0 20px", display: "flex", gap: "8px" }}>
         {INTERESTS.map(([id, text]) => {
           const on = interests.includes(id);
           return (
             <button key={id} type="button" aria-pressed={on} onClick={() => change({ interests: on ? interests.filter((x) => x !== id) : [...interests, id] })} style={chip(on)}>
+              {on ? (
+                <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ marginRight: "6px", verticalAlign: "-2px" }}>
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              ) : null}
               {text}
             </button>
           );
@@ -127,14 +134,14 @@ export default function PlanScreen() {
               <ol key={`${day}-${list.length}`} className="stagger" style={{ listStyle: "none", margin: "10px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
                 {list.map((s) => (
                   <li key={s.name}>
-                    <button type="button" onClick={() => ask(`Tell me about ${s.name} in ${city.name}`)} style={{ width: "100%", padding: "12px 14px", borderRadius: "16px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: "#2B1B10", display: "flex", gap: "12px", textAlign: "left", cursor: "pointer" }}>
+                    <button type="button" onClick={() => ask(t("pn.ask_stop", { name: s.name, city: city.name }))} style={{ width: "100%", padding: "12px 14px", borderRadius: "16px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: "#2B1B10", display: "flex", gap: "12px", textAlign: "left", cursor: "pointer" }}>
                       <span aria-hidden="true" style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: s.core ? "#F6E3DA" : "#F6EEE4", color: s.core ? "#9A4E36" : "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d={SLOT_ICON[s.slot]} />
                         </svg>
                       </span>
                       <span style={{ flex: 1, minWidth: 0 }}>
-                        <span style={{ display: "block", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "#8A6424" }}>{s.slot.toUpperCase()}</span>
+                        <span style={{ display: "block", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "#8A6424" }}>{t(`pn.${s.slot}` as Key).toUpperCase()}</span>
                         <span style={{ display: "block", marginTop: "2px", fontSize: "15px", lineHeight: 1.3, fontWeight: 800 }}>{s.name}</span>
                         <span style={{ display: "block", marginTop: "3px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{s.note}</span>
                       </span>
@@ -146,28 +153,28 @@ export default function PlanScreen() {
           );
         })}
 
-        <h3 style={label}>GET READY</h3>
+        <h3 style={label}>{t("pn.ready").toUpperCase()}</h3>
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           {city.ticket ? (
             <Link href={`/tickets?book=${city.ticket}`} className="sheet-row" style={{ marginTop: 0 }}>
               <span>
-                Book entry tickets
-                <small>Reserve now, pay there</small>
+                {t("pn.book")}
+                <small>{t("pn.book_sub")}</small>
               </span>
               <span aria-hidden="true">›</span>
             </Link>
           ) : null}
           <Link href="/city" className="sheet-row" style={{ marginTop: 0 }}>
             <span>
-              Download the {city.name} pack
-              <small>Stories and maps without signal</small>
+              {t("pn.pack", { city: city.name })}
+              <small>{t("pn.pack_sub")}</small>
             </span>
             <span aria-hidden="true">›</span>
           </Link>
-          <button type="button" className="sheet-row" style={{ marginTop: 0 }} onClick={() => ask(`I have ${days} ${days === 1 ? "day" : "days"} in ${city.name}. What else should I know before I go?`)}>
+          <button type="button" className="sheet-row" style={{ marginTop: 0 }} onClick={() => ask(t("pn.ask", { days: days === 1 ? t("trip.day_n", { n: 1 }) : t("trip.days_n", { n: days }), city: city.name }))}>
             <span>
-              Ask the guide about {city.name}
-              <small>Tap any stop above to ask about it</small>
+              {t("pn.ask_city", { city: city.name })}
+              <small>{t("pn.ask_city_sub")}</small>
             </span>
             <span aria-hidden="true">›</span>
           </button>
@@ -180,11 +187,11 @@ export default function PlanScreen() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
             </svg>
-            <span key={saved ? "on" : "off"} className="btn-swap">{saved ? "Saved" : "Save plan"}</span>
+            <span key={saved ? "on" : "off"} className="btn-swap">{saved ? t("trip.saved") : t("trip.save")}</span>
           </button>
           {saved ? (
             <Link href="/saved#plans" className="pop-in" style={{ flex: "0 0 auto", height: "52px", padding: "0 16px", borderRadius: "14px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: 700 }}>
-              View in Saved
+              {t("pn.view")}
             </Link>
           ) : null}
         </div>

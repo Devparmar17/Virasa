@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "@/components/Toast";
 import { share } from "@/components/Tap";
 import { frame, ScreenHeader } from "@/components/ui";
+import { useT } from "@/lib/i18n";
 
 type Photo = { src: string; caption: string; credit: string };
 
@@ -17,6 +18,7 @@ const PHOTOS: Photo[] = [
 ];
 
 export default function GalleryScreen() {
+  const t = useT();
   const [mine, setMine] = useState<Photo[]>([]);
   const [index, setIndex] = useState(0);
   const [zoomed, setZoomed] = useState(false);
@@ -42,7 +44,7 @@ export default function GalleryScreen() {
         title="Sidi Saiyyed Mosque"
         back="/place"
         action={
-          <button type="button" aria-label="Share photo" onClick={() => share("Sidi Saiyyed Mosque", photo.caption)} style={{ ...round, background: "none" }}>
+          <button type="button" aria-label={t("gl.share")} onClick={() => share("Sidi Saiyyed Mosque", photo.caption)} style={{ ...round, background: "none" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
               <polyline points="16 6 12 2 8 6" />
@@ -63,17 +65,17 @@ export default function GalleryScreen() {
         }}
         style={{ position: "relative", margin: "8px 0 0", height: "470px", overflow: "hidden", background: "#120B06" }}
       >
-        <button type="button" data-plain aria-label={zoomed ? "Zoom out" : "Zoom in"} onClick={() => setZoomed(!zoomed)} style={{ width: "100%", height: "100%", padding: 0, border: 0, background: "none", cursor: zoomed ? "zoom-out" : "zoom-in" }}>
+        <button type="button" data-plain aria-label={zoomed ? t("gl.zoom_out") : t("gl.zoom_in")} onClick={() => setZoomed(!zoomed)} style={{ width: "100%", height: "100%", padding: 0, border: 0, background: "none", cursor: zoomed ? "zoom-out" : "zoom-in" }}>
           <img key={photo.src} className="fade-in" src={photo.src} alt={photo.caption} style={{ width: "100%", height: "100%", objectFit: zoomed ? "cover" : "contain", scale: zoomed ? "1.6" : "1", transition: "scale 0.35s ease", display: "block" }} />
         </button>
         {photos.length > 1 ? (
           <>
-            <button type="button" aria-label="Previous photo" onClick={() => go(-1)} style={{ ...round, position: "absolute", left: "12px", top: "50%", marginTop: "-22px", background: "rgba(20, 12, 6, 0.55)" }}>
+            <button type="button" aria-label={t("gl.prev")} onClick={() => go(-1)} style={{ ...round, position: "absolute", left: "12px", top: "50%", marginTop: "-22px", background: "rgba(20, 12, 6, 0.55)" }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m15 18-6-6 6-6" />
               </svg>
             </button>
-            <button type="button" aria-label="Next photo" onClick={() => go(1)} style={{ ...round, position: "absolute", right: "12px", top: "50%", marginTop: "-22px", background: "rgba(20, 12, 6, 0.55)" }}>
+            <button type="button" aria-label={t("gl.next")} onClick={() => go(1)} style={{ ...round, position: "absolute", right: "12px", top: "50%", marginTop: "-22px", background: "rgba(20, 12, 6, 0.55)" }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m9 18 6-6-6-6" />
               </svg>
@@ -86,11 +88,11 @@ export default function GalleryScreen() {
       </div>
       <div key={photo.src} className="rise" style={{ padding: "16px 20px 0" }}>
         <p style={{ margin: 0, fontSize: "16px", lineHeight: 1.4, fontWeight: 700 }}>{photo.caption}</p>
-        <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#C9B6A0" }}>Photo: {photo.credit}</p>
+        <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#C9B6A0" }}>{t("gl.credit", { name: photo.credit === "You" ? t("us.guest") : photo.credit })}</p>
       </div>
       <div className="hscroll" style={{ margin: "18px 0 0", padding: "0 20px", display: "flex", gap: "10px", overflowX: "auto", scrollbarWidth: "none" }}>
         {photos.map((p, i) => (
-          <button key={p.src} type="button" aria-label={`Photo ${i + 1}: ${p.caption}`} aria-pressed={i === index} onClick={() => { setIndex(i); setZoomed(false); }} style={{ flex: "0 0 72px", width: "72px", height: "72px", padding: 0, borderRadius: "14px", border: i === index ? "3px solid #F3D9A8" : "3px solid transparent", background: "none", overflow: "hidden", cursor: "pointer" }}>
+          <button key={p.src} type="button" aria-label={t("gl.photo", { n: i + 1, name: p.caption })} aria-pressed={i === index} onClick={() => { setIndex(i); setZoomed(false); }} style={{ flex: "0 0 72px", width: "72px", height: "72px", padding: 0, borderRadius: "14px", border: i === index ? "3px solid #F3D9A8" : "3px solid transparent", background: "none", overflow: "hidden", cursor: "pointer" }}>
             <img src={p.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
           </button>
         ))}
@@ -99,7 +101,7 @@ export default function GalleryScreen() {
             <path d="M12 5v14" />
             <path d="M5 12h14" />
           </svg>
-          Add yours
+          {t("gl.add")}
         </button>
         <input
           ref={picker}
@@ -114,11 +116,10 @@ export default function GalleryScreen() {
             urls.current.push(src);
             setMine((m) => [...m, { src, caption: "Your photo of Sidi Saiyyed Mosque", credit: "You" }]);
             setIndex(photos.length);
-            toast("Photo added to this visit", "success");
+            toast(t("gl.added"), "success");
           }}
         />
       </div>
-      <p style={{ margin: "14px 20px 0", fontSize: "12px", lineHeight: 1.45, color: "#A8927C" }}>Photos you add stay on this phone and are not uploaded.</p>
     </div>
   );
 }

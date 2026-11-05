@@ -11,6 +11,7 @@ import { frame, Spinner, Tick } from "@/components/ui";
 import { googleSignIn, isEmail, logIn, logOut, signUp, useUser } from "@/lib/auth";
 import { Avatar, GoogleMark } from "@/components/User";
 import { readStored } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 
 type View = "choose" | "signup" | "signin";
 
@@ -61,13 +62,14 @@ export default function LoginScreen() {
   const [tries, setTries] = useState(0);
   const [setup, setSetup] = useState(false);
   const [user] = useUser();
+  const t = useT();
   // Once someone signs in here we are already leaving, so only people who arrive signed in see their account.
   const [leaving, setLeaving] = useState(false);
 
   const done = (who: string, isNew: boolean, via: "google" | "form") => {
     setLeaving(true);
     setOk(via);
-    toast(isNew ? `Welcome to Virasa, ${who}` : `Welcome back, ${who}`, "success");
+    toast(isNew ? t("lg.welcome_new", { name: who }) : t("lg.welcome_back", { name: who }), "success");
     // Signing in always leads through interests (with language) and location; earlier
     // choices are remembered, so a returning traveller can skip straight through.
     // A short pause lets the tick land before the screen changes.
@@ -91,9 +93,9 @@ export default function LoginScreen() {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     const found: Record<string, string> = {};
-    if (view === "signup" && name.trim().length < 2) found.name = "Enter your name.";
-    if (!isEmail(email)) found.email = "Enter an email address like name@example.com.";
-    if (view === "signup" ? password.length < 8 : !password) found.password = view === "signup" ? "Use at least 8 characters." : "Enter your password.";
+    if (view === "signup" && name.trim().length < 2) found.name = t("lg.err_name");
+    if (!isEmail(email)) found.email = t("lg.err_email");
+    if (view === "signup" ? password.length < 8 : !password) found.password = view === "signup" ? t("lg.err_short") : t("lg.err_pw");
     setErrors(found);
     if (Object.keys(found).length) {
       setTries((n) => n + 1);
@@ -121,7 +123,7 @@ export default function LoginScreen() {
     <button type="button" onClick={google} disabled={!!busy || !!ok} aria-busy={busy === "google"} style={{ ...outline, ...(ok === "google" ? { borderColor: "#2F7A4A", color: "#2F7A4A" } : null) }}>
       <span key={ok === "google" ? "ok" : busy === "google" ? "busy" : "idle"} className="btn-swap">
         {ok === "google" ? <Tick /> : busy === "google" ? <Spinner color="#9A4E36" track="#D9C7B3" /> : <GoogleMark />}
-        {ok === "google" ? "Signed in" : busy === "google" ? "Waiting for Google…" : "Continue with Google"}
+        {ok === "google" ? t("lg.signed_in_short") : busy === "google" ? t("lg.google_wait") : t("lg.google")}
       </span>
     </button>
   );
@@ -140,14 +142,14 @@ export default function LoginScreen() {
       </svg>
       <div style={{ position: "relative", padding: "54px 8px 0", height: "98px", display: "flex", alignItems: "center" }}>
         {view === "choose" ? (
-          <BackLink href="/welcome" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+          <BackLink href="/welcome" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
             </svg>
           </BackLink>
         ) : (
-          <button type="button" aria-label="Back to sign-in options" onClick={() => switchTo("choose")} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10", cursor: "pointer" }}>
+          <button type="button" aria-label={t("lg.back_options")} onClick={() => switchTo("choose")} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10", cursor: "pointer" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
@@ -161,23 +163,23 @@ export default function LoginScreen() {
           <span style={{ width: "104px", height: "104px", borderRadius: "50%", padding: "4px", background: "#8A6424" }}>
             <Avatar style={{ width: "96px", height: "96px", borderRadius: "50%", objectFit: "cover", display: "block", border: "3px solid #FFFFFF" }} />
           </span>
-          <h1 style={{ margin: "22px 0 0", fontSize: "28px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>You&apos;re signed in</h1>
+          <h1 style={{ margin: "22px 0 0", fontSize: "28px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>{t("lg.signed_in")}</h1>
           <p style={{ margin: "8px 0 0", fontSize: "16px", fontWeight: 700 }}>{user.name}</p>
           <p style={{ margin: "2px 0 0", fontSize: "14px", color: "#5A4434", overflowWrap: "anywhere" }}>
             {user.email} · {user.provider === "google" ? "Google" : "Email"}
           </p>
           <Link href="/home" style={{ ...primary, marginTop: "30px", textDecoration: "none" }}>
-            Continue to Virasa
+            {t("lg.continue")}
           </Link>
           <button
             type="button"
             onClick={() => {
               logOut();
-              toast("You're logged out");
+              toast(t("lg.logged_out"));
             }}
             style={{ ...outline, marginTop: "12px" }}
           >
-            Use a different account
+            {t("lg.other")}
           </button>
         </div>
       ) : view === "choose" ? (
@@ -185,8 +187,8 @@ export default function LoginScreen() {
           <div className="splash-logo" style={{ alignSelf: "center", width: "112px", height: "112px", borderRadius: "50%", background: "#FFFFFF", border: "1px solid #EFE6DA", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 44px rgba(122, 74, 40, 0.16)" }}>
             <img src="/images/845c09135def6279c007582842533707.png" alt="Virasa" style={{ width: "66px", height: "72px", objectFit: "contain", display: "block" }} />
           </div>
-          <h1 style={{ margin: "26px 0 0", fontSize: "30px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textAlign: "center" }}>Your journey, saved</h1>
-          <p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: 1.5, color: "#5A4434", textAlign: "center", textWrap: "balance" }}>Sign in to keep your saved places, passport stamps and walks.</p>
+          <h1 style={{ margin: "26px 0 0", fontSize: "30px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textAlign: "center" }}>{t("lg.title")}</h1>
+          <p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: 1.5, color: "#5A4434", textAlign: "center", textWrap: "balance" }}>{t("lg.sub")}</p>
           <div style={{ marginTop: "34px", display: "flex", flexDirection: "column", gap: "12px" }}>
             {googleButton}
             <button type="button" onClick={() => switchTo("signup")} style={primary}>
@@ -194,40 +196,40 @@ export default function LoginScreen() {
                 <rect width="20" height="16" x="2" y="4" rx="2" />
                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
               </svg>
-              Sign up with email
+              {t("lg.signup_email")}
             </button>
           </div>
           <div style={{ margin: "26px 0 0", display: "flex", alignItems: "center", gap: "12px", fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>
             <span style={{ flex: 1, height: "1px", background: "#E2D3C1" }} />
-            Already have an account?
+            {t("lg.have")}
             <span style={{ flex: 1, height: "1px", background: "#E2D3C1" }} />
           </div>
           <button type="button" onClick={() => switchTo("signin")} style={{ ...outline, marginTop: "16px", borderColor: "#9A4E36", color: "#9A4E36", background: "transparent" }}>
-            Log in
+            {t("lg.login")}
           </button>
           <Link href="/personalize" style={{ marginTop: "8px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: 700, color: "#5A4434" }}>
-            Explore as guest
+            {t("wl.guest")}
           </Link>
         </div>
       ) : (
         <form key={view} noValidate onSubmit={submit} className="stagger" style={{ position: "relative", padding: "6px 24px 0", display: "flex", flexDirection: "column", gap: "16px" }}>
           <div>
-            <h1 style={{ margin: 0, fontSize: "28px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>{view === "signup" ? "Create your account" : "Welcome back"}</h1>
-            <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: 1.5, color: "#5A4434" }}>{view === "signup" ? "It takes less than a minute." : "Log in to pick up where you left off."}</p>
+            <h1 style={{ margin: 0, fontSize: "28px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>{view === "signup" ? t("lg.create") : t("lg.welcome")}</h1>
+            <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: 1.5, color: "#5A4434" }}>{view === "signup" ? t("lg.create_sub") : t("lg.welcome_sub")}</p>
           </div>
           {view === "signup" ? (
-            <Field label="Name" error={errors.name}>
+            <Field label={t("lg.name")} error={errors.name}>
               <input type="text" name="name" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} aria-invalid={!!errors.name} style={{ ...field, borderColor: errors.name ? "#A23A2A" : "#D9C7B3" }} />
             </Field>
           ) : null}
-          <Field label="Email" error={errors.email}>
+          <Field label={t("lg.email")} error={errors.email}>
             <input type="email" name="email" autoComplete="email" inputMode="email" value={email} onChange={(e) => setEmail(e.target.value)} aria-invalid={!!errors.email} style={{ ...field, borderColor: errors.email ? "#A23A2A" : "#D9C7B3" }} />
           </Field>
-          <Field label="Password" error={errors.password} hint={view === "signup" ? "At least 8 characters." : undefined}>
+          <Field label={t("lg.password")} error={errors.password} hint={view === "signup" ? t("lg.pw_hint") : undefined}>
             <span style={{ position: "relative", display: "block" }}>
               <input type={showPassword ? "text" : "password"} name="password" autoComplete={view === "signup" ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} aria-invalid={!!errors.password} style={{ ...field, paddingRight: "76px", borderColor: errors.password ? "#A23A2A" : "#D9C7B3" }} />
               <button type="button" aria-pressed={showPassword} onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: "6px", top: "5px", height: "44px", padding: "0 12px", border: 0, borderRadius: "10px", background: "none", color: "#9A4E36", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}>
-                {showPassword ? "Hide" : "Show"}
+                {showPassword ? t("lg.hide") : t("lg.show")}
               </button>
             </span>
           </Field>
@@ -239,28 +241,27 @@ export default function LoginScreen() {
           <button type="submit" disabled={!!busy || !!ok} aria-busy={busy === "form"} style={{ ...primary, marginTop: "4px", ...(ok === "form" ? { background: "#2F7A4A", boxShadow: "0 10px 22px rgba(47, 122, 74, 0.28)" } : null) }}>
             <span key={ok === "form" ? "ok" : busy === "form" ? "busy" : "idle"} className="btn-swap">
               {ok === "form" ? <Tick /> : busy === "form" ? <Spinner /> : null}
-              {ok === "form" ? (view === "signup" ? "Account created" : "Logged in") : busy === "form" ? (view === "signup" ? "Creating your account…" : "Logging in…") : view === "signup" ? "Create account" : "Log in"}
+              {ok === "form" ? (view === "signup" ? t("lg.created") : t("lg.logged_in")) : busy === "form" ? (view === "signup" ? t("lg.creating") : t("lg.logging")) : view === "signup" ? t("lg.create_btn") : t("lg.login")}
             </span>
           </button>
           <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>
             <span style={{ flex: 1, height: "1px", background: "#E2D3C1" }} />
-            or
+            {t("lg.or")}
             <span style={{ flex: 1, height: "1px", background: "#E2D3C1" }} />
           </div>
           {googleButton}
           <p style={{ margin: "2px 0 0", fontSize: "15px", color: "#5A4434", textAlign: "center" }}>
-            {view === "signup" ? "Already have an account? " : "New to Virasa? "}
+            {view === "signup" ? t("lg.have") : t("lg.new")}{" "}
             <button type="button" onClick={() => switchTo(view === "signup" ? "signin" : "signup")} style={{ minHeight: "44px", padding: "0 4px", border: 0, background: "none", color: "#9A4E36", fontSize: "15px", fontWeight: 700, cursor: "pointer" }}>
-              {view === "signup" ? "Log in" : "Sign up"}
+              {view === "signup" ? t("lg.login") : t("lg.signup")}
             </button>
           </p>
         </form>
       )}
 
-      <p style={{ position: "absolute", left: "32px", right: "32px", bottom: "26px", margin: 0, fontSize: "12px", lineHeight: 1.5, color: "#6F5B4B", textAlign: "center" }}>Your account is kept on this phone. Location is only used while the app is open.</p>
 
-      <Sheet open={setup} onClose={() => setSetup(false)} title="Google sign-in isn't set up yet">
-        <p>Google sign-in uses Firebase, and this copy of Virasa isn&apos;t connected to a Firebase project yet. Add the project&apos;s settings to .env.local to switch it on (the README has the steps), or use email for now.</p>
+      <Sheet open={setup} onClose={() => setSetup(false)} title="lg.g_title">
+        <p>{t("lg.g_body")}</p>
         <button
           type="button"
           className="sheet-cta"
@@ -269,7 +270,7 @@ export default function LoginScreen() {
             switchTo("signup");
           }}
         >
-          Sign up with email
+          {t("lg.signup_email")}
         </button>
       </Sheet>
     </div>

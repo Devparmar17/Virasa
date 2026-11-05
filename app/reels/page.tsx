@@ -7,6 +7,7 @@ import BackLink from "@/components/Back";
 import { toast } from "@/components/Toast";
 import { pop, share, useAsk } from "@/components/Tap";
 import { useStored } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 
 type Reel = {
   id: string;
@@ -31,11 +32,12 @@ const REELS: Reel[] = [
 const clock = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
 export default function ReelsScreen() {
+  const t = useT();
   const [feed, setFeed] = useState<"for-you" | "near">("for-you");
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [captions, setCaptions] = useStored("captions", true);
-  const [liked, setLiked] = useStored<Record<string, boolean>>("liked", { "reel-sidi": true });
+  const [liked, setLiked] = useStored<Record<string, boolean>>("liked", {});
   const [saved, setSaved] = useStored<Record<string, boolean>>("saved", {});
   const ask = useAsk();
   const touchY = useRef<number | null>(null);
@@ -81,7 +83,7 @@ export default function ReelsScreen() {
       }}
       style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#1E130B", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#FFFFFF" }}
     >
-      <button type="button" data-plain aria-label={paused ? "Play reel" : "Pause reel"} onClick={() => setPaused(!paused)} style={{ position: "absolute", inset: "0", padding: "0", border: "0", background: "none", cursor: "pointer", overflow: "hidden" }}>
+      <button type="button" data-plain aria-label={paused ? t("rl.play") : t("rl.pause")} onClick={() => setPaused(!paused)} style={{ position: "absolute", inset: "0", padding: "0", border: "0", background: "none", cursor: "pointer", overflow: "hidden" }}>
         <img key={reel.id} src={reel.img} alt={reel.alt} className={`kenburns${paused ? " paused" : ""}`} style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: reel.focus, display: "block" }} />
         {paused ? (
           <span className="pop-in" aria-hidden="true" style={{ position: "absolute", left: "50%", top: "50%", width: "76px", height: "76px", margin: "-38px 0 0 -38px", borderRadius: "50%", background: "rgba(20, 12, 6, 0.55)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -94,7 +96,7 @@ export default function ReelsScreen() {
       <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", top: "0", height: "170px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0.6) 0%, rgba(20, 12, 6, 0) 100%)", pointerEvents: "none" }} />
       <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", height: "440px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.72) 40%, rgba(20, 12, 6, 0.92) 100%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", top: "50px", left: "8px", right: "8px", height: "48px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <BackLink href="/home" aria-label="Close reels" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
+        <BackLink href="/home" aria-label="Close" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
@@ -106,7 +108,7 @@ export default function ReelsScreen() {
               ["for-you", "For you"],
               ["near", "Near me"],
             ] as const
-          ).map(([id, text]) => (
+          ).map(([id]) => (
             <button
               key={id}
               type="button"
@@ -118,18 +120,18 @@ export default function ReelsScreen() {
               }}
               style={{ height: "44px", padding: "0 12px", border: "0", background: "none", color: feed === id ? "#FFFFFF" : "rgba(255, 255, 255, 0.78)", fontSize: "16px", fontWeight: feed === id ? 800 : 700, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px" }}
             >
-              {text}
+              {id === "near" ? t("rl.near") : t("rl.for_you")}
               <span style={{ width: "20px", height: "3px", borderRadius: "999px", background: feed === id ? "#F3D9A8" : "transparent" }} />
             </button>
           ))}
         </div>
         <button
           type="button"
-          aria-label={captions ? "Captions on" : "Captions off"}
+          aria-label={captions ? t("rl.cap_on") : t("rl.cap_off")}
           aria-pressed={captions}
           onClick={() => {
             setCaptions(!captions);
-            toast(captions ? "Captions off" : "Captions on");
+            toast(captions ? t("rl.cap_off") : t("rl.cap_on"));
           }}
           style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
         >
@@ -156,12 +158,12 @@ export default function ReelsScreen() {
         </button>
         <button
           type="button"
-          aria-label={isSaved ? "Remove from saved" : "Save"}
+          aria-label={isSaved ? t("rl.unsave") : t("c.save")}
           aria-pressed={isSaved}
           onClick={(e) => {
             pop(e.currentTarget.firstElementChild || e.currentTarget, !isSaved);
             setSaved((m) => ({ ...m, [reel.id]: !isSaved }));
-            toast(isSaved ? "Removed from Saved" : "Saved — find it under Saved › Stories", isSaved ? "info" : "success");
+            toast(isSaved ? t("c.removed_saved") : t("rl.saved_toast"), isSaved ? "info" : "success");
           }}
           style={action}
         >
@@ -170,9 +172,9 @@ export default function ReelsScreen() {
               <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
             </svg>
           </span>
-          <span style={label}>{isSaved ? "Saved" : "Save"}</span>
+          <span style={label}>{isSaved ? t("trip.saved") : t("c.save")}</span>
         </button>
-        <button type="button" aria-label="Share" onClick={() => share("Virasa Stories", reel.caption)} style={action}>
+        <button type="button" aria-label={t("c.share")} onClick={() => share("Virasa Stories", reel.caption)} style={action}>
           <span style={round}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
@@ -180,18 +182,18 @@ export default function ReelsScreen() {
               <line x1="12" x2="12" y1="2" y2="15" />
             </svg>
           </span>
-          <span style={label}>Share</span>
+          <span style={label}>{t("c.share")}</span>
         </button>
-        <button type="button" aria-label="Ask Virasa AI about this reel" onClick={() => ask(reel.question)} style={action}>
+        <button type="button" aria-label={t("rl.ask_aria")} onClick={() => ask(reel.question)} style={action}>
           <span style={{ ...round, background: "#F3D9A8", color: "#2B1B10" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
               <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
               <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
             </svg>
           </span>
-          <span style={label}>Ask AI</span>
+          <span style={label}>{t("rl.ask")}</span>
         </button>
-        <button type="button" aria-label="Next reel" onClick={() => go(1)} style={action}>
+        <button type="button" aria-label={t("rl.next")} onClick={() => go(1)} style={action}>
           <span style={{ ...round, width: "44px", height: "44px" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m6 9 6 6 6-6" />
@@ -219,7 +221,7 @@ export default function ReelsScreen() {
             <i />
           </span>
           <span>
-            Narrated in English · {clock(reel.seconds)}
+            {t("rl.narrated", { t: clock(reel.seconds) })}
           </span>
         </div>
       </div>
@@ -228,13 +230,13 @@ export default function ReelsScreen() {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <polygon points="3 11 22 2 13 21 11 13 3 11" />
           </svg>
-          {" Take me there "}
+          {" "}{t("rl.go")}{" "}
         </Link>
         <Link href="/story" style={{ height: "52px", borderRadius: "14px", border: "1.5px solid rgba(255, 255, 255, 0.7)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
           </svg>
-          {" Full story · 2 min "}
+          {" "}{t("rl.full")}{" "}
         </Link>
       </div>
       <div style={{ position: "absolute", left: "20px", right: "20px", bottom: "22px", height: "3px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.3)", overflow: "hidden" }}>

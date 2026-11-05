@@ -8,6 +8,7 @@ import { toast } from "@/components/Toast";
 import { share, Toggle, useAsk } from "@/components/Tap";
 import { useStored } from "@/lib/store";
 import { DEFAULT_SETTINGS, PACE_SPEED, type Settings } from "@/lib/settings";
+import { useT } from "@/lib/i18n";
 
 type Stop = { id: string; name: string; hook: string; visit: number; extra: string; at: number; href?: string };
 
@@ -57,6 +58,13 @@ const THUMBS: Record<string, React.ReactNode> = {
 };
 
 export default function WalkScreen() {
+  const t = useT();
+  // "story 2 min", "legend 3 min", "snack stop", "chai break" in the traveller's language.
+  const extraText = (x: string) => {
+    const m = x.match(/^(story|legend) (\d+) min$/);
+    if (m) return t(m[1] === "story" ? "wk.x.story" : "wk.x.legend", { n: m[2] });
+    return x === "snack stop" ? t("wk.x.snack") : x === "chai break" ? t("wk.x.chai") : x;
+  };
   // Step-free is the same switch as on Profile and Settings; the other two belong to this walk.
   const [extras, setExtras] = useStored("walkOptions", { food: false, short: false });
   const [sw, setSw] = useStored("switches", { auto: true, desc: false, steps: false });
@@ -101,21 +109,21 @@ export default function WalkScreen() {
   };
   const remove = (id: string) => {
     const at = order.indexOf(id);
-    const name = STOPS.find((x) => x.id === id)?.name;
+    const name = STOPS.find((x) => x.id === id)?.name ?? "";
     setOrder((o) => o.filter((x) => x !== id));
-    toast(`Removed ${name}`, { action: { label: "Undo", run: () => setOrder((o) => (o.includes(id) ? o : [...o.slice(0, at), id, ...o.slice(at)])) } });
+    toast(t("sv.removed", { name }), { action: { label: t("sv.undo"), run: () => setOrder((o) => (o.includes(id) ? o : [...o.slice(0, at), id, ...o.slice(at)])) } });
   };
   const add = (id: string) => {
     setOrder((o) => (o.includes(id) ? o : [...o, id]));
-    toast(`Added ${STOPS.find((x) => x.id === id)?.name}`, "success");
+    toast(t("wk.added", { name: STOPS.find((x) => x.id === id)?.name ?? "" }), "success");
   };
   // Stops that could be added (the snack stop has its own switch above).
   const addable = STOPS.filter((x) => !order.includes(x.id) && x.id !== "chandravilas");
   const arrow = (off: boolean) => ({ width: "36px", height: "32px", border: "1.5px solid #E2D3C1", borderRadius: "10px", background: "#FFFFFF", color: off ? "#CDBFAE" : "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: off ? "default" : "pointer" });
-  const NOTES = { steps: ["Step-free route on", "Step-free route off"], food: ["Added a snack stop at Chandravilas", "Snack stop removed"], short: ["Trimmed to the first three stops", "Back to the full walk"] };
+  const NOTES = { steps: ["wk.n.steps_on", "wk.n.steps_off"], food: ["wk.n.food_on", "wk.n.food_off"], short: ["wk.n.short_on", "wk.n.short_off"] };
   const v = {
     opt,
-    optS: Object.fromEntries(Object.entries(opt).map(([k, on]) => [k, on ? { bg: "#2B1B10", bd: "#2B1B10", fg: "#FFFFFF" } : { bg: "#FFFFFF", bd: "#E2D3C1", fg: "#2B1B10" }])) as Record<keyof typeof opt, { bg: string; bd: string; fg: string }>,
+    optS: Object.fromEntries(Object.entries(opt).map(([k, on]) => [k, on ? { bg: "#FBEDE6", bd: "#9A4E36", fg: "#7E3D29" } : { bg: "#FFFFFF", bd: "#E2D3C1", fg: "#2B1B10" }])) as Record<keyof typeof opt, { bg: string; bd: string; fg: string }>,
     tog: Object.fromEntries(
       (Object.keys(opt) as (keyof typeof opt)[]).map((k) => [
         k,
@@ -137,9 +145,9 @@ export default function WalkScreen() {
           </svg>
         </BackLink>
         <span style={{ fontSize: "16px", fontWeight: "800" }}>
-          Heritage walk
+          {t("wk.title")}
         </span>
-        <button type="button" aria-label="Share walk" onClick={() => share("Old City in a morning", `${stops.length} stops · ${metres(walked)} · ${total} — a heritage walk on Virasa`)} style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <button type="button" aria-label={t("wk.share")} onClick={() => share(loop ? t("gd.plan_name") : t("home.walk_title"), t("wk.share_text", { stops: t("sv.stops", { n: stops.length }), dist: metres(walked), time: total }))} style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
             <polyline points="16 6 12 2 8 6" />
@@ -147,7 +155,7 @@ export default function WalkScreen() {
           </svg>
         </button>
       </div>
-      <svg role="img" aria-label="Route map with six numbered stops through the Old City" width="390" height="210" viewBox="0 0 390 210" style={{ display: "block" }}>
+      <svg role="img" aria-label={t("wk.map")} width="390" height="210" viewBox="0 0 390 210" style={{ display: "block" }}>
         <rect width="390" height="210" fill="#F4F1EA" />
         <path d="M0 0 H52 C40 70 60 140 44 210 H0 Z" fill="#BFDCE4" />
         <g stroke="#FFFFFF" strokeWidth="3" fill="none">
@@ -193,26 +201,26 @@ export default function WalkScreen() {
       </svg>
       <main style={{ padding: "20px 20px 120px" }}>
         <p style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.12em", color: "#8A6424" }}>
-          {loop ? "AHMEDABAD · FROM YOUR AI GUIDE" : "AHMEDABAD · PLANNED FOR YOU"}
+          {(loop ? t("wk.from_ai") : t("wk.for_you")).toUpperCase()}
         </p>
         <h1 style={{ margin: "6px 0 0", fontSize: "26px", lineHeight: "1.2", fontWeight: "800", letterSpacing: "-0.02em" }}>
-          {loop ? "Old City short loop" : "Old City in a morning"}
+          {loop ? t("gd.plan_name") : t("home.walk_title")}
         </h1>
         <div style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
           <span style={{ height: "28px", padding: "0 10px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
-            Architecture
+            {t("on.i.arch")}
           </span>
           <span style={{ height: "28px", padding: "0 10px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
-            Street food
+            {t("on.i.food")}
           </span>
           <span style={{ height: "28px", padding: "0 10px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
-            Legends
+            {t("on.i.legend")}
           </span>
         </div>
         <dl style={{ margin: "18px 0 0", display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden" }}>
           <div style={{ padding: "14px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", borderRight: "1px solid #EFE6DA" }}>
             <dt style={{ order: "2", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-              Stops
+              {t("wk.stops")}
             </dt>
             <dd style={{ order: "1", margin: "0", fontSize: "18px", fontWeight: "800" }}>
               {stops.length}
@@ -220,7 +228,7 @@ export default function WalkScreen() {
           </div>
           <div style={{ padding: "14px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", borderRight: "1px solid #EFE6DA" }}>
             <dt style={{ order: "2", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-              Walking
+              {t("wk.walking")}
             </dt>
             <dd style={{ order: "1", margin: "0", fontSize: "18px", fontWeight: "800" }}>
               {metres(walked)}
@@ -228,7 +236,7 @@ export default function WalkScreen() {
           </div>
           <div style={{ padding: "14px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", borderRight: "1px solid #EFE6DA" }}>
             <dt style={{ order: "2", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-              Total
+              {t("tk.total")}
             </dt>
             <dd style={{ order: "1", margin: "0", fontSize: "18px", fontWeight: "800" }}>
               {total}
@@ -236,10 +244,10 @@ export default function WalkScreen() {
           </div>
           <div style={{ padding: "14px 8px", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
             <dt style={{ order: "2", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-              Terrain
+              {t("wk.terrain")}
             </dt>
             <dd style={{ order: "1", margin: "0", fontSize: "18px", fontWeight: "800" }}>
-              {opt.steps ? "Step-free" : "Flat"}
+              {opt.steps ? t("wk.stepfree") : t("wk.flat")}
             </dd>
           </div>
         </dl>
@@ -257,9 +265,9 @@ export default function WalkScreen() {
           </svg>
           <span>
             <strong style={{ color: "#2B1B10" }}>
-              Start by 8 AM.
+              {t("wk.start8")}
             </strong>
-            {" The lanes are cooler and Manek Chowk's morning market is open."}
+            {" "}{t("wk.start8_sub")}
           </span>
         </div>
         <div style={{ marginTop: "14px", display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -272,8 +280,13 @@ export default function WalkScreen() {
               <path d="M13.76 17.5a5 5 0 0 0-6.88-6" />
             </svg>
             <span>
-              Step-free route
+              {t("st.steps")}
             </span>
+            {v.opt.steps ? (
+              <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            ) : null}
           </button>
           <button type="button" aria-pressed={v.opt.food} onClick={v.tog.food} style={{ height: "40px", padding: "0 12px", borderRadius: "999px", border: `1.5px solid ${v.optS.food.bd}`, background: v.optS.food.bg, color: v.optS.food.fg, fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -282,8 +295,13 @@ export default function WalkScreen() {
               <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
             </svg>
             <span>
-              More food stops
+              {t("wk.opt_food")}
             </span>
+            {v.opt.food ? (
+              <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            ) : null}
           </button>
           <button type="button" aria-pressed={v.opt.short} onClick={v.tog.short} style={{ height: "40px", padding: "0 12px", borderRadius: "999px", border: `1.5px solid ${v.optS.short.bd}`, background: v.optS.short.bg, color: v.optS.short.fg, fontSize: "13px", fontWeight: "700", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -291,8 +309,13 @@ export default function WalkScreen() {
               <polyline points="12 6 12 12 16 14" />
             </svg>
             <span>
-              Only 1 hour
+              {t("wk.opt_short")}
             </span>
+            {v.opt.short ? (
+              <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            ) : null}
           </button>
         </div>
         <Link href="/tickets?book=morning-walk" style={{ marginTop: "14px", minHeight: "60px", padding: "10px 14px", borderRadius: "16px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
@@ -303,8 +326,8 @@ export default function WalkScreen() {
             </svg>
           </span>
           <span style={{ flex: "1", minWidth: "0" }}>
-            <span style={{ display: "block", fontSize: "15px", fontWeight: "800" }}>Do this walk with a guide</span>
-            <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>7:45 AM daily · ₹350 a person</span>
+            <span style={{ display: "block", fontSize: "15px", fontWeight: "800" }}>{t("wk.guide")}</span>
+            <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>{t("wk.guide_sub")}</span>
           </span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m9 18 6-6-6-6" />
@@ -312,14 +335,14 @@ export default function WalkScreen() {
         </Link>
         <div ref={stopsHead} style={{ marginTop: "28px", display: "flex", alignItems: "center", justifyContent: "space-between", scrollMarginTop: "16px" }}>
           <h2 style={{ margin: "0", fontSize: "19px", fontWeight: "800" }}>
-            Your stops
+            {t("wk.your_stops")}
           </h2>
           <button type="button" aria-pressed={editing} onClick={() => setEditing(!editing)} style={{ height: "40px", padding: "0 14px", border: editing ? "0" : "1.5px solid #E2D3C1", borderRadius: "999px", background: editing ? "#9A4E36" : "#FFFFFF", color: editing ? "#FFFFFF" : "#9A4E36", fontSize: "14px", fontWeight: "800", cursor: "pointer" }}>
-            {editing ? "Done" : "Edit stops"}
+            {editing ? t("nav.done") : t("wk.edit")}
           </button>
         </div>
         {editing ? (
-          <p className="fade-in" style={{ margin: "4px 0 0", fontSize: "13px", color: "#6F5B4B" }}>Move stops up or down, remove one, or add another below.</p>
+          <p className="fade-in" style={{ margin: "4px 0 0", fontSize: "13px", color: "#6F5B4B" }}>{t("wk.edit_hint")}</p>
         ) : null}
         <ol style={{ listStyle: "none", margin: "8px 0 0", padding: "0", display: "flex", flexDirection: "column" }}>
           {stops.map((stop, i) => {
@@ -330,7 +353,7 @@ export default function WalkScreen() {
                 <span style={{ fontSize: "15px", fontWeight: "800" }}>{stop.name}</span>
                 <span style={{ fontSize: "13px", color: "#5A4434" }}>{stop.hook}</span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-                  {stop.visit} min · {stop.extra}
+                  {t("unit.min", { n: stop.visit })} · {extraText(stop.extra)}
                 </span>
               </span>
             );
@@ -348,19 +371,19 @@ export default function WalkScreen() {
                         {text}
                       </Link>
                     ) : (
-                      <button type="button" onClick={() => ask(`Tell me about ${stop.name}`)} style={{ ...row, padding: "0", border: "0", background: "none", cursor: "pointer" }}>
+                      <button type="button" onClick={() => ask(t("sv.ask_about", { name: stop.name }))} style={{ ...row, padding: "0", border: "0", background: "none", cursor: "pointer" }}>
                         {THUMBS[stop.id]}
                         {text}
                       </button>
                     )}
                     {editing ? (
                       <span className="pop-in" style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", gap: "4px" }}>
-                        <button type="button" aria-label={`Move ${stop.name} earlier`} disabled={i === 0} onClick={() => move(i, -1)} style={arrow(i === 0)}>
+                        <button type="button" aria-label={t("wk.earlier", { name: stop.name })} disabled={i === 0} onClick={() => move(i, -1)} style={arrow(i === 0)}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                             <path d="m6 15 6-6 6 6" />
                           </svg>
                         </button>
-                        <button type="button" aria-label={`Move ${stop.name} later`} disabled={!next} onClick={() => move(i, 1)} style={arrow(!next)}>
+                        <button type="button" aria-label={t("wk.later", { name: stop.name })} disabled={!next} onClick={() => move(i, 1)} style={arrow(!next)}>
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                             <path d="m6 9 6 6 6-6" />
                           </svg>
@@ -368,7 +391,7 @@ export default function WalkScreen() {
                       </span>
                     ) : null}
                     {editing && order.includes(stop.id) && stops.length > 2 ? (
-                      <button type="button" className="fade-in" aria-label={`Remove ${stop.name}`} onClick={() => remove(stop.id)} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#FBEDE6", color: "#A23A2A", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                      <button type="button" className="fade-in" aria-label={t("wk.remove", { name: stop.name })} onClick={() => remove(stop.id)} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#FBEDE6", color: "#A23A2A", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true">
                           <path d="M18 6 6 18" />
                           <path d="m6 6 12 12" />
@@ -394,7 +417,7 @@ export default function WalkScreen() {
         </ol>
         {editing && addable.length ? (
           <div className="fade-in" style={{ marginTop: "10px", padding: "14px", borderRadius: "16px", border: "1.5px dashed #E2D3C1", background: "#FFFFFF" }}>
-            <p style={{ margin: 0, fontSize: "13px", fontWeight: 800, color: "#2B1B10" }}>Add a stop</p>
+            <p style={{ margin: 0, fontSize: "13px", fontWeight: 800, color: "#2B1B10" }}>{t("wk.add")}</p>
             <div style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "8px" }}>
               {addable.map((x) => (
                 <button key={x.id} type="button" onClick={() => add(x.id)} style={{ minHeight: "40px", padding: "0 14px 0 10px", borderRadius: "999px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
@@ -408,7 +431,7 @@ export default function WalkScreen() {
       </main>
       <div className="nav-rail">
         <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
-        <Toggle storeKey="downloads" field="walk-morning" onLabel="Walk downloaded. Remove download" offLabel="Download walk for offline use" onToast="Walk downloaded — maps and stories work offline" offToast="Download removed" style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "14px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+        <Toggle storeKey="downloads" field="walk-morning" onLabel="wk.dl_on" offLabel="wk.dl_off" onToast="wk.dl_toast" offToast="c.dl_removed" style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "14px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
           on={
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F7A4A" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="9" />
@@ -428,7 +451,7 @@ export default function WalkScreen() {
             <polygon points="3 11 22 2 13 21 11 13 3 11" />
           </svg>
           <span>
-            Start walk
+            {t("home.start_walk")}
           </span>
         </Link>
         </div>

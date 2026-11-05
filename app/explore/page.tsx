@@ -10,6 +10,7 @@ import { pop, useAsk } from "@/components/Tap";
 import { DEFAULT_SAVED, useStored } from "@/lib/store";
 import { PLACES, CATEGORIES, type Category } from "./places";
 import { useT } from "@/lib/i18n";
+import type { Key } from "@/lib/i18n";
 
 export default function ExploreScreen() {
   const [filter, setFilter] = useState<Category | "all">("all");
@@ -25,7 +26,7 @@ export default function ExploreScreen() {
   const ask = useAsk();
   const t = useT();
   // Opening hours the dictionary knows; anything else stays as written.
-  const openText = (o: string) => (o === "Open now" ? t("place.open_now") : o === "Always open" ? t("ex.always_open") : o);
+  const openText = (o: string) => (o === "Open now" ? t("place.open_now") : o === "Always open" ? t("ex.always_open") : o === "Visit by day" ? t("c.visit_day") : o);
 
   const place = PLACES.find((p) => p.id === selected) || PLACES[0];
   const needle = q.trim().toLowerCase();
@@ -64,7 +65,7 @@ export default function ExploreScreen() {
   return (
     <div style={{ width: "390px", height: "min(844px, 100dvh)", minHeight: "640px", position: "relative", overflow: "hidden", background: "#F4F1EA", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div className="map-canvas" style={{ position: "absolute", left: 0, top: 0, width: "390px", height: "844px" }}>
-      <svg role="img" aria-label="Map of Ahmedabad's Old City with heritage places" width="390" height="844" viewBox="0 0 390 844" style={{ position: "absolute", inset: "0", display: "block" }}>
+      <svg role="img" aria-label={t("ex.map_aria")} width="390" height="844" viewBox="0 0 390 844" style={{ position: "absolute", inset: "0", display: "block" }}>
         <defs>
           {/* A soft lift under the pins and the cluster bubble. */}
           <filter id="pin-shadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -143,7 +144,7 @@ export default function ExploreScreen() {
           <path d="M232 0 C226 200 238 500 232 844" />
           <path d="M120 844 L340 110" />
         </g>
-        <g fontFamily="Plus Jakarta Sans, system-ui, sans-serif" fontSize="10" fontWeight="700" fill="#7F776B" stroke="#F4F1EA" strokeWidth="3" paintOrder="stroke" letterSpacing="0.3">
+        <g fontFamily="Plus Jakarta Sans, system-ui, sans-serif" fontSize="11" fontWeight="700" fill="#6F665A" stroke="#F4F1EA" strokeWidth="3" paintOrder="stroke" letterSpacing="0.3">
           <text x="300" y="320">
             Relief Rd
           </text>
@@ -272,7 +273,7 @@ export default function ExploreScreen() {
             style={{ flex: 1, minWidth: 0, width: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "15px", fontWeight: 600, color: "#2B1B10" }}
           />
           {q ? (
-            <button type="button" aria-label="Clear search" onClick={() => setQ("")} style={{ flex: "0 0 36px", width: "36px", height: "36px", border: 0, borderRadius: "50%", background: "#F3ECE2", color: "#6F5B4B", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <button type="button" aria-label={t("ex.clear")} onClick={() => setQ("")} style={{ flex: "0 0 36px", width: "36px", height: "36px", border: 0, borderRadius: "50%", background: "#F3ECE2", color: "#6F5B4B", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true">
                 <path d="M18 6 6 18" />
                 <path d="m6 6 12 12" />
@@ -280,7 +281,7 @@ export default function ExploreScreen() {
             </button>
           ) : null}
         </label>
-        <button type="button" aria-label="Map layers" onClick={() => setLayersOpen(true)} style={{ width: "44px", height: "44px", border: "0", borderRadius: "14px", background: "#F6F1EA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <button type="button" aria-label={t("ex.layers_btn")} onClick={() => setLayersOpen(true)} style={{ width: "44px", height: "44px", border: "0", borderRadius: "14px", background: "#F6F1EA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
             <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
@@ -289,7 +290,7 @@ export default function ExploreScreen() {
         </button>
       </div>
       {searching && needle ? (
-        <div role="listbox" aria-label="Places on the map" className="label-in" style={{ position: "absolute", zIndex: 6, top: "116px", left: "16px", right: "16px", maxHeight: "300px", overflowY: "auto", padding: "6px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid rgba(226, 211, 193, 0.7)", boxShadow: "0 14px 30px rgba(60, 36, 20, 0.16)" }}>
+        <div role="listbox" aria-label={t("ex.places")} className="label-in" style={{ position: "absolute", zIndex: 6, top: "116px", left: "16px", right: "16px", maxHeight: "300px", overflowY: "auto", padding: "6px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid rgba(226, 211, 193, 0.7)", boxShadow: "0 14px 30px rgba(60, 36, 20, 0.16)" }}>
           {matches.length ? (
             matches.map((p) => (
               <button key={p.id} type="button" role="option" aria-selected={p.id === selected} onClick={() => choose(p.id)} style={{ width: "100%", minHeight: "56px", padding: "6px 8px", border: 0, borderRadius: "12px", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", cursor: "pointer" }}>
@@ -331,11 +332,11 @@ export default function ExploreScreen() {
       </div>
       <button
         type="button"
-        aria-label="Show my location"
+        aria-label={t("ex.my_loc")}
         onClick={(e) => {
           pop(e.currentTarget);
           setLocated((n) => n + 1);
-          toast(`You're on Gandhi Road · ${place.mins} min walk to ${place.name}`);
+          toast(t("ex.you_on", { n: place.mins, name: place.name }));
         }}
         style={{ position: "absolute", right: "16px", bottom: "338px", width: "48px", height: "48px", border: "1px solid rgba(226, 211, 193, 0.7)", borderRadius: "16px", background: "#FFFFFF", color: "#2F6FB0", boxShadow: "0 8px 20px rgba(60, 36, 20, 0.16)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
       >
@@ -348,7 +349,7 @@ export default function ExploreScreen() {
           <circle cx="12" cy="12" r="3" />
         </svg>
       </button>
-      <section aria-label="Selected place" style={{ position: "absolute", left: "0", right: "0", bottom: "0", background: "#FFFFFF", borderRadius: "26px 26px 0 0", boxShadow: "0 -10px 30px rgba(90, 60, 30, 0.14)", padding: "8px 20px 100px" }}>
+      <section aria-label={t("ex.selected")} style={{ position: "absolute", left: "0", right: "0", bottom: "0", background: "#FFFFFF", borderRadius: "26px 26px 0 0", boxShadow: "0 -10px 30px rgba(90, 60, 30, 0.14)", padding: "8px 20px 100px" }}>
         <div style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#DCCDBA", margin: "0 auto" }} />
         <div style={{ marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>{needle ? t(matches.length === 1 ? "ex.found_one" : "ex.found", { n: matches.length }) : filter === "all" ? t("ex.nearby") : t(shown.length === 1 ? "ex.count_one" : "ex.count", { n: shown.length, cat: t(`ex.cat.${filter}`) })}</span>
@@ -365,7 +366,7 @@ export default function ExploreScreen() {
           </button>
         </div>
         <div key={place.id} className="rise">
-          <Link href={place.href || place.detail || "/explore"} onClick={(e) => { if (!place.href && !place.detail) { e.preventDefault(); ask(`Tell me about ${place.name}`); } }} style={{ marginTop: "10px", display: "flex", gap: "14px", textDecoration: "none", color: "#2B1B10" }}>
+          <Link href={place.href || place.detail || "/explore"} onClick={(e) => { if (!place.href && !place.detail) { e.preventDefault(); ask(t("sv.ask_about", { name: place.name })); } }} style={{ marginTop: "10px", display: "flex", gap: "14px", textDecoration: "none", color: "#2B1B10" }}>
             {place.img ? (
               <img src={place.img} alt="" style={{ flex: "0 0 92px", width: "92px", height: "92px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
             ) : (
@@ -384,7 +385,7 @@ export default function ExploreScreen() {
               <span style={{ fontSize: "18px", fontWeight: "800", letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{place.name}</span>
               <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", fontWeight: "600", color: "#5A4434" }}>
                 <span>
-                  {place.fact} · {place.mins} min walk
+                  {/^\d{4}$/.test(place.fact) ? t("c.built", { year: place.fact }) : place.fact} · {place.km < 1 ? `${Math.round(place.km * 1000)} m` : `${place.km} km`} · {t("unit.min_walk", { n: place.mins })}
                 </span>
               </span>
             </span>
@@ -409,7 +410,7 @@ export default function ExploreScreen() {
                   {t("ex.read")}
                 </Link>
               ) : (
-                <button type="button" onClick={() => ask(`Tell me the story of ${place.name}`)} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid #9A4E36", background: "none", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", cursor: "pointer" }}>
+                <button type="button" onClick={() => ask(t("c.story_of", { name: place.name }))} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid #9A4E36", background: "none", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", cursor: "pointer" }}>
                   {t("ex.ask")}
                 </button>
               )
@@ -421,7 +422,7 @@ export default function ExploreScreen() {
               onClick={(e) => {
                 pop(e.currentTarget, !isSaved);
                 setSaved((m) => ({ ...m, [place.id]: !isSaved }));
-                toast(isSaved ? "Removed from Saved" : "Saved for later", isSaved ? "info" : "success");
+                toast(isSaved ? t("c.removed_saved") : t("c.saved_later"), isSaved ? "info" : "success");
               }}
               style={{ flex: "0 0 50px", width: "50px", height: "50px", borderRadius: "14px", border: `1.5px solid ${isSaved ? "#9A4E36" : "#E2D3C1"}`, background: isSaved ? "#FBEDE6" : "#FFFFFF", color: isSaved ? "#9A4E36" : "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
             >
@@ -433,8 +434,8 @@ export default function ExploreScreen() {
         </div>
       </section>
       <MainNav active="explore" />
-      <Sheet open={listOpen} onClose={() => setListOpen(false)} title={filter === "all" ? "Places nearby" : CATEGORIES[filter].chip}>
-        <p>Nearest first. Tap a place to see it on the map.</p>
+      <Sheet open={listOpen} onClose={() => setListOpen(false)} title={filter === "all" ? t("ex.nearby_t") : t(`ex.cat.${filter}` as Key)}>
+        <p>{t("ex.nearest_hint")}</p>
         {[...shown]
           .sort((a, b) => a.km - b.km)
           .map((p) => (
@@ -444,19 +445,19 @@ export default function ExploreScreen() {
                 <span style={{ minWidth: "0" }}>
                   {p.name}
                   <small>
-                    {CATEGORIES[p.cat].label} · {p.open}
+                    {t(`ex.one.${p.cat}` as Key)} · {openText(p.open)}
                   </small>
                 </span>
               </span>
-              <span style={{ flex: "0 0 auto", fontSize: "13px", color: "#6F5B4B" }}>{p.mins} min</span>
+              <span style={{ flex: "0 0 auto", fontSize: "13px", color: "#6F5B4B" }}>{t("unit.min", { n: p.mins })}</span>
             </button>
           ))}
       </Sheet>
       <Sheet open={layersOpen} onClose={() => setLayersOpen(false)} title={t("ex.layers")}>
         {(
           [
-            ["labels", "Place names", "Show the name above the selected pin"],
-            ["savedOnly", "Saved places only", "Fade the places you have not saved"],
+            ["labels", t("ex.labels"), t("ex.labels_hint")],
+            ["savedOnly", t("ex.saved_only"), t("ex.saved_only_hint")],
           ] as const
         ).map(([id, name, hint]) => (
           <button key={id} type="button" role="switch" aria-checked={!!layers[id]} className="sheet-row" onClick={() => setLayers((l) => ({ ...l, [id]: !l[id] }))}>

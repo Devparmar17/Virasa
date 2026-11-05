@@ -11,12 +11,13 @@ import Link from "next/link";
 import BackLink from "@/components/Back";
 import VoiceSearch from "@/components/VoiceSearch";
 import { pop, useAsk } from "@/components/Tap";
+import { toast } from "@/components/Toast";
 import { frame } from "@/components/ui";
 import { travellerProfile, useStored } from "@/lib/store";
 import { DEFAULT_HERE, type Here } from "@/lib/here";
 import { useT, type Key } from "@/lib/i18n";
 import { POPULAR_CITIES } from "@/lib/trip";
-import { FIND_KINDS, mapsUrl, type Discovery, type Find, type FindKind } from "@/lib/discover";
+import { FIND_KINDS, mapsUrl, type Discovery, type Find, type FindKind, type SavedFind } from "@/lib/discover";
 import { lookOf } from "@/lib/kinds";
 
 const INK = "#2B1B10";
@@ -54,6 +55,19 @@ const smallBtn: CSSProperties = { height: "40px", padding: "0 12px", borderRadiu
 function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void }) {
   const t = useT();
   const look = lookOf(f.kind);
+  const [finds, setFinds] = useStored<Record<string, SavedFind>>("savedFinds", {});
+  const key = `${city}|${f.name}`.toLowerCase();
+  const saved = Boolean(finds[key]);
+  const toggle = (el: Element) => {
+    pop(el, !saved);
+    setFinds((m) => {
+      const next = { ...m };
+      if (saved) delete next[key];
+      else next[key] = { ...f, city, savedAt: Date.now() };
+      return next;
+    });
+    toast(saved ? t("sv.removed", { name: f.name }) : t("c.saved_name", { name: f.name }), saved ? "info" : "success");
+  };
   return (
     <li style={{ padding: "14px", borderRadius: "20px", border: "1px solid #EFE6DA", background: "#FFFFFF" }}>
       <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
@@ -110,6 +124,11 @@ function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void
           <Icon d={ICON.map} size={15} />
           {t("trip.map")}
         </a>
+        <button type="button" aria-pressed={saved} aria-label={saved ? t("sv.remove_aria", { name: f.name }) : t("c.save_name", { name: f.name })} onClick={(e) => toggle(e.currentTarget)} style={{ ...smallBtn, marginLeft: "auto", width: "40px", padding: 0, justifyContent: "center", borderColor: saved ? "#9A4E36" : "#E2D3C1", background: saved ? "#FBEDE6" : "#FFFFFF", color: saved ? "#9A4E36" : INK }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+          </svg>
+        </button>
       </div>
     </li>
   );
@@ -169,16 +188,16 @@ export default function DiscoverScreen() {
     })
       .then(async (res) => {
         const data = await res.json().catch(() => ({}));
-        setResults((r) => ({ ...r, [key]: res.ok && data.discovery ? { data: data.discovery } : { error: data.error || "Couldn't find anything right now." } }));
+        setResults((r) => ({ ...r, [key]: res.ok && data.discovery ? { data: data.discovery } : { error: data.error || t("dc.none") } }));
       })
       .catch((e: Error) => {
-        setResults((r) => ({ ...r, [key]: { error: e.name === "AbortError" ? "This is taking too long. Try again in a moment." : "Check your internet connection and try again." } }));
+        setResults((r) => ({ ...r, [key]: { error: e.name === "AbortError" ? t("c.slow") : t("c.offline") } }));
       })
       .finally(() => {
         window.clearTimeout(timer);
         asking.current.delete(key);
       });
-  }, [key, city, kind, lang, results]);
+  }, [key, city, kind, lang, results, t]);
 
   const go = (next: string) => {
     const where = next.trim().replace(/[.?!]+$/, "");
@@ -198,7 +217,7 @@ export default function DiscoverScreen() {
   return (
     <div style={frame({ paddingBottom: "48px" })}>
       <div style={{ padding: "54px 8px 0", height: "98px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <BackLink href="/home" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: INK }}>
+        <BackLink href="/home" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: INK }}>
           <Icon d={ICON.back} size={22} />
         </BackLink>
         <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>{t("home.discover")}</h1>
@@ -238,7 +257,7 @@ export default function DiscoverScreen() {
         ))}
       </div>
 
-      <div role="tablist" aria-label="What to discover" className="hscroll" style={{ marginTop: "18px", padding: "0 20px", display: "flex", gap: "8px" }}>
+      <div role="tablist" aria-label={t("dc.tabs")} className="hscroll" style={{ marginTop: "18px", padding: "0 20px", display: "flex", gap: "8px" }}>
         {FIND_KINDS.map(([id]) => {
           const on = kind === id;
           const look = id === "all" ? { fg: INK, icon: ALL_ICON } : lookOf(id);
@@ -293,7 +312,7 @@ export default function DiscoverScreen() {
             {finds.length ? (
               <ul className="stagger" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
                 {finds.map((f, i) => (
-                  <FindCard key={`${f.name}-${i}`} f={f} city={result.data?.city || city} onAsk={() => ask(`Explain ${f.name}${f.area ? ` in ${f.area}` : ""}, ${result.data?.city || city} to me: why locals love it, its story, and how to make the most of a visit.`)} />
+                  <FindCard key={`${f.name}-${i}`} f={f} city={result.data?.city || city} onAsk={() => ask(t("dc.ask", { name: `${f.name}${f.area ? ` (${f.area})` : ""}`, city: result.data?.city || city }))} />
                 ))}
               </ul>
             ) : (

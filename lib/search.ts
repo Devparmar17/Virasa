@@ -2,7 +2,7 @@
 // the map's places, bookable tickets and walks, and the city trip plans.
 
 import { SECRETS } from "./secrets";
-import { BOOKABLES, rupees } from "./tickets";
+import { BOOKABLES, KIND_LABEL, rupees } from "./tickets";
 import { CITY_PLANS } from "./plans";
 import { PLACES } from "@/app/explore/places";
 
@@ -35,7 +35,7 @@ const INDEX: Entry[] = [
     id: p.id,
     kind: "Place",
     title: p.name,
-    sub: `${p.mins} min walk · ${p.open}`,
+    sub: `${p.km < 1 ? `${Math.round(p.km * 1000)} m` : `${p.km} km`} · ${p.mins} min walk`,
     href: p.href || `/navigate?to=${p.id}`,
     img: p.img,
     words: `${p.name} ${p.cat} ${p.fact} ${p.id === "sidi" ? "jali tree of life mosque" : ""}`,
@@ -43,12 +43,12 @@ const INDEX: Entry[] = [
   })),
   ...BOOKABLES.map((b) => ({
     id: `ticket-${b.id}`,
-    kind: b.kind === "guided" ? "Guided walk" : "Entry ticket",
+    kind: KIND_LABEL[b.kind],
     title: b.title,
-    sub: `${b.place} · from ${rupees(b.adult)}`,
+    sub: `${b.place} · ${b.kind === "car" ? `${rupees(b.adult)} per car` : `from ${rupees(b.adult)}`}`,
     href: `/tickets?book=${b.id}`,
     img: b.img,
-    words: `${b.title} ${b.place} ${b.blurb} ticket booking ${b.kind === "guided" ? "guide tour walk" : "entry"}`,
+    words: `${b.title} ${b.place} ${b.blurb} ${b.tag ?? ""} ticket booking ${{ guided: "guide tour walk", entry: "entry", activity: "activity experience workshop class", car: "car cab taxi driver transport ride pickup" }[b.kind]} ${b.senior ? "senior citizen elderly old parents grandparents wheelchair" : ""}`,
     detail: [],
   })),
   {
@@ -83,7 +83,7 @@ const INDEX: Entry[] = [
     kind: "Trip plan",
     title: `Plan a trip to ${c.name}`,
     sub: c.tag,
-    href: `/plan?city=${c.id}`,
+    href: `/trip?city=${encodeURIComponent(c.name)}`,
     img: c.img,
     words: `${c.name} ${c.tag} trip plan itinerary`,
     detail: c.stops.map((s) => ({ name: s.name, text: `${s.name} ${s.note}` })),

@@ -6,8 +6,8 @@ import BackLink from "@/components/Back";
 import { useStored } from "@/lib/store";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 import { renderVals } from "./logic";
-import { DEFAULT_PROFILE, PARTIES, type Profile } from "@/lib/profile";
-import { useT, type Key } from "@/lib/i18n";
+import { useT } from "@/lib/i18n";
+import PartyChips from "@/components/PartyChips";
 
 export default function PersonalizeScreen() {
   // Choices are remembered, and length and language are the same ones Settings edits.
@@ -25,11 +25,11 @@ export default function PersonalizeScreen() {
   };
   const v: any = renderVals(state, setState);
   const t = useT();
-  const [profile, setProfile] = useStored<Profile>("profile", DEFAULT_PROFILE);
   return (
     <div style={{ width: "390px", minHeight: "844px", paddingBottom: "120px", position: "relative", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
-      <div style={{ padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <BackLink href="/login" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+      {/* Sticks once scrolled, so Skip and the progress stay in reach. */}
+      <div style={{ position: "sticky", top: "-54px", zIndex: 10, background: "#FFFFFF", padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
+        <BackLink href="/welcome" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
@@ -43,47 +43,37 @@ export default function PersonalizeScreen() {
             <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1" }} />
           </div>
           <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-            Step 1 of 2
+            {t("on.step", { n: 1, total: 2 })}
           </span>
         </div>
         <Link href="/location" style={{ height: "44px", padding: "0 10px", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "700", color: "#5A4434" }}>
-          Skip
+          {t("on.skip")}
         </Link>
       </div>
       <div style={{ padding: "18px 20px 0" }}>
         <h1 style={{ margin: "0", fontSize: "26px", lineHeight: "1.2", fontWeight: "800", letterSpacing: "-0.02em", textWrap: "balance" }}>
-          What pulls you into a place?
+          {t("on.title")}
         </h1>
         <p style={{ margin: "8px 0 0", fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>
-          Pick a few. Your feed, walks and stories will follow them — change anytime.
+          {t("on.sub")}
         </p>
       </div>
       <fieldset style={{ border: "0", margin: "20px 0 0", padding: "0 20px", minWidth: "0" }}>
         <legend style={{ padding: "0", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
           {t("trip.who")}
         </legend>
-        <div role="radiogroup" aria-label={t("trip.who")} style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "8px" }}>
-          {PARTIES.map((p) => {
-            const on = profile.party === p.id;
-            return (
-              <button key={p.id} type="button" role="radio" aria-checked={on} onClick={() => setProfile((x) => ({ ...DEFAULT_PROFILE, ...x, party: p.id }))} style={{ height: "48px", padding: "0 14px 0 10px", borderRadius: "999px", border: `1.5px solid ${on ? "#9A4E36" : "#E2D3C1"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: on ? "#7E3D29" : "#2B1B10", display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: "700", cursor: "pointer", transition: "background-color 0.18s ease, border-color 0.18s ease" }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d={p.icon} />
-                </svg>
-                {t(`who.${p.id}` as Key)}
-              </button>
-            );
-          })}
+        <div style={{ marginTop: "10px" }}>
+          <PartyChips />
         </div>
         <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: "1.4", color: "#6F5B4B" }}>{t("trip.who_hint")}</p>
       </fieldset>
       <fieldset style={{ border: "0", margin: "22px 0 0", padding: "0 20px", minWidth: "0" }}>
         <legend style={{ padding: "0", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
           <span>
-            Interests
+            {t("on.interests")}
           </span>
           <span style={{ letterSpacing: "0", fontWeight: "600", color: "#6F5B4B" }}>
-            {v.count}{" selected"}
+            {t("on.selected", { n: v.count })}
           </span>
         </legend>
         <div className="stagger" style={{ marginTop: "10px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
@@ -97,7 +87,7 @@ export default function PersonalizeScreen() {
               <polygon points="12 2 20 7 4 7" />
             </svg>
             <span style={{ flex: "1" }}>
-              Architecture
+              {t("on.i.arch")}
             </span>
             {v.on.arch ? (
               <>
@@ -116,7 +106,7 @@ export default function PersonalizeScreen() {
               <path d="M11 20h2" />
             </svg>
             <span style={{ flex: "1" }}>
-              Stepwells
+              {t("on.i.well")}
             </span>
             {v.on.well ? (
               <>
@@ -133,7 +123,7 @@ export default function PersonalizeScreen() {
               <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" />
             </svg>
             <span style={{ flex: "1" }}>
-              Street food
+              {t("on.i.food")}
             </span>
             {v.on.food ? (
               <>
@@ -152,7 +142,7 @@ export default function PersonalizeScreen() {
               <path d="M14.8 14.8 20 20" />
             </svg>
             <span style={{ flex: "1" }}>
-              {"Crafts & textiles"}
+              {t("on.i.craft")}
             </span>
             {v.on.craft ? (
               <>
@@ -168,7 +158,7 @@ export default function PersonalizeScreen() {
               <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
             </svg>
             <span style={{ flex: "1" }}>
-              Legends
+              {t("on.i.legend")}
             </span>
             {v.on.legend ? (
               <>
@@ -183,7 +173,7 @@ export default function PersonalizeScreen() {
               <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
             </svg>
             <span style={{ flex: "1" }}>
-              Spiritual places
+              {t("on.i.spirit")}
             </span>
             {v.on.spirit ? (
               <>
@@ -199,7 +189,7 @@ export default function PersonalizeScreen() {
               <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z" />
             </svg>
             <span style={{ flex: "1" }}>
-              Festivals
+              {t("on.i.fest")}
             </span>
             {v.on.fest ? (
               <>
@@ -215,7 +205,7 @@ export default function PersonalizeScreen() {
               <circle cx="12" cy="13" r="3" />
             </svg>
             <span style={{ flex: "1" }}>
-              Photo spots
+              {t("on.i.photo")}
             </span>
             {v.on.photo ? (
               <>
@@ -227,67 +217,12 @@ export default function PersonalizeScreen() {
           </button>
         </div>
       </fieldset>
-      <fieldset style={{ border: "0", margin: "22px 0 0", padding: "0 20px", minWidth: "0" }}>
-        <legend style={{ padding: "0", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
-          Story length
-        </legend>
-        <div role="group" style={{ marginTop: "10px", padding: "4px", borderRadius: "16px", background: "#F1E7DA", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
-          <button type="button" onClick={v.setLen.quick} aria-pressed={v.lenOn.quick} style={{ height: "52px", borderRadius: "12px", border: `1.5px solid ${v.lenS.quick.bd}`, background: v.lenS.quick.bg, boxShadow: v.lenS.quick.sh, color: v.lenS.quick.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
-            <span style={{ fontSize: "14px", fontWeight: "700" }}>
-              Quick
-            </span>
-            <span style={{ fontSize: "12px", fontWeight: "600", color: v.lenS.quick.sub }}>
-              1 min
-            </span>
-          </button>
-          <button type="button" onClick={v.setLen.classic} aria-pressed={v.lenOn.classic} style={{ height: "52px", borderRadius: "12px", border: `1.5px solid ${v.lenS.classic.bd}`, background: v.lenS.classic.bg, boxShadow: v.lenS.classic.sh, color: v.lenS.classic.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
-            <span style={{ fontSize: "14px", fontWeight: "700" }}>
-              Classic
-            </span>
-            <span style={{ fontSize: "12px", fontWeight: "600", color: v.lenS.classic.sub }}>
-              3 min
-            </span>
-          </button>
-          <button type="button" onClick={v.setLen.deep} aria-pressed={v.lenOn.deep} style={{ height: "52px", borderRadius: "12px", border: `1.5px solid ${v.lenS.deep.bd}`, background: v.lenS.deep.bg, boxShadow: v.lenS.deep.sh, color: v.lenS.deep.fg, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
-            <span style={{ fontSize: "14px", fontWeight: "700" }}>
-              Deep dive
-            </span>
-            <span style={{ fontSize: "12px", fontWeight: "600", color: v.lenS.deep.sub }}>
-              10 min
-            </span>
-          </button>
-        </div>
-      </fieldset>
-      <fieldset style={{ border: "0", margin: "22px 0 0", padding: "0 20px", minWidth: "0" }}>
-        <legend style={{ padding: "0", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
-          Story language
-        </legend>
-        <div role="group" style={{ marginTop: "10px", padding: "4px", borderRadius: "16px", background: "#F1E7DA", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
-          <button type="button" lang="en" onClick={v.setLang.en} aria-pressed={v.langOn.en} style={{ height: "44px", borderRadius: "12px", border: `1.5px solid ${v.langS.en.bd}`, background: v.langS.en.bg, boxShadow: v.langS.en.sh, color: v.langS.en.fg, fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
-            English
-          </button>
-          <button type="button" lang="hi" onClick={v.setLang.hi} aria-pressed={v.langOn.hi} style={{ height: "44px", borderRadius: "12px", border: `1.5px solid ${v.langS.hi.bd}`, background: v.langS.hi.bg, boxShadow: v.langS.hi.sh, color: v.langS.hi.fg, fontSize: "15px", fontWeight: "600", cursor: "pointer" }}>
-            हिन्दी
-          </button>
-          <button type="button" onClick={v.setLang.gu} aria-pressed={v.langOn.gu} style={{ height: "44px", borderRadius: "12px", border: `1.5px solid ${v.langS.gu.bd}`, background: v.langS.gu.bg, boxShadow: v.langS.gu.sh, color: v.langS.gu.fg, fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
-            Local
-          </button>
-        </div>
-        <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: "1.4", color: "#6F5B4B" }}>
-          {"Local follows the state you're in — ગુજરાતી in Gujarat, தமிழ் in Tamil Nadu, বাংলা in West Bengal."}
-        </p>
-      </fieldset>
       <div className="nav-rail">
         <div style={{ padding: "28px 20px 24px", background: "linear-gradient(180deg, rgba(251, 246, 238, 0) 0%, #FBF6EE 34%)" }}>
         <Link href="/location" style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
           <span>
-            {v.cta}
+            {v.count ? t("on.continue") : t("on.skip_now")}
           </span>
-          {v.count ? (
-            <span key={v.count} className="pop-in" style={{ minWidth: "26px", height: "26px", padding: "0 8px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.22)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800 }}>
-              {v.count}
-            </span>
-          ) : null}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />

@@ -11,6 +11,7 @@
 // /trip?city=…     the planner with the city filled in
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import BackLink from "@/components/Back";
 import VoiceSearch from "@/components/VoiceSearch";
 import { toast } from "@/components/Toast";
@@ -176,6 +177,7 @@ function StopCard({ s, city, last, onAsk }: { s: TripStop; city: string; last: b
 export default function TripScreen() {
   const t = useT();
   const ask = useAsk();
+  const router = useRouter();
   const search = useSyncExternalStore(noop, () => window.location.search, () => "");
   const params = new URLSearchParams(search);
   const openId = params.get("id");
@@ -244,6 +246,9 @@ export default function TripScreen() {
       if (!res.ok || !data.trip) throw new Error(data.error || tr("trip.error"));
       const made: SavedTrip = { id: tripId(where), trip: data.trip as Trip, lang, savedAt: Date.now(), profile: who };
       setLast(made);
+      // Saved straight away, so it's always waiting under Saved › Plans.
+      setSaved((m) => ({ ...m, [made.id]: made }));
+      toast(t("trip.saved_toast"), { tone: "success", action: { label: "View", run: () => router.push("/saved#plans") } });
       // The plan gets its own address, so Back from the guide comes back to it.
       window.history.replaceState(null, "", "/trip?view=last");
       setPhase(null);
@@ -252,7 +257,7 @@ export default function TripScreen() {
       // Cancelled: the traveller is already back on the planner.
       if (abort.current !== controller) return;
       const err = e as Error;
-      setError(err.name === "AbortError" ? "This is taking too long. Try again in a moment." : err.message === "Failed to fetch" ? "Check your internet connection and try again." : err.message);
+      setError(err.name === "AbortError" ? t("c.slow") : err.message === "Failed to fetch" ? t("c.offline") : err.message);
       setPhase("error");
     } finally {
       window.clearTimeout(timer);
@@ -293,7 +298,7 @@ export default function TripScreen() {
     ];
     const listen = () => {
       const synth = window.speechSynthesis;
-      if (!synth) return toast("Reading aloud isn't available in this browser.", "error");
+      if (!synth) return toast(t("c.no_read"), "error");
       if (speaking) return hush();
       synth.cancel();
       const utter = (text: string) => {
@@ -330,7 +335,7 @@ export default function TripScreen() {
           delete rest[shown.id];
           return rest;
         });
-        toast(`Removed ${trip.title}`, { action: { label: "Undo", run: () => setSaved((m) => ({ ...m, [kept.id]: kept })) } });
+        toast(t("sv.removed", { name: trip.title }), { action: { label: t("sv.undo"), run: () => setSaved((m) => ({ ...m, [kept.id]: kept })) } });
       } else {
         setSaved((m) => ({ ...m, [shown.id]: { ...shown, savedAt: Date.now() } }));
         toast(t("trip.saved_toast"), "success");
@@ -342,7 +347,7 @@ export default function TripScreen() {
       <div style={frame({ paddingBottom: "120px" })}>
         <div style={{ padding: "54px 8px 0", height: "98px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           {openId ? (
-            <BackLink href="/saved#plans" aria-label="Back" style={roundBtn}>
+            <BackLink href="/saved#plans" aria-label={t("on.back")} style={roundBtn}>
               <Icon d={ICON.back} size={22} />
             </BackLink>
           ) : (
@@ -351,7 +356,7 @@ export default function TripScreen() {
             </button>
           )}
           <h1 style={{ margin: 0, fontSize: "16px", fontWeight: 800 }}>{t("trip.title")}</h1>
-          <button type="button" aria-label="Share plan" onClick={() => share(trip.title, shareText)} style={roundBtn}>
+          <button type="button" aria-label={t("c.share_plan")} onClick={() => share(trip.title, shareText)} style={roundBtn}>
             <Icon d={ICON.share} />
           </button>
         </div>
@@ -367,12 +372,6 @@ export default function TripScreen() {
           <div style={{ padding: "16px 18px 18px" }}>
             <p style={{ margin: 0, display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "#E7B98A" }}>
               {trip.city.toUpperCase()}
-              {trip.source === "gemini" ? (
-                <span style={{ height: "22px", padding: "0 8px", borderRadius: "999px", background: "rgba(238, 242, 254, 0.14)", color: "#C9D6FF", display: "inline-flex", alignItems: "center", gap: "4px", letterSpacing: 0, fontSize: "11px" }}>
-                  <Spark size={10} />
-                  Gemini
-                </span>
-              ) : null}
             </p>
             <h2 style={{ margin: "6px 0 0", fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textWrap: "balance" }}>{trip.title}</h2>
             <p style={{ margin: "8px 0 0", fontSize: "calc(14px * var(--read-scale, 1))", lineHeight: 1.5, color: "#D9C6AE" }}>{trip.summary}</p>
@@ -411,7 +410,7 @@ export default function TripScreen() {
         ) : null}
 
         {trip.days.length > 1 ? (
-          <div role="tablist" aria-label="Days" className="hscroll" style={{ marginTop: "22px", padding: "0 20px", display: "flex", gap: "8px" }}>
+          <div role="tablist" aria-label={t("tp.days")} className="hscroll" style={{ marginTop: "22px", padding: "0 20px", display: "flex", gap: "8px" }}>
             {trip.days.map((d) => {
               const on = d.day === today.day;
               return (
@@ -437,7 +436,7 @@ export default function TripScreen() {
           </h2>
           <ol className="stagger" style={{ listStyle: "none", margin: 0, padding: 0 }}>
             {today.stops.map((s, i) => (
-              <StopCard key={`${s.name}-${i}`} s={s} city={trip.city} last={i === today.stops.length - 1} onAsk={() => ask(`Explain ${s.name} in ${trip.city} to me simply: what it is, its story, and what to look for.`)} />
+              <StopCard key={`${s.name}-${i}`} s={s} city={trip.city} last={i === today.stops.length - 1} onAsk={() => ask(t("tp.explain", { name: s.name, city: trip.city }))} />
             ))}
           </ol>
         </section>
@@ -508,7 +507,7 @@ export default function TripScreen() {
           ) : null}
 
           <div style={{ marginTop: "22px", display: "flex", flexDirection: "column", gap: "8px" }}>
-            <button type="button" className="sheet-row" style={{ marginTop: 0 }} onClick={() => ask(`I'm planning ${trip.title}. ${trip.days.map((d) => `Day ${d.day}: ${d.stops.map((s) => s.name).join(", ")}.`).join(" ")} What else should I know before I go?`)}>
+            <button type="button" className="sheet-row" style={{ marginTop: 0 }} onClick={() => ask(t("tp.ask_more", { title: trip.title, days: trip.days.map((d) => `${t("trip.day", { n: d.day })}: ${d.stops.map((s) => s.name).join(", ")}.`).join(" ") }))}>
               <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Icon d={ICON.chat} />
                 {t("trip.ask_guide")}
@@ -522,6 +521,16 @@ export default function TripScreen() {
               </span>
               <span aria-hidden="true">›</span>
             </Link>
+            {/* Travelling with elders: a car that suits them, one tap away. */}
+            {madeFor.party === "family-elders" || madeFor.stepFree ? (
+              <Link href={madeFor.stepFree ? "/tickets?book=car-wheelchair" : "/tickets?book=car-senior"} className="sheet-row" style={{ marginTop: 0 }}>
+                <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <Icon d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2M7 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0M9 17h6" />
+                  {madeFor.stepFree ? t("tp.car_wheel") : t("tp.car_senior")}
+                </span>
+                <span aria-hidden="true">›</span>
+              </Link>
+            ) : null}
           </div>
         </div>
 
@@ -588,11 +597,11 @@ export default function TripScreen() {
     <div style={frame({ paddingBottom: "130px" })}>
       <div style={{ padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
         {step > 1 ? (
-          <button type="button" aria-label="Back" onClick={() => setStep(step - 1)} style={roundBtn}>
+          <button type="button" aria-label={t("on.back")} onClick={() => setStep(step - 1)} style={roundBtn}>
             <Icon d={ICON.back} size={22} />
           </button>
         ) : (
-          <BackLink href="/home" aria-label="Back" style={roundBtn}>
+          <BackLink href="/home" aria-label={t("on.back")} style={roundBtn}>
             <Icon d={ICON.back} size={22} />
           </BackLink>
         )}

@@ -2,7 +2,9 @@
 import Link from "next/link";
 import BackLink from "@/components/Back";
 import MainNav from "@/components/MainNav";
+import { Tap } from "@/components/Tap";
 import { Points, StampBar, StampCount } from "@/components/Stamps";
+import { T } from "@/lib/i18n";
 
 export default function GamesScreen() {
   return (
@@ -15,7 +17,7 @@ export default function GamesScreen() {
           </svg>
         </BackLink>
         <h1 style={{ flex: "1", margin: "0", fontSize: "22px", fontWeight: "800", letterSpacing: "-0.01em" }}>
-          {"Play & learn"}
+          <T k="gm.title" />
         </h1>
         <span style={{ height: "32px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", gap: "4px" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="#C8902B" stroke="none" aria-hidden="true">
@@ -27,21 +29,21 @@ export default function GamesScreen() {
         </span>
       </div>
       <p style={{ margin: "8px 20px 0", fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>
-        {"Quick games built from the stories you've heard. Points turn into passport stamps."}
+        <T k="gm.sub" />
       </p>
       <Link href="/quiz" style={{ position: "relative", overflow: "hidden", margin: "16px 20px 0", padding: "18px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE", display: "flex", gap: "14px", textDecoration: "none" }}>
         <span style={{ flex: "1", display: "flex", flexDirection: "column", gap: "4px" }}>
           <span style={{ fontSize: "12px", fontWeight: "700", letterSpacing: "0.12em", color: "#E7B98A" }}>
-            {"TODAY'S QUIZ"}
+            <span style={{ textTransform: "uppercase" }}><T k="gm.today" /></span>
           </span>
           <span style={{ fontSize: "20px", fontWeight: "800", lineHeight: "1.2" }}>
             Sidi Saiyyed Mosque
           </span>
           <span style={{ fontSize: "13px", color: "#D9C6AE" }}>
-            3 questions · 1 min · +30 pts
+            <T k="gm.quiz_meta" />
           </span>
           <span style={{ marginTop: "10px", alignSelf: "flex-start", height: "44px", padding: "0 16px", borderRadius: "12px", background: "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: "800" }}>
-            Play now
+            <T k="pl.play_now" />
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
               <polygon points="7 4 19 12 7 20 7 4" />
             </svg>
@@ -50,7 +52,7 @@ export default function GamesScreen() {
         <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="" style={{ flex: "0 0 96px", width: "96px", height: "128px", objectFit: "cover", borderRadius: "48px 48px 12px 12px", display: "block" }} />
       </Link>
       <h2 style={{ margin: "26px 20px 0", fontSize: "19px", fontWeight: "800" }}>
-        More games
+        <T k="gm.more" />
       </h2>
       <div style={{ margin: "12px 20px 0", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "12px" }}>
         <Link href="/puzzle" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
@@ -63,21 +65,21 @@ export default function GamesScreen() {
             <span style={{ position: "absolute", right: "0", bottom: "0", width: "33.33%", height: "33.33%", background: "#2B1B10" }} />
           </span>
           <span style={{ marginTop: "4px", fontSize: "15px", fontWeight: "800" }}>
-            Jali puzzle
+            <T k="gm.puzzle" />
           </span>
           <span style={{ fontSize: "12px", lineHeight: "1.4", color: "#5A4434" }}>
-            Slide 8 tiles to rebuild the Tree of Life
+            <T k="gm.puzzle_sub" />
           </span>
           <span style={{ marginTop: "2px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#8A6424" }}>
-              +20 pts
+              <T k="gm.pts" v={{ n: 20 }} />
             </span>
             <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
               2 min
             </span>
           </span>
         </Link>
-        <article style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+        <Tap ask="gm.state_ask" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" , textAlign: "left", cursor: "pointer", width: "100%" }}>
           <span role="img" aria-label="Illustration placeholder: guess the state" style={{ height: "104px", borderRadius: "12px", background: "#F6EEE4", display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center", gap: "6px", padding: "0 12px" }}>
             <span style={{ height: "28px", padding: "0 10px", borderRadius: "8px", background: "#FFFFFF", fontSize: "12px", fontWeight: "800", display: "flex", alignItems: "center" }}>
               Rajasthan?
@@ -90,20 +92,20 @@ export default function GamesScreen() {
             </span>
           </span>
           <span style={{ marginTop: "4px", fontSize: "15px", fontWeight: "800" }}>
-            Guess the state
+            <T k="gm.state" />
           </span>
           <span style={{ fontSize: "12px", lineHeight: "1.4", color: "#5A4434" }}>
-            One monument photo, three states — pick right
+            <T k="gm.state_sub" />
           </span>
           <span style={{ marginTop: "2px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#8A6424" }}>
-              +10 pts
+              <T k="gm.pts" v={{ n: 10 }} />
             </span>
             <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
-              All India
+              <T k="gm.all_india" />
             </span>
           </span>
-        </article>
+        </Tap>
         <Link href="/lens" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
           <span style={{ height: "104px", borderRadius: "12px", background: "#2B1B10", color: "#F3D9A8", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -116,21 +118,21 @@ export default function GamesScreen() {
             </svg>
           </span>
           <span style={{ marginTop: "4px", fontSize: "15px", fontWeight: "800" }}>
-            Spot it in AR
+            <T k="gm.spot" />
           </span>
           <span style={{ fontSize: "12px", lineHeight: "1.4", color: "#5A4434" }}>
-            Find 3 carved details with your camera on site
+            <T k="gm.spot_sub" />
           </span>
           <span style={{ marginTop: "2px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#8A6424" }}>
-              +25 pts
+              <T k="gm.pts" v={{ n: 25 }} />
             </span>
             <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
-              On site
+              <T k="gm.on_site" />
             </span>
           </span>
         </Link>
-        <article style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" }}>
+        <Tap ask="gm.legend_ask" style={{ padding: "10px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px", textDecoration: "none", color: "#2B1B10" , textAlign: "left", cursor: "pointer", width: "100%" }}>
           <span style={{ height: "104px", borderRadius: "12px", background: "#EDE4DA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
@@ -138,25 +140,25 @@ export default function GamesScreen() {
             </svg>
           </span>
           <span style={{ marginTop: "4px", fontSize: "15px", fontWeight: "800" }}>
-            Legend match
+            <T k="gm.legend" />
           </span>
           <span style={{ fontSize: "12px", lineHeight: "1.4", color: "#5A4434" }}>
-            Match each legend to the city it belongs to
+            <T k="gm.legend_sub" />
           </span>
           <span style={{ marginTop: "2px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: "12px", fontWeight: "800", color: "#8A6424" }}>
-              +15 pts
+              <T k="gm.pts" v={{ n: 15 }} />
             </span>
             <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>
               1 min
             </span>
           </span>
-        </article>
+        </Tap>
       </div>
       <section style={{ margin: "22px 20px 0", padding: "16px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
           <span style={{ fontSize: "15px", fontWeight: "800" }}>
-            Your passport
+            <T k="gm.passport" />
           </span>
           <span style={{ fontSize: "13px", fontWeight: "700", color: "#6F5B4B" }}>
             <StampCount />
@@ -166,7 +168,7 @@ export default function GamesScreen() {
           <StampBar />
         </div>
         <p style={{ margin: "10px 0 0", fontSize: "12px", color: "#6F5B4B" }}>
-          No streaks, no timers — play whenever you like.
+          <T k="gm.relax" />
         </p>
       </section>
       <MainNav active="home" />

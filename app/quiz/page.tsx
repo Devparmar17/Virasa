@@ -7,8 +7,10 @@ import { Confetti } from "@/components/ui";
 import BackLink from "@/components/Back";
 import { renderVals } from "./logic";
 import { useStored } from "@/lib/store";
+import { useT } from "@/lib/i18n";
 
 export default function QuizScreen() {
+  const t = useT();
   const [state, setAll] = useState<Record<string, any>>({});
   const [points, setPoints] = useStored<number>("points", 0);
   const setState = (patch: Record<string, any>) => {
@@ -16,11 +18,11 @@ export default function QuizScreen() {
     if (patch.done && !state.done) setPoints((p) => p + (state.score || 0) * 10);
     setAll((s) => ({ ...s, ...patch }));
   };
-  const v: any = renderVals(state, setState);
+  const v: any = renderVals(state, setState, t);
   return (
     <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
       <div style={{ padding: "54px 16px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <BackLink href="/games" aria-label="Close quiz" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/games" aria-label="Close" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
@@ -55,7 +57,7 @@ export default function QuizScreen() {
             <h1 style={{ margin: "18px 20px 0", fontSize: "22px", lineHeight: "1.25", fontWeight: "800", letterSpacing: "-0.01em", textWrap: "balance" }}>
               {v.question}
             </h1>
-            <div role="group" aria-label="Answers" style={{ margin: "16px 20px 0", display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div role="group" aria-label={t("qz.answers")} style={{ margin: "16px 20px 0", display: "flex", flexDirection: "column", gap: "10px" }}>
               {v.opts.map((o: any, i: number) => (
                 <Fragment key={i}>
                   <button type="button" onClick={o.pick} aria-pressed={o.chosen} className={o.showCheck ? "ans-right" : o.showX ? "ans-wrong" : undefined} style={{ minHeight: "56px", padding: "8px 14px 8px 10px", borderRadius: "14px", border: `1.5px solid ${o.bd}`, background: o.bg, color: o.fg, display: "flex", alignItems: "center", gap: "12px", fontSize: "15px", fontWeight: "700", textAlign: "left", cursor: "pointer" }}>
@@ -67,14 +69,14 @@ export default function QuizScreen() {
                     </span>
                     {o.showCheck ? (
                       <>
-                        <svg className="check-draw" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F7A4A" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-label="Correct answer">
+                        <svg className="check-draw" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2F7A4A" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-label={t("qz.right_aria")}>
                           <path pathLength={1} d="M20 6 9 17l-5-5" />
                         </svg>
                       </>
                     ) : null}
                     {o.showX ? (
                       <>
-                        <svg className="pop-in" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B3402A" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-label="Your answer, incorrect">
+                        <svg className="pop-in" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B3402A" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-label={t("qz.wrong_aria")}>
                           <path d="M18 6 6 18" />
                           <path d="m6 6 12 12" />
                         </svg>
@@ -107,7 +109,7 @@ export default function QuizScreen() {
               {v.notPicked ? (
                 <>
                   <button type="button" disabled={true} style={{ width: "100%", height: "56px", border: "0", borderRadius: "16px", background: "#EFE6DA", color: "#5A4434", fontSize: "16px", fontWeight: "700" }}>
-                    Pick an answer
+                    {t("qz.pick")}
                   </button>
                 </>
               ) : null}
@@ -123,7 +125,7 @@ export default function QuizScreen() {
                 {v.score}/3
               </span>
               <span style={{ marginTop: "6px", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#E7B98A" }}>
-                CORRECT
+                {t("qz.correct").toUpperCase()}
               </span>
               {v.score >= 2 ? <Confetti count={20} spread={120} /> : null}
             </div>
@@ -131,7 +133,7 @@ export default function QuizScreen() {
               {v.resultTitle}
             </h1>
             <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.5", color: "#5A4434" }}>
-              +{v.points}{" points added."}
+              {t("qz.added", { n: v.points })}
             </p>
             <div style={{ marginTop: "18px", padding: "12px 16px", borderRadius: "16px", background: "#F6F1EA", border: "1px solid #EFE6DA", display: "flex", alignItems: "center", gap: "12px", textAlign: "left" }}>
               <span style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "#8A6424", border: "2px dashed #F3D9A8", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -142,20 +144,20 @@ export default function QuizScreen() {
               </span>
               <span style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                 <span style={{ fontSize: "14px", fontWeight: "800" }}>
-                  {points} points in total
+                  {t("qz.total", { n: points })}
                 </span>
                 <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
-                  Keep playing to learn more
+                  {t("qz.keep")}
                 </span>
               </span>
             </div>
           </div>
           <div style={{ position: "absolute", left: "20px", right: "20px", bottom: "30px", display: "flex", flexDirection: "column", gap: "10px" }}>
             <Link href="/games" style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: "700", textDecoration: "none" }}>
-              More games
+              {t("gm.more")}
             </Link>
             <button type="button" onClick={v.reset} style={{ height: "52px", borderRadius: "16px", border: "1.5px solid #9A4E36", background: "#FFFFFF", color: "#9A4E36", fontSize: "15px", fontWeight: "700", cursor: "pointer" }}>
-              Play again
+              {t("pl.again")}
             </button>
           </div>
         </>

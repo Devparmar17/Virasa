@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { isKey, tr } from "@/lib/i18n";
 
 type Tone = "info" | "success" | "error";
 type Options = Tone | { tone?: Tone; action?: { label: string; run: () => void } };
@@ -24,7 +25,10 @@ export function toast(text: string, options: Options = "info") {
   const o = typeof options === "string" ? { tone: options } : options;
   const tone = o.tone ?? "info";
   buzz(tone);
-  push?.({ id: Date.now(), text, tone, action: o.action });
+  // A phrase key is shown in the traveller's language.
+  const shown = isKey(text) ? tr(text) : text;
+  const action = o.action && isKey(o.action.label) ? { ...o.action, label: tr(o.action.label) } : o.action;
+  push?.({ id: Date.now(), text: shown, tone, action });
 }
 
 const ICON: Record<Exclude<Tone, "info">, React.ReactNode> = {

@@ -6,6 +6,8 @@ import { SECRETS } from "./secrets";
 
 export type FindKind = "hidden" | "food" | "market" | "festival" | "experience";
 export type Find = { name: string; kind: FindKind; area?: string; why: string; tryThis?: string; when?: string; tip?: string; href?: string };
+// A find saved from Discover, shown under Saved › Places.
+export type SavedFind = Find & { city: string; savedAt: number };
 export type Discovery = { city: string; intro: string; finds: Find[]; source?: "gemini" | "library" };
 
 export const FIND_KINDS: [FindKind | "all", string][] = [

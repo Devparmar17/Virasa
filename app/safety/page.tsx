@@ -43,26 +43,26 @@ export default function SafetyScreen() {
   const [sharing, setSharing] = useState(false);
 
   const shareLocation = () => {
-    if (!navigator.geolocation) return toast("This phone can't share its location from the browser.", "error");
+    if (!navigator.geolocation) return toast(t("sf.no_loc"), "error");
     setSharing(true);
     navigator.geolocation.getCurrentPosition(
       async (p) => {
         const link = `https://maps.google.com/?q=${p.coords.latitude.toFixed(5)},${p.coords.longitude.toFixed(5)}`;
-        const text = `I'm here: ${link}`;
+        const text = t("sf.im_here", { link });
         try {
-          if (navigator.share) await navigator.share({ title: "My location", text });
+          if (navigator.share) await navigator.share({ title: t("sf.my_loc"), text });
           else {
             await navigator.clipboard.writeText(text);
-            toast("Location link copied — paste it into a message", "success");
+            toast(t("sf.copied"), "success");
           }
         } catch (e) {
-          if ((e as Error)?.name !== "AbortError") toast("Couldn't share right now", "error");
+          if ((e as Error)?.name !== "AbortError") toast(t("c.share_fail"), "error");
         }
         setSharing(false);
       },
       () => {
         setSharing(false);
-        toast("Allow location in your browser to share where you are.", "error");
+        toast(t("sf.allow"), "error");
       },
       { timeout: 10000, maximumAge: 30000 }
     );

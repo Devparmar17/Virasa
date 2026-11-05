@@ -11,6 +11,7 @@ import { toast } from "@/components/Toast";
 import { frame, ScreenHeader } from "@/components/ui";
 import { useStored } from "@/lib/store";
 import { cityByName, DEFAULT_HERE, hereLabel, isAhmedabad, KNOWN_CITIES, type Here } from "@/lib/here";
+import { useT } from "@/lib/i18n";
 
 // Listed first: the cities Virasa has the most for.
 const FEATURED = ["Ahmedabad", "Jaipur", "Varanasi", "Udaipur", "Delhi", "Hampi", "Kolkata", "Mysuru", "Kochi", "Amritsar", "Agra", "Mumbai"];
@@ -24,22 +25,23 @@ const Chevron = () => (
 
 export default function CityScreen() {
   const router = useRouter();
+  const t = useT();
   const [here, setHere] = useStored<Here>("here", DEFAULT_HERE);
   const [query, setQuery] = useState("");
   const needle = query.trim().toLowerCase();
-  const list = ORDERED.filter((c) => !needle || `${c.city} ${c.state}`.toLowerCase().includes(needle));
+  const list = ORDERED.filter((c) => c.city.toLowerCase() !== here.city.toLowerCase() && (!needle || `${c.city} ${c.state}`.toLowerCase().includes(needle)));
   const exact = list.some((c) => c.city.toLowerCase() === needle);
 
   const choose = (name: string) => {
     const next = cityByName(name);
     setHere(next);
-    toast(`You're in ${next.city}`, "success");
+    toast(t("ct.toast", { city: next.city }), "success");
     router.push("/home");
   };
 
   return (
     <div style={frame({ paddingBottom: "48px" })}>
-      <ScreenHeader title="Choose a city" back="/home" />
+      <ScreenHeader title={t("ct.title")} back="/home" />
       <div style={{ padding: "0 20px" }}>
         <GeoLink href="/home" style={{ height: "54px", padding: "0 14px", borderRadius: "16px", background: "#E3EEF8", color: "#1F5A93", display: "flex", alignItems: "center", gap: "10px", fontSize: "15px", fontWeight: 700 }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -50,17 +52,17 @@ export default function CityScreen() {
             <circle cx="12" cy="12" r="7" />
             <circle cx="12" cy="12" r="3" />
           </svg>
-          Use my current location
+          {t("ct.use_loc")}
         </GeoLink>
 
-        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>YOU ARE HERE</h2>
+        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>{t("ct.here").toUpperCase()}</h2>
         <Link href="/home" style={{ padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none" }}>
           <span className="pulse" aria-hidden="true" style={{ flex: "0 0 14px", width: "14px", height: "14px", borderRadius: "50%", background: "#9FD3B0" }} />
           <span style={{ flex: 1, minWidth: 0 }}>
             <span style={{ display: "block", fontSize: "18px", fontWeight: 800 }}>{hereLabel(here)}</span>
             <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "#D9C6AE" }}>
-              {here.source === "gps" ? "From your location" : here.source === "picked" ? "Chosen by you" : "Virasa's home city"}
-              {isAhmedabad(here) ? " · walks, stories and the map" : " · plans, local finds and the AI Guide"}
+              {here.source === "gps" ? t("ct.from_gps") : here.source === "picked" ? t("ct.picked") : t("ct.home_city")}
+              {" · "}{isAhmedabad(here) ? t("ct.ahd") : t("ct.other")}
             </span>
           </span>
           <span style={{ color: "#9FD3B0" }}>
@@ -68,7 +70,7 @@ export default function CityScreen() {
           </span>
         </Link>
 
-        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>I&apos;M IN ANOTHER CITY</h2>
+        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>{t("ct.another").toUpperCase()}</h2>
         <label style={{ height: "54px", padding: "0 14px", borderRadius: "16px", background: "#FFFFFF", border: "1.5px solid #D9C7B3", display: "flex", alignItems: "center", gap: "10px" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
@@ -76,8 +78,8 @@ export default function CityScreen() {
           </svg>
           <input
             type="search"
-            aria-label="Type any city"
-            placeholder="Type any city or town"
+            aria-label={t("ct.type")}
+            placeholder={t("ct.type")}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {
@@ -87,18 +89,15 @@ export default function CityScreen() {
             style={{ flex: 1, minWidth: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "16px", color: "#2B1B10" }}
           />
         </label>
-        <p style={{ margin: "8px 2px 10px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>Tap a city to make it yours. Home, the AI Guide and Discover follow it.</p>
+        <p style={{ margin: "8px 2px 10px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{t("ct.tap_hint")}</p>
 
         <ul className="stagger" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
           {needle && !exact ? (
             <li style={{ padding: "6px 6px 6px 14px", borderRadius: "16px", background: "#FBEDE6", border: "1px solid #F0D3C6", display: "flex", alignItems: "center", gap: "8px" }}>
               <button type="button" onClick={() => choose(query)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
-                <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>I&apos;m in {query.trim()}</span>
-                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>Use this as my city</span>
+                <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{t("ct.im_in", { city: query.trim() })}</span>
+                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{t("ct.tap_use")}</span>
               </button>
-              <Link href={`/trip?city=${encodeURIComponent(query.trim())}`} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", textDecoration: "none" }}>
-                Plan trip
-              </Link>
             </li>
           ) : null}
           {list.map((c) => {
@@ -108,13 +107,10 @@ export default function CityScreen() {
                 <button type="button" aria-pressed={mine} onClick={() => choose(c.city)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "16px", fontWeight: 800 }}>
                     {c.city}
-                    {mine ? <span style={{ height: "22px", padding: "0 8px", borderRadius: "999px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "12px", fontWeight: 800, display: "inline-flex", alignItems: "center" }}>You&apos;re here</span> : null}
+                    {mine ? <span style={{ height: "22px", padding: "0 8px", borderRadius: "999px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "12px", fontWeight: 800, display: "inline-flex", alignItems: "center" }}>{t("ct.youre_here")}</span> : null}
                   </span>
-                  <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{c.city === "Ahmedabad" ? "Gujarat · walks, stories and the map" : c.state}</span>
+                  <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{c.city === "Ahmedabad" ? t("ct.gujarat") : c.state}</span>
                 </button>
-                <Link href={`/trip?city=${encodeURIComponent(c.city)}`} aria-label={`Plan a trip to ${c.city}`} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", color: "#2B1B10", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", textDecoration: "none" }}>
-                  Plan trip
-                </Link>
               </li>
             );
           })}
