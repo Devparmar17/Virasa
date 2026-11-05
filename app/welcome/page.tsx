@@ -1,6 +1,7 @@
 // 02 · Welcome
 import Link from "next/link";
 import { T } from "@/lib/i18n";
+import { StartLink } from "@/components/User";
 
 export default function WelcomeScreen() {
   return (
@@ -88,7 +89,7 @@ export default function WelcomeScreen() {
         </li>
       </ul>
       <div style={{ position: "absolute", left: "24px", right: "24px", bottom: "30px", display: "flex", flexDirection: "column", gap: "6px" }}>
-        <Link href="/personalize" style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
+        <StartLink style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
           <span>
             <T k="wl.start" />
           </span>
@@ -96,7 +97,7 @@ export default function WelcomeScreen() {
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
           </svg>
-        </Link>
+        </StartLink>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
           <Link href="/login#signin" style={{ height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: "700", color: "#9A4E36", textDecoration: "none" }}>
             <T k="wl.signin" />

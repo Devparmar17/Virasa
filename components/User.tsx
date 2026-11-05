@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "./Toast";
@@ -110,5 +110,16 @@ export function AccountCard() {
         {t("us.logout")}
       </button>
     </div>
+  );
+}
+
+// Welcome's "Get started": someone not signed in signs in first (sign-in then
+// carries on to interests and location); someone signed in goes straight on.
+export function StartLink({ style, children }: { style: CSSProperties; children: ReactNode }) {
+  const [user] = useUser();
+  return (
+    <Link href={user ? "/personalize" : "/login"} style={style}>
+      {children}
+    </Link>
   );
 }
