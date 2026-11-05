@@ -171,9 +171,7 @@ export default function HomeScreen() {
           </VoiceSearch>
         </div>
 
-        {/* AI first: plan a whole trip, or find what locals love. In another city
-            the city card below offers the same two, so these show only in Ahmedabad. */}
-        <HereGate>
+        {/* AI first: plan a whole trip, or find what locals love, in any city. */}
         <nav aria-label="Plan with AI" style={{ margin: "14px 20px 0", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
           <Link href="/trip" style={{ minHeight: "96px", padding: "14px", borderRadius: "20px", background: "linear-gradient(140deg, #9A4E36 0%, #7E3D29 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.26)" }}>
             <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "rgba(255, 255, 255, 0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -207,7 +205,6 @@ export default function HomeScreen() {
             </span>
           </Link>
         </nav>
-        </HereGate>
 
         {/* Away from Ahmedabad, Home is about the city the traveller is in. */}
         <HereGate elsewhere={<Elsewhere />}>
