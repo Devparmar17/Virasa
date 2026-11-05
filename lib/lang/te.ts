@@ -1043,5 +1043,14 @@ const te: Record<string, string> = {
   "lg.g_fail": "Google సైన్-ఇన్ కాలేదు. మళ్లీ ప్రయత్నించండి.",
   // city card
   "here.ask_q": "నేను {city}లో ఉన్నాను. ఈ రోజు ఇక్కడ ఏమి చూడాలి, ఏమి తినాలి?",
+  // home city picks
+  "hp.places": "{city}లో చూడాల్సిన ప్రదేశాలు",
+  "hp.food": "{city}లో రుచి చూడాల్సిన తిండి",
+  "hp.all": "అన్నీ చూడండి",
+  "hp.k.hidden": "దాగిన ప్రదేశం",
+  "hp.k.market": "సంత",
+  "hp.k.experience": "చేయాల్సింది",
+  "hp.k.festival": "పండుగ",
+  "hp.k.food": "స్థానిక తిండి",
 };
 export default te;

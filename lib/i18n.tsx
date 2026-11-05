@@ -1123,6 +1123,15 @@ const D = {
   "lg.g_fail": { en: "Google sign-in didn't work. Please try again.", hi: "Google साइन-इन नहीं हुआ। फिर कोशिश करें।", gu: "Google સાઇન-ઇન ન થયું. ફરી પ્રયાસ કરો.", ta: "Google உள்நுழைவு நடக்கவில்லை. மீண்டும் முயலுங்கள்.", bn: "Google সাইন-ইন হল না। আবার চেষ্টা করুন।" },
   // ---------- city card ----------
   "here.ask_q": { en: "I'm in {city}. What should I see and eat here today?", hi: "मैं {city} में हूँ। आज यहाँ क्या देखूँ और क्या खाऊँ?", gu: "હું {city}માં છું. આજે અહીં શું જોઉં અને શું ખાઉં?", ta: "நான் {city} இல் இருக்கிறேன். இன்று இங்கே என்ன பார்க்கலாம், என்ன சாப்பிடலாம்?", bn: "আমি {city}-তে আছি। আজ এখানে কী দেখব আর কী খাব?" },
+  // ---------- home city picks ----------
+  "hp.places": { en: "Places to visit in {city}", hi: "{city} में देखने की जगहें", gu: "{city}માં જોવાની જગ્યાઓ", ta: "{city} இல் பார்க்க வேண்டிய இடங்கள்", bn: "{city}-তে দেখার জায়গা" },
+  "hp.food": { en: "Local food to try in {city}", hi: "{city} का खाना जो ज़रूर चखें", gu: "{city}નું ખાવાનું જે જરૂર ચાખો", ta: "{city} இல் சுவைக்க வேண்டிய உணவு", bn: "{city}-র যে খাবার চেখে দেখবেন" },
+  "hp.all": { en: "See all", hi: "सब देखें", gu: "બધું જુઓ", ta: "எல்லாம் பார்", bn: "সব দেখুন" },
+  "hp.k.hidden": { en: "Hidden place", hi: "छिपी जगह", gu: "છુપાયેલી જગ્યા", ta: "மறைந்த இடம்", bn: "লুকোনো জায়গা" },
+  "hp.k.market": { en: "Market", hi: "बाज़ार", gu: "બજાર", ta: "சந்தை", bn: "বাজার" },
+  "hp.k.experience": { en: "Thing to do", hi: "करने लायक", gu: "કરવા જેવું", ta: "செய்ய வேண்டியது", bn: "করার মতো" },
+  "hp.k.festival": { en: "Festival", hi: "त्योहार", gu: "તહેવાર", ta: "திருவிழா", bn: "উৎসব" },
+  "hp.k.food": { en: "Local food", hi: "लोकल खाना", gu: "સ્થાનિક ખાણું", ta: "உள்ளூர் உணவு", bn: "স্থানীয় খাবার" },
 } satisfies Record<string, Entry>;
 
 export type Key = keyof typeof D;

@@ -1043,5 +1043,14 @@ const ml: Record<string, string> = {
   "lg.g_fail": "Google സൈൻ-ഇൻ നടന്നില്ല. വീണ്ടും ശ്രമിക്കുക.",
   // city card
   "here.ask_q": "ഞാൻ {city} ൽ ആണ്. ഇന്ന് ഇവിടെ എന്ത് കാണണം, എന്ത് കഴിക്കണം?",
+  // home city picks
+  "hp.places": "{city} ൽ കാണേണ്ട സ്ഥലങ്ങൾ",
+  "hp.food": "{city} ലെ രുചിക്കേണ്ട ഭക്ഷണം",
+  "hp.all": "എല്ലാം കാണുക",
+  "hp.k.hidden": "ഒളിഞ്ഞ സ്ഥലം",
+  "hp.k.market": "ചന്ത",
+  "hp.k.experience": "ചെയ്യേണ്ടത്",
+  "hp.k.festival": "ഉത്സവം",
+  "hp.k.food": "പ്രാദേശിക ഭക്ഷണം",
 };
 export default ml;

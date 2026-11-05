@@ -1043,5 +1043,14 @@ const kn: Record<string, string> = {
   "lg.g_fail": "Google ಸೈನ್-ಇನ್ ಆಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
   // city card
   "here.ask_q": "ನಾನು {city} ನಲ್ಲಿದ್ದೇನೆ. ಇಂದು ಇಲ್ಲಿ ಏನು ನೋಡಲಿ, ಏನು ತಿನ್ನಲಿ?",
+  // home city picks
+  "hp.places": "{city} ನಲ್ಲಿ ನೋಡಬೇಕಾದ ಸ್ಥಳಗಳು",
+  "hp.food": "{city} ನಲ್ಲಿ ಸವಿಯಬೇಕಾದ ಊಟ",
+  "hp.all": "ಎಲ್ಲಾ ನೋಡಿ",
+  "hp.k.hidden": "ಅಡಗಿದ ಸ್ಥಳ",
+  "hp.k.market": "ಮಾರುಕಟ್ಟೆ",
+  "hp.k.experience": "ಮಾಡಬೇಕಾದ್ದು",
+  "hp.k.festival": "ಹಬ್ಬ",
+  "hp.k.food": "ಸ್ಥಳೀಯ ಊಟ",
 };
 export default kn;
