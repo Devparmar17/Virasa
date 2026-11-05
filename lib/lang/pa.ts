@@ -1043,5 +1043,14 @@ const pa: Record<string, string> = {
   "lg.g_fail": "Google ਸਾਈਨ-ਇਨ ਨਹੀਂ ਹੋਇਆ। ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
   // city card
   "here.ask_q": "ਮੈਂ {city} ਵਿੱਚ ਹਾਂ। ਅੱਜ ਇੱਥੇ ਕੀ ਵੇਖਾਂ ਅਤੇ ਕੀ ਖਾਵਾਂ?",
+  // home city picks
+  "hp.places": "{city} ਵਿੱਚ ਵੇਖਣ ਵਾਲੀਆਂ ਥਾਵਾਂ",
+  "hp.food": "{city} ਦਾ ਖਾਣਾ ਜੋ ਜ਼ਰੂਰ ਚੱਖੋ",
+  "hp.all": "ਸਭ ਵੇਖੋ",
+  "hp.k.hidden": "ਲੁਕੀ ਥਾਂ",
+  "hp.k.market": "ਬਾਜ਼ਾਰ",
+  "hp.k.experience": "ਕਰਨ ਵਾਲਾ",
+  "hp.k.festival": "ਤਿਉਹਾਰ",
+  "hp.k.food": "ਸਥਾਨਕ ਖਾਣਾ",
 };
 export default pa;

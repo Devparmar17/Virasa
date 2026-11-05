@@ -53,13 +53,43 @@ export function Elsewhere() {
   const row = { minHeight: "72px", padding: "12px 14px", borderRadius: "18px", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", textDecoration: "none", cursor: "pointer", width: "100%", boxSizing: "border-box" } as const;
   return (
     <section aria-label={t("here.title", { city })} style={{ margin: "20px 20px 0" }}>
-      <div style={{ position: "relative", borderRadius: "22px", overflow: "hidden", background: "#2B1B10", color: "#FBF6EE" }}>
-        {img ? <img src={img} alt="" className="kenburns" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.45 }} /> : null}
-        <div style={{ position: "relative", padding: "18px 18px 20px", background: "linear-gradient(180deg, rgba(43, 27, 16, 0.2) 0%, rgba(43, 27, 16, 0.85) 100%)" }}>
-          <p style={{ margin: 0, fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "#F3D9A8" }}>{t("here.kicker", { city: city.toUpperCase() })}</p>
-          <h2 style={{ margin: "6px 0 0", fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>{t("here.title", { city })}</h2>
-          <Link href={`/trip?city=${encodeURIComponent(city)}`} style={{ ...row, marginTop: "14px", background: "#9A4E36", color: "#FFFFFF" }}>
-            <Row dark icon="M3 11l19-9-9 19-2-8-8-2z" title={t("here.plan")} sub={t("here.plan_sub")} />
+      {/* The city's photo, or a warm stone-lattice pattern when there's no photo yet. */}
+      <div style={{ position: "relative", minHeight: "210px", borderRadius: "24px", overflow: "hidden", background: "linear-gradient(150deg, #A9583A 0%, #7E3D29 55%, #4E2416 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: "0 14px 30px rgba(78, 36, 22, 0.24)" }}>
+        {img ? (
+          <>
+            <img src={img} alt="" className="kenburns" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+            <span aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(20, 12, 6, 0.1) 0%, rgba(20, 12, 6, 0.55) 50%, rgba(20, 12, 6, 0.9) 100%)" }} />
+          </>
+        ) : (
+          <svg aria-hidden="true" width="100%" height="100%" style={{ position: "absolute", inset: 0, opacity: 0.12 }}>
+            <defs>
+              <pattern id="here-jali" width="44" height="44" patternUnits="userSpaceOnUse">
+                <rect x="11" y="11" width="22" height="22" fill="none" stroke="#FFE7C7" strokeWidth="1.4" />
+                <rect x="11" y="11" width="22" height="22" fill="none" stroke="#FFE7C7" strokeWidth="1.4" transform="rotate(45 22 22)" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#here-jali)" />
+          </svg>
+        )}
+        <span style={{ position: "relative", alignSelf: "flex-start", margin: "16px 0 0 16px", height: "30px", padding: "0 12px 0 9px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.18)", WebkitBackdropFilter: "blur(8px)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.06em" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          {t("here.kicker", { city: city.toUpperCase() })}
+        </span>
+        <div style={{ position: "relative", padding: "14px 16px 16px" }}>
+          <h2 style={{ margin: "0 2px", fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textWrap: "balance" }}>{t("here.title", { city })}</h2>
+          <Link href={`/trip?city=${encodeURIComponent(city)}`} style={{ ...row, marginTop: "14px", minHeight: "64px", padding: "10px 10px 10px 16px", background: "#FFFFFF", color: "#2B1B10" }}>
+            <span style={{ flex: 1, minWidth: 0 }}>
+              <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{t("here.plan")}</span>
+              <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "#6F5B4B" }}>{t("here.plan_sub")}</span>
+            </span>
+            <span aria-hidden="true" style={{ flex: "0 0 44px", height: "44px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
           </Link>
         </div>
       </div>

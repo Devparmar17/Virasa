@@ -5,7 +5,8 @@
 import { SECRETS } from "./secrets";
 
 export type FindKind = "hidden" | "food" | "market" | "festival" | "experience";
-export type Find = { name: string; kind: FindKind; area?: string; why: string; tryThis?: string; when?: string; tip?: string; href?: string };
+// `wiki` names the English Wikipedia article that best pictures the find, used to show its photo.
+export type Find = { name: string; kind: FindKind; area?: string; why: string; tryThis?: string; when?: string; tip?: string; href?: string; wiki?: string };
 // A find saved from Discover, shown under Saved › Places.
 export type SavedFind = Find & { city: string; savedAt: number };
 export type Discovery = { city: string; intro: string; finds: Find[]; source?: "gemini" | "library" };
@@ -36,6 +37,7 @@ export const DISCOVER_SCHEMA = {
           tryThis: { type: "STRING" },
           when: { type: "STRING" },
           tip: { type: "STRING" },
+          wiki: { type: "STRING" },
         },
         required: ["name", "kind", "why"],
       },

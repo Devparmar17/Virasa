@@ -11,6 +11,7 @@ import { Greeting } from "@/components/User";
 import { frame } from "@/components/ui";
 import { T, type Key } from "@/lib/i18n";
 import { Elsewhere, HereCity, HereGate } from "@/components/Here";
+import CityPicks from "@/components/CityPicks";
 
 const INK = "#2B1B10";
 const MUTED = "#6F5B4B";
@@ -173,14 +174,21 @@ export default function HomeScreen() {
 
         {/* AI first: plan a whole trip, or find what locals love, in any city. */}
         <nav aria-label="Plan with AI" style={{ margin: "14px 20px 0", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
-          <Link href="/trip" style={{ minHeight: "96px", padding: "14px", borderRadius: "20px", background: "linear-gradient(140deg, #9A4E36 0%, #7E3D29 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.26)" }}>
-            <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "rgba(255, 255, 255, 0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
-              </svg>
+          <Link href="/trip" style={{ minHeight: "118px", padding: "14px 14px 16px", borderRadius: "22px", background: "linear-gradient(140deg, #9A4E36 0%, #7E3D29 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.26)" }}>
+            <span style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+              <span style={{ width: "40px", height: "40px", borderRadius: "13px", background: "rgba(255, 255, 255, 0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
+                </svg>
+              </span>
+              <span aria-hidden="true" style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.18)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 17 17 7M9 7h8v8" />
+                </svg>
+              </span>
             </span>
             <span>
-              <span style={{ display: "block", fontSize: "16px", fontWeight: 800, lineHeight: 1.2 }}>
+              <span style={{ display: "block", fontSize: "17px", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.01em" }}>
                 <T k="home.plan_ai" />
               </span>
               <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "rgba(255, 255, 255, 0.86)", lineHeight: 1.3 }}>
@@ -188,15 +196,22 @@ export default function HomeScreen() {
               </span>
             </span>
           </Link>
-          <Link href="/discover" style={{ minHeight: "96px", padding: "14px", borderRadius: "20px", background: "#F6EEE4", color: INK, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none" }}>
-            <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "#FFFFFF", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M6 3h12l4 6-10 13L2 9Z" />
-                <path d="M11 3 8 9l4 13 4-13-3-6M2 9h20" />
-              </svg>
+          <Link href="/discover" style={{ minHeight: "118px", padding: "14px 14px 16px", borderRadius: "22px", background: "#F6EEE4", color: INK, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none" }}>
+            <span style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+              <span style={{ width: "40px", height: "40px", borderRadius: "13px", background: "#FFFFFF", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.08)" }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M6 3h12l4 6-10 13L2 9Z" />
+                  <path d="M11 3 8 9l4 13 4-13-3-6M2 9h20" />
+                </svg>
+              </span>
+              <span aria-hidden="true" style={{ width: "28px", height: "28px", borderRadius: "50%", background: "#FFFFFF", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M7 17 17 7M9 7h8v8" />
+                </svg>
+              </span>
             </span>
             <span>
-              <span style={{ display: "block", fontSize: "16px", fontWeight: 800, lineHeight: 1.2 }}>
+              <span style={{ display: "block", fontSize: "17px", fontWeight: 800, lineHeight: 1.2, letterSpacing: "-0.01em" }}>
                 <T k="home.discover" />
               </span>
               <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: MUTED, lineHeight: 1.3 }}>
@@ -250,7 +265,9 @@ export default function HomeScreen() {
           ))}
         </nav>
 
-        <HereGate>
+        {/* Ahmedabad has its own top places and hidden places; any other city gets
+            places and food found for it. */}
+        <HereGate elsewhere={<CityPicks />}>
         <section style={{ marginTop: "30px" }}>
           <SectionHead title="home.highlights" more={{ href: "/explore", label: "home.map" }} />
           <Highlights />

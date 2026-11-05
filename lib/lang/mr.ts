@@ -1043,5 +1043,14 @@ const mr: Record<string, string> = {
   "lg.g_fail": "Google साइन-इन झाले नाही. पुन्हा प्रयत्न करा.",
   // city card
   "here.ask_q": "मी {city} मध्ये आहे. आज इथे काय पाहू आणि काय खाऊ?",
+  // home city picks
+  "hp.places": "{city} मध्ये पाहण्याची ठिकाणे",
+  "hp.food": "{city} मधले चाखायचे जेवण",
+  "hp.all": "सर्व पाहा",
+  "hp.k.hidden": "लपलेले ठिकाण",
+  "hp.k.market": "बाजार",
+  "hp.k.experience": "करण्यासारखे",
+  "hp.k.festival": "सण",
+  "hp.k.food": "स्थानिक जेवण",
 };
 export default mr;
