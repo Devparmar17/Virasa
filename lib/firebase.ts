@@ -6,6 +6,7 @@
 // signs in with Google, so the rest of the app doesn't carry Firebase.
 import { getApps, initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, type AuthError } from "firebase/auth";
+import { tr, type Key } from "./i18n";
 
 const config = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -30,16 +31,20 @@ export async function signInWithGoogle(): Promise<{ profile: GoogleProfile } | {
     return { profile: { name: user.displayName || email.split("@")[0] || "Traveller", email, picture: user.photoURL || undefined } };
   } catch (e) {
     const code = (e as AuthError)?.code || "";
-    const messages: Record<string, string> = {
-      "auth/popup-closed-by-user": "Google sign-in was cancelled.",
-      "auth/cancelled-popup-request": "Google sign-in was cancelled.",
-      "auth/popup-blocked": "Your browser blocked Google's sign-in window. Allow pop-ups for this site and try again.",
-      "auth/unauthorized-domain": "This web address isn't allowed to sign in yet. Add it in Firebase under Authentication › Settings › Authorized domains.",
-      "auth/operation-not-allowed": "Google sign-in is switched off in Firebase. Turn it on under Authentication › Sign-in method › Google.",
-      "auth/network-request-failed": "Couldn't reach Google. Check your connection and try again.",
-      "auth/invalid-api-key": "The Firebase settings in .env.local don't look right. Check the API key.",
+    // Travellers see a plain message in their language. Setup problems (this web
+    // address not yet allowed in Firebase, Google sign-in switched off, a wrong
+    // key) all say the same thing: use email for now. The code goes to the console.
+    if (code) console.warn("Google sign-in:", code);
+    const messages: Record<string, Key> = {
+      "auth/popup-closed-by-user": "lg.g_cancel",
+      "auth/cancelled-popup-request": "lg.g_cancel",
+      "auth/popup-blocked": "lg.g_popup",
+      "auth/unauthorized-domain": "lg.g_ready",
+      "auth/operation-not-allowed": "lg.g_ready",
+      "auth/invalid-api-key": "lg.g_ready",
+      "auth/network-request-failed": "lg.g_net",
     };
-    return { error: messages[code] || "Google sign-in didn't work this time. Try again." };
+    return { error: tr(messages[code] || "lg.g_fail") };
   }
 }
 

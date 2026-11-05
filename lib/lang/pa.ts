@@ -1035,5 +1035,13 @@ const pa: Record<string, string> = {
   "tk.tag.top": "ਸਭ ਤੋਂ ਵੱਧ ਬੁੱਕ",
   "tk.tag.wheel": "ਵ੍ਹੀਲਚੇਅਰ ਨਾਲ ਜਾ ਸਕਦੇ ਹੋ",
   "tk.tag.palace": "ਮਹਿਲ",
+  // google sign-in messages
+  "lg.g_cancel": "Google ਸਾਈਨ-ਇਨ ਰੱਦ ਹੋ ਗਿਆ।",
+  "lg.g_popup": "ਬ੍ਰਾਊਜ਼ਰ ਨੇ Google ਦੀ ਖਿੜਕੀ ਰੋਕ ਦਿੱਤੀ। ਪੌਪ-ਅੱਪ ਦੀ ਇਜਾਜ਼ਤ ਦਿਓ ਅਤੇ ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+  "lg.g_ready": "ਇਸ ਵੈੱਬਸਾਈਟ 'ਤੇ Google ਸਾਈਨ-ਇਨ ਹਾਲੇ ਤਿਆਰ ਨਹੀਂ। ਹਾਲੇ ਈਮੇਲ ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ।",
+  "lg.g_net": "Google ਨਾਲ ਜੁੜ ਨਹੀਂ ਸਕੇ। ਇੰਟਰਨੈੱਟ ਵੇਖੋ ਅਤੇ ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+  "lg.g_fail": "Google ਸਾਈਨ-ਇਨ ਨਹੀਂ ਹੋਇਆ। ਫਿਰ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+  // city card
+  "here.ask_q": "ਮੈਂ {city} ਵਿੱਚ ਹਾਂ। ਅੱਜ ਇੱਥੇ ਕੀ ਵੇਖਾਂ ਅਤੇ ਕੀ ਖਾਵਾਂ?",
 };
 export default pa;

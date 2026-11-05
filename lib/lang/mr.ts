@@ -1035,5 +1035,13 @@ const mr: Record<string, string> = {
   "tk.tag.top": "सर्वाधिक बुक",
   "tk.tag.wheel": "व्हीलचेअरने जाता येते",
   "tk.tag.palace": "महाल",
+  // google sign-in messages
+  "lg.g_cancel": "Google साइन-इन रद्द झाले.",
+  "lg.g_popup": "ब्राउझरने Google ची खिडकी रोखली. पॉप-अपला परवानगी द्या आणि पुन्हा प्रयत्न करा.",
+  "lg.g_ready": "या वेबसाइटवर Google साइन-इन अजून तयार नाही. सध्या ईमेलने साइन इन करा.",
+  "lg.g_net": "Google शी जोडता आले नाही. इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.",
+  "lg.g_fail": "Google साइन-इन झाले नाही. पुन्हा प्रयत्न करा.",
+  // city card
+  "here.ask_q": "मी {city} मध्ये आहे. आज इथे काय पाहू आणि काय खाऊ?",
 };
 export default mr;

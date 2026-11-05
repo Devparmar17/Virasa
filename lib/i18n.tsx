@@ -1115,6 +1115,14 @@ const D = {
   "tk.tag.top": { en: "Most booked", hi: "सबसे ज़्यादा बुक", gu: "સૌથી વધુ બુક", ta: "அதிகம் பதிவானது", bn: "সবচেয়ে বেশি বুক" },
   "tk.tag.wheel": { en: "Wheelchair access", hi: "व्हीलचेयर से जा सकते हैं", gu: "વ્હીલચેરથી જઈ શકાય", ta: "சக்கர நாற்காலியில் செல்லலாம்", bn: "হুইলচেয়ারে যাওয়া যায়" },
   "tk.tag.palace": { en: "palace", hi: "महल", gu: "મહેલ", ta: "அரண்மனை", bn: "প্রাসাদ" },
+  // ---------- google sign-in messages ----------
+  "lg.g_cancel": { en: "Google sign-in was cancelled.", hi: "Google साइन-इन रद्द हो गया।", gu: "Google સાઇન-ઇન રદ થયું.", ta: "Google உள்நுழைவு ரத்தானது.", bn: "Google সাইন-ইন বাতিল হয়েছে।" },
+  "lg.g_popup": { en: "Your browser blocked the Google window. Allow pop-ups and try again.", hi: "ब्राउज़र ने Google की खिड़की रोक दी। पॉप-अप की अनुमति दें और फिर कोशिश करें।", gu: "બ્રાઉઝરે Google ની બારી રોકી. પૉપ-અપની મંજૂરી આપો અને ફરી પ્રયાસ કરો.", ta: "உலாவி Google சாளரத்தைத் தடுத்தது. பாப்-அப்களை அனுமதித்து மீண்டும் முயலுங்கள்.", bn: "ব্রাউজার Google-এর জানালা আটকে দিয়েছে। পপ-আপের অনুমতি দিয়ে আবার চেষ্টা করুন।" },
+  "lg.g_ready": { en: "Google sign-in isn't ready on this website yet. Please sign in with email for now.", hi: "इस वेबसाइट पर Google साइन-इन अभी तैयार नहीं है। अभी ईमेल से साइन इन करें।", gu: "આ વેબસાઇટ પર Google સાઇન-ઇન હજી તૈયાર નથી. હમણાં ઇમેઇલથી સાઇન ઇન કરો.", ta: "இந்த இணையதளத்தில் Google உள்நுழைவு இன்னும் தயாராக இல்லை. இப்போதைக்கு மின்னஞ்சல் மூலம் உள்நுழையுங்கள்.", bn: "এই ওয়েবসাইটে Google সাইন-ইন এখনও তৈরি নয়। আপাতত ইমেল দিয়ে সাইন ইন করুন।" },
+  "lg.g_net": { en: "Couldn't reach Google. Check your internet and try again.", hi: "Google से जुड़ नहीं पाए। इंटरनेट देखें और फिर कोशिश करें।", gu: "Google સાથે જોડાઈ ન શકાયું. ઇન્ટરનેટ તપાસો અને ફરી પ્રયાસ કરો.", ta: "Google-ஐ அடைய முடியவில்லை. இணையத்தைச் சரிபார்த்து மீண்டும் முயலுங்கள்.", bn: "Google-এর সঙ্গে যোগাযোগ হল না। ইন্টারনেট দেখে আবার চেষ্টা করুন।" },
+  "lg.g_fail": { en: "Google sign-in didn't work. Please try again.", hi: "Google साइन-इन नहीं हुआ। फिर कोशिश करें।", gu: "Google સાઇન-ઇન ન થયું. ફરી પ્રયાસ કરો.", ta: "Google உள்நுழைவு நடக்கவில்லை. மீண்டும் முயலுங்கள்.", bn: "Google সাইন-ইন হল না। আবার চেষ্টা করুন।" },
+  // ---------- city card ----------
+  "here.ask_q": { en: "I'm in {city}. What should I see and eat here today?", hi: "मैं {city} में हूँ। आज यहाँ क्या देखूँ और क्या खाऊँ?", gu: "હું {city}માં છું. આજે અહીં શું જોઉં અને શું ખાઉં?", ta: "நான் {city} இல் இருக்கிறேன். இன்று இங்கே என்ன பார்க்கலாம், என்ன சாப்பிடலாம்?", bn: "আমি {city}-তে আছি। আজ এখানে কী দেখব আর কী খাব?" },
 } satisfies Record<string, Entry>;
 
 export type Key = keyof typeof D;
