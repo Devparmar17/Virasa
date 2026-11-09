@@ -22,5 +22,5 @@ export function Points() {
 
 export function StampBar() {
   const n = useCount();
-  return <div style={{ width: `${Math.min(100, n * 10)}%`, height: "100%", borderRadius: "999px", background: "#8A6424" }} />;
+  return <div style={{ width: `${Math.min(100, n * 10)}%`, height: "100%", borderRadius: "999px", background: "var(--gold)" }} />;
 }

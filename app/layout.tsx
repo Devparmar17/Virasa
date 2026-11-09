@@ -13,12 +13,15 @@ export const metadata: Metadata = {
 // Screens are drawn 390px wide; phones scale that to fit their own width.
 export const viewport: Viewport = { width: 390, themeColor: "#FBF6EE" };
 
+// Anek, by Ek Type: one family drawn for Latin and every Indian script the app
+// speaks, so a screen reads the same in English, Hindi or Tamil. Each script is
+// served as its own subset, so a phone only downloads the scripts on screen.
 const FONTS =
-  "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800" +
-  "&family=Noto+Sans+Gujarati:wght@500;600;700&family=Noto+Sans+Devanagari:wght@500;600;700" +
-  "&family=Noto+Sans+Tamil:wght@500;600&family=Noto+Sans+Bengali:wght@500;600" +
-  "&family=Noto+Sans+Telugu:wght@500;600&family=Noto+Sans+Kannada:wght@500;600&family=Noto+Sans+Malayalam:wght@500;600" +
-  "&family=Noto+Sans+Gurmukhi:wght@500;600&display=swap";
+  "https://fonts.googleapis.com/css2?family=Anek+Latin:wdth,wght@75..125,400..800" +
+  "&family=Anek+Devanagari:wght@400..800&family=Anek+Gujarati:wght@400..800" +
+  "&family=Anek+Tamil:wght@400..800&family=Anek+Bangla:wght@400..800" +
+  "&family=Anek+Telugu:wght@400..800&family=Anek+Kannada:wght@400..800" +
+  "&family=Anek+Malayalam:wght@400..800&family=Anek+Gurmukhi:wght@400..800&display=swap";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

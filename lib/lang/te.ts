@@ -625,7 +625,7 @@ const te: Record<string, string> = {
   "sv.photo": "ఫోటో: {name}",
   "sv.downloading": "డౌన్‌లోడ్ అవుతోంది…",
   "sv.downloaded": "డౌన్‌లోడ్ అయింది · 86 MB",
-  "sv.not_downloaded": "డౌన్‌లోడ్ కాలేదు · 86 MB",
+  "sv.not_downloaded": "డౌన్‌లోడ్ కాలేదు",
   "sv.search_aria": "సేవ్ చేసినవాటిలో వెతకండి",
   "sv.close_search": "వెతకడం మూసివేయండి",
   "sv.items": "సేవ్ చేసినవి",

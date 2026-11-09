@@ -8,19 +8,19 @@ import { T } from "@/lib/i18n";
 
 export default function PlaceScreen() {
   return (
-    <div style={{ width: "390px", height: "2168px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "2168px", position: "relative", overflow: "hidden", background: "var(--paper)", fontFamily: "inherit", color: "var(--ink)" }}>
       <div style={{ position: "relative", height: "340px" }}>
         <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="The Tree of Life jali seen from inside Sidi Saiyyed Mosque" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", top: "0", height: "130px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0.45) 0%, rgba(20, 12, 6, 0) 100%)" }} />
         <div style={{ position: "absolute", top: "50px", left: "16px", right: "16px", display: "flex", justifyContent: "space-between" }}>
-          <BackLink href="/home" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)" }}>
+          <BackLink href="/home" aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
             </svg>
           </BackLink>
           <div style={{ display: "flex", gap: "10px" }}>
-            <Toggle storeKey="saved" field="sidi" onLabel="c.saved_rm" offLabel="c.save" onToast="c.saved_find" offToast="c.removed_saved" style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)", cursor: "pointer" }}
+            <Toggle storeKey="saved" field="sidi" onLabel="c.saved_rm" offLabel="c.save" onToast="c.saved_find" offToast="c.removed_saved" style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)", cursor: "pointer" }}
               on={
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="#9A4E36" stroke="#9A4E36" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
@@ -32,7 +32,7 @@ export default function PlaceScreen() {
                 </svg>
               }
             />
-            <Tap aria-label="c.share" shareTitle="Sidi Saiyyed Mosque" shareText="pc.sub" style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)", cursor: "pointer" }}>
+            <Tap aria-label="c.share" shareTitle="Sidi Saiyyed Mosque" shareText="pc.sub" style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)", cursor: "pointer" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
                 <polyline points="16 6 12 2 8 6" />
@@ -41,7 +41,7 @@ export default function PlaceScreen() {
             </Tap>
           </div>
         </div>
-        <Tap aria-label="pc.photos" href="/gallery" style={{ position: "absolute", right: "16px", bottom: "36px", height: "40px", padding: "0 14px", border: "0", borderRadius: "999px", background: "rgba(43, 27, 16, 0.78)", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}>
+        <Tap aria-label="pc.photos" href="/gallery" style={{ position: "absolute", right: "16px", bottom: "36px", height: "40px", padding: "0 14px", border: "0", borderRadius: "999px", background: "rgba(43, 27, 16, 0.78)", color: "var(--paper)", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <rect width="18" height="18" x="3" y="3" rx="2" />
             <circle cx="9" cy="9" r="2" />
@@ -52,22 +52,22 @@ export default function PlaceScreen() {
           </span>
         </Tap>
       </div>
-      <main style={{ position: "relative", marginTop: "-24px", borderRadius: "24px 24px 0 0", background: "#FFFFFF", padding: "22px 20px 120px" }}>
+      <main style={{ position: "relative", marginTop: "-24px", borderRadius: "24px 24px 0 0", background: "var(--paper)", padding: "22px 20px 120px" }}>
         <div style={{ display: "flex", gap: "8px" }}>
-          <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#F6E3DA", color: "#7E3D29", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+          <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "var(--clay-wash)", color: "var(--clay-deep)", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
             <T k="ex.one.monument" />
           </span>
-          <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
+          <span style={{ height: "26px", padding: "0 10px", borderRadius: "7px", background: "var(--sand)", color: "var(--gold-deep)", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>
             1573 · Gujarat Sultanate
           </span>
         </div>
         <h1 style={{ margin: "12px 0 0", fontSize: "28px", lineHeight: "1.15", fontWeight: "800", letterSpacing: "-0.02em" }}>
           Sidi Saiyyed Mosque
         </h1>
-        <p style={{ margin: "4px 0 0", fontSize: "15px", color: "#6F5B4B", fontWeight: "500" }}>
+        <p style={{ margin: "4px 0 0", fontSize: "15px", color: "var(--ink-muted)", fontWeight: "500" }}>
           <T k="pc.sub" />
         </p>
-        <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", fontWeight: "600", color: "#5A4434" }}>
+        <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", fontWeight: "600", color: "var(--ink-soft)" }}>
           <OpenStatus opens={7} closes={18} />
           <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#B9A894" }} />
           <span>
@@ -75,7 +75,7 @@ export default function PlaceScreen() {
           </span>
         </div>
         <div style={{ marginTop: "18px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
-          <Link href="/story" style={{ height: "48px", borderRadius: "14px", border: "1.5px solid #9A4E36", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "14px", fontWeight: "700", textDecoration: "none" }}>
+          <Link href="/story" style={{ height: "48px", borderRadius: "14px", border: "1.5px solid var(--clay)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "14px", fontWeight: "700", textDecoration: "none" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
               <polygon points="7 4 19 12 7 20 7 4" />
             </svg>
@@ -83,7 +83,7 @@ export default function PlaceScreen() {
               <T k="pc.play" />
             </span>
           </Link>
-          <Link href="/lens" style={{ height: "48px", borderRadius: "14px", border: "1.5px solid #9A4E36", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "14px", fontWeight: "700", textDecoration: "none" }}>
+          <Link href="/lens" style={{ height: "48px", borderRadius: "14px", border: "1.5px solid var(--clay)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "14px", fontWeight: "700", textDecoration: "none" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M3 7V5a2 2 0 0 1 2-2h2" />
               <path d="M17 3h2a2 2 0 0 1 2 2v2" />
@@ -94,16 +94,16 @@ export default function PlaceScreen() {
             {" "}<T k="pc.lens" />{" "}
           </Link>
         </div>
-        <section style={{ marginTop: "22px", padding: "18px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
-          <p style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
+        <section style={{ marginTop: "22px", padding: "18px", borderRadius: "18px", background: "var(--sand-light)", border: "1px solid var(--line)" }}>
+          <p style={{ margin: "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "var(--gold)" }}>
             <span style={{ textTransform: "uppercase" }}><T k="pc.in30" /></span>
           </p>
-          <p style={{ margin: "10px 0 0", fontSize: "15px", lineHeight: "1.5", color: "#2B1B10", textWrap: "pretty" }}>
+          <p style={{ margin: "10px 0 0", fontSize: "15px", lineHeight: "1.5", color: "var(--ink)", textWrap: "pretty" }}>
             {"Built in 1573 by Sidi Saiyyed, an Abyssinian noble in the Gujarat Sultanate's army, this small mosque was left unfinished when the Mughals took the city. Its carved stone jalis — above all the Tree of Life — became Ahmedabad's unofficial symbol."}
           </p>
           <div style={{ marginTop: "14px", display: "flex", alignItems: "center", gap: "6px" }}>
             
-            <SheetButton title="pc.history" label={<T k="pc.read_full" />} style={{ height: "44px", padding: "0 10px", border: "0", background: "none", color: "#9A4E36", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
+            <SheetButton title="pc.history" label={<T k="pc.read_full" />} style={{ height: "44px", padding: "0 10px", border: "0", background: "none", color: "var(--clay)", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
               <p>Sidi Saiyyed came to Gujarat from Abyssinia (today&apos;s Ethiopia) and rose in the service of the Gujarat Sultanate. In 1572–73, the sultanate&apos;s final year, he began this small mosque beside the city wall at Lal Darwaja.</p>
               <p>The building is modest — a single arcaded prayer hall with no courtyard minarets — but its west wall holds ten stone screens. Eight are geometric. Two, flanking the central arch, show trees whose branches fold back on themselves like lace: the Tree of Life.</p>
               <p>The central arch is filled with plain stone. The usual explanation is that work stopped when Akbar&apos;s Mughal army took Gujarat in 1573, before its screen could be carved.</p>
@@ -116,14 +116,14 @@ export default function PlaceScreen() {
             <h2 style={{ margin: "0", fontSize: "19px", fontWeight: "800" }}>
               <T k="pc.chapters" />
             </h2>
-            <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
+            <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink-muted)" }}>
               <T k="pc.parts" />
             </span>
           </div>
           <ol style={{ listStyle: "none", margin: "10px 0 0", padding: "0", display: "flex", flexDirection: "column" }}>
             <li>
-              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F3ECE2" }}>
-                <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", background: "#E3F1E7", color: "#2F7A4A", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "var(--ink)", borderBottom: "1px solid var(--line-soft)" }}>
+                <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", background: "var(--green-tint)", color: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M20 6 9 17l-5-5" />
                   </svg>
@@ -131,14 +131,14 @@ export default function PlaceScreen() {
                 <span style={{ flex: "1", fontSize: "15px", fontWeight: "700" }}>
                   Who was Sidi Saiyyed?
                 </span>
-                <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   0:40
                 </span>
               </Link>
             </li>
             <li>
-              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F3ECE2" }}>
-                <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "var(--ink)", borderBottom: "1px solid var(--line-soft)" }}>
+                <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                     <polygon points="7 4 19 12 7 20 7 4" />
                   </svg>
@@ -147,37 +147,37 @@ export default function PlaceScreen() {
                   <span style={{ fontSize: "15px", fontWeight: "700" }}>
                     Reading the Tree of Life
                   </span>
-                  <span style={{ fontSize: "12px", fontWeight: "600", color: "#9A4E36" }}>
+                  <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--clay)" }}>
                     <T k="pc.up_next" />
                   </span>
                 </span>
-                <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   0:50
                 </span>
               </Link>
             </li>
             <li>
-              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", borderBottom: "1px solid #F3ECE2" }}>
-                <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", border: "1.5px solid #D9C7B3", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: "800" }}>
+              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "var(--ink)", borderBottom: "1px solid var(--line-soft)" }}>
+                <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", border: "1.5px solid var(--line-deep)", color: "var(--ink-soft)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: "800" }}>
                   3
                 </span>
                 <span style={{ flex: "1", fontSize: "15px", fontWeight: "700" }}>
                   The window left blank
                 </span>
-                <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   0:30
                 </span>
               </Link>
             </li>
             <li>
-              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10" }}>
-                <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", border: "1.5px solid #D9C7B3", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: "800" }}>
+              <Link href="/story" style={{ minHeight: "60px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "var(--ink)" }}>
+                <span style={{ flex: "0 0 32px", width: "32px", height: "32px", borderRadius: "50%", border: "1.5px solid var(--line-deep)", color: "var(--ink-soft)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: "800" }}>
                   4
                 </span>
                 <span style={{ flex: "1", fontSize: "15px", fontWeight: "700" }}>
                   From stone screen to a logo
                 </span>
-                <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   0:20
                 </span>
               </Link>
@@ -189,10 +189,10 @@ export default function PlaceScreen() {
             <T k="pc.look" />
           </h2>
           <div className="hscroll" style={{ margin: "12px -20px 0", padding: "0 20px", display: "flex", gap: "12px", overflowX: "auto", scrollbarWidth: "none" }}>
-            <article style={{ flex: "0 0 210px", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
+            <article style={{ flex: "0 0 210px", border: "1px solid var(--line)", borderRadius: "16px", overflow: "hidden", background: "var(--paper)" }}>
               <div style={{ position: "relative", height: "112px" }}>
                 <img src="/images/358cd23211709da539c3303890c27e8b.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "var(--ink)", color: "var(--paper)", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   1
                 </span>
               </div>
@@ -200,15 +200,15 @@ export default function PlaceScreen() {
                 <h3 style={{ margin: "0", fontSize: "15px", fontWeight: "800" }}>
                   The Tree of Life
                 </h3>
-                <p style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: "1.4", color: "#5A4434" }}>
+                <p style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: "1.4", color: "var(--ink-soft)" }}>
                   Intertwined trees and curling palm fronds, all cut from stone
                 </p>
               </div>
             </article>
-            <article style={{ flex: "0 0 210px", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
-              <div style={{ position: "relative", height: "112px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <article style={{ flex: "0 0 210px", border: "1px solid var(--line)", borderRadius: "16px", overflow: "hidden", background: "var(--paper)" }}>
+              <div style={{ position: "relative", height: "112px", background: "var(--parchment)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <img src="/images/sidi-lattice.jpg" alt="A geometric stone screen in a side arch of the mosque" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 50%", display: "block" }} />
-                <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "var(--ink)", color: "var(--paper)", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   2
                 </span>
               </div>
@@ -216,15 +216,15 @@ export default function PlaceScreen() {
                 <h3 style={{ margin: "0", fontSize: "15px", fontWeight: "800" }}>
                   Geometric lattices
                 </h3>
-                <p style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: "1.4", color: "#5A4434" }}>
+                <p style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: "1.4", color: "var(--ink-soft)" }}>
                   Repeating star-and-square screens in the side arches
                 </p>
               </div>
             </article>
-            <article style={{ flex: "0 0 210px", border: "1px solid #EFE6DA", borderRadius: "16px", overflow: "hidden", background: "#FFFFFF" }}>
-              <div style={{ position: "relative", height: "112px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <article style={{ flex: "0 0 210px", border: "1px solid var(--line)", borderRadius: "16px", overflow: "hidden", background: "var(--paper)" }}>
+              <div style={{ position: "relative", height: "112px", background: "var(--parchment)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <img src="/images/sidi-exterior.jpg" alt="The west wall of the mosque, with its row of arches" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: "40% 45%", display: "block" }} />
-                <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ position: "absolute", top: "8px", left: "8px", width: "26px", height: "26px", borderRadius: "50%", background: "var(--ink)", color: "var(--paper)", fontSize: "13px", fontWeight: "800", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   3
                 </span>
               </div>
@@ -232,7 +232,7 @@ export default function PlaceScreen() {
                 <h3 style={{ margin: "0", fontSize: "15px", fontWeight: "800" }}>
                   The blank arch
                 </h3>
-                <p style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: "1.4", color: "#5A4434" }}>
+                <p style={{ margin: "4px 0 0", fontSize: "13px", lineHeight: "1.4", color: "var(--ink-soft)" }}>
                   Filled with plain stone — the work stopped here
                 </p>
               </div>
@@ -244,30 +244,30 @@ export default function PlaceScreen() {
             <T k="pc.before" />
           </h2>
           <div style={{ marginTop: "12px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
-            <div style={{ padding: "14px", borderRadius: "14px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ padding: "14px", borderRadius: "14px", background: "var(--sand-light)", display: "flex", flexDirection: "column", gap: "6px" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
               </svg>
-              <span style={{ fontSize: "12px", fontWeight: "700", color: "#6F5B4B" }}>
+              <span style={{ fontSize: "12px", fontWeight: "700", color: "var(--ink-muted)" }}>
                 <T k="pc.dress" />
               </span>
               <span style={{ fontSize: "14px", fontWeight: "700", lineHeight: "1.3" }}>
                 <T k="pc.dress_v" />
               </span>
             </div>
-            <div style={{ padding: "14px", borderRadius: "14px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ padding: "14px", borderRadius: "14px", background: "var(--sand-light)", display: "flex", flexDirection: "column", gap: "6px" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
-              <span style={{ fontSize: "12px", fontWeight: "700", color: "#6F5B4B" }}>
+              <span style={{ fontSize: "12px", fontWeight: "700", color: "var(--ink-muted)" }}>
                 <T k="pc.time" />
               </span>
               <span style={{ fontSize: "14px", fontWeight: "700", lineHeight: "1.3" }}>
                 <T k="pc.time_v" />
               </span>
             </div>
-            <div style={{ padding: "14px", borderRadius: "14px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ padding: "14px", borderRadius: "14px", background: "var(--sand-light)", display: "flex", flexDirection: "column", gap: "6px" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="4" />
                 <path d="M12 2v2" />
@@ -279,21 +279,21 @@ export default function PlaceScreen() {
                 <path d="m6.34 17.66-1.41 1.41" />
                 <path d="m19.07 4.93-1.41 1.41" />
               </svg>
-              <span style={{ fontSize: "12px", fontWeight: "700", color: "#6F5B4B" }}>
+              <span style={{ fontSize: "12px", fontWeight: "700", color: "var(--ink-muted)" }}>
                 <T k="pc.light" />
               </span>
               <span style={{ fontSize: "14px", fontWeight: "700", lineHeight: "1.3" }}>
                 <T k="pc.light_v" />
               </span>
             </div>
-            <div style={{ padding: "14px", borderRadius: "14px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div style={{ padding: "14px", borderRadius: "14px", background: "var(--sand-light)", display: "flex", flexDirection: "column", gap: "6px" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9A4E36" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
                 <path d="M13 5v2" />
                 <path d="M13 17v2" />
                 <path d="M13 11v2" />
               </svg>
-              <span style={{ fontSize: "12px", fontWeight: "700", color: "#6F5B4B" }}>
+              <span style={{ fontSize: "12px", fontWeight: "700", color: "var(--ink-muted)" }}>
                 <T k="tk.entry" />
               </span>
               <span style={{ fontSize: "14px", fontWeight: "700", lineHeight: "1.3" }}>
@@ -301,7 +301,7 @@ export default function PlaceScreen() {
               </span>
             </div>
           </div>
-          <div style={{ marginTop: "12px", display: "flex", gap: "10px", alignItems: "flex-start", fontSize: "13px", lineHeight: "1.45", color: "#5A4434" }}>
+          <div style={{ marginTop: "12px", display: "flex", gap: "10px", alignItems: "flex-start", fontSize: "13px", lineHeight: "1.45", color: "var(--ink-soft)" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={{ flex: "0 0 18px", marginTop: "1px" }}>
               <circle cx="12" cy="12" r="10" />
               <path d="M12 16v-4" />
@@ -311,8 +311,8 @@ export default function PlaceScreen() {
               <T k="pc.hours" />
             </span>
           </div>
-          <Link href="/tickets?book=sidi-guided" style={{ marginTop: "14px", minHeight: "64px", padding: "10px 14px", borderRadius: "16px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
-            <span style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Link href="/tickets?book=sidi-guided" style={{ marginTop: "14px", minHeight: "64px", padding: "10px 14px", borderRadius: "16px", background: "var(--ink)", color: "var(--cream)", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+            <span style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: "var(--gold-light)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
               <path d="M13 5v2M13 17v2M13 11v2" />
@@ -322,7 +322,7 @@ export default function PlaceScreen() {
               <span style={{ display: "block", fontSize: "15px", fontWeight: "800" }}>
                 <T k="pc.guide" />
               </span>
-              <span style={{ display: "block", marginTop: "2px", fontSize: "12px", color: "#D9C6AE" }}>
+              <span style={{ display: "block", marginTop: "2px", fontSize: "12px", color: "var(--sand-on-dark)" }}>
                 <T k="pc.guide_sub" />
               </span>
             </span>
@@ -336,30 +336,30 @@ export default function PlaceScreen() {
             <T k="pc.nearby" />
           </h2>
           <div className="hscroll" style={{ margin: "12px -20px 0", padding: "0 20px", display: "flex", gap: "12px", overflowX: "auto", scrollbarWidth: "none" }}>
-            <Link href="/secret?id=bhadra" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "#2B1B10", textDecoration: "none" }}>
+            <Link href="/secret?id=bhadra" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "var(--ink)", textDecoration: "none" }}>
               <img src="/images/bhadra-fort.jpg" alt="The gate and tower of Bhadra Fort" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Bhadra Fort
               </span>
-              <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+              <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                 450 m · 6 min
               </span>
             </Link>
-            <Link href="/secret?id=teen" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "#2B1B10", textDecoration: "none" }}>
+            <Link href="/secret?id=teen" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "var(--ink)", textDecoration: "none" }}>
               <img src="/images/teen-darwaza.jpg" alt="The three arches of Teen Darwaza" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Teen Darwaza
               </span>
-              <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+              <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                 750 m · 9 min
               </span>
             </Link>
-            <Link href="/secret?id=jama" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "#2B1B10", textDecoration: "none" }}>
+            <Link href="/secret?id=jama" style={{ flex: "0 0 150px", display: "flex", flexDirection: "column", gap: "8px", color: "var(--ink)", textDecoration: "none" }}>
               <img src="/images/jama-masjid.jpg" alt="The courtyard of Jama Masjid, Ahmedabad" style={{ width: "100%", height: "110px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
               <span style={{ fontSize: "15px", fontWeight: "800" }}>
                 Jama Masjid
               </span>
-              <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+              <span style={{ marginTop: "-4px", fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                 1.1 km · 13 min
               </span>
             </Link>
@@ -367,15 +367,15 @@ export default function PlaceScreen() {
         </section>
       </main>
       <div className="nav-rail">
-        <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
-        <Link href="/walk" style={{ flex: "0 0 auto", height: "52px", padding: "0 14px", gap: "6px", fontSize: "14px", fontWeight: 700, textDecoration: "none", borderRadius: "14px", border: "1.5px solid #E2D3C1", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ padding: "12px 20px 30px", background: "var(--paper)", borderTop: "1px solid var(--line)", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
+        <Link href="/walk" style={{ flex: "0 0 auto", height: "52px", padding: "0 14px", gap: "6px", fontSize: "14px", fontWeight: 700, textDecoration: "none", borderRadius: "14px", border: "1.5px solid var(--line-strong)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />
             <path d="M12 5v14" />
           </svg>
           <T k="pc.add_walk" />
         </Link>
-        <Link href="/navigate" style={{ flex: "1", height: "52px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 8px 18px rgba(154, 78, 54, 0.26)" }}>
+        <Link href="/navigate" style={{ flex: "1", height: "52px", borderRadius: "14px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 8px 18px rgba(154, 78, 54, 0.26)" }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <polygon points="3 11 22 2 13 21 11 13 3 11" />
           </svg>

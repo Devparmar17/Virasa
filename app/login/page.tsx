@@ -19,9 +19,9 @@ const onHash = (fn: () => void) => {
   window.addEventListener("hashchange", fn);
   return () => window.removeEventListener("hashchange", fn);
 };
-const field: CSSProperties = { width: "100%", height: "54px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid #D9C7B3", background: "#FFFFFF", fontSize: "16px", color: "#2B1B10", outline: "none" };
-const primary: CSSProperties = { width: "100%", height: "56px", border: 0, borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: 700, cursor: "pointer", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" };
-const outline: CSSProperties = { width: "100%", height: "56px", borderRadius: "16px", border: "1.5px solid #D9C7B3", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", fontSize: "16px", fontWeight: 700, cursor: "pointer" };
+const field: CSSProperties = { width: "100%", height: "54px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid var(--line-deep)", background: "var(--paper)", fontSize: "16px", color: "var(--ink)", outline: "none" };
+const primary: CSSProperties = { width: "100%", height: "56px", border: 0, borderRadius: "16px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: 700, cursor: "pointer", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" };
+const outline: CSSProperties = { width: "100%", height: "56px", borderRadius: "16px", border: "1.5px solid var(--line-deep)", background: "var(--paper)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", fontSize: "16px", fontWeight: 700, cursor: "pointer" };
 
 function Field({ label, error, hint, children }: { label: string; error?: string; hint?: string; children: ReactNode }) {
   return (
@@ -29,11 +29,11 @@ function Field({ label, error, hint, children }: { label: string; error?: string
       <span style={{ display: "block", marginBottom: "6px", fontSize: "14px", fontWeight: 700 }}>{label}</span>
       {children}
       {error ? (
-        <span role="alert" className="rise" style={{ display: "block", marginTop: "6px", fontSize: "13px", fontWeight: 600, color: "#A23A2A" }}>
+        <span role="alert" className="rise" style={{ display: "block", marginTop: "6px", fontSize: "13px", fontWeight: 600, color: "var(--red)" }}>
           {error}
         </span>
       ) : hint ? (
-        <span style={{ display: "block", marginTop: "6px", fontSize: "13px", color: "#6F5B4B" }}>{hint}</span>
+        <span style={{ display: "block", marginTop: "6px", fontSize: "13px", color: "var(--ink-muted)" }}>{hint}</span>
       ) : null}
     </label>
   );
@@ -120,7 +120,7 @@ export default function LoginScreen() {
   };
 
   const googleButton = (
-    <button type="button" onClick={google} disabled={!!busy || !!ok} aria-busy={busy === "google"} style={{ ...outline, ...(ok === "google" ? { borderColor: "#2F7A4A", color: "#2F7A4A" } : null) }}>
+    <button type="button" onClick={google} disabled={!!busy || !!ok} aria-busy={busy === "google"} style={{ ...outline, ...(ok === "google" ? { borderColor: "var(--green)", color: "var(--green)" } : null) }}>
       <span key={ok === "google" ? "ok" : busy === "google" ? "busy" : "idle"} className="btn-swap">
         {ok === "google" ? <Tick /> : busy === "google" ? <Spinner color="#9A4E36" track="#D9C7B3" /> : <GoogleMark />}
         {ok === "google" ? t("lg.signed_in_short") : busy === "google" ? t("lg.google_wait") : t("lg.google")}
@@ -142,14 +142,14 @@ export default function LoginScreen() {
       </svg>
       <div style={{ position: "relative", padding: "54px 8px 0", height: "98px", display: "flex", alignItems: "center" }}>
         {view === "choose" ? (
-          <BackLink href="/welcome" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+          <BackLink href="/welcome" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink)" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
             </svg>
           </BackLink>
         ) : (
-          <button type="button" aria-label={t("lg.back_options")} onClick={() => switchTo("choose")} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10", cursor: "pointer" }}>
+          <button type="button" aria-label={t("lg.back_options")} onClick={() => switchTo("choose")} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink)", cursor: "pointer" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
@@ -160,12 +160,12 @@ export default function LoginScreen() {
 
       {user && !leaving ? (
         <div key="account" className="stagger" style={{ position: "relative", padding: "28px 24px 0", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-          <span style={{ width: "104px", height: "104px", borderRadius: "50%", padding: "4px", background: "#8A6424" }}>
-            <Avatar style={{ width: "96px", height: "96px", borderRadius: "50%", objectFit: "cover", display: "block", border: "3px solid #FFFFFF" }} />
+          <span style={{ width: "104px", height: "104px", borderRadius: "50%", padding: "4px", background: "var(--gold)" }}>
+            <Avatar style={{ width: "96px", height: "96px", borderRadius: "50%", objectFit: "cover", display: "block", border: "3px solid var(--paper)" }} />
           </span>
           <h1 style={{ margin: "22px 0 0", fontSize: "28px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>{t("lg.signed_in")}</h1>
           <p style={{ margin: "8px 0 0", fontSize: "16px", fontWeight: 700 }}>{user.name}</p>
-          <p style={{ margin: "2px 0 0", fontSize: "14px", color: "#5A4434", overflowWrap: "anywhere" }}>
+          <p style={{ margin: "2px 0 0", fontSize: "14px", color: "var(--ink-soft)", overflowWrap: "anywhere" }}>
             {user.email} · {user.provider === "google" ? "Google" : "Email"}
           </p>
           <Link href="/home" style={{ ...primary, marginTop: "30px", textDecoration: "none" }}>
@@ -184,11 +184,11 @@ export default function LoginScreen() {
         </div>
       ) : view === "choose" ? (
         <div key="choose" className="stagger" style={{ position: "relative", padding: "18px 24px 0", display: "flex", flexDirection: "column" }}>
-          <div className="splash-logo" style={{ alignSelf: "center", width: "112px", height: "112px", borderRadius: "50%", background: "#FFFFFF", border: "1px solid #EFE6DA", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 44px rgba(122, 74, 40, 0.16)" }}>
+          <div className="splash-logo" style={{ alignSelf: "center", width: "112px", height: "112px", borderRadius: "50%", background: "var(--paper)", border: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 44px rgba(122, 74, 40, 0.16)" }}>
             <img src="/images/845c09135def6279c007582842533707.png" alt="Virasa" style={{ width: "66px", height: "72px", objectFit: "contain", display: "block" }} />
           </div>
           <h1 style={{ margin: "26px 0 0", fontSize: "30px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textAlign: "center" }}>{t("lg.title")}</h1>
-          <p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: 1.5, color: "#5A4434", textAlign: "center", textWrap: "balance" }}>{t("lg.sub")}</p>
+          <p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: 1.5, color: "var(--ink-soft)", textAlign: "center", textWrap: "balance" }}>{t("lg.sub")}</p>
           <div style={{ marginTop: "34px", display: "flex", flexDirection: "column", gap: "12px" }}>
             {googleButton}
             <button type="button" onClick={() => switchTo("signup")} style={primary}>
@@ -199,15 +199,15 @@ export default function LoginScreen() {
               {t("lg.signup_email")}
             </button>
           </div>
-          <div style={{ margin: "26px 0 0", display: "flex", alignItems: "center", gap: "12px", fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>
-            <span style={{ flex: 1, height: "1px", background: "#E2D3C1" }} />
+          <div style={{ margin: "26px 0 0", display: "flex", alignItems: "center", gap: "12px", fontSize: "13px", fontWeight: 600, color: "var(--ink-muted)" }}>
+            <span style={{ flex: 1, height: "1px", background: "var(--line-strong)" }} />
             {t("lg.have")}
-            <span style={{ flex: 1, height: "1px", background: "#E2D3C1" }} />
+            <span style={{ flex: 1, height: "1px", background: "var(--line-strong)" }} />
           </div>
-          <button type="button" onClick={() => switchTo("signin")} style={{ ...outline, marginTop: "16px", borderColor: "#9A4E36", color: "#9A4E36", background: "transparent" }}>
+          <button type="button" onClick={() => switchTo("signin")} style={{ ...outline, marginTop: "16px", borderColor: "var(--clay)", color: "var(--clay)", background: "transparent" }}>
             {t("lg.login")}
           </button>
-          <Link href="/personalize" style={{ marginTop: "8px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: 700, color: "#5A4434" }}>
+          <Link href="/personalize" style={{ marginTop: "8px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: 700, color: "var(--ink-soft)" }}>
             {t("wl.guest")}
           </Link>
         </div>
@@ -215,20 +215,20 @@ export default function LoginScreen() {
         <form key={view} noValidate onSubmit={submit} className="stagger" style={{ position: "relative", padding: "6px 24px 0", display: "flex", flexDirection: "column", gap: "16px" }}>
           <div>
             <h1 style={{ margin: 0, fontSize: "28px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>{view === "signup" ? t("lg.create") : t("lg.welcome")}</h1>
-            <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: 1.5, color: "#5A4434" }}>{view === "signup" ? t("lg.create_sub") : t("lg.welcome_sub")}</p>
+            <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: 1.5, color: "var(--ink-soft)" }}>{view === "signup" ? t("lg.create_sub") : t("lg.welcome_sub")}</p>
           </div>
           {view === "signup" ? (
             <Field label={t("lg.name")} error={errors.name}>
-              <input type="text" name="name" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} aria-invalid={!!errors.name} style={{ ...field, borderColor: errors.name ? "#A23A2A" : "#D9C7B3" }} />
+              <input type="text" name="name" autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} aria-invalid={!!errors.name} style={{ ...field, borderColor: errors.name ? "var(--red)" : "var(--line-deep)" }} />
             </Field>
           ) : null}
           <Field label={t("lg.email")} error={errors.email}>
-            <input type="email" name="email" autoComplete="email" inputMode="email" value={email} onChange={(e) => setEmail(e.target.value)} aria-invalid={!!errors.email} style={{ ...field, borderColor: errors.email ? "#A23A2A" : "#D9C7B3" }} />
+            <input type="email" name="email" autoComplete="email" inputMode="email" value={email} onChange={(e) => setEmail(e.target.value)} aria-invalid={!!errors.email} style={{ ...field, borderColor: errors.email ? "var(--red)" : "var(--line-deep)" }} />
           </Field>
           <Field label={t("lg.password")} error={errors.password} hint={view === "signup" ? t("lg.pw_hint") : undefined}>
             <span style={{ position: "relative", display: "block" }}>
-              <input type={showPassword ? "text" : "password"} name="password" autoComplete={view === "signup" ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} aria-invalid={!!errors.password} style={{ ...field, paddingRight: "76px", borderColor: errors.password ? "#A23A2A" : "#D9C7B3" }} />
-              <button type="button" aria-pressed={showPassword} onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: "6px", top: "5px", height: "44px", padding: "0 12px", border: 0, borderRadius: "10px", background: "none", color: "#9A4E36", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}>
+              <input type={showPassword ? "text" : "password"} name="password" autoComplete={view === "signup" ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} aria-invalid={!!errors.password} style={{ ...field, paddingRight: "76px", borderColor: errors.password ? "var(--red)" : "var(--line-deep)" }} />
+              <button type="button" aria-pressed={showPassword} onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: "6px", top: "5px", height: "44px", padding: "0 12px", border: 0, borderRadius: "10px", background: "none", color: "var(--clay)", fontSize: "14px", fontWeight: 700, cursor: "pointer" }}>
                 {showPassword ? t("lg.hide") : t("lg.show")}
               </button>
             </span>
@@ -238,21 +238,21 @@ export default function LoginScreen() {
               {errors.form}
             </p>
           ) : null}
-          <button type="submit" disabled={!!busy || !!ok} aria-busy={busy === "form"} style={{ ...primary, marginTop: "4px", ...(ok === "form" ? { background: "#2F7A4A", boxShadow: "0 10px 22px rgba(47, 122, 74, 0.28)" } : null) }}>
+          <button type="submit" disabled={!!busy || !!ok} aria-busy={busy === "form"} style={{ ...primary, marginTop: "4px", ...(ok === "form" ? { background: "var(--green)", boxShadow: "0 10px 22px rgba(47, 122, 74, 0.28)" } : null) }}>
             <span key={ok === "form" ? "ok" : busy === "form" ? "busy" : "idle"} className="btn-swap">
               {ok === "form" ? <Tick /> : busy === "form" ? <Spinner /> : null}
               {ok === "form" ? (view === "signup" ? t("lg.created") : t("lg.logged_in")) : busy === "form" ? (view === "signup" ? t("lg.creating") : t("lg.logging")) : view === "signup" ? t("lg.create_btn") : t("lg.login")}
             </span>
           </button>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>
-            <span style={{ flex: 1, height: "1px", background: "#E2D3C1" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "13px", fontWeight: 600, color: "var(--ink-muted)" }}>
+            <span style={{ flex: 1, height: "1px", background: "var(--line-strong)" }} />
             {t("lg.or")}
-            <span style={{ flex: 1, height: "1px", background: "#E2D3C1" }} />
+            <span style={{ flex: 1, height: "1px", background: "var(--line-strong)" }} />
           </div>
           {googleButton}
-          <p style={{ margin: "2px 0 0", fontSize: "15px", color: "#5A4434", textAlign: "center" }}>
+          <p style={{ margin: "2px 0 0", fontSize: "15px", color: "var(--ink-soft)", textAlign: "center" }}>
             {view === "signup" ? t("lg.have") : t("lg.new")}{" "}
-            <button type="button" onClick={() => switchTo(view === "signup" ? "signin" : "signup")} style={{ minHeight: "44px", padding: "0 4px", border: 0, background: "none", color: "#9A4E36", fontSize: "15px", fontWeight: 700, cursor: "pointer" }}>
+            <button type="button" onClick={() => switchTo(view === "signup" ? "signin" : "signup")} style={{ minHeight: "44px", padding: "0 4px", border: 0, background: "none", color: "var(--clay)", fontSize: "15px", fontWeight: 700, cursor: "pointer" }}>
               {view === "signup" ? t("lg.login") : t("lg.signup")}
             </button>
           </p>

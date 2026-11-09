@@ -55,23 +55,23 @@ export default function CityScreen() {
           {t("ct.use_loc")}
         </GeoLink>
 
-        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>{t("ct.here").toUpperCase()}</h2>
-        <Link href="/home" style={{ padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none" }}>
-          <span className="pulse" aria-hidden="true" style={{ flex: "0 0 14px", width: "14px", height: "14px", borderRadius: "50%", background: "#9FD3B0" }} />
+        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "var(--gold)" }}>{t("ct.here").toUpperCase()}</h2>
+        <Link href="/home" style={{ padding: "16px", borderRadius: "18px", background: "var(--ink)", color: "var(--cream)", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none" }}>
+          <span className="pulse" aria-hidden="true" style={{ flex: "0 0 14px", width: "14px", height: "14px", borderRadius: "50%", background: "var(--green-light)" }} />
           <span style={{ flex: 1, minWidth: 0 }}>
             <span style={{ display: "block", fontSize: "18px", fontWeight: 800 }}>{hereLabel(here)}</span>
-            <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "#D9C6AE" }}>
+            <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "var(--sand-on-dark)" }}>
               {here.source === "gps" ? t("ct.from_gps") : here.source === "picked" ? t("ct.picked") : t("ct.home_city")}
               {" · "}{isAhmedabad(here) ? t("ct.ahd") : t("ct.other")}
             </span>
           </span>
-          <span style={{ color: "#9FD3B0" }}>
+          <span style={{ color: "var(--green-light)" }}>
             <Chevron />
           </span>
         </Link>
 
-        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>{t("ct.another").toUpperCase()}</h2>
-        <label style={{ height: "54px", padding: "0 14px", borderRadius: "16px", background: "#FFFFFF", border: "1.5px solid #D9C7B3", display: "flex", alignItems: "center", gap: "10px" }}>
+        <h2 style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "var(--gold)" }}>{t("ct.another").toUpperCase()}</h2>
+        <label style={{ height: "54px", padding: "0 14px", borderRadius: "16px", background: "var(--paper)", border: "1.5px solid var(--line-deep)", display: "flex", alignItems: "center", gap: "10px" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
@@ -86,30 +86,30 @@ export default function CityScreen() {
               if (e.key === "Enter" && query.trim()) choose(list[0]?.city ?? query);
             }}
             enterKeyHint="go"
-            style={{ flex: 1, minWidth: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "16px", color: "#2B1B10" }}
+            style={{ flex: 1, minWidth: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "16px", color: "var(--ink)" }}
           />
         </label>
-        <p style={{ margin: "8px 2px 10px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{t("ct.tap_hint")}</p>
+        <p style={{ margin: "8px 2px 10px", fontSize: "13px", lineHeight: 1.45, color: "var(--ink-soft)" }}>{t("ct.tap_hint")}</p>
 
         <ul className="stagger" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
           {needle && !exact ? (
-            <li style={{ padding: "6px 6px 6px 14px", borderRadius: "16px", background: "#FBEDE6", border: "1px solid #F0D3C6", display: "flex", alignItems: "center", gap: "8px" }}>
-              <button type="button" onClick={() => choose(query)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
+            <li style={{ padding: "6px 6px 6px 14px", borderRadius: "16px", background: "var(--clay-tint)", border: "1px solid #F0D3C6", display: "flex", alignItems: "center", gap: "8px" }}>
+              <button type="button" onClick={() => choose(query)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "var(--ink)", textAlign: "left", cursor: "pointer" }}>
                 <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{t("ct.im_in", { city: query.trim() })}</span>
-                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{t("ct.tap_use")}</span>
+                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>{t("ct.tap_use")}</span>
               </button>
             </li>
           ) : null}
           {list.map((c) => {
             const mine = c.city.toLowerCase() === here.city.toLowerCase();
             return (
-              <li key={c.city} style={{ padding: "6px 6px 6px 14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${mine ? "#BFDCC8" : "#EFE6DA"}`, display: "flex", alignItems: "center", gap: "8px" }}>
-                <button type="button" aria-pressed={mine} onClick={() => choose(c.city)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "#2B1B10", textAlign: "left", cursor: "pointer" }}>
+              <li key={c.city} style={{ padding: "6px 6px 6px 14px", borderRadius: "16px", background: "var(--paper)", border: `1px solid ${mine ? "#BFDCC8" : "var(--line)"}`, display: "flex", alignItems: "center", gap: "8px" }}>
+                <button type="button" aria-pressed={mine} onClick={() => choose(c.city)} style={{ flex: 1, minWidth: 0, minHeight: "48px", padding: 0, border: 0, background: "none", color: "var(--ink)", textAlign: "left", cursor: "pointer" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "16px", fontWeight: 800 }}>
                     {c.city}
-                    {mine ? <span style={{ height: "22px", padding: "0 8px", borderRadius: "999px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "12px", fontWeight: 800, display: "inline-flex", alignItems: "center" }}>{t("ct.youre_here")}</span> : null}
+                    {mine ? <span style={{ height: "22px", padding: "0 8px", borderRadius: "999px", background: "var(--green-tint)", color: "var(--green)", fontSize: "12px", fontWeight: 800, display: "inline-flex", alignItems: "center" }}>{t("ct.youre_here")}</span> : null}
                   </span>
-                  <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{c.city === "Ahmedabad" ? t("ct.gujarat") : c.state}</span>
+                  <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>{c.city === "Ahmedabad" ? t("ct.gujarat") : c.state}</span>
                 </button>
               </li>
             );

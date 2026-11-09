@@ -87,29 +87,30 @@ export default function SearchScreen() {
   };
   const v = { q, onQ: (e: React.ChangeEvent<HTMLInputElement>) => setQ(e.target.value), clear: () => setQ("") };
   return (
-    <div style={{ width: "390px", minHeight: "844px", paddingBottom: "40px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", minHeight: "844px", paddingBottom: "40px", position: "relative", overflow: "hidden", background: "var(--paper)", fontFamily: "inherit", color: "var(--ink)" }}>
+      <h1 className="sr-only">{t("home.search")}</h1>
       <div style={{ padding: "54px 16px 0 8px", display: "flex", alignItems: "center", gap: "6px" }}>
-        <BackLink href="/home" aria-label="Back" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+        <BackLink href="/home" aria-label="Back" style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink)" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
           </svg>
         </BackLink>
-        <div style={{ flex: "1", minWidth: "0", height: "50px", border: "1.5px solid #9A4E36", borderRadius: "14px", display: "flex", alignItems: "center", gap: "8px", padding: "0 2px 0 14px", background: "#FFFFFF", boxShadow: "0 0 0 4px rgba(154, 78, 54, 0.10)" }}>
+        <div style={{ flex: "1", minWidth: "0", height: "50px", border: "1.5px solid var(--clay)", borderRadius: "14px", display: "flex", alignItems: "center", gap: "8px", padding: "0 2px 0 14px", background: "var(--paper)", boxShadow: "0 0 0 4px rgba(154, 78, 54, 0.10)" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
           </svg>
-          <input type="search" autoFocus enterKeyHint="search" aria-label={t("home.search")} placeholder={t("se.placeholder")} value={v.q} onChange={v.onQ} onKeyDown={(e) => { if (e.key === "Enter" && query && !found && !hits.length) ask(query); }} style={{ flex: "1", minWidth: "0", width: "0", height: "44px", border: "0", outline: "none", background: "transparent", fontSize: "16px", fontWeight: "600", color: "#2B1B10" }} />
-          <VoiceSearch onResult={setQ} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#9A4E36" }}>
+          <input type="search" autoFocus enterKeyHint="search" aria-label={t("home.search")} placeholder={t("se.placeholder")} value={v.q} onChange={v.onQ} onKeyDown={(e) => { if (e.key === "Enter" && query && !found && !hits.length) ask(query); }} style={{ flex: "1", minWidth: "0", width: "0", height: "44px", border: "0", outline: "none", background: "transparent", fontSize: "16px", fontWeight: "600", color: "var(--ink)" }} />
+          <VoiceSearch onResult={setQ} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "var(--clay)" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
               <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
               <line x1="12" x2="12" y1="19" y2="22" />
             </svg>
           </VoiceSearch>
-          {q ? <button type="button" aria-label={t("ex.clear")} onClick={v.clear} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#6F5B4B" }}>
-            <span style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#EFE6DA", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {q ? <button type="button" aria-label={t("ex.clear")} onClick={v.clear} style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "var(--ink-muted)" }}>
+            <span style={{ width: "24px", height: "24px", borderRadius: "50%", background: "var(--line)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M18 6 6 18" />
                 <path d="m6 6 12 12" />
@@ -122,37 +123,37 @@ export default function SearchScreen() {
         <>
       <div className="hscroll" style={{ padding: "12px 20px 0", display: "flex", gap: "8px", overflowX: "auto", scrollbarWidth: "none" }}>
         {TABS.map(([id, text]) => (
-          <button key={id} type="button" aria-pressed={tab === id} onClick={() => setTab(id)} style={{ flex: "0 0 auto", height: "38px", padding: "0 14px", borderRadius: "999px", border: tab === id ? "1.5px solid #2B1B10" : "1.5px solid #E2D3C1", background: tab === id ? "#2B1B10" : "#FFFFFF", color: tab === id ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
+          <button key={id} type="button" aria-pressed={tab === id} onClick={() => setTab(id)} style={{ flex: "0 0 auto", height: "38px", padding: "0 14px", borderRadius: "999px", border: tab === id ? "1.5px solid var(--ink)" : "1.5px solid var(--line-strong)", background: tab === id ? "var(--ink)" : "var(--paper)", color: tab === id ? "var(--paper)" : "var(--ink)", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
             {({ all: t("tk.all"), places: `${t("sr.places")} 5`, stories: `${t("home.stories")} 2`, reels: `${t("home.reels")} 3` } as Record<string, string>)[id] ?? text}
           </button>
         ))}
       </div>
-      <section hidden={!show.answer} aria-label={t("sr.quick")} style={{ margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: "700", letterSpacing: "0.08em", color: "#8A6424" }}>
+      <section hidden={!show.answer} aria-label={t("sr.quick")} style={{ margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "var(--sand-light)", border: "1px solid var(--line)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: "700", letterSpacing: "0.08em", color: "var(--gold)" }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="#8A6424" stroke="none" aria-hidden="true">
             <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
             <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
           </svg>
           {" "}{t("sr.quick_h").toUpperCase()}{" "}
         </div>
-        <p style={{ margin: "10px 0 0", fontSize: "15px", lineHeight: "1.5", color: "#2B1B10", textWrap: "pretty" }}>
+        <p style={{ margin: "10px 0 0", fontSize: "15px", lineHeight: "1.5", color: "var(--ink)", textWrap: "pretty" }}>
           {"A "}
           <strong>
             jali
           </strong>
           {" is a stone screen carved into a lattice. It lets in light and breeze while keeping rooms cool and private. Famous ones range from Sidi Saiyyed Mosque here in Ahmedabad to Salim Chishti's Tomb at Fatehpur Sikri."}
         </p>
-        <p style={{ margin: "8px 0 0", fontSize: "12px", color: "#6F5B4B" }}>
+        <p style={{ margin: "8px 0 0", fontSize: "12px", color: "var(--ink-muted)" }}>
           {t("sr.from_lib")}
         </p>
         <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
-          <Link href="/story" style={{ height: "44px", padding: "0 14px 0 10px", borderRadius: "12px", border: "1.5px solid #9A4E36", color: "#9A4E36", display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: "700", textDecoration: "none", background: "#FFFFFF" }}>
+          <Link href="/story" style={{ height: "44px", padding: "0 14px 0 10px", borderRadius: "12px", border: "1.5px solid var(--clay)", color: "var(--clay)", display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: "700", textDecoration: "none", background: "var(--paper)" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
               <polygon points="7 4 19 12 7 20 7 4" />
             </svg>
             {" "}{t("sr.listen30")}{" "}
           </Link>
-          <button type="button" onClick={() => ask(t("sr.jali_ask"))} style={{ height: "44px", padding: "0 12px", borderRadius: "12px", border: "0", background: "none", color: "#5A4434", fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
+          <button type="button" onClick={() => ask(t("sr.jali_ask"))} style={{ height: "44px", padding: "0 12px", borderRadius: "12px", border: "0", background: "none", color: "var(--ink-soft)", fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
             {t("sr.follow")}
           </button>
         </div>
@@ -162,27 +163,27 @@ export default function SearchScreen() {
           <h2 style={{ margin: "0", fontSize: "18px", fontWeight: "800" }}>
             {t("sr.places")}
           </h2>
-          <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>
+          <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink-muted)" }}>
             {t("sv.sort.1")}
           </span>
         </div>
-        <p style={{ margin: "12px 20px 0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
+        <p style={{ margin: "12px 20px 0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "var(--gold)" }}>
           {t("sr.near_you", { city: "Ahmedabad" }).toUpperCase()}
         </p>
         <ul style={{ listStyle: "none", margin: "4px 0 0", padding: "0 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
           <li>
-            <Link href="/place" style={{ minHeight: "80px", padding: "8px", borderRadius: "16px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10", background: "#FFFFFF" }}>
+            <Link href="/place" style={{ minHeight: "80px", padding: "8px", borderRadius: "16px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "var(--ink)", background: "var(--paper)" }}>
               <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
                 <span style={{ fontSize: "16px", fontWeight: "800" }}>
                   Sidi Saiyyed Mosque
                 </span>
-                <span style={{ fontSize: "13px", color: "#5A4434" }}>
+                <span style={{ fontSize: "13px", color: "var(--ink-soft)" }}>
                   Ten carved jalis, incl. the Tree of Life
                 </span>
-                <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   {"1.8 km · 22 min walk · "}
-                  <span style={{ color: "#2F7A4A" }}>
+                  <span style={{ color: "var(--green)" }}>
                     {t("c.visit_day")}
                   </span>
                 </span>
@@ -193,18 +194,18 @@ export default function SearchScreen() {
             </Link>
           </li>
           <li>
-            <button type="button" onClick={() => ask("Tell me about Rani Sipri's Mosque")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "#2B1B10", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
+            <button type="button" onClick={() => ask("Tell me about Rani Sipri's Mosque")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "var(--ink)", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
               <img src="/images/rani-sipri.jpg" alt="Rani Sipri's Mosque, Ahmedabad" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
                 <span style={{ fontSize: "16px", fontWeight: "800" }}>
                   {"Rani Sipri's Mosque"}
                 </span>
-                <span style={{ fontSize: "13px", color: "#5A4434" }}>
+                <span style={{ fontSize: "13px", color: "var(--ink-soft)" }}>
                   Slender minarets and fine jalis, 1514
                 </span>
-                <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   {"2.4 km · 30 min walk · "}
-                  <span style={{ color: "#2F7A4A" }}>
+                  <span style={{ color: "var(--green)" }}>
                     {t("c.visit_day")}
                   </span>
                 </span>
@@ -215,16 +216,16 @@ export default function SearchScreen() {
             </button>
           </li>
           <li hidden={openOnly}>
-            <button type="button" onClick={() => ask("Tell me about Sarkhej Roza")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "#2B1B10", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
+            <button type="button" onClick={() => ask("Tell me about Sarkhej Roza")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "var(--ink)", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
               <img src="/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg" alt="" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
                 <span style={{ fontSize: "16px", fontWeight: "800" }}>
                   Sarkhej Roza
                 </span>
-                <span style={{ fontSize: "13px", color: "#5A4434" }}>
+                <span style={{ fontSize: "13px", color: "var(--ink-soft)" }}>
                   Pierced stone screens around royal tombs
                 </span>
-                <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   8 km · 20 min drive
                 </span>
               </span>
@@ -236,21 +237,21 @@ export default function SearchScreen() {
         </ul>
         {!openOnly ? (
           <>
-        <p style={{ margin: "14px 20px 0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>
+        <p style={{ margin: "14px 20px 0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "var(--gold)" }}>
           {t("sr.across").toUpperCase()}
         </p>
         <ul style={{ listStyle: "none", margin: "4px 0 0", padding: "0 12px", display: "flex", flexDirection: "column", gap: "4px" }}>
           <li>
-            <button type="button" onClick={() => ask("Tell me about Salim Chishti's Tomb")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "#2B1B10", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
+            <button type="button" onClick={() => ask("Tell me about Salim Chishti's Tomb")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "var(--ink)", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
               <img src="/images/salim-chishti.jpg" alt="Marble jalis at the tomb of Salim Chishti" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
                 <span style={{ fontSize: "16px", fontWeight: "800" }}>
                   {"Salim Chishti's Tomb"}
                 </span>
-                <span style={{ fontSize: "13px", color: "#5A4434" }}>
+                <span style={{ fontSize: "13px", color: "var(--ink-soft)" }}>
                   Marble jalis as fine as lace
                 </span>
-                <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   Fatehpur Sikri, Uttar Pradesh
                 </span>
               </span>
@@ -260,16 +261,16 @@ export default function SearchScreen() {
             </button>
           </li>
           <li>
-            <button type="button" onClick={() => ask("Tell me about Hawa Mahal")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "#2B1B10", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
+            <button type="button" onClick={() => ask("Tell me about Hawa Mahal")} style={{ width: "100%", minHeight: "80px", padding: "8px", border: "0", borderRadius: "16px", background: "none", color: "var(--ink)", textAlign: "left", display: "flex", alignItems: "center", gap: "14px", cursor: "pointer" }}>
               <img src="/images/hawa-mahal.jpg" alt="The facade of Hawa Mahal, Jaipur" style={{ flex: "0 0 64px", width: "64px", height: "64px", borderRadius: "12px", objectFit: "cover", display: "block" }} />
               <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
                 <span style={{ fontSize: "16px", fontWeight: "800" }}>
                   Hawa Mahal
                 </span>
-                <span style={{ fontSize: "13px", color: "#5A4434" }}>
+                <span style={{ fontSize: "13px", color: "var(--ink-soft)" }}>
                   953 latticed windows that catch the breeze
                 </span>
-                <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+                <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                   Jaipur, Rajasthan
                 </span>
               </span>
@@ -290,7 +291,7 @@ export default function SearchScreen() {
         </div>
         <ul style={{ listStyle: "none", margin: "10px 0 0", padding: "0 20px", display: "flex", flexDirection: "column", gap: "4px" }}>
           <li style={{ minHeight: "64px", display: "flex", alignItems: "center", gap: "14px" }}>
-            <Link href="/story" aria-label={t("sr.play", { name: "How stone became lace" })} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Link href="/story" aria-label={t("sr.play", { name: "How stone became lace" })} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "50%", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                 <polygon points="7 4 19 12 7 20 7 4" />
               </svg>
@@ -299,13 +300,13 @@ export default function SearchScreen() {
               <span style={{ fontSize: "15px", fontWeight: "700" }}>
                 How stone became lace: reading a jali
               </span>
-              <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+              <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                 3 min · EN · हिं · ગુ
               </span>
             </span>
           </li>
           <li style={{ minHeight: "64px", display: "flex", alignItems: "center", gap: "14px" }}>
-            <Link href="/story" aria-label={t("sr.play", { name: "The noble who built Ahmedabad's symbol" })} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Link href="/story" aria-label={t("sr.play", { name: "The noble who built Ahmedabad's symbol" })} style={{ flex: "0 0 48px", width: "48px", height: "48px", borderRadius: "50%", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                 <polygon points="7 4 19 12 7 20 7 4" />
               </svg>
@@ -314,7 +315,7 @@ export default function SearchScreen() {
               <span style={{ fontSize: "15px", fontWeight: "700" }}>
                 {"The noble who built Ahmedabad's symbol"}
               </span>
-              <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+              <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
                 2 min · EN · हिं · ગુ
               </span>
             </span>
@@ -328,35 +329,35 @@ export default function SearchScreen() {
           </h2>
         </div>
         <div style={{ marginTop: "12px", padding: "0 20px", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "10px" }}>
-          <Link href="/reels" style={{ position: "relative", height: "184px", borderRadius: "14px", overflow: "hidden", display: "block", textDecoration: "none", background: "#2B1B10" }}>
+          <Link href="/reels" style={{ position: "relative", height: "184px", borderRadius: "14px", overflow: "hidden", display: "block", textDecoration: "none", background: "var(--ink)" }}>
             <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "30% 50%", display: "block" }} />
-            <span style={{ position: "absolute", left: "0", right: "0", bottom: "0", padding: "28px 10px 10px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.86) 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span style={{ position: "absolute", left: "0", right: "0", bottom: "0", padding: "28px 10px 10px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.86) 100%)", color: "var(--paper)", display: "flex", flexDirection: "column", gap: "2px" }}>
               <span style={{ fontSize: "12px", fontWeight: "700", lineHeight: "1.25" }}>
                 Golden hour at Sidi Saiyyed
               </span>
-              <span style={{ fontSize: "11px", fontWeight: "600", color: "#F3D9A8" }}>
+              <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--gold-light)" }}>
                 0:42
               </span>
             </span>
           </Link>
-          <Link href="/reels" style={{ position: "relative", height: "184px", borderRadius: "14px", overflow: "hidden", display: "block", textDecoration: "none", background: "#2B1B10" }}>
+          <Link href="/reels" style={{ position: "relative", height: "184px", borderRadius: "14px", overflow: "hidden", display: "block", textDecoration: "none", background: "var(--ink)" }}>
             <img src="/images/d2ca2a032f6c259ea0b82d98120d9ff1.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-            <span style={{ position: "absolute", left: "0", right: "0", bottom: "0", padding: "28px 10px 10px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.86) 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span style={{ position: "absolute", left: "0", right: "0", bottom: "0", padding: "28px 10px 10px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.86) 100%)", color: "var(--paper)", display: "flex", flexDirection: "column", gap: "2px" }}>
               <span style={{ fontSize: "12px", fontWeight: "700", lineHeight: "1.25" }}>
                 Sarkhej Roza in 30 seconds
               </span>
-              <span style={{ fontSize: "11px", fontWeight: "600", color: "#F3D9A8" }}>
+              <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--gold-light)" }}>
                 0:30
               </span>
             </span>
           </Link>
-          <Link href="/reels" style={{ position: "relative", height: "184px", borderRadius: "14px", overflow: "hidden", display: "block", textDecoration: "none", background: "#2B1B10" }}>
+          <Link href="/reels" style={{ position: "relative", height: "184px", borderRadius: "14px", overflow: "hidden", display: "block", textDecoration: "none", background: "var(--ink)" }}>
             <img src="/images/6b114a4ce322f517be6c561ea38233e8.jpg" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-            <span style={{ position: "absolute", left: "0", right: "0", bottom: "0", padding: "28px 10px 10px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.86) 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span style={{ position: "absolute", left: "0", right: "0", bottom: "0", padding: "28px 10px 10px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.86) 100%)", color: "var(--paper)", display: "flex", flexDirection: "column", gap: "2px" }}>
               <span style={{ fontSize: "12px", fontWeight: "700", lineHeight: "1.25" }}>
                 Jali windows of the pols
               </span>
-              <span style={{ fontSize: "11px", fontWeight: "600", color: "#F3D9A8" }}>
+              <span style={{ fontSize: "11px", fontWeight: "600", color: "var(--gold-light)" }}>
                 0:55
               </span>
             </span>
@@ -367,8 +368,8 @@ export default function SearchScreen() {
       ) : (
         <div className="rise" style={{ padding: "22px 20px 0" }}>
           {answering || answer ? (
-            <section aria-label={t("sr.answer")} aria-busy={answering} className="fade-in" style={{ marginBottom: "18px", padding: "14px 16px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.08em", color: answer?.source === "gemini" ? "#3457C9" : "#8A6424" }}>
+            <section aria-label={t("sr.answer")} aria-busy={answering} className="fade-in" style={{ marginBottom: "18px", padding: "14px 16px", borderRadius: "18px", background: "var(--sand-light)", border: "1px solid var(--line)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.08em", color: answer?.source === "gemini" ? "var(--ai-blue)" : "var(--gold)" }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
                 </svg>
@@ -382,9 +383,9 @@ export default function SearchScreen() {
                 </div>
               ) : answer ? (
                 <>
-                  <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: 1.5, color: "#2B1B10" }}>{answer.text}</p>
+                  <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: 1.5, color: "var(--ink)" }}>{answer.text}</p>
                   <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
-                    <button type="button" aria-pressed={speaking} onClick={() => listen(answer.text)} style={{ height: "40px", padding: "0 14px 0 10px", border: 0, borderRadius: "999px", background: speaking ? "#9A4E36" : "#FFFFFF", color: speaking ? "#FFFFFF" : "#7E3D29", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
+                    <button type="button" aria-pressed={speaking} onClick={() => listen(answer.text)} style={{ height: "40px", padding: "0 14px 0 10px", border: 0, borderRadius: "999px", background: speaking ? "var(--clay)" : "var(--paper)", color: speaking ? "var(--paper)" : "var(--clay-deep)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
                       {speaking ? (
                         <span className="eq" aria-hidden="true" style={{ height: "12px" }}>
                           <i />
@@ -398,7 +399,7 @@ export default function SearchScreen() {
                       )}
                       {speaking ? t("trip.stop") : t("trip.listen")}
                     </button>
-                    <button type="button" onClick={() => ask(query)} style={{ height: "40px", padding: "0 14px", border: "1.5px solid #E2D3C1", borderRadius: "999px", background: "#FFFFFF", color: "#2B1B10", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
+                    <button type="button" onClick={() => ask(query)} style={{ height: "40px", padding: "0 14px", border: "1.5px solid var(--line-strong)", borderRadius: "999px", background: "var(--paper)", color: "var(--ink)", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
                       {t("sr.follow")}
                     </button>
                   </div>
@@ -414,12 +415,12 @@ export default function SearchScreen() {
               <ul style={{ listStyle: "none", margin: "8px -8px 0", padding: "0", display: "flex", flexDirection: "column", gap: "4px" }}>
                 {hits.map((h) => (
                   <li key={h.id}>
-                    <Link href={h.href} style={{ minHeight: "76px", padding: "8px", borderRadius: "16px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "#2B1B10" }}>
-                      {h.img ? <img src={h.img} alt="" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} /> : <span aria-hidden="true" style={{ flex: "0 0 60px", height: "60px", borderRadius: "12px", background: "#EFE1C9" }} />}
+                    <Link href={h.href} style={{ minHeight: "76px", padding: "8px", borderRadius: "16px", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: "var(--ink)" }}>
+                      {h.img ? <img src={h.img} alt="" style={{ flex: "0 0 60px", width: "60px", height: "60px", borderRadius: "12px", objectFit: "cover", display: "block" }} /> : <span aria-hidden="true" style={{ flex: "0 0 60px", height: "60px", borderRadius: "12px", background: "var(--parchment)" }} />}
                       <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "3px" }}>
-                        <span style={{ fontSize: "12px", fontWeight: "700", color: "#8A6424" }}>{h.kind}</span>
+                        <span style={{ fontSize: "12px", fontWeight: "700", color: "var(--gold)" }}>{h.kind}</span>
                         <span style={{ fontSize: "16px", fontWeight: "800" }}>{h.title}</span>
-                        <span style={{ fontSize: "13px", lineHeight: 1.35, color: "#5A4434" }}>{h.sub}</span>
+                        <span style={{ fontSize: "13px", lineHeight: 1.35, color: "var(--ink-soft)" }}>{h.sub}</span>
                       </span>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6F5B4B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="m9 18 6-6-6-6" />
@@ -428,25 +429,25 @@ export default function SearchScreen() {
                   </li>
                 ))}
               </ul>
-              <button type="button" onClick={() => ask(query)} style={{ marginTop: "12px", width: "100%", height: "48px", border: "1.5px solid #9A4E36", borderRadius: "14px", background: "#FFFFFF", color: "#9A4E36", fontSize: "15px", fontWeight: "800", cursor: "pointer" }}>
+              <button type="button" onClick={() => ask(query)} style={{ marginTop: "12px", width: "100%", height: "48px", border: "1.5px solid var(--clay)", borderRadius: "14px", background: "var(--paper)", color: "var(--clay)", fontSize: "15px", fontWeight: "800", cursor: "pointer" }}>
                 {t("se.ask", { q: query })}
               </button>
             </section>
           ) : query ? (
-            <section style={{ padding: "18px", borderRadius: "18px", background: "#F6F1EA", border: "1px solid #EFE6DA" }}>
+            <section style={{ padding: "18px", borderRadius: "18px", background: "var(--sand-light)", border: "1px solid var(--line)" }}>
               <p style={{ margin: "0", fontSize: "17px", fontWeight: "800" }}>
                 {t("se.none", { q: query })}
               </p>
-              <p style={{ margin: "8px 0 0", fontSize: "14px", lineHeight: "1.5", color: "#5A4434" }}>{t("se.none_body")}</p>
-              <button type="button" onClick={() => ask(query)} style={{ marginTop: "14px", height: "48px", padding: "0 18px", border: "0", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", fontSize: "15px", fontWeight: "800", cursor: "pointer" }}>
+              <p style={{ margin: "8px 0 0", fontSize: "14px", lineHeight: "1.5", color: "var(--ink-soft)" }}>{t("se.none_body")}</p>
+              <button type="button" onClick={() => ask(query)} style={{ marginTop: "14px", height: "48px", padding: "0 18px", border: "0", borderRadius: "14px", background: "var(--clay)", color: "var(--paper)", fontSize: "15px", fontWeight: "800", cursor: "pointer" }}>
                 {t("se.ask_short")}
               </button>
             </section>
           ) : null}
-          <p style={{ margin: query && !hits.length ? "26px 0 0" : "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "#8A6424" }}>{t("se.try")}</p>
+          <p style={{ margin: query && !hits.length ? "26px 0 0" : "0", fontSize: "12px", fontWeight: "700", letterSpacing: "0.1em", color: "var(--gold)" }}>{t("se.try")}</p>
           <div className="stagger" style={{ marginTop: "10px", display: "flex", flexWrap: "wrap", gap: "8px" }}>
             {SUGGESTIONS.map((text) => (
-              <button key={text} type="button" onClick={() => setQ(text)} style={{ height: "40px", padding: "0 14px", borderRadius: "999px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
+              <button key={text} type="button" onClick={() => setQ(text)} style={{ height: "40px", padding: "0 14px", borderRadius: "999px", border: "1.5px solid var(--line-strong)", background: "var(--paper)", color: "var(--ink)", fontSize: "14px", fontWeight: "700", cursor: "pointer" }}>
                 {text}
               </button>
             ))}

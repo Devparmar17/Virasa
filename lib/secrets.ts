@@ -337,6 +337,7 @@ export const SECRETS: Secret[] = [
     line: "Fafda and jalebi since 1900",
     distance: "1.3 km · 16 min walk",
     mins: 16,
+    img: "/images/fafda-jalebi.jpg",
     alt: "A plate of fafda and jalebi",
     story: [
       "Chandravilas has been frying snacks on Gandhi Road since 1900, which makes it one of the oldest eating houses in the city. It is known above all for fafda and jalebi, Ahmedabad's favourite breakfast.",

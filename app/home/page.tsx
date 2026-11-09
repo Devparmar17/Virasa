@@ -13,9 +13,9 @@ import { T, type Key } from "@/lib/i18n";
 import { Elsewhere, HereCity, HereGate } from "@/components/Here";
 import CityPicks from "@/components/CityPicks";
 
-const INK = "#2B1B10";
-const MUTED = "#6F5B4B";
-const BRAND = "#9A4E36";
+const INK = "var(--ink)";
+const MUTED = "var(--ink-muted)";
+const BRAND = "var(--clay)";
 
 const Chevron = ({ size = 16 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -99,10 +99,10 @@ const shade: CSSProperties = { position: "absolute", inset: 0, background: "line
 
 export default function HomeScreen() {
   return (
-    <div style={frame({ background: "#FFFFFF", paddingBottom: "112px" })}>
+    <div style={frame({ background: "var(--paper)", paddingBottom: "112px" })}>
       <header style={{ padding: "50px 12px 0 12px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
         <Link href="/city" aria-label="Change city" style={{ flex: "1 1 auto", minWidth: 0, height: "44px", padding: "0 8px", borderRadius: "999px", display: "flex", alignItems: "center", gap: "8px", color: INK, textDecoration: "none" }}>
-          <span style={{ flex: "0 0 30px", width: "30px", height: "30px", borderRadius: "50%", background: "#E3F1E7", color: "#2F7A4A", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ flex: "0 0 30px", width: "30px", height: "30px", borderRadius: "50%", background: "var(--green-tint)", color: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
               <circle cx="12" cy="10" r="3" />
@@ -136,7 +136,7 @@ export default function HomeScreen() {
             }
           />
           <Link href="/safety" aria-label="SOS: emergency numbers and help" style={{ height: "44px", padding: "0 0 0 4px", display: "flex", alignItems: "center" }}>
-            <span style={{ height: "34px", padding: "0 11px", borderRadius: "999px", background: "#B03A2E", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, letterSpacing: "0.06em", boxShadow: "0 4px 10px rgba(176, 58, 46, 0.28)" }}>
+            <span style={{ height: "34px", padding: "0 11px", borderRadius: "999px", background: "var(--red-bright)", color: "var(--paper)", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, letterSpacing: "0.06em", boxShadow: "0 4px 10px rgba(176, 58, 46, 0.28)" }}>
               SOS
             </span>
           </Link>
@@ -153,7 +153,7 @@ export default function HomeScreen() {
           </h1>
         </div>
 
-        <div style={{ margin: "16px 20px 0", height: "54px", borderRadius: "16px", background: "#F6F1EA", display: "flex", alignItems: "center", padding: "0 5px 0 0" }}>
+        <div style={{ margin: "16px 20px 0", height: "54px", borderRadius: "16px", background: "var(--sand-light)", display: "flex", alignItems: "center", padding: "0 5px 0 0" }}>
           <Link href="/search" style={{ flex: 1, minWidth: 0, height: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "0 8px 0 16px", textDecoration: "none" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5A4434" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="11" cy="11" r="8" />
@@ -163,7 +163,7 @@ export default function HomeScreen() {
               <T k="home.search" />
             </span>
           </Link>
-          <VoiceSearch style={{ flex: "0 0 44px", width: "44px", height: "44px", border: "0", borderRadius: "12px", background: "#FFFFFF", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.12)" }}>
+          <VoiceSearch style={{ flex: "0 0 44px", width: "44px", height: "44px", border: "0", borderRadius: "12px", background: "var(--paper)", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.12)" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
               <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
@@ -174,14 +174,14 @@ export default function HomeScreen() {
 
         {/* AI first: plan a whole trip, or find what locals love, in any city. */}
         <nav aria-label="Plan with AI" style={{ margin: "14px 20px 0", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
-          <Link href="/trip" style={{ minHeight: "118px", padding: "14px 14px 16px", borderRadius: "22px", background: "linear-gradient(140deg, #9A4E36 0%, #7E3D29 100%)", color: "#FFFFFF", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.26)" }}>
+          <Link href="/trip" style={{ minHeight: "118px", padding: "14px 14px 16px", borderRadius: "22px", background: "linear-gradient(140deg, var(--clay) 0%, var(--clay-deep) 100%)", color: "var(--paper)", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.26)" }}>
             <span style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
               <span style={{ width: "40px", height: "40px", borderRadius: "13px", background: "rgba(255, 255, 255, 0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
                 </svg>
               </span>
-              <span aria-hidden="true" style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.18)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span aria-hidden="true" style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(255, 255, 255, 0.18)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M7 17 17 7M9 7h8v8" />
                 </svg>
@@ -196,15 +196,15 @@ export default function HomeScreen() {
               </span>
             </span>
           </Link>
-          <Link href="/discover" style={{ minHeight: "118px", padding: "14px 14px 16px", borderRadius: "22px", background: "#F6EEE4", color: INK, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none" }}>
+          <Link href="/discover" style={{ minHeight: "118px", padding: "14px 14px 16px", borderRadius: "22px", background: "var(--sand)", color: INK, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "10px", textDecoration: "none" }}>
             <span style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
-              <span style={{ width: "40px", height: "40px", borderRadius: "13px", background: "#FFFFFF", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.08)" }}>
+              <span style={{ width: "40px", height: "40px", borderRadius: "13px", background: "var(--paper)", color: "var(--gold)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.08)" }}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M6 3h12l4 6-10 13L2 9Z" />
                   <path d="M11 3 8 9l4 13 4-13-3-6M2 9h20" />
                 </svg>
               </span>
-              <span aria-hidden="true" style={{ width: "28px", height: "28px", borderRadius: "50%", background: "#FFFFFF", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span aria-hidden="true" style={{ width: "28px", height: "28px", borderRadius: "50%", background: "var(--paper)", color: "var(--gold)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M7 17 17 7M9 7h8v8" />
                 </svg>
@@ -225,10 +225,10 @@ export default function HomeScreen() {
         <HereGate elsewhere={<Elsewhere />}>
         {/* The one thing to do next: today's planned walk. */}
         <section aria-label="Planned for you" style={{ margin: "20px 20px 0" }}>
-          <Link href="/walk" style={{ position: "relative", height: "216px", borderRadius: "22px", overflow: "hidden", display: "block", color: "#FFFFFF", textDecoration: "none", boxShadow: "0 14px 30px rgba(60, 36, 20, 0.18)" }}>
+          <Link href="/walk" style={{ position: "relative", height: "216px", borderRadius: "22px", overflow: "hidden", display: "block", color: "var(--paper)", textDecoration: "none", boxShadow: "0 14px 30px rgba(60, 36, 20, 0.18)" }}>
             <img src="/images/6b114a4ce322f517be6c561ea38233e8.jpg" alt="" className="kenburns" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
             <span aria-hidden="true" style={{ ...shade, background: "linear-gradient(180deg, rgba(20, 12, 6, 0.05) 0%, rgba(20, 12, 6, 0.86) 100%)" }} />
-            <span style={{ position: "absolute", top: "14px", left: "14px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.92)", color: INK, display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.04em" }}>
+            <span style={{ position: "absolute", top: "14px", left: "14px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.92)", color: INK, display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 800, letterSpacing: "0" }}>
               <span aria-hidden="true" style={{ width: "7px", height: "7px", borderRadius: "50%", background: BRAND }} />
               <T k="home.planned" />
             </span>
@@ -240,7 +240,7 @@ export default function HomeScreen() {
                 <span style={{ fontSize: "13px", fontWeight: 600, color: "rgba(255, 255, 255, 0.88)" }}>
                   <T k="home.walk_meta" />
                 </span>
-                <span style={{ flex: "0 0 auto", height: "44px", padding: "0 16px", borderRadius: "999px", background: "#FFFFFF", color: INK, display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 800 }}>
+                <span style={{ flex: "0 0 auto", height: "44px", padding: "0 16px", borderRadius: "999px", background: "var(--paper)", color: INK, display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 800 }}>
                   <T k="home.start_walk" />
                   <Chevron />
                 </span>
@@ -253,7 +253,7 @@ export default function HomeScreen() {
         <nav aria-label="Quick actions" style={{ margin: "22px 12px 0", display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))" }}>
           {ACTIONS.map((a) => (
             <Link key={a.href} href={a.href} style={{ padding: "4px 0", display: "flex", flexDirection: "column", alignItems: "center", gap: "7px", textDecoration: "none", color: INK }}>
-              <span style={{ width: "54px", height: "54px", borderRadius: "18px", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ width: "54px", height: "54px", borderRadius: "18px", background: "var(--sand)", color: "var(--clay-deep)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   {a.icon}
                 </svg>
@@ -275,13 +275,13 @@ export default function HomeScreen() {
 
         <section style={{ marginTop: "26px" }}>
           <SectionHead title="home.secrets" />
-          <ul style={{ listStyle: "none", margin: "8px 20px 0", padding: "4px 0", borderRadius: "20px", border: "1px solid #EFE6DA", background: "#FFFFFF" }}>
+          <ul style={{ listStyle: "none", margin: "8px 20px 0", padding: "4px 0", borderRadius: "20px", border: "1px solid var(--line)", background: "var(--paper)" }}>
             {SECRETS.map((s, i) => (
-              <li key={s.href} style={{ borderTop: i ? "1px solid #F3ECE2" : "0", margin: "0 12px" }}>
+              <li key={s.href} style={{ borderTop: i ? "1px solid var(--line-soft)" : "0", margin: "0 12px" }}>
                 <Link href={s.href} style={{ minHeight: "76px", padding: "10px 0", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", color: INK }}>
                   <img src={s.img} alt={s.alt} style={{ flex: "0 0 56px", width: "56px", height: "56px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
                   <span style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "2px" }}>
-                    <span style={{ fontSize: "12px", fontWeight: 700, color: "#8A6424" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--gold)" }}>
                       <T k={s.tag} />
                     </span>
                     <span style={{ fontSize: "15px", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.title}</span>

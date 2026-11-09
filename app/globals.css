@@ -1,3 +1,52 @@
+/* ---------- palette ----------
+   Every screen draws from these. Change a value here and it changes everywhere. */
+:root {
+  /* Ink and text */
+  --ink: #2b1b10;
+  --ink-soft: #5a4434;
+  --ink-muted: #6f5b4b;
+  --night: #1e130b;
+  --bark: #5c3d24;
+  /* Clay: actions and brand */
+  --clay: #9a4e36;
+  --clay-deep: #7e3d29;
+  --clay-tint: #fbede6;
+  --clay-wash: #f6e3da;
+  --rust: #c0612f;
+  /* Gold: highlights and labels */
+  --gold: #8a6424;
+  --gold-deep: #6e4e1e;
+  --gold-light: #f3d9a8;
+  --gold-on-dark: #e7b98a;
+  /* Sandstone surfaces */
+  --paper: #ffffff;
+  --cream: #fbf6ee;
+  --sand-light: #f6f1ea;
+  --sand: #f6eee4;
+  --sand-deep: #f1e7da;
+  --sand-grey: #ede4da;
+  --parchment: #efe1c9;
+  --map: #f4f1ea;
+  --sand-on-dark: #d9c6ae;
+  /* Lines */
+  --line-soft: #f3ece2;
+  --line: #efe6da;
+  --line-strong: #e2d3c1;
+  --line-deep: #d9c7b3;
+  --stone: #cdbfae;
+  --taupe-light: #c9b6a0;
+  --taupe: #a8927c;
+  /* Status */
+  --green: #2f7a4a;
+  --green-tint: #e3f1e7;
+  --green-light: #9fd3b0;
+  --sage: #d3e8c6;
+  --red: #a23a2a;
+  --red-bright: #b03a2e;
+  --blue: #2f6fb0;
+  --ai-blue: #3457c9;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -11,8 +60,8 @@ body {
 body {
   min-height: 100vh;
   background: #e9e0d4;
-  font-family: "Plus Jakarta Sans", "Noto Sans Devanagari", "Noto Sans Gujarati", "Noto Sans Tamil", "Noto Sans Bengali", "Noto Sans Telugu", "Noto Sans Kannada", "Noto Sans Malayalam", "Noto Sans Gurmukhi", system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: #2b1b10;
+  font-family: "Anek Latin", "Anek Devanagari", "Anek Gujarati", "Anek Tamil", "Anek Bangla", "Anek Telugu", "Anek Kannada", "Anek Malayalam", "Anek Gurmukhi", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
 }
 
 button,
@@ -21,21 +70,55 @@ input {
 }
 
 input::placeholder {
-  color: #6f5b4b;
+  color: var(--ink-muted);
 }
 
 a {
-  color: #9a4e36;
+  color: var(--clay);
   text-decoration: none;
 }
 
 a:hover {
-  color: #7e3d29;
+  color: var(--clay-deep);
 }
 
 :focus-visible {
-  outline: 2px solid #9a4e36;
+  outline: 2px solid var(--clay);
   outline-offset: 2px;
+}
+
+/* The browser's own surfaces carry the palette too. */
+::selection {
+  background: var(--gold-light);
+  color: var(--ink);
+}
+
+:root {
+  accent-color: var(--clay);
+  caret-color: var(--clay);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* A heading screen readers can find on screens whose title is the map or camera itself. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Each screen is drawn at its design size (390px wide for phone screens);
@@ -201,7 +284,7 @@ a:hover {
 }
 
 .tab:hover {
-  color: #5a4434;
+  color: var(--ink-soft);
 }
 
 .tab:active {
@@ -209,7 +292,7 @@ a:hover {
 }
 
 .tab[aria-current="page"] {
-  color: #9a4e36;
+  color: var(--clay);
 }
 
 .tab-icon {
@@ -262,8 +345,8 @@ a:hover {
   max-width: 330px;
   padding: 12px 18px;
   border-radius: 14px;
-  background: #2b1b10;
-  color: #fbf6ee;
+  background: var(--ink);
+  color: var(--cream);
   font-size: 14px;
   font-weight: 700;
   line-height: 1.35;
@@ -312,8 +395,8 @@ a:hover {
   display: flex;
   flex-direction: column;
   border-radius: 26px 26px 0 0;
-  background: #ffffff;
-  color: #2b1b10;
+  background: var(--paper);
+  color: var(--ink);
   box-shadow: 0 -16px 40px rgba(43, 27, 16, 0.24);
   outline: none;
   animation: sheet-up 0.34s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
@@ -325,7 +408,7 @@ a:hover {
   height: 4px;
   margin-top: 10px;
   border-radius: 999px;
-  background: #d9c7b3;
+  background: var(--line-deep);
 }
 
 .sheet-head {
@@ -348,7 +431,7 @@ a:hover {
   border: 0;
   border-radius: 50%;
   background: none;
-  color: #2b1b10;
+  color: var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -364,7 +447,7 @@ a:hover {
   margin: 0 0 12px;
   font-size: 14px;
   line-height: 1.5;
-  color: #5a4434;
+  color: var(--ink-soft);
 }
 
 .sheet-row {
@@ -372,10 +455,10 @@ a:hover {
   min-height: 56px;
   padding: 8px 14px;
   margin-top: 8px;
-  border: 1.5px solid #efe6da;
+  border: 1.5px solid var(--line);
   border-radius: 14px;
-  background: #ffffff;
-  color: #2b1b10;
+  background: var(--paper);
+  color: var(--ink);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -389,8 +472,8 @@ a:hover {
 
 .sheet-row[aria-pressed="true"],
 .sheet-row[aria-checked="true"] {
-  border-color: #9a4e36;
-  background: #fbede6;
+  border-color: var(--clay);
+  background: var(--clay-tint);
 }
 
 .sheet-row small {
@@ -398,7 +481,7 @@ a:hover {
   margin-top: 2px;
   font-size: 12px;
   font-weight: 600;
-  color: #6f5b4b;
+  color: var(--ink-muted);
 }
 
 .sheet-cta {
@@ -407,8 +490,8 @@ a:hover {
   margin-top: 16px;
   border: 0;
   border-radius: 14px;
-  background: #9a4e36;
-  color: #ffffff;
+  background: var(--clay);
+  color: var(--paper);
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
@@ -542,7 +625,7 @@ a:hover {
 }
 
 .shimmer {
-  background: linear-gradient(100deg, #efe6da 30%, #f8f2ea 50%, #efe6da 70%);
+  background: linear-gradient(100deg, var(--line) 30%, #f8f2ea 50%, var(--line) 70%);
   background-size: 300% 100%;
   animation: shimmer 1.4s linear infinite;
 }
@@ -571,7 +654,7 @@ a:hover {
   position: absolute;
   inset: 0;
   z-index: 30;
-  background: #ffffff;
+  background: var(--paper);
   pointer-events: none;
   animation: flash 0.45s ease-out forwards;
 }
@@ -594,15 +677,15 @@ a:hover {
   z-index: 50;
   padding: 10px 16px;
   border-radius: 999px;
-  background: #2b1b10;
-  color: #fbf6ee;
+  background: var(--ink);
+  color: var(--cream);
   font-size: 13px;
   font-weight: 700;
   box-shadow: 0 8px 20px rgba(43, 27, 16, 0.25);
 }
 
 .screens-link:hover {
-  color: #f3d9a8;
+  color: var(--gold-light);
 }
 
 /* On a phone it would cover the tab bar; Settings links to the same list. */
@@ -621,6 +704,25 @@ a:hover {
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Things that say "still working" keep saying it, without travelling. */
+  .spin {
+    animation: spin 1.4s linear infinite !important;
+  }
+  .typing i {
+    animation: typing-fade 1.2s ease-in-out infinite !important;
+  }
+  .typing i:nth-child(2) { animation-delay: 0.2s !important; }
+  .typing i:nth-child(3) { animation-delay: 0.4s !important; }
+  .shimmer {
+    animation: typing-fade 1.6s ease-in-out infinite !important;
+  }
+}
+
+@keyframes typing-fade {
+  50% {
+    opacity: 0.45;
   }
 }
 
@@ -642,7 +744,7 @@ a:hover {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #9a4e36;
+  background: var(--clay);
   animation: typing 1s ease-in-out infinite;
 }
 .typing i:nth-child(2) { animation-delay: 0.15s; }
@@ -955,8 +1057,8 @@ a:hover {
 }
 
 .toast-success .toast-icon {
-  background: #2f7a4a;
-  color: #ffffff;
+  background: var(--green);
+  color: var(--paper);
   animation: pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.08s backwards;
 }
 
@@ -966,7 +1068,7 @@ a:hover {
 
 .toast-error .toast-icon {
   background: #c4553b;
-  color: #ffffff;
+  color: var(--paper);
 }
 
 /* A toast that offers Undo stays up a little longer. */
@@ -981,7 +1083,7 @@ a:hover {
   border: 0;
   border-radius: 10px;
   background: rgba(251, 246, 238, 0.14);
-  color: #f3d9a8;
+  color: var(--gold-light);
   font-size: 14px;
   font-weight: 800;
   cursor: pointer;
@@ -1029,7 +1131,7 @@ a:hover {
 }
 
 .card-link:focus-visible::after {
-  outline: 2px solid #9a4e36;
+  outline: 2px solid var(--clay);
   outline-offset: -2px;
 }
 
@@ -1101,7 +1203,7 @@ input[type="search"]::-webkit-search-cancel-button {
 
 /* The story card lifts and glows while you are at the stop. */
 .nav-here {
-  border-color: #8a6424 !important;
+  border-color: var(--gold) !important;
   box-shadow: 0 0 0 4px rgba(138, 100, 36, 0.18), 0 12px 28px rgba(90, 60, 30, 0.2) !important;
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }

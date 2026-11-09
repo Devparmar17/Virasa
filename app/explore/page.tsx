@@ -63,7 +63,8 @@ export default function ExploreScreen() {
     };
   };
   return (
-    <div style={{ width: "390px", height: "min(844px, 100dvh)", minHeight: "640px", position: "relative", overflow: "hidden", background: "#F4F1EA", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "min(844px, 100dvh)", minHeight: "640px", position: "relative", overflow: "hidden", background: "var(--map)", fontFamily: "inherit", color: "var(--ink)" }}>
+      <h1 className="sr-only">{t("tab.explore")}</h1>
       <div className="map-canvas" style={{ position: "absolute", left: 0, top: 0, width: "390px", height: "844px" }}>
       <svg role="img" aria-label={t("ex.map_aria")} width="390" height="844" viewBox="0 0 390 844" style={{ position: "absolute", inset: "0", display: "block" }}>
         <defs>
@@ -144,7 +145,7 @@ export default function ExploreScreen() {
           <path d="M232 0 C226 200 238 500 232 844" />
           <path d="M120 844 L340 110" />
         </g>
-        <g fontFamily="Plus Jakarta Sans, system-ui, sans-serif" fontSize="11" fontWeight="700" fill="#6F665A" stroke="#F4F1EA" strokeWidth="3" paintOrder="stroke" letterSpacing="0.3">
+        <g fontFamily="Anek Latin, system-ui, sans-serif" fontSize="11" fontWeight="700" fill="#6F665A" stroke="#F4F1EA" strokeWidth="3" paintOrder="stroke" letterSpacing="0.3">
           <text x="300" y="320">
             Relief Rd
           </text>
@@ -155,7 +156,7 @@ export default function ExploreScreen() {
             Kalupur Rd
           </text>
         </g>
-        <text x="42" y="430" transform="rotate(-84 42 430)" fontFamily="Plus Jakarta Sans, system-ui, sans-serif" fontSize="11" fontWeight="700" fontStyle="italic" fill="#4F8697" letterSpacing="2.5">
+        <text x="42" y="430" transform="rotate(-84 42 430)" fontFamily="Anek Latin, system-ui, sans-serif" fontSize="11" fontWeight="700" fontStyle="italic" fill="#4F8697" letterSpacing="2.5">
           Sabarmati
         </text>
         <g {...pin("bhadra")}>
@@ -240,7 +241,7 @@ export default function ExploreScreen() {
         <circle cx="318" cy="420" r="8" fill="#2F6FB0" stroke="#FFFFFF" strokeWidth="3" />
       </svg>
       {layers.labels ? (
-        <span key={selected} className="label-in" style={{ position: "absolute", left: `${Math.min(Math.max(place.x, 96), 294)}px`, top: `${place.y < 340 ? place.y + 14 : place.y - 98}px`, transform: "translateX(-50%)", whiteSpace: "nowrap", height: "30px", padding: "0 12px", borderRadius: "999px", background: "#2B1B10", color: "#FFFFFF", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center", boxShadow: "0 6px 16px rgba(43, 27, 16, 0.25)" }}>
+        <span key={selected} className="label-in" style={{ position: "absolute", left: `${Math.min(Math.max(place.x, 96), 294)}px`, top: `${place.y < 340 ? place.y + 14 : place.y - 98}px`, transform: "translateX(-50%)", whiteSpace: "nowrap", height: "30px", padding: "0 12px", borderRadius: "999px", background: "var(--ink)", color: "var(--paper)", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center", boxShadow: "0 6px 16px rgba(43, 27, 16, 0.25)" }}>
           {place.name}
         </span>
       ) : null}
@@ -270,10 +271,10 @@ export default function ExploreScreen() {
                 e.currentTarget.blur();
               }
             }}
-            style={{ flex: 1, minWidth: 0, width: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "15px", fontWeight: 600, color: "#2B1B10" }}
+            style={{ flex: 1, minWidth: 0, width: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "15px", fontWeight: 600, color: "var(--ink)" }}
           />
           {q ? (
-            <button type="button" aria-label={t("ex.clear")} onClick={() => setQ("")} style={{ flex: "0 0 36px", width: "36px", height: "36px", border: 0, borderRadius: "50%", background: "#F3ECE2", color: "#6F5B4B", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <button type="button" aria-label={t("ex.clear")} onClick={() => setQ("")} style={{ flex: "0 0 36px", width: "36px", height: "36px", border: 0, borderRadius: "50%", background: "var(--line-soft)", color: "var(--ink-muted)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true">
                 <path d="M18 6 6 18" />
                 <path d="m6 6 12 12" />
@@ -281,7 +282,7 @@ export default function ExploreScreen() {
             </button>
           ) : null}
         </label>
-        <button type="button" aria-label={t("ex.layers_btn")} onClick={() => setLayersOpen(true)} style={{ width: "44px", height: "44px", border: "0", borderRadius: "14px", background: "#F6F1EA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+        <button type="button" aria-label={t("ex.layers_btn")} onClick={() => setLayersOpen(true)} style={{ width: "44px", height: "44px", border: "0", borderRadius: "14px", background: "var(--sand-light)", color: "var(--ink-soft)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
             <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
@@ -290,14 +291,14 @@ export default function ExploreScreen() {
         </button>
       </div>
       {searching && needle ? (
-        <div role="listbox" aria-label={t("ex.places")} className="label-in" style={{ position: "absolute", zIndex: 6, top: "116px", left: "16px", right: "16px", maxHeight: "300px", overflowY: "auto", padding: "6px", borderRadius: "18px", background: "#FFFFFF", border: "1px solid rgba(226, 211, 193, 0.7)", boxShadow: "0 14px 30px rgba(60, 36, 20, 0.16)" }}>
+        <div role="listbox" aria-label={t("ex.places")} className="label-in" style={{ position: "absolute", zIndex: 6, top: "116px", left: "16px", right: "16px", maxHeight: "300px", overflowY: "auto", padding: "6px", borderRadius: "18px", background: "var(--paper)", border: "1px solid rgba(226, 211, 193, 0.7)", boxShadow: "0 14px 30px rgba(60, 36, 20, 0.16)" }}>
           {matches.length ? (
             matches.map((p) => (
-              <button key={p.id} type="button" role="option" aria-selected={p.id === selected} onClick={() => choose(p.id)} style={{ width: "100%", minHeight: "56px", padding: "6px 8px", border: 0, borderRadius: "12px", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", cursor: "pointer" }}>
+              <button key={p.id} type="button" role="option" aria-selected={p.id === selected} onClick={() => choose(p.id)} style={{ width: "100%", minHeight: "56px", padding: "6px 8px", border: 0, borderRadius: "12px", background: "none", color: "var(--ink)", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", cursor: "pointer" }}>
                 {p.img ? <img src={p.img} alt="" style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "10px", objectFit: "cover", display: "block" }} /> : <span aria-hidden="true" style={{ flex: "0 0 40px", height: "40px", borderRadius: "10px", background: CATEGORIES[p.cat].tagBg }} />}
                 <span style={{ flex: 1, minWidth: 0 }}>
                   <span style={{ display: "block", fontSize: "15px", fontWeight: 800 }}>{p.name}</span>
-                  <span style={{ display: "block", marginTop: "1px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>
+                  <span style={{ display: "block", marginTop: "1px", fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>
                     {t(`ex.one.${p.cat}`)} · {t("unit.min_walk", { n: p.mins })}
                   </span>
                 </span>
@@ -305,12 +306,12 @@ export default function ExploreScreen() {
               </button>
             ))
           ) : (
-            <p style={{ margin: 0, padding: "14px 10px", fontSize: "14px", color: "#6F5B4B" }}>{t("ex.no_match", { q: q.trim() })}</p>
+            <p style={{ margin: 0, padding: "14px 10px", fontSize: "14px", color: "var(--ink-muted)" }}>{t("ex.no_match", { q: q.trim() })}</p>
           )}
         </div>
       ) : null}
       <div className="hscroll" style={{ position: "absolute", top: "116px", left: "16px", right: "0", display: "flex", gap: "8px", overflowX: "auto", paddingRight: "16px", paddingBottom: "8px", scrollbarWidth: "none" }}>
-        <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")} style={{ flex: "0 0 auto", height: "38px", padding: "0 14px", borderRadius: "999px", border: "0", background: filter === "all" ? "#2B1B10" : "#FFFFFF", color: filter === "all" ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: "700", boxShadow: "0 4px 12px rgba(43, 27, 16, 0.18)", cursor: "pointer" }}>
+        <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")} style={{ flex: "0 0 auto", height: "38px", padding: "0 14px", borderRadius: "999px", border: "0", background: filter === "all" ? "var(--ink)" : "var(--paper)", color: filter === "all" ? "var(--paper)" : "var(--ink)", fontSize: "13px", fontWeight: "700", boxShadow: "0 4px 12px rgba(43, 27, 16, 0.18)", cursor: "pointer" }}>
           {t("ex.all")}
         </button>
         {(Object.keys(CATEGORIES) as Category[]).map((c) => (
@@ -323,9 +324,9 @@ export default function ExploreScreen() {
               const first = PLACES.find((p) => p.cat === c);
               if (filter !== c && first && place.cat !== c) setSelected(first.id);
             }}
-            style={{ flex: "0 0 auto", height: "38px", padding: "0 14px 0 10px", borderRadius: "999px", border: "0", background: filter === c ? "#2B1B10" : "#FFFFFF", color: filter === c ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: "700", boxShadow: "0 4px 12px rgba(90, 60, 30, 0.14)", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}
+            style={{ flex: "0 0 auto", height: "38px", padding: "0 14px 0 10px", borderRadius: "999px", border: "0", background: filter === c ? "var(--ink)" : "var(--paper)", color: filter === c ? "var(--paper)" : "var(--ink)", fontSize: "13px", fontWeight: "700", boxShadow: "0 4px 12px rgba(90, 60, 30, 0.14)", display: "flex", alignItems: "center", gap: "6px", cursor: "pointer" }}
           >
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: CATEGORIES[c].color, border: filter === c ? "1.5px solid #FFFFFF" : "0" }} />
+            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: CATEGORIES[c].color, border: filter === c ? "1.5px solid var(--paper)" : "0" }} />
             {t(`ex.cat.${c}`)}
           </button>
         ))}
@@ -338,7 +339,7 @@ export default function ExploreScreen() {
           setLocated((n) => n + 1);
           toast(t("ex.you_on", { n: place.mins, name: place.name }));
         }}
-        style={{ position: "absolute", right: "16px", bottom: "338px", width: "48px", height: "48px", border: "1px solid rgba(226, 211, 193, 0.7)", borderRadius: "16px", background: "#FFFFFF", color: "#2F6FB0", boxShadow: "0 8px 20px rgba(60, 36, 20, 0.16)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+        style={{ position: "absolute", right: "16px", bottom: "338px", width: "48px", height: "48px", border: "1px solid rgba(226, 211, 193, 0.7)", borderRadius: "16px", background: "var(--paper)", color: "var(--blue)", boxShadow: "0 8px 20px rgba(60, 36, 20, 0.16)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
       >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <line x1="2" x2="5" y1="12" y2="12" />
@@ -349,11 +350,11 @@ export default function ExploreScreen() {
           <circle cx="12" cy="12" r="3" />
         </svg>
       </button>
-      <section aria-label={t("ex.selected")} style={{ position: "absolute", left: "0", right: "0", bottom: "0", background: "#FFFFFF", borderRadius: "26px 26px 0 0", boxShadow: "0 -10px 30px rgba(90, 60, 30, 0.14)", padding: "8px 20px 100px" }}>
+      <section aria-label={t("ex.selected")} style={{ position: "absolute", left: "0", right: "0", bottom: "0", background: "var(--paper)", borderRadius: "26px 26px 0 0", boxShadow: "0 -10px 30px rgba(90, 60, 30, 0.14)", padding: "8px 20px 100px" }}>
         <div style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#DCCDBA", margin: "0 auto" }} />
         <div style={{ marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>{needle ? t(matches.length === 1 ? "ex.found_one" : "ex.found", { n: matches.length }) : filter === "all" ? t("ex.nearby") : t(shown.length === 1 ? "ex.count_one" : "ex.count", { n: shown.length, cat: t(`ex.cat.${filter}`) })}</span>
-          <button type="button" onClick={() => setListOpen(true)} style={{ height: "36px", padding: "0 4px", border: "0", background: "none", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700", color: "#9A4E36", cursor: "pointer" }}>
+          <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink-muted)" }}>{needle ? t(matches.length === 1 ? "ex.found_one" : "ex.found", { n: matches.length }) : filter === "all" ? t("ex.nearby") : t(shown.length === 1 ? "ex.count_one" : "ex.count", { n: shown.length, cat: t(`ex.cat.${filter}`) })}</span>
+          <button type="button" onClick={() => setListOpen(true)} style={{ height: "36px", padding: "0 4px", border: "0", background: "none", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700", color: "var(--clay)", cursor: "pointer" }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="8" x2="21" y1="6" y2="6" />
               <line x1="8" x2="21" y1="12" y2="12" />
@@ -366,7 +367,7 @@ export default function ExploreScreen() {
           </button>
         </div>
         <div key={place.id} className="rise">
-          <Link href={place.href || place.detail || "/explore"} onClick={(e) => { if (!place.href && !place.detail) { e.preventDefault(); ask(t("sv.ask_about", { name: place.name })); } }} style={{ marginTop: "10px", display: "flex", gap: "14px", textDecoration: "none", color: "#2B1B10" }}>
+          <Link href={place.href || place.detail || "/explore"} onClick={(e) => { if (!place.href && !place.detail) { e.preventDefault(); ask(t("sv.ask_about", { name: place.name })); } }} style={{ marginTop: "10px", display: "flex", gap: "14px", textDecoration: "none", color: "var(--ink)" }}>
             {place.img ? (
               <img src={place.img} alt="" style={{ flex: "0 0 92px", width: "92px", height: "92px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
             ) : (
@@ -380,10 +381,10 @@ export default function ExploreScreen() {
             <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "4px" }}>
               <span style={{ display: "flex", gap: "6px" }}>
                 <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: CATEGORIES[place.cat].tagBg, color: CATEGORIES[place.cat].tagFg, fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>{t(`ex.one.${place.cat}`)}</span>
-                <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>{openText(place.open)}</span>
+                <span style={{ height: "22px", padding: "0 8px", borderRadius: "6px", background: "var(--green-tint)", color: "var(--green)", fontSize: "11px", fontWeight: "700", display: "flex", alignItems: "center" }}>{openText(place.open)}</span>
               </span>
               <span style={{ fontSize: "18px", fontWeight: "800", letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{place.name}</span>
-              <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", fontWeight: "600", color: "#5A4434" }}>
+              <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", fontWeight: "600", color: "var(--ink-soft)" }}>
                 <span>
                   {/^\d{4}$/.test(place.fact) ? t("c.built", { year: place.fact }) : place.fact} · {place.km < 1 ? `${Math.round(place.km * 1000)} m` : `${place.km} km`} · {t("unit.min_walk", { n: place.mins })}
                 </span>
@@ -391,14 +392,14 @@ export default function ExploreScreen() {
             </span>
           </Link>
           <div style={{ marginTop: "14px", display: "flex", gap: "8px" }}>
-            <Link href={place.id === "sidi" ? "/navigate" : `/navigate?to=${place.id}`} style={{ flex: "1", height: "50px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
+            <Link href={place.id === "sidi" ? "/navigate" : `/navigate?to=${place.id}`} style={{ flex: "1", height: "50px", borderRadius: "14px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <polygon points="3 11 22 2 13 21 11 13 3 11" />
               </svg>
               <span>{t("ex.walk_there")}</span>
             </Link>
             {place.href ? (
-              <Link href="/story" style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid #9A4E36", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
+              <Link href="/story" style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid var(--clay)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                   <polygon points="7 4 19 12 7 20 7 4" />
                 </svg>
@@ -406,11 +407,11 @@ export default function ExploreScreen() {
               </Link>
             ) : (
               place.detail ? (
-                <Link href={place.detail} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid #9A4E36", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
+                <Link href={place.detail} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid var(--clay)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
                   {t("ex.read")}
                 </Link>
               ) : (
-                <button type="button" onClick={() => ask(t("c.story_of", { name: place.name }))} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid #9A4E36", background: "none", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", cursor: "pointer" }}>
+                <button type="button" onClick={() => ask(t("c.story_of", { name: place.name }))} style={{ flex: "1", height: "50px", borderRadius: "14px", border: "1.5px solid var(--clay)", background: "none", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", cursor: "pointer" }}>
                   {t("ex.ask")}
                 </button>
               )
@@ -424,7 +425,7 @@ export default function ExploreScreen() {
                 setSaved((m) => ({ ...m, [place.id]: !isSaved }));
                 toast(isSaved ? t("c.removed_saved") : t("c.saved_later"), isSaved ? "info" : "success");
               }}
-              style={{ flex: "0 0 50px", width: "50px", height: "50px", borderRadius: "14px", border: `1.5px solid ${isSaved ? "#9A4E36" : "#E2D3C1"}`, background: isSaved ? "#FBEDE6" : "#FFFFFF", color: isSaved ? "#9A4E36" : "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+              style={{ flex: "0 0 50px", width: "50px", height: "50px", borderRadius: "14px", border: `1.5px solid ${isSaved ? "var(--clay)" : "var(--line-strong)"}`, background: isSaved ? "var(--clay-tint)" : "var(--paper)", color: isSaved ? "var(--clay)" : "var(--ink-soft)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
@@ -449,7 +450,7 @@ export default function ExploreScreen() {
                   </small>
                 </span>
               </span>
-              <span style={{ flex: "0 0 auto", fontSize: "13px", color: "#6F5B4B" }}>{t("unit.min", { n: p.mins })}</span>
+              <span style={{ flex: "0 0 auto", fontSize: "13px", color: "var(--ink-muted)" }}>{t("unit.min", { n: p.mins })}</span>
             </button>
           ))}
       </Sheet>
@@ -465,8 +466,8 @@ export default function ExploreScreen() {
               {name}
               <small>{hint}</small>
             </span>
-            <span aria-hidden="true" style={{ flex: "0 0 46px", width: "46px", height: "28px", padding: "3px", borderRadius: "999px", background: layers[id] ? "#2F7A4A" : "#CDBFAE", display: "flex", justifyContent: layers[id] ? "flex-end" : "flex-start", transition: "background-color 0.2s ease" }}>
-              <span style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#FFFFFF" }} />
+            <span aria-hidden="true" style={{ flex: "0 0 46px", width: "46px", height: "28px", padding: "3px", borderRadius: "999px", background: layers[id] ? "var(--green)" : "var(--stone)", display: "flex", justifyContent: layers[id] ? "flex-end" : "flex-start", transition: "background-color 0.2s ease" }}>
+              <span style={{ width: "22px", height: "22px", borderRadius: "50%", background: "var(--paper)" }} />
             </span>
           </button>
         ))}
