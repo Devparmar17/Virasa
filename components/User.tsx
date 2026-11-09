@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "./Toast";
@@ -31,7 +31,7 @@ export function Avatar({ style }: { style: CSSProperties }) {
   const t = useT();
   if (!user) {
     return (
-      <span role="img" aria-label={t("us.guest")} style={{ ...style, background: "#F1E7DA", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span role="img" aria-label={t("us.guest")} style={{ ...style, background: "var(--sand-deep)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <svg width="55%" height="55%" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <circle cx="12" cy="8" r="4.5" />
           <path d="M20 21a8 8 0 0 0-16 0" />
@@ -47,7 +47,7 @@ export function Avatar({ style }: { style: CSSProperties }) {
       .map((w) => w[0]?.toUpperCase())
       .join("");
     return (
-      <span role="img" aria-label={user.name} style={{ ...style, background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", fontSize: `calc(${style.width} * 0.38)`, fontWeight: 800, letterSpacing: "0.02em" }}>
+      <span role="img" aria-label={user.name} style={{ ...style, background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: `calc(${style.width} * 0.38)`, fontWeight: 800, letterSpacing: "0.02em" }}>
         {initials}
       </span>
     );
@@ -70,21 +70,21 @@ export function AccountCard() {
   const [user] = useUser();
   const t = useT();
   const router = useRouter();
-  const box: CSSProperties = { margin: "14px 20px 0", minHeight: "56px", padding: "8px 8px 8px 14px", borderRadius: "16px", border: "1px solid #EFE6DA", background: "#F6F1EA", color: "#2B1B10", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" };
+  const box: CSSProperties = { margin: "14px 20px 0", minHeight: "56px", padding: "8px 8px 8px 14px", borderRadius: "16px", border: "1px solid var(--line)", background: "var(--sand-light)", color: "var(--ink)", display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" };
   if (!user) {
     return (
       <Link href="/login" style={box}>
         <span style={{ flex: 1, minWidth: 0 }}>
           <span style={{ display: "block", fontSize: "15px", fontWeight: 800 }}>{t("us.join")}</span>
-          <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{t("us.join_sub")}</span>
+          <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>{t("us.join_sub")}</span>
         </span>
-        <span style={{ flex: "0 0 auto", height: "40px", padding: "0 14px", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800 }}>{t("lg.login")}</span>
+        <span style={{ flex: "0 0 auto", height: "40px", padding: "0 14px", borderRadius: "12px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800 }}>{t("lg.login")}</span>
       </Link>
     );
   }
   return (
     <div style={box}>
-      <span aria-hidden="true" style={{ flex: "0 0 36px", width: "36px", height: "36px", borderRadius: "10px", background: "#FFFFFF", border: "1px solid #EFE6DA", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span aria-hidden="true" style={{ flex: "0 0 36px", width: "36px", height: "36px", borderRadius: "10px", background: "var(--paper)", border: "1px solid var(--line)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         {user.provider === "google" ? (
           <GoogleMark />
         ) : (
@@ -95,7 +95,7 @@ export function AccountCard() {
         )}
       </span>
       <span style={{ flex: 1, minWidth: 0 }}>
-        <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{user.provider === "google" ? t("us.via_google") : t("us.via_email")}</span>
+        <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>{user.provider === "google" ? t("us.via_google") : t("us.via_email")}</span>
         <span style={{ display: "block", marginTop: "1px", fontSize: "14px", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.email}</span>
       </span>
       <button
@@ -105,10 +105,21 @@ export function AccountCard() {
           toast(t("lg.logged_out"));
           router.push("/login");
         }}
-        style={{ flex: "0 0 auto", height: "40px", padding: "0 12px", border: "1.5px solid #E2D3C1", borderRadius: "12px", background: "#FFFFFF", color: "#A23A2A", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}
+        style={{ flex: "0 0 auto", height: "40px", padding: "0 12px", border: "1.5px solid var(--line-strong)", borderRadius: "12px", background: "var(--paper)", color: "var(--red)", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}
       >
         {t("us.logout")}
       </button>
     </div>
+  );
+}
+
+// Welcome's "Get started": someone not signed in signs in first (sign-in then
+// carries on to interests and location); someone signed in goes straight on.
+export function StartLink({ style, children }: { style: CSSProperties; children: ReactNode }) {
+  const [user] = useUser();
+  return (
+    <Link href={user ? "/personalize" : "/login"} style={style}>
+      {children}
+    </Link>
   );
 }

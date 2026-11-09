@@ -38,7 +38,7 @@ export default function GalleryScreen() {
   const round = { width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "rgba(251, 246, 238, 0.14)", color: "#FBF6EE", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" } as const;
 
   return (
-    <div style={frame({ background: "#1E130B", color: "#FBF6EE", paddingBottom: "40px" })}>
+    <div style={frame({ background: "var(--night)", color: "var(--cream)", paddingBottom: "40px" })}>
       <ScreenHeader
         dark
         title="Sidi Saiyyed Mosque"
@@ -88,15 +88,15 @@ export default function GalleryScreen() {
       </div>
       <div key={photo.src} className="rise" style={{ padding: "16px 20px 0" }}>
         <p style={{ margin: 0, fontSize: "16px", lineHeight: 1.4, fontWeight: 700 }}>{photo.caption}</p>
-        <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#C9B6A0" }}>{t("gl.credit", { name: photo.credit === "You" ? t("us.guest") : photo.credit })}</p>
+        <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--taupe-light)" }}>{t("gl.credit", { name: photo.credit === "You" ? t("us.guest") : photo.credit })}</p>
       </div>
       <div className="hscroll" style={{ margin: "18px 0 0", padding: "0 20px", display: "flex", gap: "10px", overflowX: "auto", scrollbarWidth: "none" }}>
         {photos.map((p, i) => (
-          <button key={p.src} type="button" aria-label={t("gl.photo", { n: i + 1, name: p.caption })} aria-pressed={i === index} onClick={() => { setIndex(i); setZoomed(false); }} style={{ flex: "0 0 72px", width: "72px", height: "72px", padding: 0, borderRadius: "14px", border: i === index ? "3px solid #F3D9A8" : "3px solid transparent", background: "none", overflow: "hidden", cursor: "pointer" }}>
+          <button key={p.src} type="button" aria-label={t("gl.photo", { n: i + 1, name: p.caption })} aria-pressed={i === index} onClick={() => { setIndex(i); setZoomed(false); }} style={{ flex: "0 0 72px", width: "72px", height: "72px", padding: 0, borderRadius: "14px", border: i === index ? "3px solid var(--gold-light)" : "3px solid transparent", background: "none", overflow: "hidden", cursor: "pointer" }}>
             <img src={p.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
           </button>
         ))}
-        <button type="button" onClick={() => picker.current?.click()} style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "14px", border: "2px dashed rgba(251, 246, 238, 0.4)", background: "none", color: "#FBF6EE", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px", fontSize: "11px", fontWeight: 700, cursor: "pointer" }}>
+        <button type="button" onClick={() => picker.current?.click()} style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "14px", border: "2px dashed rgba(251, 246, 238, 0.4)", background: "none", color: "var(--cream)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px", fontSize: "11px", fontWeight: 700, cursor: "pointer" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 5v14" />
             <path d="M5 12h14" />

@@ -7,7 +7,7 @@ export default function MainScreen() {
   return (
     <>
       <AutoAdvance to="/welcome" ms={2000} />
-      <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FBF6EE", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+      <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "var(--cream)", fontFamily: "inherit", color: "var(--ink)" }}>
         <svg aria-hidden="true" width="390" height="844" viewBox="0 0 390 844" style={{ position: "absolute", inset: "0", opacity: "0.09" }}>
           <defs>
             <pattern id="jali" width="56" height="56" patternUnits="userSpaceOnUse">
@@ -22,25 +22,25 @@ export default function MainScreen() {
           </defs>
           <rect width="390" height="844" fill="url(#jali)" />
         </svg>
-        <Link href="/welcome" data-plain aria-label="Continue to Virasa" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "#2B1B10", paddingBottom: "40px" }}>
-          <div className="splash-logo" style={{ width: "176px", height: "176px", borderRadius: "50%", background: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 44px rgba(122, 74, 40, 0.18)", border: "1px solid #EADFD2" }}>
+        <Link href="/welcome" data-plain aria-label="Continue to Virasa" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textDecoration: "none", color: "var(--ink)", paddingBottom: "40px" }}>
+          <div className="splash-logo" style={{ width: "176px", height: "176px", borderRadius: "50%", background: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 18px 44px rgba(122, 74, 40, 0.18)", border: "1px solid #EADFD2" }}>
             <img src="/images/845c09135def6279c007582842533707.png" alt="" style={{ width: "104px", height: "112px", objectFit: "contain", display: "block" }} />
           </div>
           <div style={{ marginTop: "30px", fontSize: "46px", fontWeight: "800", letterSpacing: "-0.02em", lineHeight: "1" }}>
             Virasa
           </div>
-          <div style={{ marginTop: "10px", fontSize: "14px", fontWeight: "700", letterSpacing: "0.32em", color: "#8A6424", paddingLeft: "0.32em" }}>
+          <div style={{ marginTop: "10px", fontSize: "14px", fontWeight: "700", letterSpacing: "0.32em", color: "var(--gold)", paddingLeft: "0.32em" }}>
             <span style={{ textTransform: "uppercase" }}><T k="sp.tag" /></span>
           </div>
-          <div style={{ marginTop: "26px", fontSize: "17px", fontWeight: "500", color: "#5A4434" }}>
+          <div style={{ marginTop: "26px", fontSize: "17px", fontWeight: "500", color: "var(--ink-soft)" }}>
             <T k="sp.line" />
           </div>
         </Link>
         <div style={{ position: "absolute", left: "0", right: "0", bottom: "58px", display: "flex", flexDirection: "column", alignItems: "center", gap: "14px", pointerEvents: "none" }}>
           <div style={{ width: "120px", height: "4px", borderRadius: "999px", background: "#EADFD2", overflow: "hidden" }}>
-            <div className="splash-bar" style={{ width: "100%", height: "100%", borderRadius: "999px", background: "#9A4E36" }} />
+            <div className="splash-bar" style={{ width: "100%", height: "100%", borderRadius: "999px", background: "var(--clay)" }} />
           </div>
-          <div style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B", letterSpacing: "0.02em" }}>
+          <div style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)", letterSpacing: "0.02em" }}>
             <T k="sp.sub" />
           </div>
         </div>

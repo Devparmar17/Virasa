@@ -42,7 +42,7 @@ const Spark = ({ size = 12 }: { size?: number }) => (
   </svg>
 );
 const GuideMark = ({ size = 28 }: { size?: number }) => (
-  <span aria-hidden="true" style={{ flex: `0 0 ${size}px`, width: `${size}px`, height: `${size}px`, borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+  <span aria-hidden="true" style={{ flex: `0 0 ${size}px`, width: `${size}px`, height: `${size}px`, borderRadius: "50%", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
     <Spark size={Math.round(size * 0.46)} />
   </span>
 );
@@ -233,7 +233,9 @@ export default function AIGuideScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Follow the conversation down; an empty chat stays at the top of its welcome.
   useEffect(() => {
+    if (thread.length === 0 && !busy) return;
     log.current?.scrollTo({ top: log.current.scrollHeight, behavior: "smooth" });
   }, [thread, busy]);
 
@@ -286,16 +288,16 @@ export default function AIGuideScreen() {
 
 
   return (
-    <div style={{ width: "390px", height: "min(844px, 100dvh)", minHeight: "640px", position: "relative", overflow: "hidden", background: "#FFFFFF", color: "#2B1B10" }}>
+    <div style={{ width: "390px", height: "min(844px, 100dvh)", minHeight: "640px", position: "relative", overflow: "hidden", background: "var(--paper)", color: "var(--ink)" }}>
       {/* Header: who you're talking to, and the voice and language controls. */}
-      <header style={{ position: "relative", zIndex: 2, padding: "50px 10px 10px 14px", display: "flex", alignItems: "center", gap: "8px", background: "rgba(255, 255, 255, 0.96)", borderBottom: "1px solid #F3ECE2" }}>
+      <header style={{ position: "relative", zIndex: 2, padding: "50px 10px 10px 14px", display: "flex", alignItems: "center", gap: "8px", background: "rgba(255, 255, 255, 0.96)", borderBottom: "1px solid var(--line-soft)" }}>
         <GuideMark size={40} />
         <span style={{ flex: 1, minWidth: 0 }}>
           <span style={{ display: "flex", alignItems: "center", gap: "7px", fontSize: "17px", fontWeight: 800, whiteSpace: "nowrap" }}>
             {t("tab.guide")}
           </span>
-          <span style={{ marginTop: "2px", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B", whiteSpace: "nowrap", overflow: "hidden" }}>
-            <span aria-hidden="true" style={{ flex: "0 0 7px", width: "7px", height: "7px", borderRadius: "50%", background: "#2F7A4A" }} />
+          <span style={{ marginTop: "2px", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)", whiteSpace: "nowrap", overflow: "hidden" }}>
+            <span aria-hidden="true" style={{ flex: "0 0 7px", width: "7px", height: "7px", borderRadius: "50%", background: "var(--green)" }} />
             <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{isAhmedabad(here) ? t("gd.near_sidi") : t("gd.in_city", { city: here.city })}</span>
           </span>
         </span>
@@ -333,7 +335,7 @@ export default function AIGuideScreen() {
             )}
           </Icon>
         </button>
-        <button type="button" aria-label={t("gd.lang_label", { name: langOf(lang).label })} onClick={() => setLangOpen(true)} style={{ flex: "0 0 auto", minWidth: "40px", height: "40px", padding: "0 10px", border: 0, borderRadius: "999px", background: "#F6F1EA", color: "#5A4434", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
+        <button type="button" aria-label={t("gd.lang_label", { name: langOf(lang).label })} onClick={() => setLangOpen(true)} style={{ flex: "0 0 auto", minWidth: "40px", height: "40px", padding: "0 10px", border: 0, borderRadius: "999px", background: "var(--sand-light)", color: "var(--ink-soft)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: 800, cursor: "pointer" }}>
           {langOf(lang).short}
         </button>
       </header>
@@ -342,17 +344,17 @@ export default function AIGuideScreen() {
       <div ref={log} role="log" aria-label={t("gd.convo")} className="chat-log" style={{ position: "absolute", left: 0, right: 0, top: "101px", bottom: lastIsGuide && !busy ? "214px" : "168px", overflowY: "auto", padding: "16px 16px 12px", display: "flex", flexDirection: "column", gap: "14px" }}>
         {thread.length === 0 ? (
           <div className="stagger" style={{ margin: "auto 0", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-            <span style={{ width: "64px", height: "64px", borderRadius: "22px", background: "linear-gradient(140deg, #9A4E36, #C27A52)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 12px 26px rgba(154, 78, 54, 0.28)" }}>
-              <Spark size={28} />
+            <span style={{ width: "76px", height: "76px", borderRadius: "50%", background: "var(--paper)", border: "1px solid var(--line)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 12px 30px rgba(122, 74, 40, 0.14)" }}>
+              <img src="/images/845c09135def6279c007582842533707.png" alt="" style={{ width: "44px", height: "48px", objectFit: "contain", display: "block" }} />
             </span>
             <h1 style={{ margin: "16px 0 0", fontSize: "24px", lineHeight: 1.2, fontWeight: 800, letterSpacing: "-0.02em" }}>
               <Greeting />
             </h1>
-            <p style={{ margin: "6px 0 0", maxWidth: "290px", fontSize: "14px", lineHeight: 1.5, color: "#6F5B4B" }}>
+            <p style={{ margin: "6px 0 0", maxWidth: "290px", fontSize: "14px", lineHeight: 1.5, color: "var(--ink-muted)" }}>
               {gemini ? t("gd.intro_ai") : t("gd.intro_lib")}
             </p>
             {/* The whole-trip planner leads: any city, planned around who is going. */}
-            <Link href="/trip" style={{ marginTop: "20px", width: "100%", minHeight: "76px", padding: "14px 14px 14px 16px", borderRadius: "20px", background: "linear-gradient(140deg, #9A4E36, #7E3D29)", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)", boxSizing: "border-box" }}>
+            <Link href="/trip" style={{ marginTop: "20px", width: "100%", minHeight: "76px", padding: "14px 14px 14px 16px", borderRadius: "20px", background: "linear-gradient(140deg, var(--clay), var(--clay-deep))", color: "var(--paper)", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)", boxSizing: "border-box" }}>
               <span style={{ flex: "0 0 44px", height: "44px", borderRadius: "14px", background: "rgba(255, 255, 255, 0.18)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Icon size={22}>
                   <path d="M3 11l19-9-9 19-2-8-8-2z" />
@@ -370,11 +372,11 @@ export default function AIGuideScreen() {
               {STARTERS.map((s) => {
                 const inner = (
                   <>
-                    <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ width: "36px", height: "36px", borderRadius: "12px", background: "var(--sand)", color: "var(--clay-deep)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <Icon size={18}>{s.icon}</Icon>
                     </span>
                     <span style={{ marginTop: "10px", display: "block", fontSize: "14px", lineHeight: 1.25, fontWeight: 800 }}>{t(s.title)}</span>
-                    <span style={{ marginTop: "3px", display: "block", fontSize: "12px", lineHeight: 1.35, color: "#6F5B4B" }}>{t(s.sub)}</span>
+                    <span style={{ marginTop: "3px", display: "block", fontSize: "12px", lineHeight: 1.35, color: "var(--ink-muted)" }}>{t(s.sub)}</span>
                   </>
                 );
                 const card = { minHeight: "112px", padding: "14px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: "#2B1B10", display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left", textDecoration: "none", cursor: "pointer", boxShadow: "0 4px 14px rgba(90, 60, 30, 0.05)" } as const;
@@ -393,7 +395,7 @@ export default function AIGuideScreen() {
         ) : (
           thread.map((m, i) =>
             m.role === "user" ? (
-              <div key={i} className="rise" style={{ alignSelf: "flex-end", maxWidth: "290px", padding: "11px 14px", borderRadius: "20px 20px 6px 20px", background: "#9A4E36", color: "#FFFFFF", fontSize: "15px", lineHeight: 1.45 }}>
+              <div key={i} className="rise" style={{ alignSelf: "flex-end", maxWidth: "290px", padding: "11px 14px", borderRadius: "20px 20px 6px 20px", background: "var(--clay)", color: "var(--paper)", fontSize: "15px", lineHeight: 1.45 }}>
                 {m.text}
               </div>
             ) : (
@@ -402,42 +404,42 @@ export default function AIGuideScreen() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   {m.kind === "booking" && m.draft ? (
                     <>
-                      <div style={{ marginBottom: "8px", padding: "11px 14px", borderRadius: "6px 20px 20px 20px", background: "#F6F1EA", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.5 }}>{m.text}</div>
+                      <div style={{ marginBottom: "8px", padding: "11px 14px", borderRadius: "6px 20px 20px 20px", background: "var(--sand-light)", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.5 }}>{m.text}</div>
                       <BookingCard draft={m.draft} bookedRef={m.bookedRef} onBooked={(ref) => markBooked(i, ref)} />
                     </>
                   ) : m.kind === "plan" ? (
-                    <div style={{ padding: "12px", borderRadius: "6px 20px 20px 20px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
+                    <div style={{ padding: "12px", borderRadius: "6px 20px 20px 20px", background: "var(--paper)", border: "1px solid var(--line)" }}>
                       <p style={{ margin: "0 2px", fontSize: "15px", lineHeight: 1.45 }}>{t("gd.plan_intro")}</p>
-                      <div style={{ marginTop: "10px", padding: "12px", borderRadius: "14px", background: "#F6F1EA" }}>
+                      <div style={{ marginTop: "10px", padding: "12px", borderRadius: "14px", background: "var(--sand-light)" }}>
                         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
                           <span style={{ fontSize: "14px", fontWeight: 800 }}>{t("gd.plan_name")}</span>
-                          <span style={{ fontSize: "12px", fontWeight: 700, color: "#6F5B4B" }}>1 h 40 · 1.4 km</span>
+                          <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--ink-muted)" }}>1 h 40 · 1.4 km</span>
                         </div>
                         <ol style={{ listStyle: "none", margin: "8px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: "4px" }}>
                           {PLAN_STOPS.map(([name, mins], n) => (
                             <li key={name} style={{ minHeight: "26px", display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", fontWeight: 700 }}>
-                              <span style={{ flex: "0 0 22px", width: "22px", height: "22px", borderRadius: "50%", background: n === 0 ? "#2B1B10" : "#9A4E36", color: "#FFFFFF", fontSize: "11px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{n + 1}</span>
+                              <span style={{ flex: "0 0 22px", width: "22px", height: "22px", borderRadius: "50%", background: n === 0 ? "var(--ink)" : "var(--clay)", color: "var(--paper)", fontSize: "11px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{n + 1}</span>
                               <span style={{ flex: 1 }}>{name}</span>
-                              <span style={{ fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{mins}</span>
+                              <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>{mins}</span>
                             </li>
                           ))}
                         </ol>
                         <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
-                          <Link href="/navigate" style={{ flex: 1, height: "44px", borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", fontSize: "14px", fontWeight: 800, textDecoration: "none" }}>
+                          <Link href="/navigate" style={{ flex: 1, height: "44px", borderRadius: "12px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", fontSize: "14px", fontWeight: 800, textDecoration: "none" }}>
                             <Icon size={16}>
                               <polygon points="3 11 22 2 13 21 11 13 3 11" />
                             </Icon>
                             {t("home.start_walk")}
                           </Link>
-                          <Link href="/walk?plan=loop&edit=1" style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "center", fontSize: "14px", fontWeight: 800, textDecoration: "none" }}>
+                          <Link href="/walk?plan=loop&edit=1" style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid var(--line-strong)", background: "var(--paper)", color: "var(--ink)", display: "flex", alignItems: "center", fontSize: "14px", fontWeight: 800, textDecoration: "none" }}>
                             {t("gd.edit_plan")}
                           </Link>
                         </div>
                       </div>
-                      <p style={{ margin: "10px 2px 0", fontSize: "13px", lineHeight: 1.4, color: "#5A4434" }}>{t("gd.plan_tip")}</p>
+                      <p style={{ margin: "10px 2px 0", fontSize: "13px", lineHeight: 1.4, color: "var(--ink-soft)" }}>{t("gd.plan_tip")}</p>
                     </div>
                   ) : (
-                    <div style={{ padding: "11px 14px", borderRadius: "6px 20px 20px 20px", background: "#F6F1EA", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.5, whiteSpace: "pre-wrap" }}>{m.text}</div>
+                    <div style={{ padding: "11px 14px", borderRadius: "6px 20px 20px 20px", background: "var(--sand-light)", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.5, whiteSpace: "pre-wrap" }}>{m.text}</div>
                   )}
                   {/* Under each answer: listen, who answered, and was it helpful. */}
                   <div style={{ marginTop: "6px", display: "flex", alignItems: "center", gap: "6px" }}>
@@ -446,7 +448,7 @@ export default function AIGuideScreen() {
                       aria-label={speaking === i ? t("gd.stop_reading") : t("gd.read_answer")}
                       aria-pressed={speaking === i}
                       onClick={() => (speaking === i ? hush() : say(m.text, i))}
-                      style={{ height: "32px", padding: "0 11px 0 9px", border: 0, borderRadius: "999px", background: speaking === i ? "#9A4E36" : "transparent", color: speaking === i ? "#FFFFFF" : "#7E3D29", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 800, cursor: "pointer" }}
+                      style={{ height: "32px", padding: "0 11px 0 9px", border: 0, borderRadius: "999px", background: speaking === i ? "var(--clay)" : "transparent", color: speaking === i ? "var(--paper)" : "var(--clay-deep)", display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: 800, cursor: "pointer" }}
                     >
                       {speaking === i ? (
                         <span className="eq" aria-hidden="true" style={{ height: "11px" }}>
@@ -462,7 +464,7 @@ export default function AIGuideScreen() {
                       {speaking === i ? t("trip.stop") : t("trip.listen")}
                     </button>
                     {m.source ? (
-                      <span style={{ flex: 1, minWidth: 0, fontSize: "11px", fontWeight: 700, color: m.source === "gemini" ? "#3457C9" : "#8A7563", display: "flex", alignItems: "center", gap: "4px" }}>
+                      <span style={{ flex: 1, minWidth: 0, fontSize: "11px", fontWeight: 700, color: m.source === "gemini" ? "var(--ai-blue)" : "#8A7563", display: "flex", alignItems: "center", gap: "4px" }}>
                         {m.source === "gemini" ? <Spark size={10} /> : null}
                         {m.source === "library" ? t("gd.src_library") : m.source === "booking" ? t("gd.src_booking") : t("tab.guide")}
                       </span>
@@ -470,7 +472,7 @@ export default function AIGuideScreen() {
                       <span style={{ flex: 1 }} />
                     )}
                     {(["up", "down"] as const).map((d) => (
-                      <button key={d} type="button" aria-label={d === "up" ? t("gd.helpful") : t("gd.not_helpful")} aria-pressed={m.vote === d} onClick={(e) => rate(i, d, e.currentTarget)} style={{ width: "36px", height: "36px", border: 0, borderRadius: "50%", background: m.vote === d ? "#F6EEE4" : "transparent", color: m.vote === d ? "#9A4E36" : "#A8927C", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                      <button key={d} type="button" aria-label={d === "up" ? t("gd.helpful") : t("gd.not_helpful")} aria-pressed={m.vote === d} onClick={(e) => rate(i, d, e.currentTarget)} style={{ width: "36px", height: "36px", border: 0, borderRadius: "50%", background: m.vote === d ? "var(--sand)" : "transparent", color: m.vote === d ? "var(--clay)" : "var(--taupe)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                         <Icon size={15}>
                           {d === "up" ? (
                             <>
@@ -495,7 +497,7 @@ export default function AIGuideScreen() {
         {busy ? (
           <div className="rise" style={{ alignSelf: "flex-start", display: "flex", gap: "8px", alignItems: "center" }}>
             <GuideMark />
-            <span className="typing" aria-label={t("gd.writing")} style={{ padding: "14px 16px", borderRadius: "6px 20px 20px 20px", background: "#F6F1EA" }}>
+            <span className="typing" aria-label={t("gd.writing")} style={{ padding: "14px 16px", borderRadius: "6px 20px 20px 20px", background: "var(--sand-light)" }}>
               <i />
               <i />
               <i />
@@ -522,7 +524,7 @@ export default function AIGuideScreen() {
             {t("gd.kid")}
           </button>
           <Link href="/lens" style={chip}>
-            <span style={{ color: "#9A4E36", display: "flex" }}>
+            <span style={{ color: "var(--clay)", display: "flex" }}>
               <Icon size={15}>
                 <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
                 <circle cx="12" cy="13" r="3" />
@@ -534,9 +536,9 @@ export default function AIGuideScreen() {
       ) : null}
 
       {/* The message box: type, or tap the mic and speak. */}
-      <div style={{ position: "absolute", left: "12px", right: "12px", bottom: "100px", minHeight: "56px", padding: "0 6px 0 16px", borderRadius: "28px", background: "#FFFFFF", border: `1.5px solid ${listening ? "#9A4E36" : "#E2D3C1"}`, boxShadow: listening ? "0 0 0 4px rgba(154, 78, 54, 0.14)" : "0 6px 18px rgba(90, 60, 30, 0.08)", display: "flex", alignItems: "center", gap: "6px", transition: "border-color 0.2s ease, box-shadow 0.2s ease" }}>
+      <div style={{ position: "absolute", left: "12px", right: "12px", bottom: "100px", minHeight: "56px", padding: "0 6px 0 16px", borderRadius: "28px", background: "var(--paper)", border: `1.5px solid ${listening ? "var(--clay)" : "var(--line-strong)"}`, boxShadow: listening ? "0 0 0 4px rgba(154, 78, 54, 0.14)" : "0 6px 18px rgba(90, 60, 30, 0.08)", display: "flex", alignItems: "center", gap: "6px", transition: "border-color 0.2s ease, box-shadow 0.2s ease" }}>
         {listening ? (
-          <span className="eq" aria-hidden="true" style={{ height: "14px", color: "#9A4E36" }}>
+          <span className="eq" aria-hidden="true" style={{ height: "14px", color: "var(--clay)" }}>
             <i />
             <i />
             <i />
@@ -552,17 +554,17 @@ export default function AIGuideScreen() {
           onKeyDown={(e) => {
             if (e.key === "Enter") ask(q);
           }}
-          style={{ flex: 1, minWidth: 0, width: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "15px", color: "#2B1B10" }}
+          style={{ flex: 1, minWidth: 0, width: 0, height: "44px", border: 0, outline: "none", background: "transparent", fontSize: "15px", color: "var(--ink)" }}
         />
         {q.trim() ? (
-          <button type="button" aria-label={t("gd.send")} disabled={busy} onClick={() => ask(q)} className="pop-in" style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#2B1B10", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", opacity: busy ? 0.5 : 1 }}>
+          <button type="button" aria-label={t("gd.send")} disabled={busy} onClick={() => ask(q)} className="pop-in" style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "var(--ink)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", opacity: busy ? 0.5 : 1 }}>
             <Icon size={20}>
               <path d="m5 12 7-7 7 7" />
               <path d="M12 19V5" />
             </Icon>
           </button>
         ) : (
-          <button type="button" aria-label={listening ? t("gd.stop_listen") : t("gd.speak")} aria-pressed={listening} onClick={speak} className={listening ? "pulse" : undefined} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <button type="button" aria-label={listening ? t("gd.stop_listen") : t("gd.speak")} aria-pressed={listening} onClick={speak} className={listening ? "pulse" : undefined} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
             <Icon size={20}>
               <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
               <path d="M19 10v2a7 7 0 0 1-14 0v-2" />

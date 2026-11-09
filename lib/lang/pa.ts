@@ -625,7 +625,7 @@ const pa: Record<string, string> = {
   "sv.photo": "ਫ਼ੋਟੋ: {name}",
   "sv.downloading": "ਡਾਊਨਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
   "sv.downloaded": "ਡਾਊਨਲੋਡ ਹੋ ਗਿਆ · 86 MB",
-  "sv.not_downloaded": "ਡਾਊਨਲੋਡ ਨਹੀਂ ਹੋਇਆ · 86 MB",
+  "sv.not_downloaded": "ਡਾਊਨਲੋਡ ਨਹੀਂ ਹੋਇਆ",
   "sv.search_aria": "ਸੰਭਾਲੇ ਹੋਏ ਵਿੱਚ ਖੋਜੋ",
   "sv.close_search": "ਖੋਜ ਬੰਦ ਕਰੋ",
   "sv.items": "ਸੰਭਾਲੀਆਂ ਚੀਜ਼ਾਂ",

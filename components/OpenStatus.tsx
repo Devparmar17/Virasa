@@ -20,7 +20,7 @@ export default function OpenStatus({ opens, closes }: { opens: number; closes: n
         </span>
       ) : (
         <>
-          <strong style={{ color: open ? "#2F7A4A" : "#A23A2A" }}>{open ? t("place.open_now") : t("tk.closed")}</strong>
+          <strong style={{ color: open ? "var(--green)" : "var(--red)" }}>{open ? t("place.open_now") : t("tk.closed")}</strong>
           <span>· {open ? t("op.closes", { time: hour(closes) }) : t("op.opens", { time: hour(opens) })}</span>
         </>
       )}

@@ -27,7 +27,7 @@ type Card = {
 };
 
 // Listen sits beside the title as a quiet round button; the card itself is the main target.
-const listenStyle: CSSProperties = { position: "relative", zIndex: 2, flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center", gap: "2px", fontSize: "11px", fontWeight: 800, textDecoration: "none", cursor: "pointer" };
+const listenStyle: CSSProperties = { position: "relative", zIndex: 2, flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "var(--sand)", color: "var(--clay-deep)", display: "flex", alignItems: "center", justifyContent: "center", gap: "2px", fontSize: "11px", fontWeight: 800, textDecoration: "none", cursor: "pointer" };
 
 const Play = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
@@ -105,10 +105,10 @@ export default function Highlights() {
   return (
     <div className="hscroll" style={{ display: "flex", gap: "14px", padding: "12px 20px 8px" }}>
       {CARDS.map((c) => (
-        <article key={c.id} className="tap-card" style={{ position: "relative", flex: "0 0 272px", border: "1px solid #EFE6DA", borderRadius: "20px", overflow: "hidden", background: "#FFFFFF", boxShadow: "0 6px 18px rgba(90, 60, 30, 0.07)", display: "flex", flexDirection: "column" }}>
+        <article key={c.id} className="tap-card" style={{ position: "relative", flex: "0 0 272px", border: "1px solid var(--line)", borderRadius: "20px", overflow: "hidden", background: "var(--paper)", boxShadow: "0 6px 18px rgba(90, 60, 30, 0.07)", display: "flex", flexDirection: "column" }}>
           <div style={{ position: "relative", height: "156px" }}>
             {c.img ? <img src={c.img} alt={c.alt} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: c.focus, display: "block" }} /> : c.art ? <Placeholder item={c.art} /> : null}
-            <span style={{ position: "absolute", left: "10px", bottom: "10px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.94)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: 700, color: "#2B1B10" }}>
+            <span style={{ position: "absolute", left: "10px", bottom: "10px", height: "28px", padding: "0 10px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.94)", display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: 700, color: "var(--ink)" }}>
               {c.walk ? (
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z" />
@@ -131,7 +131,7 @@ export default function Highlights() {
               offLabel={`c.save_name|${c.title}`}
               onToast="c.saved_find"
               offToast="c.removed_saved"
-              style={{ position: "absolute", zIndex: 2, top: "8px", right: "8px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+              style={{ position: "absolute", zIndex: 2, top: "8px", right: "8px", width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "rgba(255, 255, 255, 0.94)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
               on={<Bookmark on />}
               off={<Bookmark on={false} />}
             />
@@ -139,13 +139,13 @@ export default function Highlights() {
           <div style={{ flex: 1, padding: "12px 12px 14px 16px", display: "flex", alignItems: "flex-start", gap: "10px" }}>
             <div style={{ flex: 1, minWidth: 0 }}>
               {/* The title's link stretches over the whole card, so the card is one big target. */}
-              <Link href={c.href} className="card-link" style={{ display: "block", textDecoration: "none", color: "#2B1B10" }}>
+              <Link href={c.href} className="card-link" style={{ display: "block", textDecoration: "none", color: "var(--ink)" }}>
                 <h3 style={{ margin: 0, fontSize: "17px", lineHeight: 1.25, fontWeight: 800, letterSpacing: "-0.01em", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.title}</h3>
               </Link>
-              <p style={{ margin: "3px 0 0", fontSize: "13px", lineHeight: 1.35, color: "#6F5B4B", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.line}</p>
-              <p style={{ margin: "6px 0 0", display: "flex", alignItems: "center", gap: "5px", fontSize: "13px", fontWeight: 700, color: "#2B1B10", whiteSpace: "nowrap" }}>
-                {c.open ? <span style={{ color: "#2F7A4A" }}><Say text={c.open} /></span> : null}
-                <span style={{ fontWeight: 600, color: "#6F5B4B" }}>{c.open ? "· " : ""}{/^\d{4}$/.test(c.fact.split(" · ")[0]) ? <T k="c.built" v={{ year: c.fact.split(" · ")[0] }} /> : c.fact.split(" · ")[0]}</span>
+              <p style={{ margin: "3px 0 0", fontSize: "13px", lineHeight: 1.35, color: "var(--ink-muted)", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{c.line}</p>
+              <p style={{ margin: "6px 0 0", display: "flex", alignItems: "center", gap: "5px", fontSize: "13px", fontWeight: 700, color: "var(--ink)", whiteSpace: "nowrap" }}>
+                {c.open ? <span style={{ color: "var(--green)" }}><Say text={c.open} /></span> : null}
+                <span style={{ fontWeight: 600, color: "var(--ink-muted)" }}>{c.open ? "· " : ""}{/^\d{4}$/.test(c.fact.split(" · ")[0]) ? <T k="c.built" v={{ year: c.fact.split(" · ")[0] }} /> : c.fact.split(" · ")[0]}</span>
               </p>
             </div>
             {c.listen}
