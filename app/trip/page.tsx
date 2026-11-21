@@ -24,9 +24,9 @@ import { cityImage, POPULAR_CITIES, TRIP_INTERESTS, tripId, type SavedTrip, type
 import { lookOf } from "@/lib/kinds";
 import { mapsUrl } from "@/lib/discover";
 
-const INK = "#2B1B10";
-const MUTED = "#6F5B4B";
-const BRAND = "#9A4E36";
+const INK = "var(--ink)";
+const MUTED = "var(--ink-muted)";
+const BRAND = "var(--clay)";
 
 type Form = { city: string; days: number; interests: string[]; notes: string };
 const DEFAULT_FORM: Form = { city: "", days: 2, interests: ["heritage", "food", "hidden"], notes: "" };
@@ -67,16 +67,16 @@ const ICON = {
 };
 
 const roundBtn: CSSProperties = { width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", color: INK, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" };
-const kicker: CSSProperties = { margin: "26px 0 10px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "#8A6424" };
+const kicker: CSSProperties = { margin: "26px 0 10px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "var(--gold)" };
 const h1: CSSProperties = { margin: 0, fontSize: "27px", lineHeight: 1.2, fontWeight: 800, letterSpacing: "-0.02em", textWrap: "balance" };
-const hint: CSSProperties = { margin: "8px 0 0", fontSize: "15px", lineHeight: 1.45, color: "#5A4434" };
-const pill = (on: boolean): CSSProperties => ({ minHeight: "46px", padding: "0 16px", borderRadius: "999px", border: `1.5px solid ${on ? BRAND : "#E2D3C1"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: on ? "#7E3D29" : INK, display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 700, cursor: "pointer" });
-const tile = (on: boolean): CSSProperties => ({ position: "relative", minHeight: "76px", padding: "12px", borderRadius: "18px", border: `1.5px solid ${on ? BRAND : "#EFE6DA"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: INK, display: "flex", alignItems: "center", gap: "10px", textAlign: "left", cursor: "pointer", transition: "background-color 0.18s ease, border-color 0.18s ease" });
-const smallLink: CSSProperties = { height: "40px", padding: "0 12px", borderRadius: "999px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: INK, display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, textDecoration: "none", cursor: "pointer" };
+const hint: CSSProperties = { margin: "8px 0 0", fontSize: "15px", lineHeight: 1.45, color: "var(--ink-soft)" };
+const pill = (on: boolean): CSSProperties => ({ minHeight: "46px", padding: "0 16px", borderRadius: "999px", border: `1.5px solid ${on ? BRAND : "var(--line-strong)"}`, background: on ? "var(--clay-tint)" : "var(--paper)", color: on ? "var(--clay-deep)" : INK, display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 700, cursor: "pointer" });
+const tile = (on: boolean): CSSProperties => ({ position: "relative", minHeight: "76px", padding: "12px", borderRadius: "18px", border: `1.5px solid ${on ? BRAND : "var(--line)"}`, background: on ? "var(--clay-tint)" : "var(--paper)", color: INK, display: "flex", alignItems: "center", gap: "10px", textAlign: "left", cursor: "pointer", transition: "background-color 0.18s ease, border-color 0.18s ease" });
+const smallLink: CSSProperties = { height: "40px", padding: "0 12px", borderRadius: "999px", border: "1.5px solid var(--line-strong)", background: "var(--paper)", color: INK, display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, textDecoration: "none", cursor: "pointer" };
 
 function Tick() {
   return (
-    <span className="pop-in" aria-hidden="true" style={{ position: "absolute", top: "8px", right: "8px", width: "22px", height: "22px", borderRadius: "50%", background: BRAND, color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <span className="pop-in" aria-hidden="true" style={{ position: "absolute", top: "8px", right: "8px", width: "22px", height: "22px", borderRadius: "50%", background: BRAND, color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <Icon d={ICON.tick} size={13} width={3} />
     </span>
   );
@@ -102,22 +102,22 @@ function Waiting({ city, onCancel }: { city: string; onCancel: () => void }) {
   const lines: Key[] = ["trip.wait_1", "trip.wait_2", "trip.wait_3", "trip.wait_4", "trip.wait_5", "trip.wait_6"];
   return (
     <div role="status" aria-live="polite" style={{ padding: "8px 20px 0" }}>
-      <div style={{ position: "relative", height: "220px", borderRadius: "24px", overflow: "hidden", background: "linear-gradient(160deg, #3A2516 0%, #2B1B10 60%, #4A2A1A 100%)", color: "#FBF6EE", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "14px", textAlign: "center" }}>
+      <div style={{ position: "relative", height: "220px", borderRadius: "24px", overflow: "hidden", background: "linear-gradient(160deg, #3A2516 0%, var(--ink) 60%, #4A2A1A 100%)", color: "var(--cream)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "14px", textAlign: "center" }}>
         <span className="pulse" style={{ width: "72px", height: "72px", borderRadius: "50%", background: BRAND, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Spark size={32} />
         </span>
         <span style={{ fontSize: "26px", fontWeight: 800, letterSpacing: "-0.02em" }}>{city}</span>
-        <span key={n} className="fade-in" style={{ minHeight: "22px", padding: "0 20px", fontSize: "16px", fontWeight: 700, color: "#F3D9A8" }}>
+        <span key={n} className="fade-in" style={{ minHeight: "22px", padding: "0 20px", fontSize: "16px", fontWeight: 700, color: "var(--gold-light)" }}>
           {t(lines[n], { city })}
         </span>
       </div>
-      <div aria-hidden="true" style={{ marginTop: "16px", height: "8px", borderRadius: "999px", background: "#F1E7DA", overflow: "hidden" }}>
+      <div aria-hidden="true" style={{ marginTop: "16px", height: "8px", borderRadius: "999px", background: "var(--sand-deep)", overflow: "hidden" }}>
         <span className="trip-progress" style={{ display: "block", height: "100%", borderRadius: "999px", background: BRAND }} />
       </div>
       <p style={{ margin: "10px 0 0", fontSize: "13px", color: MUTED, textAlign: "center" }}>{t("trip.wait_note")}</p>
       <div style={{ marginTop: "22px", display: "flex", flexDirection: "column", gap: "10px" }}>
         {[0, 1, 2].map((i) => (
-          <div key={i} style={{ display: "flex", gap: "12px", alignItems: "center", padding: "12px", borderRadius: "18px", border: "1px solid #EFE6DA" }}>
+          <div key={i} style={{ display: "flex", gap: "12px", alignItems: "center", padding: "12px", borderRadius: "18px", border: "1px solid var(--line)" }}>
             <span className="shimmer" style={{ flex: "0 0 44px", height: "44px", borderRadius: "13px" }} />
             <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
               <span className="shimmer" style={{ width: "40%", height: "10px", borderRadius: "6px" }} />
@@ -142,17 +142,17 @@ function StopCard({ s, city, last, onAsk }: { s: TripStop; city: string; last: b
     <li style={{ display: "flex", gap: "12px" }}>
       <span style={{ flex: "0 0 44px", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <KindIcon kind={s.kind} />
-        {last ? null : <span aria-hidden="true" style={{ flex: 1, width: "2px", margin: "6px 0", borderRadius: "2px", background: "#EFE6DA" }} />}
+        {last ? null : <span aria-hidden="true" style={{ flex: 1, width: "2px", margin: "6px 0", borderRadius: "2px", background: "var(--line)" }} />}
       </span>
       <div style={{ flex: 1, minWidth: 0, paddingBottom: last ? 0 : "18px" }}>
-        <p style={{ margin: "2px 0 0", fontSize: "12px", fontWeight: 800, letterSpacing: "0.08em", color: "#8A6424" }}>
+        <p style={{ margin: "2px 0 0", fontSize: "12px", fontWeight: 800, letterSpacing: "0.08em", color: "var(--gold)" }}>
           {t(`slot.${s.slot}` as Key)}
           {meta ? <span style={{ fontWeight: 600, letterSpacing: 0, color: MUTED }}> · {meta}</span> : null}
         </p>
         <h3 style={{ margin: "3px 0 0", fontSize: "17px", lineHeight: 1.3, fontWeight: 800 }}>{s.name}</h3>
         <p style={{ margin: "4px 0 0", fontSize: "calc(14px * var(--read-scale, 1))", lineHeight: 1.5, color: "#4A3728" }}>{s.why}</p>
         {s.tip ? (
-          <p style={{ margin: "8px 0 0", padding: "8px 10px", borderRadius: "12px", background: "#FBF6EE", display: "flex", gap: "8px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>
+          <p style={{ margin: "8px 0 0", padding: "8px 10px", borderRadius: "12px", background: "var(--cream)", display: "flex", gap: "8px", fontSize: "13px", lineHeight: 1.45, color: "var(--ink-soft)" }}>
             <span style={{ flex: "0 0 auto", color: "#B5841E", marginTop: "1px" }}>
               <Icon d={ICON.bulb} size={16} />
             </span>
@@ -361,7 +361,7 @@ export default function TripScreen() {
           </button>
         </div>
 
-        <section aria-label={trip.title} className="rise" style={{ margin: "4px 20px 0", borderRadius: "24px", overflow: "hidden", background: INK, color: "#FBF6EE" }}>
+        <section aria-label={trip.title} className="rise" style={{ margin: "4px 20px 0", borderRadius: "24px", overflow: "hidden", background: INK, color: "var(--cream)" }}>
           {img ? (
             <div style={{ height: "150px", overflow: "hidden" }}>
               <img src={img} alt="" className="kenburns" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
@@ -370,11 +370,9 @@ export default function TripScreen() {
             <div aria-hidden="true" style={{ height: "64px", background: "radial-gradient(circle at 20% 120%, rgba(243, 217, 168, 0.35), transparent 55%), radial-gradient(circle at 90% -20%, rgba(154, 78, 54, 0.8), transparent 60%)" }} />
           )}
           <div style={{ padding: "16px 18px 18px" }}>
-            <p style={{ margin: 0, display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "#E7B98A" }}>
-              {trip.city.toUpperCase()}
-            </p>
-            <h2 style={{ margin: "6px 0 0", fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textWrap: "balance" }}>{trip.title}</h2>
-            <p style={{ margin: "8px 0 0", fontSize: "calc(14px * var(--read-scale, 1))", lineHeight: 1.5, color: "#D9C6AE" }}>{trip.summary}</p>
+            <h2 style={{ margin: 0, fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em", textWrap: "balance" }}>{trip.title}</h2>
+            <p style={{ margin: "4px 0 0", fontSize: "14px", fontWeight: 700, color: "var(--gold-light)" }}>{trip.city}</p>
+            <p style={{ margin: "8px 0 0", fontSize: "calc(14px * var(--read-scale, 1))", lineHeight: 1.5, color: "var(--sand-on-dark)" }}>{trip.summary}</p>
             <div style={{ marginTop: "12px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
               {[t(trip.days.length === 1 ? "trip.day_n" : "trip.days_n", { n: trip.days.length }), party ? t(`who.${party.id}` as Key) : "", BUDGETS.find(([b]) => b === madeFor.budget)?.[1] ?? ""].filter(Boolean).map((x) => (
                 <span key={x} style={{ height: "26px", padding: "0 10px", borderRadius: "999px", background: "rgba(251, 246, 238, 0.12)", display: "inline-flex", alignItems: "center", fontSize: "12px", fontWeight: 700 }}>
@@ -382,7 +380,7 @@ export default function TripScreen() {
                 </span>
               ))}
             </div>
-            <button type="button" aria-pressed={speaking} onClick={listen} style={{ marginTop: "16px", width: "100%", height: "48px", border: 0, borderRadius: "14px", background: speaking ? "#F3D9A8" : "#FBF6EE", color: INK, display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: 800, cursor: "pointer" }}>
+            <button type="button" aria-pressed={speaking} onClick={listen} style={{ marginTop: "16px", width: "100%", height: "48px", border: 0, borderRadius: "14px", background: speaking ? "var(--gold-light)" : "var(--cream)", color: INK, display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: 800, cursor: "pointer" }}>
               <Icon d={speaking ? ICON.stop : ICON.speaker} />
               <span key={speaking ? "s" : "l"} className="btn-swap">{speaking ? t("trip.stop") : t("trip.listen")}</span>
             </button>
@@ -395,8 +393,8 @@ export default function TripScreen() {
               {facts
                 .filter(([, , v]) => v)
                 .map(([icon, label, value], i) => (
-                  <div key={label} style={{ padding: "12px 14px", display: "flex", gap: "12px", alignItems: "flex-start", borderTop: i ? "1px solid #F3ECE2" : 0 }}>
-                    <span style={{ flex: "0 0 36px", height: "36px", borderRadius: "11px", background: "#F6EEE4", color: "#8A6424", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div key={label} style={{ padding: "12px 14px", display: "flex", gap: "12px", alignItems: "flex-start", borderTop: i ? "1px solid var(--line-soft)" : 0 }}>
+                    <span style={{ flex: "0 0 36px", height: "36px", borderRadius: "11px", background: "var(--sand)", color: "var(--gold)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <Icon d={icon} size={18} />
                     </span>
                     <span style={{ minWidth: 0 }}>
@@ -420,7 +418,7 @@ export default function TripScreen() {
                   role="tab"
                   aria-selected={on}
                   onClick={() => setDayPick({ id: shown.id, n: d.day })}
-                  style={{ flex: "0 0 auto", maxWidth: "200px", minHeight: "58px", padding: "8px 14px", borderRadius: "16px", border: `1.5px solid ${on ? INK : "#E2D3C1"}`, background: on ? INK : "#FFFFFF", color: on ? "#FBF6EE" : INK, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: "2px", textAlign: "left", cursor: "pointer", transition: "background-color 0.18s ease, color 0.18s ease" }}
+                  style={{ flex: "0 0 auto", maxWidth: "200px", minHeight: "58px", padding: "8px 14px", borderRadius: "16px", border: `1.5px solid ${on ? INK : "var(--line-strong)"}`, background: on ? INK : "var(--paper)", color: on ? "var(--cream)" : INK, display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", gap: "2px", textAlign: "left", cursor: "pointer", transition: "background-color 0.18s ease, color 0.18s ease" }}
                 >
                   <span style={{ fontSize: "14px", fontWeight: 800 }}>{t("trip.day", { n: d.day })}</span>
                   <span style={{ maxWidth: "100%", fontSize: "12px", fontWeight: 600, opacity: 0.8, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{d.theme}</span>
@@ -446,7 +444,7 @@ export default function TripScreen() {
             <h2 style={{ ...kicker, padding: "0 20px" }}>{t("trip.food_try").toUpperCase()}</h2>
             <div className="hscroll" style={{ display: "flex", gap: "10px", padding: "0 20px 4px" }}>
               {trip.food.map((f) => (
-                <article key={f.name} style={{ flex: "0 0 250px", padding: "14px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "6px" }}>
+                <article key={f.name} style={{ flex: "0 0 250px", padding: "14px", borderRadius: "18px", border: "1px solid var(--line)", background: "var(--paper)", display: "flex", flexDirection: "column", gap: "6px" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <KindIcon kind="food" size={36} />
                     <span style={{ minWidth: 0 }}>
@@ -457,7 +455,7 @@ export default function TripScreen() {
                   <span style={{ fontSize: "13px", fontWeight: 800, color: "#B5541E" }}>
                     {t("trip.try")}: {f.dish}
                   </span>
-                  <span style={{ flex: 1, fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{f.why}</span>
+                  <span style={{ flex: 1, fontSize: "13px", lineHeight: 1.45, color: "var(--ink-soft)" }}>{f.why}</span>
                   <a href={mapsUrl(f.name, f.area, trip.city)} target="_blank" rel="noopener noreferrer" style={{ ...smallLink, alignSelf: "flex-start", marginTop: "4px" }}>
                     <Icon d={ICON.map} size={15} />
                     {t("trip.map")}
@@ -474,14 +472,14 @@ export default function TripScreen() {
               <h2 style={kicker}>{t("trip.hidden").toUpperCase()}</h2>
               <Card>
                 {trip.hidden.map((h, i) => (
-                  <div key={h.name} style={{ padding: "12px 14px", display: "flex", gap: "12px", borderTop: i ? "1px solid #F3ECE2" : 0 }}>
+                  <div key={h.name} style={{ padding: "12px 14px", display: "flex", gap: "12px", borderTop: i ? "1px solid var(--line-soft)" : 0 }}>
                     <KindIcon kind="hidden" size={38} />
                     <span style={{ flex: 1, minWidth: 0 }}>
                       <span style={{ display: "block", fontSize: "15px", fontWeight: 800 }}>{h.name}</span>
                       {h.area ? <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: MUTED }}>{h.area}</span> : null}
-                      <span style={{ display: "block", marginTop: "3px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{h.why}</span>
+                      <span style={{ display: "block", marginTop: "3px", fontSize: "13px", lineHeight: 1.45, color: "var(--ink-soft)" }}>{h.why}</span>
                     </span>
-                    <a href={mapsUrl(h.name, h.area, trip.city)} target="_blank" rel="noopener noreferrer" aria-label={`${h.name} on Maps`} style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "#F6F1EA", color: INK, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <a href={mapsUrl(h.name, h.area, trip.city)} target="_blank" rel="noopener noreferrer" aria-label={`${h.name} on Maps`} style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", background: "var(--sand-light)", color: INK, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <Icon d={ICON.map} size={18} />
                     </a>
                   </div>
@@ -496,7 +494,7 @@ export default function TripScreen() {
               <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
                 {trip.tips.map((tip) => (
                   <li key={tip} style={{ display: "flex", gap: "10px", fontSize: "calc(14px * var(--read-scale, 1))", lineHeight: 1.5 }}>
-                    <span style={{ flex: "0 0 auto", marginTop: "2px", color: "#2F7A4A" }}>
+                    <span style={{ flex: "0 0 auto", marginTop: "2px", color: "var(--green)" }}>
                       <Icon d={ICON.check} size={18} />
                     </span>
                     {tip}
@@ -535,14 +533,14 @@ export default function TripScreen() {
         </div>
 
         <div className="nav-rail">
-          <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
-            <button type="button" aria-pressed={isSaved} onClick={(e) => toggleSave(e.currentTarget)} style={{ flex: 1, height: "54px", borderRadius: "16px", border: isSaved ? `1.5px solid ${BRAND}` : 0, background: isSaved ? "#FBEDE6" : BRAND, color: isSaved ? BRAND : "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "16px", fontWeight: 800, cursor: "pointer" }}>
+          <div style={{ padding: "12px 20px 30px", background: "var(--paper)", borderTop: "1px solid var(--line)", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", gap: "10px" }}>
+            <button type="button" aria-pressed={isSaved} onClick={(e) => toggleSave(e.currentTarget)} style={{ flex: 1, height: "54px", borderRadius: "16px", border: isSaved ? `1.5px solid ${BRAND}` : 0, background: isSaved ? "var(--clay-tint)" : BRAND, color: isSaved ? BRAND : "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "16px", fontWeight: 800, cursor: "pointer" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill={isSaved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d={ICON.bookmark} />
               </svg>
               <span key={isSaved ? "on" : "off"} className="btn-swap">{isSaved ? t("trip.saved") : t("trip.save")}</span>
             </button>
-            <button type="button" onClick={() => backToForm(1)} style={{ flex: "0 0 auto", height: "54px", padding: "0 18px", borderRadius: "16px", border: 0, background: INK, color: "#FBF6EE", fontSize: "15px", fontWeight: 700, cursor: "pointer" }}>
+            <button type="button" onClick={() => backToForm(1)} style={{ flex: "0 0 auto", height: "54px", padding: "0 18px", borderRadius: "16px", border: 0, background: INK, color: "var(--cream)", fontSize: "15px", fontWeight: 700, cursor: "pointer" }}>
               {t("trip.new")}
             </button>
           </div>
@@ -562,11 +560,11 @@ export default function TripScreen() {
           <Waiting city={city} onCancel={cancel} />
         ) : (
           <div role="alert" className="rise" style={{ padding: "40px 24px 0", display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", textAlign: "center" }}>
-            <span style={{ width: "72px", height: "72px", borderRadius: "50%", background: "#FBEDE6", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ width: "72px", height: "72px", borderRadius: "50%", background: "var(--clay-tint)", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <Icon d={ICON.compass} size={32} />
             </span>
             <h2 style={{ margin: "6px 0 0", fontSize: "21px", fontWeight: 800 }}>{t("trip.error")}</h2>
-            <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.5, color: "#5A4434" }}>{error}</p>
+            <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.5, color: "var(--ink-soft)" }}>{error}</p>
             <button type="button" className="sheet-cta" onClick={plan} style={{ marginTop: "12px" }}>
               {t("trip.retry")}
             </button>
@@ -608,7 +606,7 @@ export default function TripScreen() {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
           <div style={{ display: "flex", gap: "6px" }}>
             {[1, 2, 3].map((n) => (
-              <span key={n} style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1", overflow: "hidden", display: "block" }}>
+              <span key={n} style={{ width: "40px", height: "5px", borderRadius: "999px", background: "var(--line-strong)", overflow: "hidden", display: "block" }}>
                 {n <= step ? <span className={n === step ? "step-fill" : undefined} style={{ display: "block", width: "100%", height: "100%", borderRadius: "999px", background: BRAND }} /> : null}
               </span>
             ))}
@@ -623,7 +621,7 @@ export default function TripScreen() {
           <>
             <h1 style={h1}>{t("trip.where")}</h1>
             <p style={hint}>{t("trip.where_hint")}</p>
-            <div style={{ marginTop: "18px", height: "60px", borderRadius: "18px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", display: "flex", alignItems: "center", gap: "10px", padding: "0 6px 0 16px" }}>
+            <div style={{ marginTop: "18px", height: "60px", borderRadius: "18px", border: "1.5px solid var(--line-strong)", background: "var(--paper)", display: "flex", alignItems: "center", gap: "10px", padding: "0 6px 0 16px" }}>
               <span style={{ color: BRAND, display: "flex" }}>
                 <Icon d={ICON.pin} size={22} />
               </span>
@@ -649,7 +647,7 @@ export default function TripScreen() {
                   setTyped(true);
                   setF({ city: heard.replace(/[.?!]+$/, "") });
                 }}
-                style={{ flex: "0 0 48px", width: "48px", height: "48px", border: 0, borderRadius: "14px", background: "#FBEDE6", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+                style={{ flex: "0 0 48px", width: "48px", height: "48px", border: 0, borderRadius: "14px", background: "var(--clay-tint)", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
               >
                 <Icon d={ICON.mic} size={22} />
               </VoiceSearch>
@@ -678,14 +676,14 @@ export default function TripScreen() {
             </div>
 
             <h2 style={kicker}>{t("trip.days").toUpperCase()}</h2>
-            <div style={{ padding: "8px", borderRadius: "20px", background: "#F6F1EA", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <button type="button" aria-label={t("trip.fewer")} disabled={form.days <= 1} onClick={(e) => { pop(e.currentTarget); setF({ days: Math.max(1, form.days - 1) }); }} style={{ width: "56px", height: "56px", border: 0, borderRadius: "16px", background: "#FFFFFF", color: INK, opacity: form.days <= 1 ? 0.4 : 1, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.12)" }}>
+            <div style={{ padding: "8px", borderRadius: "20px", background: "var(--sand-light)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <button type="button" aria-label={t("trip.fewer")} disabled={form.days <= 1} onClick={(e) => { pop(e.currentTarget); setF({ days: Math.max(1, form.days - 1) }); }} style={{ width: "56px", height: "56px", border: 0, borderRadius: "16px", background: "var(--paper)", color: INK, opacity: form.days <= 1 ? 0.4 : 1, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.12)" }}>
                 <Icon d={ICON.minus} size={24} width={2.4} />
               </button>
               <span key={form.days} className="pop-in" aria-live="polite" style={{ fontSize: "24px", fontWeight: 800, letterSpacing: "-0.01em" }}>
                 {t(form.days === 1 ? "trip.day_n" : "trip.days_n", { n: form.days })}
               </span>
-              <button type="button" aria-label={t("trip.more")} disabled={form.days >= 7} onClick={(e) => { pop(e.currentTarget); setF({ days: Math.min(7, form.days + 1) }); }} style={{ width: "56px", height: "56px", border: 0, borderRadius: "16px", background: "#FFFFFF", color: INK, opacity: form.days >= 7 ? 0.4 : 1, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.12)" }}>
+              <button type="button" aria-label={t("trip.more")} disabled={form.days >= 7} onClick={(e) => { pop(e.currentTarget); setF({ days: Math.min(7, form.days + 1) }); }} style={{ width: "56px", height: "56px", border: 0, borderRadius: "16px", background: "var(--paper)", color: INK, opacity: form.days >= 7 ? 0.4 : 1, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 1px 3px rgba(60, 36, 20, 0.12)" }}>
                 <Icon d={ICON.plus} size={24} width={2.4} />
               </button>
             </div>
@@ -693,7 +691,7 @@ export default function TripScreen() {
             {last ? (
               <>
                 <h2 style={kicker}>{t("trip.last")}</h2>
-                <Link href="/trip?view=last" style={{ padding: "10px 12px 10px 10px", borderRadius: "18px", border: "1px solid #EFE6DA", display: "flex", alignItems: "center", gap: "12px", color: INK, textDecoration: "none" }}>
+                <Link href="/trip?view=last" style={{ padding: "10px 12px 10px 10px", borderRadius: "18px", border: "1px solid var(--line)", display: "flex", alignItems: "center", gap: "12px", color: INK, textDecoration: "none" }}>
                   {cityImage(last.trip.city) ? (
                     <img src={cityImage(last.trip.city)} alt="" style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "14px", objectFit: "cover", display: "block" }} />
                   ) : (
@@ -703,7 +701,7 @@ export default function TripScreen() {
                     <span style={{ display: "block", fontSize: "15px", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{last.trip.title}</span>
                     <span style={{ display: "block", fontSize: "13px", color: MUTED }}>{t(last.trip.days.length === 1 ? "trip.day_n" : "trip.days_n", { n: last.trip.days.length })} · {last.trip.city}</span>
                   </span>
-                  <span style={{ height: "36px", padding: "0 12px", borderRadius: "999px", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800 }}>{t("trip.open")}</span>
+                  <span style={{ height: "36px", padding: "0 12px", borderRadius: "999px", background: "var(--sand)", color: "var(--clay-deep)", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800 }}>{t("trip.open")}</span>
                 </Link>
               </>
             ) : null}
@@ -719,7 +717,7 @@ export default function TripScreen() {
                 const on = profile.party === p.id;
                 return (
                   <button key={p.id} type="button" role="radio" aria-checked={on} onClick={(e) => { pop(e.currentTarget, !on); setP({ party: p.id }); }} style={{ ...tile(on), gridColumn: i === PARTIES.length - 1 ? "1 / -1" : undefined }}>
-                    <span aria-hidden="true" style={{ flex: "0 0 40px", height: "40px", borderRadius: "12px", background: on ? "#FFFFFF" : "#F6EEE4", color: on ? BRAND : "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span aria-hidden="true" style={{ flex: "0 0 40px", height: "40px", borderRadius: "12px", background: on ? "var(--paper)" : "var(--sand)", color: on ? BRAND : "var(--clay-deep)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <Icon d={p.icon} size={22} width={1.9} />
                     </span>
                     <span style={{ minWidth: 0, paddingRight: "16px" }}>
@@ -733,11 +731,11 @@ export default function TripScreen() {
             </div>
 
             <h2 style={kicker}>{t("trip.budget").toUpperCase()}</h2>
-            <div role="radiogroup" aria-label={t("trip.budget")} style={{ padding: "4px", borderRadius: "16px", background: "#F1E7DA", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
+            <div role="radiogroup" aria-label={t("trip.budget")} style={{ padding: "4px", borderRadius: "16px", background: "var(--sand-deep)", display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "4px" }}>
               {BUDGETS.map(([id, sign]) => {
                 const on = profile.budget === id;
                 return (
-                  <button key={id} type="button" role="radio" aria-checked={on} onClick={() => setP({ budget: id })} style={{ minHeight: "58px", border: 0, borderRadius: "12px", background: on ? "#FFFFFF" : "transparent", color: on ? INK : "#5A4434", boxShadow: on ? "0 2px 6px rgba(90, 60, 30, 0.14)" : "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
+                  <button key={id} type="button" role="radio" aria-checked={on} onClick={() => setP({ budget: id })} style={{ minHeight: "58px", border: 0, borderRadius: "12px", background: on ? "var(--paper)" : "transparent", color: on ? INK : "var(--ink-soft)", boxShadow: on ? "0 2px 6px rgba(90, 60, 30, 0.14)" : "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: "pointer" }}>
                     <span style={{ fontSize: "16px", fontWeight: 800, color: on ? BRAND : "inherit" }}>{sign}</span>
                     <span style={{ fontSize: "13px", fontWeight: on ? 800 : 600 }}>{t(`pf.${id}` as Key)}</span>
                   </button>
@@ -764,7 +762,7 @@ export default function TripScreen() {
                 const look = lookOf(id);
                 return (
                   <button key={id} type="button" aria-pressed={on} onClick={(e) => { pop(e.currentTarget, !on); setF({ interests: on ? form.interests.filter((x) => x !== id) : [...form.interests, id] }); }} style={{ ...tile(on), minHeight: "64px" }}>
-                    <span aria-hidden="true" style={{ flex: "0 0 36px", height: "36px", borderRadius: "11px", background: on ? "#FFFFFF" : look.bg, color: look.fg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span aria-hidden="true" style={{ flex: "0 0 36px", height: "36px", borderRadius: "11px", background: on ? "var(--paper)" : look.bg, color: look.fg, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <Icon d={look.icon} size={19} />
                     </span>
                     <span style={{ minWidth: 0, paddingRight: "14px", fontSize: "14px", fontWeight: 700, lineHeight: 1.25 }}>{t(`int.${id}` as Key)}</span>
@@ -781,9 +779,9 @@ export default function TripScreen() {
                 placeholder={t("trip.notes_ph")}
                 aria-label={t("trip.notes")}
                 rows={3}
-                style={{ width: "100%", padding: "14px 60px 14px 14px", borderRadius: "16px", border: "1.5px solid #E2D3C1", outline: "none", resize: "none", fontSize: "15px", lineHeight: 1.45, color: INK, fontFamily: "inherit", boxSizing: "border-box" }}
+                style={{ width: "100%", padding: "14px 60px 14px 14px", borderRadius: "16px", border: "1.5px solid var(--line-strong)", outline: "none", resize: "none", fontSize: "15px", lineHeight: 1.45, color: INK, fontFamily: "inherit", boxSizing: "border-box" }}
               />
-              <VoiceSearch label={t("trip.say_notes")} onResult={(heard) => setF({ notes: `${form.notes ? `${form.notes} ` : ""}${heard}`.slice(0, 300) })} style={{ position: "absolute", top: "10px", right: "10px", width: "44px", height: "44px", border: 0, borderRadius: "12px", background: "#FBEDE6", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+              <VoiceSearch label={t("trip.say_notes")} onResult={(heard) => setF({ notes: `${form.notes ? `${form.notes} ` : ""}${heard}`.slice(0, 300) })} style={{ position: "absolute", top: "10px", right: "10px", width: "44px", height: "44px", border: 0, borderRadius: "12px", background: "var(--clay-tint)", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                 <Icon d={ICON.mic} size={20} />
               </VoiceSearch>
             </div>
@@ -792,8 +790,8 @@ export default function TripScreen() {
       </div>
 
       <div className="nav-rail">
-        <div style={{ padding: "28px 20px 24px", background: "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 34%)" }}>
-          <button type="button" onClick={goNext} style={{ width: "100%", height: "58px", border: 0, borderRadius: "18px", background: BRAND, color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "17px", fontWeight: 800, cursor: "pointer", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
+        <div style={{ padding: "28px 20px 24px", background: "linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, var(--paper) 34%)" }}>
+          <button type="button" onClick={goNext} style={{ width: "100%", height: "58px", border: 0, borderRadius: "18px", background: BRAND, color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "17px", fontWeight: 800, cursor: "pointer", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
             {step === 3 ? <Spark size={18} /> : null}
             <span>{step === 3 ? t("trip.go") : t("trip.next")}</span>
             {step === 3 ? null : <Icon d={ICON.arrow} size={20} width={2.2} />}

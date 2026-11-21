@@ -625,7 +625,7 @@ const ml: Record<string, string> = {
   "sv.photo": "ഫോട്ടോ: {name}",
   "sv.downloading": "ഡൗൺലോഡ് ചെയ്യുന്നു…",
   "sv.downloaded": "ഡൗൺലോഡ് ചെയ്തു · 86 MB",
-  "sv.not_downloaded": "ഡൗൺലോഡ് ചെയ്തിട്ടില്ല · 86 MB",
+  "sv.not_downloaded": "ഡൗൺലോഡ് ചെയ്തിട്ടില്ല",
   "sv.search_aria": "സേവ് ചെയ്തവയിൽ തിരയുക",
   "sv.close_search": "തിരയൽ അടയ്ക്കുക",
   "sv.items": "സേവ് ചെയ്തവ",

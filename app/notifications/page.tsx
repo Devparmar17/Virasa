@@ -45,7 +45,7 @@ export default function NotificationsScreen() {
         title={t("nt.title")}
         back="/profile"
         action={
-          <Link href="/settings#alerts" aria-label={t("nt.settings")} style={{ width: "44px", height: "44px", borderRadius: "50%", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Link href="/settings#alerts" aria-label={t("nt.settings")} style={{ width: "44px", height: "44px", borderRadius: "50%", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="4" x2="20" y1="7" y2="7" />
               <line x1="4" x2="20" y1="17" y2="17" />
@@ -56,8 +56,8 @@ export default function NotificationsScreen() {
         }
       />
       <div style={{ padding: "4px 20px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <span style={{ fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>{unread ? t("nt.n_new", { n: unread }) : t("nt.caught_up")}</span>
-        <button type="button" disabled={!unread} onClick={() => setRead(Object.fromEntries(NOTES.map((n) => [n.id, true])))} style={{ height: "40px", padding: "0 4px", border: "0", background: "none", color: unread ? "#9A4E36" : "#A8927C", fontSize: "13px", fontWeight: 700, cursor: unread ? "pointer" : "default" }}>
+        <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--ink-muted)" }}>{unread ? t("nt.n_new", { n: unread }) : t("nt.caught_up")}</span>
+        <button type="button" disabled={!unread} onClick={() => setRead(Object.fromEntries(NOTES.map((n) => [n.id, true])))} style={{ height: "40px", padding: "0 4px", border: "0", background: "none", color: unread ? "var(--clay)" : "var(--taupe)", fontSize: "13px", fontWeight: 700, cursor: unread ? "pointer" : "default" }}>
           {t("nt.read_all")}
         </button>
       </div>
@@ -66,14 +66,14 @@ export default function NotificationsScreen() {
         if (!list.length) return null;
         return (
           <section key={day} style={{ padding: "0 20px" }}>
-            <h2 style={{ margin: "14px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" }}>{t(day === "Today" ? "nt.today" : "nt.earlier").toUpperCase()}</h2>
+            <h2 style={{ margin: "14px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "var(--gold)" }}>{t(day === "Today" ? "nt.today" : "nt.earlier").toUpperCase()}</h2>
             <ul className="stagger" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
               {list.map((n) => {
                 const isNew = !read[n.id];
                 const ic = n.look ? LOOKS[n.look] : ICON[n.kind];
                 return (
                   <li key={n.id}>
-                    <Link href={n.href} onClick={() => setRead((r) => ({ ...r, [n.id]: true }))} style={{ padding: "14px", borderRadius: "16px", background: "#FFFFFF", border: `1px solid ${isNew ? "#E2C9B4" : "#EFE6DA"}`, color: "#2B1B10", display: "flex", gap: "12px" }}>
+                    <Link href={n.href} onClick={() => setRead((r) => ({ ...r, [n.id]: true }))} style={{ padding: "14px", borderRadius: "16px", background: "var(--paper)", border: `1px solid ${isNew ? "#E2C9B4" : "var(--line)"}`, color: "var(--ink)", display: "flex", gap: "12px" }}>
                       <span aria-hidden="true" style={{ flex: "0 0 40px", width: "40px", height: "40px", borderRadius: "12px", background: ic.bg, color: ic.fg, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d={ic.path} />
@@ -82,11 +82,11 @@ export default function NotificationsScreen() {
                       <span style={{ flex: 1, minWidth: 0 }}>
                         <span style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "8px" }}>
                           <span style={{ fontSize: "15px", lineHeight: 1.3, fontWeight: isNew ? 800 : 600 }}>{t(n.title)}</span>
-                          <span style={{ flex: "0 0 auto", fontSize: "12px", color: "#6F5B4B" }}>{t(n.when)}</span>
+                          <span style={{ flex: "0 0 auto", fontSize: "12px", color: "var(--ink-muted)" }}>{t(n.when)}</span>
                         </span>
-                        <span style={{ display: "block", marginTop: "4px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{t(n.body)}</span>
+                        <span style={{ display: "block", marginTop: "4px", fontSize: "13px", lineHeight: 1.45, color: "var(--ink-soft)" }}>{t(n.body)}</span>
                       </span>
-                      {isNew ? <span aria-label={t("nt.unread")} style={{ flex: "0 0 8px", width: "8px", height: "8px", marginTop: "6px", borderRadius: "50%", background: "#9A4E36" }} /> : null}
+                      {isNew ? <span aria-label={t("nt.unread")} style={{ flex: "0 0 8px", width: "8px", height: "8px", marginTop: "6px", borderRadius: "50%", background: "var(--clay)" }} /> : null}
                     </Link>
                   </li>
                 );
@@ -96,7 +96,7 @@ export default function NotificationsScreen() {
         );
       })}
       {muted ? (
-        <p style={{ margin: "18px 20px 0", fontSize: "13px", lineHeight: 1.45, color: "#6F5B4B" }}>
+        <p style={{ margin: "18px 20px 0", fontSize: "13px", lineHeight: 1.45, color: "var(--ink-muted)" }}>
           {t("nt.hidden", { n: muted })} <Link href="/settings#alerts">{t("nt.change")}</Link>
         </p>
       ) : null}

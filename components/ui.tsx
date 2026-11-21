@@ -1,14 +1,14 @@
 import BackLink from "./Back";
 import type { CSSProperties, ReactNode } from "react";
 
-export const FONT = "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', 'Noto Sans Telugu', 'Noto Sans Kannada', 'Noto Sans Malayalam', 'Noto Sans Gurmukhi', system-ui, -apple-system, 'Segoe UI', sans-serif";
+export const FONT = "'Anek Latin', 'Anek Devanagari', 'Anek Gujarati', 'Anek Tamil', 'Anek Bangla', 'Anek Telugu', 'Anek Kannada', 'Anek Malayalam', 'Anek Gurmukhi', system-ui, -apple-system, 'Segoe UI', sans-serif";
 
 // The frame every phone screen is drawn in.
-export const frame = (extra?: CSSProperties): CSSProperties => ({ width: "390px", minHeight: "844px", position: "relative", background: "#FFFFFF", fontFamily: FONT, color: "#2B1B10", ...extra });
+export const frame = (extra?: CSSProperties): CSSProperties => ({ width: "390px", minHeight: "844px", position: "relative", background: "var(--paper)", fontFamily: FONT, color: "var(--ink)", ...extra });
 
 // Top bar with a back arrow, a centred title and an optional action on the right.
 export function ScreenHeader({ title, back, action, dark }: { title: string; back: string; action?: ReactNode; dark?: boolean }) {
-  const ink = dark ? "#FBF6EE" : "#2B1B10";
+  const ink = dark ? "var(--cream)" : "var(--ink)";
   return (
     <div style={{ padding: "54px 8px 0", height: "98px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <BackLink href={back} aria-label="Back" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: ink }}>
@@ -25,7 +25,7 @@ export function ScreenHeader({ title, back, action, dark }: { title: string; bac
 
 export function SectionLabel({ children, id }: { children: ReactNode; id?: string }) {
   return (
-    <h2 id={id} style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424", scrollMarginTop: "16px" }}>
+    <h2 id={id} style={{ margin: "24px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "var(--gold)", scrollMarginTop: "16px" }}>
       {children}
     </h2>
   );
@@ -33,10 +33,10 @@ export function SectionLabel({ children, id }: { children: ReactNode; id?: strin
 
 // A white card that groups setting rows.
 export function Card({ children, style }: { children: ReactNode; style?: CSSProperties }) {
-  return <div style={{ border: "1px solid #EFE6DA", borderRadius: "16px", background: "#FFFFFF", overflow: "hidden", ...style }}>{children}</div>;
+  return <div style={{ border: "1px solid var(--line)", borderRadius: "16px", background: "var(--paper)", overflow: "hidden", ...style }}>{children}</div>;
 }
 
-export const rowStyle = (last?: boolean): CSSProperties => ({ width: "100%", minHeight: "56px", padding: "8px 14px", border: "0", borderBottom: last ? "0" : "1px solid #F3ECE2", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", fontSize: "15px", fontWeight: 600, textAlign: "left", textDecoration: "none", cursor: "pointer" });
+export const rowStyle = (last?: boolean): CSSProperties => ({ width: "100%", minHeight: "56px", padding: "8px 14px", border: "0", borderBottom: last ? "0" : "1px solid var(--line-soft)", background: "none", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", fontSize: "15px", fontWeight: 600, textAlign: "left", textDecoration: "none", cursor: "pointer" });
 
 export function Chevron() {
   return (
@@ -52,10 +52,10 @@ export function SwitchRow({ label, hint, on, onToggle, last }: { label: string; 
     <button type="button" role="switch" aria-checked={on} onClick={onToggle} style={rowStyle(last)}>
       <span>
         {label}
-        {hint ? <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>{hint}</span> : null}
+        {hint ? <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "var(--ink-muted)" }}>{hint}</span> : null}
       </span>
-      <span aria-hidden="true" style={{ flex: "0 0 50px", width: "50px", height: "30px", padding: "3px", borderRadius: "999px", background: on ? "#2F7A4A" : "#CDBFAE", display: "flex", transition: "background-color 0.2s ease" }}>
-        <span className="switch-knob" style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#FFFFFF", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)", translate: on ? "20px 0" : "0 0" }} />
+      <span aria-hidden="true" style={{ flex: "0 0 50px", width: "50px", height: "30px", padding: "3px", borderRadius: "999px", background: on ? "var(--green)" : "var(--stone)", display: "flex", transition: "background-color 0.2s ease" }}>
+        <span className="switch-knob" style={{ width: "24px", height: "24px", borderRadius: "50%", background: "var(--paper)", boxShadow: "0 1px 3px rgba(0, 0, 0, 0.25)", translate: on ? "20px 0" : "0 0" }} />
       </span>
     </button>
   );
@@ -64,9 +64,9 @@ export function SwitchRow({ label, hint, on, onToggle, last }: { label: string; 
 // One-of-several choice, drawn like the story-length picker in onboarding.
 export function Segmented<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: [T, string][]; onChange: (v: T) => void }) {
   return (
-    <div role="radiogroup" aria-label={label} style={{ padding: "4px", borderRadius: "14px", background: "#F1E7DA", display: "grid", gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))`, gap: "4px" }}>
+    <div role="radiogroup" aria-label={label} style={{ padding: "4px", borderRadius: "14px", background: "var(--sand-deep)", display: "grid", gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))`, gap: "4px" }}>
       {options.map(([id, text]) => (
-        <button key={id} type="button" role="radio" aria-checked={value === id} onClick={() => onChange(id)} style={{ minHeight: "44px", padding: "4px 6px", border: "0", borderRadius: "10px", background: value === id ? "#FFFFFF" : "transparent", color: value === id ? "#2B1B10" : "#5A4434", fontSize: "13px", fontWeight: value === id ? 800 : 600, boxShadow: value === id ? "0 2px 6px rgba(90, 60, 30, 0.14)" : "none", cursor: "pointer" }}>
+        <button key={id} type="button" role="radio" aria-checked={value === id} onClick={() => onChange(id)} style={{ minHeight: "44px", padding: "4px 6px", border: "0", borderRadius: "10px", background: value === id ? "var(--paper)" : "transparent", color: value === id ? "var(--ink)" : "var(--ink-soft)", fontSize: "13px", fontWeight: value === id ? 800 : 600, boxShadow: value === id ? "0 2px 6px rgba(90, 60, 30, 0.14)" : "none", cursor: "pointer" }}>
           {text}
         </button>
       ))}
@@ -91,7 +91,7 @@ export function Tick({ size = 18, width = 2.8 }: { size?: number; width?: number
 // The big green success badge: swells in, rings once, and the tick draws.
 export function SuccessBadge({ size = 72 }: { size?: number }) {
   return (
-    <span className="success-badge" aria-hidden="true" style={{ position: "relative", width: `${size}px`, height: `${size}px`, borderRadius: "50%", background: "#E3F1E7", color: "#2F7A4A", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <span className="success-badge" aria-hidden="true" style={{ position: "relative", width: `${size}px`, height: `${size}px`, borderRadius: "50%", background: "var(--green-tint)", color: "var(--green)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <Tick size={Math.round(size * 0.47)} width={2.6} />
       <Confetti />
     </span>

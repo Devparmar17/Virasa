@@ -21,9 +21,9 @@ const GUIDE_LANGS = [
   ["gu", "ગુજરાતી"],
 ] as const;
 
-const chip = (on: boolean): CSSProperties => ({ flex: "0 0 auto", minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "#2B1B10" : "#E2D3C1"}`, background: on ? "#2B1B10" : "#FFFFFF", color: on ? "#FFFFFF" : "#2B1B10", fontSize: "13px", fontWeight: 700, cursor: "pointer" });
-const label: CSSProperties = { margin: "22px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "#8A6424" };
-const primary: CSSProperties = { width: "100%", height: "56px", border: 0, borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: 700, cursor: "pointer", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" };
+const chip = (on: boolean): CSSProperties => ({ flex: "0 0 auto", minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "var(--ink)" : "var(--line-strong)"}`, background: on ? "var(--ink)" : "var(--paper)", color: on ? "var(--paper)" : "var(--ink)", fontSize: "13px", fontWeight: 700, cursor: "pointer" });
+const label: CSSProperties = { margin: "22px 0 8px", fontSize: "12px", fontWeight: 700, letterSpacing: "0.1em", color: "var(--gold)" };
+const primary: CSSProperties = { width: "100%", height: "56px", border: 0, borderRadius: "16px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: 700, cursor: "pointer", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" };
 
 // Line icons for each kind, used when there's no photo.
 const KIND_ICON: Record<Bookable["kind"], string> = {
@@ -33,13 +33,32 @@ const KIND_ICON: Record<Bookable["kind"], string> = {
   car: "M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2M7 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0M9 17h6",
 };
 
+// Activities without a photo show what you actually do there, not a generic mark.
+const ACTIVITY_ICON: Record<string, string> = {
+  cooking: "M4 11h16M5 11v6a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-6M2 11h2M20 11h2M9.5 7.5c0-1.5 1-1.5 1-3M13.5 7.5c0-1.5 1-1.5 1-3",
+  kites: "M12 2l6.5 7.5L12 17 5.5 9.5zM5.5 9.5h13M12 2v15M12 17c-1.2 1.6 1.2 2.4 0 4",
+  "block-print": "M10 3h4v5h-4zM5 8h14v5H5zM8 17h.01M12 17h.01M16 17h.01M10 20.5h.01M14 20.5h.01",
+  "riverfront-cycle": "M2 17.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0-7 0M15 17.5a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0-7 0M5.5 17.5 9 10h6l3.5 7.5M9 10l3.5 7.5M15 10l-1-4h2M7.5 7h3",
+  garba: "M6 20.5 16.2 6.3M18 20.5 7.8 6.3M15 5.2a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0-3.2 0M5.8 5.2a1.6 1.6 0 1 0 3.2 0a1.6 1.6 0 1 0-3.2 0",
+  "blue-pottery": "M8.5 3h7M9.5 3v3.2C6.5 7.6 4.5 10 4.5 13.5A6.5 6.5 0 0 0 11 20h2a6.5 6.5 0 0 0 6.5-6.5c0-3.5-2-5.9-5-7.3V3M5 13h14",
+};
+
+// Placeholder tiles stay in the sandstone palette: sand for places, deeper sand for cars.
+const TILE: Record<Bookable["kind"], [string, string]> = {
+  guided: ["#EFE1C9", "#8A6424"],
+  entry: ["#EFE1C9", "#8A6424"],
+  activity: ["#F6E3D8", "#9A4E36"],
+  car: ["#F1E7DA", "#5A4434"],
+};
+
 function Thumb({ item, size }: { item: Bookable; size: number }) {
   const box: CSSProperties = { flex: `0 0 ${size}px`, width: `${size}px`, height: `${size}px`, borderRadius: "14px", display: "block" };
   if (item.img) return <img src={item.img} alt="" style={{ ...box, objectFit: "cover" }} />;
+  const [bg, fg] = TILE[item.kind];
   return (
-    <span aria-hidden="true" style={{ ...box, background: item.kind === "car" ? "#E3EEF8" : item.kind === "activity" ? "#FBE5EE" : "#EFE1C9", color: item.kind === "car" ? "#2F6FB0" : item.kind === "activity" ? "#B03A6B" : "#9C7A55", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <svg width={size * 0.5} height={size * 0.5} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d={KIND_ICON[item.kind]} />
+    <span aria-hidden="true" style={{ ...box, background: bg, color: fg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <svg width={size * 0.46} height={size * 0.46} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <path d={(item.kind === "activity" && ACTIVITY_ICON[item.id]) || KIND_ICON[item.kind]} />
       </svg>
     </span>
   );
@@ -47,12 +66,12 @@ function Thumb({ item, size }: { item: Bookable; size: number }) {
 
 function Stepper({ name, hint, value, min, max, onChange }: { name: string; hint: string; value: number; min: number; max: number; onChange: (n: number) => void }) {
   const tr = useT();
-  const round = (off: boolean): CSSProperties => ({ width: "44px", height: "44px", borderRadius: "50%", border: "1.5px solid #D9C7B3", background: "#FFFFFF", color: off ? "#CDBFAE" : "#2B1B10", fontSize: "22px", lineHeight: 1, fontWeight: 600, cursor: off ? "default" : "pointer" });
+  const round = (off: boolean): CSSProperties => ({ width: "44px", height: "44px", borderRadius: "50%", border: "1.5px solid var(--line-deep)", background: "var(--paper)", color: off ? "var(--stone)" : "var(--ink)", fontSize: "22px", lineHeight: 1, fontWeight: 600, cursor: off ? "default" : "pointer" });
   return (
     <div style={{ minHeight: "60px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
       <span>
         <span style={{ display: "block", fontSize: "15px", fontWeight: 700 }}>{name}</span>
-        <span style={{ display: "block", marginTop: "2px", fontSize: "12px", color: "#6F5B4B" }}>{hint}</span>
+        <span style={{ display: "block", marginTop: "2px", fontSize: "12px", color: "var(--ink-muted)" }}>{hint}</span>
       </span>
       <span style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <button type="button" aria-label={tr("tk.fewer", { what: name })} disabled={value <= min} onClick={() => onChange(value - 1)} style={round(value <= min)}>
@@ -80,14 +99,14 @@ function TicketCard({ ticket, onCancel }: { ticket: Ticket; onCancel?: () => voi
   // The stripes are decoration drawn from the code; staff read the code itself.
   const bars = [...ticket.ref.replace("VR-", "").repeat(4)].map((c) => (c.charCodeAt(0) % 4) + 1);
   return (
-    <article className="rise" style={{ borderRadius: "20px", background: "#FFFFFF", border: "1px solid #EFE6DA", boxShadow: ticket.cancelled ? "none" : "0 10px 24px rgba(90, 60, 30, 0.08)", overflow: "hidden" }}>
+    <article className="rise" style={{ borderRadius: "20px", background: "var(--paper)", border: "1px solid var(--line)", boxShadow: ticket.cancelled ? "none" : "0 10px 24px rgba(90, 60, 30, 0.08)", overflow: "hidden" }}>
       <div style={{ padding: "16px", display: "flex", gap: "14px", alignItems: "center", opacity: ticket.cancelled ? 0.6 : 1 }}>
         <Thumb item={item} size={60} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: "16px", lineHeight: 1.25, fontWeight: 800 }}>{item.title}</div>
-          <div style={{ marginTop: "3px", fontSize: "13px", color: "#5A4434" }}>{item.place}</div>
+          <div style={{ marginTop: "3px", fontSize: "13px", color: "var(--ink-soft)" }}>{item.place}</div>
         </div>
-        {ticket.cancelled ? <span style={{ flex: "0 0 auto", height: "26px", padding: "0 10px", borderRadius: "999px", background: "#FBE9E4", color: "#A23A2A", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center" }}>{tr("tk.cancelled")}</span> : null}
+        {ticket.cancelled ? <span style={{ flex: "0 0 auto", height: "26px", padding: "0 10px", borderRadius: "999px", background: "#FBE9E4", color: "var(--red)", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center" }}>{tr("tk.cancelled")}</span> : null}
       </div>
       <dl style={{ margin: 0, padding: "0 16px 14px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px 12px" }}>
         {[
@@ -98,23 +117,23 @@ function TicketCard({ ticket, onCancel }: { ticket: Ticket; onCancel?: () => voi
           [tr("tk.price"), ticket.total ? rupees(ticket.total) : tr("tk.free")],
         ].map(([k, v]) => (
           <div key={k}>
-            <dt style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "#8A6424" }}>{k.toUpperCase()}</dt>
+            <dt style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "var(--gold)" }}>{k.toUpperCase()}</dt>
             <dd style={{ margin: "2px 0 0", fontSize: "14px", fontWeight: 700 }}>{v}</dd>
           </div>
         ))}
       </dl>
       {ticket.cancelled ? (
-        <div style={{ borderTop: "2px dashed #E2D3C1", padding: "14px 16px 16px", background: "#F6F1EA", display: "flex", flexDirection: "column", gap: "4px", fontSize: "13px", color: "#5A4434" }}>
-          <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "#8A6424" }}>
+        <div style={{ borderTop: "2px dashed var(--line-strong)", padding: "14px 16px 16px", background: "var(--sand-light)", display: "flex", flexDirection: "column", gap: "4px", fontSize: "13px", color: "var(--ink-soft)" }}>
+          <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "var(--gold)" }}>
             {ticket.ref} · {tr("tk.cancelled_on", { date: new Date(ticket.cancelled.at).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) }).toUpperCase()}
           </span>
           {ticket.total ? (
             <>
               <span>
-                {tr("tk.charge", { pct: Math.round(CANCEL_FEE_RATE * 100) })} <strong style={{ color: "#2B1B10" }}>{rupees(ticket.cancelled.fee)}</strong>
+                {tr("tk.charge", { pct: Math.round(CANCEL_FEE_RATE * 100) })} <strong style={{ color: "var(--ink)" }}>{rupees(ticket.cancelled.fee)}</strong>
               </span>
               <span>
-                {tr("tk.refunded")} <strong style={{ color: "#2F7A4A" }}>{rupees(ticket.cancelled.refund)}</strong>
+                {tr("tk.refunded")} <strong style={{ color: "var(--green)" }}>{rupees(ticket.cancelled.refund)}</strong>
               </span>
             </>
           ) : (
@@ -122,24 +141,24 @@ function TicketCard({ ticket, onCancel }: { ticket: Ticket; onCancel?: () => voi
           )}
         </div>
       ) : (
-      <div style={{ borderTop: "2px dashed #E2D3C1", padding: "14px 16px 16px", background: "#F6F1EA" }}>
+      <div style={{ borderTop: "2px dashed var(--line-strong)", padding: "14px 16px 16px", background: "var(--sand-light)" }}>
         <div aria-hidden="true" style={{ height: "40px", display: "flex", alignItems: "stretch", gap: "2px" }}>
           {bars.map((w, i) => (
-            <span key={i} style={{ flex: `${w} 0 0`, background: i % 2 ? "transparent" : "#2B1B10" }} />
+            <span key={i} style={{ flex: `${w} 0 0`, background: i % 2 ? "transparent" : "var(--ink)" }} />
           ))}
         </div>
         <div style={{ marginTop: "10px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "10px" }}>
           <span>
-            <span style={{ display: "block", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "#8A6424" }}>{tr("tk.code").toUpperCase()}</span>
+            <span style={{ display: "block", fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em", color: "var(--gold)" }}>{tr("tk.code").toUpperCase()}</span>
             <span style={{ display: "block", fontSize: "20px", fontWeight: 800, letterSpacing: "0.06em", fontVariantNumeric: "tabular-nums" }}>{ticket.ref}</span>
           </span>
           {onCancel ? (
-            <button type="button" onClick={onCancel} style={{ minHeight: "44px", padding: "0 12px", border: "1.5px solid #E2D3C1", borderRadius: "12px", background: "#FFFFFF", color: "#A23A2A", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+            <button type="button" onClick={onCancel} style={{ minHeight: "44px", padding: "0 12px", border: "1.5px solid var(--line-strong)", borderRadius: "12px", background: "var(--paper)", color: "var(--red)", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
               {tr("trip.cancel")}
             </button>
           ) : null}
         </div>
-        <p style={{ margin: "10px 0 0", fontSize: "12px", lineHeight: 1.45, color: "#5A4434" }}>
+        <p style={{ margin: "10px 0 0", fontSize: "12px", lineHeight: 1.45, color: "var(--ink-soft)" }}>
           {ticket.pickup ? `${tr("tk.pickup_from", { place: ticket.pickup })} ` : ""}
           {ticket.help?.length ? `${tr("tk.help_line", { list: ticket.help.map((h) => (CAR_HELP.includes(h) ? tr(`tk.help.${CAR_HELP.indexOf(h)}` as Key) : h)).join(", ") })} ` : ""}
           {item.meet}. {tr("tk.name_on", { name: ticket.name })}
@@ -268,7 +287,7 @@ export default function TicketsScreen() {
                 setPickup(e.target.value);
                 setError("");
               }}
-              style={{ width: "100%", height: "54px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid #D9C7B3", background: "#FFFFFF", fontSize: "16px", color: "#2B1B10", outline: "none", boxSizing: "border-box" }}
+              style={{ width: "100%", height: "54px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid var(--line-deep)", background: "var(--paper)", fontSize: "16px", color: "var(--ink)", outline: "none", boxSizing: "border-box" }}
             />
 
             <h3 style={label}>{tr("tk.driver_help").toUpperCase()}</h3>
@@ -276,7 +295,7 @@ export default function TicketsScreen() {
               {CAR_HELP.map((h) => {
                 const on = help.includes(h);
                 return (
-                  <button key={h} type="button" aria-pressed={on} onClick={() => setHelp((x) => (on ? x.filter((y) => y !== h) : [...x, h]))} style={{ minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "#9A4E36" : "#E2D3C1"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: on ? "#7E3D29" : "#2B1B10", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+                  <button key={h} type="button" aria-pressed={on} onClick={() => setHelp((x) => (on ? x.filter((y) => y !== h) : [...x, h]))} style={{ minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "var(--clay)" : "var(--line-strong)"}`, background: on ? "var(--clay-tint)" : "var(--paper)", color: on ? "var(--clay-deep)" : "var(--ink)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
                     {on ? (
                       <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                         <path d="M20 6 9 17l-5-5" />
@@ -297,7 +316,7 @@ export default function TicketsScreen() {
     <div style={frame({ paddingBottom: item && !done ? "120px" : "48px" })}>
       <div style={{ padding: "54px 8px 0", height: "98px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         {back ? (
-          <BackLink href={back} aria-label={tr("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+          <BackLink href={back} aria-label={tr("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink)" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
@@ -308,7 +327,7 @@ export default function TicketsScreen() {
             type="button"
             aria-label={tr("tk.back_all")}
             // A booking opened from another screen (Book on a place, a plan…) goes back there.
-            onClick={() => (picked === undefined && linkedItem && !done && canGoBack() ? router.back() : open(null))} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10", cursor: "pointer" }}>
+            onClick={() => (picked === undefined && linkedItem && !done && canGoBack() ? router.back() : open(null))} style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink)", cursor: "pointer" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
@@ -324,7 +343,7 @@ export default function TicketsScreen() {
           <div className="rise" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "6px 12px 20px" }}>
             <SuccessBadge />
             <h2 style={{ margin: "16px 0 0", fontSize: "24px", fontWeight: 800, letterSpacing: "-0.01em" }}>{tr("tk.saved")}</h2>
-            <p style={{ margin: "6px 0 0", fontSize: "14px", lineHeight: 1.5, color: "#5A4434" }}>{tr("tk.find")}</p>
+            <p style={{ margin: "6px 0 0", fontSize: "14px", lineHeight: 1.5, color: "var(--ink-soft)" }}>{tr("tk.find")}</p>
           </div>
           <TicketCard ticket={done} />
           <button
@@ -337,7 +356,7 @@ export default function TicketsScreen() {
           >
             {tr("tk.see_mine")}
           </button>
-          <Link href="/home" style={{ marginTop: "6px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: 700, color: "#5A4434" }}>
+          <Link href="/home" style={{ marginTop: "6px", height: "48px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "15px", fontWeight: 700, color: "var(--ink-soft)" }}>
             {tr("tk.back_home")}
           </Link>
         </div>
@@ -346,20 +365,20 @@ export default function TicketsScreen() {
           <div className="rise" style={{ display: "flex", gap: "14px", alignItems: "center" }}>
             <Thumb item={item} size={84} />
             <div style={{ flex: 1, minWidth: 0 }}>
-              <span style={{ display: "inline-flex", height: "22px", padding: "0 8px", borderRadius: "6px", background: item.kind === "guided" ? "#F6E3DA" : "#F6EEE4", color: item.kind === "guided" ? "#7E3D29" : "#6E4E1E", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>{tr(`tk.kind.${item.kind}` as Key)}</span>
-              {item.senior ? <span style={{ display: "inline-flex", height: "22px", marginLeft: "6px", padding: "0 8px", borderRadius: "6px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>{tr("tk.senior")}</span> : null}
+              <span style={{ display: "inline-flex", height: "22px", padding: "0 8px", borderRadius: "6px", background: item.kind === "guided" ? "var(--clay-wash)" : "var(--sand)", color: item.kind === "guided" ? "var(--clay-deep)" : "var(--gold-deep)", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>{tr(`tk.kind.${item.kind}` as Key)}</span>
+              {item.senior ? <span style={{ display: "inline-flex", height: "22px", marginLeft: "6px", padding: "0 8px", borderRadius: "6px", background: "var(--green-tint)", color: "var(--green)", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>{tr("tk.senior")}</span> : null}
               <h2 style={{ margin: "6px 0 0", fontSize: "20px", lineHeight: 1.2, fontWeight: 800, letterSpacing: "-0.01em" }}>{item.title}</h2>
-              <p style={{ margin: "4px 0 0", fontSize: "13px", color: "#5A4434" }}>
+              <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--ink-soft)" }}>
                 {item.place} · {item.duration}
               </p>
             </div>
           </div>
-          <p style={{ margin: "14px 0 0", fontSize: "14px", lineHeight: 1.5, color: "#5A4434" }}>{item.blurb}</p>
+          <p style={{ margin: "14px 0 0", fontSize: "14px", lineHeight: 1.5, color: "var(--ink-soft)" }}>{item.blurb}</p>
 
           <h3 style={label}>{tr("tk.date").toUpperCase()}</h3>
           <div className="hscroll" role="radiogroup" aria-label={tr("tk.date")} style={{ margin: "0 -20px", padding: "0 20px 4px", display: "flex", gap: "8px" }}>
             {days.map((d) => (
-              <button key={d.key} type="button" role="radio" aria-checked={chosenDate === d.key} disabled={d.off} onClick={() => setDate(d.key)} style={{ flex: "0 0 68px", height: "76px", borderRadius: "16px", border: `1.5px solid ${chosenDate === d.key ? "#9A4E36" : "#E2D3C1"}`, background: chosenDate === d.key ? "#9A4E36" : "#FFFFFF", color: d.off ? "#B9AA98" : chosenDate === d.key ? "#FFFFFF" : "#2B1B10", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: d.off ? "default" : "pointer" }}>
+              <button key={d.key} type="button" role="radio" aria-checked={chosenDate === d.key} disabled={d.off} onClick={() => setDate(d.key)} style={{ flex: "0 0 68px", height: "76px", borderRadius: "16px", border: `1.5px solid ${chosenDate === d.key ? "var(--clay)" : "var(--line-strong)"}`, background: chosenDate === d.key ? "var(--clay)" : "var(--paper)", color: d.off ? "#B9AA98" : chosenDate === d.key ? "var(--paper)" : "var(--ink)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px", cursor: d.off ? "default" : "pointer" }}>
                 <span style={{ fontSize: "11px", fontWeight: 700 }}>{d.off ? tr("tk.closed") : d.top === "Today" ? tr("tk.today") : d.top === "Tomorrow" ? tr("tk.tomorrow") : d.top}</span>
                 <span style={{ fontSize: "20px", lineHeight: 1, fontWeight: 800 }}>{d.day}</span>
                 <span style={{ fontSize: "11px", fontWeight: 600 }}>{d.month}</span>
@@ -379,7 +398,7 @@ export default function TicketsScreen() {
           {item.kind === "car" ? (
             <>
               <h3 style={label}>{tr("tk.passengers").toUpperCase()}</h3>
-              <div style={{ padding: "4px 14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
+              <div style={{ padding: "4px 14px", borderRadius: "16px", background: "var(--paper)", border: "1px solid var(--line)" }}>
                 <Stepper name={tr("tk.passengers")} hint={tr("tk.up_to", { n: item.seats ?? 4, price: rupees(item.adult) })} value={Math.min(adults, item.seats ?? 4)} min={1} max={item.seats ?? 4} onChange={setAdults} />
               </div>
 
@@ -388,9 +407,9 @@ export default function TicketsScreen() {
           ) : (
             <>
               <h3 style={label}>{tr("tk.guests").toUpperCase()}</h3>
-              <div style={{ padding: "4px 14px", borderRadius: "16px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
+              <div style={{ padding: "4px 14px", borderRadius: "16px", background: "var(--paper)", border: "1px solid var(--line)" }}>
                 <Stepper name={tr("tk.adults")} hint={item.adult ? tr("tk.each", { price: rupees(item.adult) }) : tr("tk.free")} value={adults} min={1} max={10} onChange={setAdults} />
-                <div style={{ height: "1px", background: "#F3ECE2" }} />
+                <div style={{ height: "1px", background: "var(--line-soft)" }} />
                 <Stepper name={tr("tk.children")} hint={tr("tk.kids_hint", { price: item.child ? tr("tk.each", { price: rupees(item.child) }) : tr("tk.free") })} value={children} min={0} max={10} onChange={setChildren} />
               </div>
             </>
@@ -416,7 +435,7 @@ export default function TicketsScreen() {
                 {[{ id: null, text: tr("tk.no_car") }, ...CAR_ADDONS.map((c) => ({ id: c.id as string | null, text: `${tr(`tk.carl.${c.id}` as Key)} · ${rupees(addonPrice(item, c.id))}` }))].map((c) => {
                   const on = carAdd === c.id;
                   return (
-                    <button key={c.id ?? "none"} type="button" role="radio" aria-checked={on} onClick={() => setCarAdd(c.id)} style={{ minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "#9A4E36" : "#E2D3C1"}`, background: on ? "#FBEDE6" : "#FFFFFF", color: on ? "#7E3D29" : "#2B1B10", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+                    <button key={c.id ?? "none"} type="button" role="radio" aria-checked={on} onClick={() => setCarAdd(c.id)} style={{ minHeight: "44px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? "var(--clay)" : "var(--line-strong)"}`, background: on ? "var(--clay-tint)" : "var(--paper)", color: on ? "var(--clay-deep)" : "var(--ink)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
                       {on ? (
                         <svg className="pop-in" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <path d="M20 6 9 17l-5-5" />
@@ -427,7 +446,7 @@ export default function TicketsScreen() {
                   );
                 })}
               </div>
-              {carCost ? <p style={{ margin: "8px 2px 0", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{tr("tk.driver_waits")}</p> : null}
+              {carCost ? <p style={{ margin: "8px 2px 0", fontSize: "13px", lineHeight: 1.45, color: "var(--ink-soft)" }}>{tr("tk.driver_waits")}</p> : null}
               {carCost ? pickupFields : null}
             </>
           ) : null}
@@ -443,18 +462,18 @@ export default function TicketsScreen() {
               setError("");
             }}
             aria-invalid={!!error}
-            style={{ width: "100%", height: "54px", padding: "0 14px", borderRadius: "14px", border: `1.5px solid ${error ? "#A23A2A" : "#D9C7B3"}`, background: "#FFFFFF", fontSize: "16px", color: "#2B1B10", outline: "none" }}
+            style={{ width: "100%", height: "54px", padding: "0 14px", borderRadius: "14px", border: `1.5px solid ${error ? "var(--red)" : "var(--line-deep)"}`, background: "var(--paper)", fontSize: "16px", color: "var(--ink)", outline: "none" }}
           />
           {error ? (
-            <p role="alert" className="rise" style={{ margin: "6px 0 0", fontSize: "13px", fontWeight: 600, color: "#A23A2A" }}>
+            <p role="alert" className="rise" style={{ margin: "6px 0 0", fontSize: "13px", fontWeight: 600, color: "var(--red)" }}>
               {error}
             </p>
           ) : null}
 
           <div className="nav-rail">
-            <div style={{ padding: "12px 20px 30px", background: "#FFFFFF", borderTop: "1px solid #EFE6DA", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", alignItems: "center", gap: "14px" }}>
+            <div style={{ padding: "12px 20px 30px", background: "var(--paper)", borderTop: "1px solid var(--line)", boxShadow: "0 -8px 20px rgba(90, 60, 30, 0.08)", display: "flex", alignItems: "center", gap: "14px" }}>
               <span style={{ flex: "0 0 auto" }}>
-                <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{tr("tk.total")}</span>
+                <span style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>{tr("tk.total")}</span>
                 <span key={total} className="pop-in" style={{ display: "block", fontSize: "22px", fontWeight: 800, letterSpacing: "-0.01em" }}>
                   {total ? rupees(total) : tr("tk.free")}
                 </span>
@@ -466,21 +485,21 @@ export default function TicketsScreen() {
                     {reserving ? tr("bk.booking") : total ? tr("tk.book_price", { price: rupees(total) }) : tr("tk.book")}
                   </span>
                 </button>
-                <span style={{ fontSize: "12px", fontWeight: 600, color: "#6F5B4B", textAlign: "center" }}>{total ? tr("tk.refund_note", { price: rupees(cancelTerms(total).refund) }) : tr("tk.free_cancel")}</span>
+                <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)", textAlign: "center" }}>{total ? tr("tk.refund_note", { price: rupees(cancelTerms(total).refund) }) : tr("tk.free_cancel")}</span>
               </span>
             </div>
           </div>
         </div>
       ) : (
         <>
-          <div role="tablist" aria-label={tr("home.tickets")} style={{ margin: "0 20px", padding: "4px", borderRadius: "14px", background: "#F1E7DA", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "4px" }}>
+          <div role="tablist" aria-label={tr("home.tickets")} style={{ margin: "0 20px", padding: "4px", borderRadius: "14px", background: "var(--sand-deep)", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "4px" }}>
             {(
               [
                 ["book", tr("tk.book")],
                 ["mine", `${tr("tk.mine")}${active.length ? ` · ${active.length}` : ""}`],
               ] as const
             ).map(([id, text]) => (
-              <button key={id} type="button" role="tab" aria-selected={view === id} onClick={() => setTab(id)} style={{ height: "44px", border: 0, borderRadius: "10px", background: view === id ? "#FFFFFF" : "transparent", color: view === id ? "#2B1B10" : "#5A4434", fontSize: "14px", fontWeight: view === id ? 800 : 600, boxShadow: view === id ? "0 2px 6px rgba(90, 60, 30, 0.14)" : "none", cursor: "pointer" }}>
+              <button key={id} type="button" role="tab" aria-selected={view === id} onClick={() => setTab(id)} style={{ height: "44px", border: 0, borderRadius: "10px", background: view === id ? "var(--paper)" : "transparent", color: view === id ? "var(--ink)" : "var(--ink-soft)", fontSize: "14px", fontWeight: view === id ? 800 : 600, boxShadow: view === id ? "0 2px 6px rgba(90, 60, 30, 0.14)" : "none", cursor: "pointer" }}>
                 {text}
               </button>
             ))}
@@ -507,13 +526,13 @@ export default function TicketsScreen() {
               <ul key={filter} className="stagger" style={{ listStyle: "none", margin: "14px 0 0", padding: "0 20px", display: "flex", flexDirection: "column", gap: "10px" }}>
                 {shown.map((b) => (
                   <li key={b.id}>
-                    <button type="button" onClick={() => open(b.id)} style={{ width: "100%", padding: "12px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: "#2B1B10", display: "flex", gap: "14px", alignItems: "center", textAlign: "left", cursor: "pointer" }}>
+                    <button type="button" onClick={() => open(b.id)} style={{ width: "100%", padding: "12px", borderRadius: "18px", border: "1px solid var(--line)", background: "var(--paper)", color: "var(--ink)", display: "flex", gap: "14px", alignItems: "center", textAlign: "left", cursor: "pointer" }}>
                       <Thumb item={b} size={76} />
                       <span style={{ flex: 1, minWidth: 0 }}>
-                        {b.tag ? <span style={{ display: "inline-flex", height: "22px", padding: "0 8px", marginBottom: "4px", borderRadius: "6px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>{tagText(b.tag)}</span> : null}
+                        {b.tag ? <span style={{ display: "inline-flex", height: "22px", padding: "0 8px", marginBottom: "4px", borderRadius: "6px", background: "var(--sand)", color: "var(--gold-deep)", fontSize: "11px", fontWeight: 700, alignItems: "center" }}>{tagText(b.tag)}</span> : null}
                         <span style={{ display: "block", fontSize: "16px", lineHeight: 1.25, fontWeight: 800 }}>{b.title}</span>
-                        <span style={{ display: "block", marginTop: "3px", fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>{b.place}</span>
-                        <span style={{ display: "block", marginTop: "6px", fontSize: "13px", fontWeight: 700, color: "#9A4E36" }}>
+                        <span style={{ display: "block", marginTop: "3px", fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>{b.place}</span>
+                        <span style={{ display: "block", marginTop: "6px", fontSize: "13px", fontWeight: 700, color: "var(--clay)" }}>
                           {b.kind === "car" ? tr("tk.per_car", { price: rupees(b.adult) }) : b.adult ? tr("tk.from", { price: rupees(b.adult) }) : tr("tk.free")} · {b.kind === "entry" ? tr("tk.entry") : b.duration}
                         </span>
                       </span>
@@ -537,14 +556,14 @@ export default function TicketsScreen() {
             </div>
           ) : (
             <div className="rise" style={{ margin: "44px 32px 0", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "8px" }}>
-              <span style={{ width: "72px", height: "72px", borderRadius: "50%", background: "#F6EEE4", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ width: "72px", height: "72px", borderRadius: "50%", background: "var(--sand)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
                   <path d="M13 5v2M13 17v2M13 11v2" />
                 </svg>
               </span>
               <span style={{ fontSize: "18px", fontWeight: 800 }}>{tr("tk.none")}</span>
-              <span style={{ fontSize: "14px", lineHeight: 1.45, color: "#5A4434" }}>{tr("tk.none_sub")}</span>
+              <span style={{ fontSize: "14px", lineHeight: 1.45, color: "var(--ink-soft)" }}>{tr("tk.none_sub")}</span>
               <button type="button" onClick={() => setTab("book")} style={{ ...primary, marginTop: "10px", width: "auto", padding: "0 24px", height: "50px" }}>
                 {tr("tk.browse")}
               </button>
@@ -559,24 +578,24 @@ export default function TicketsScreen() {
               {bookable(cancelling.item)?.title} · {longDate(cancelling.date, uiLang)}, {cancelling.slot}
             </p>
             {cancelling.total ? (
-              <div style={{ margin: "4px 0 6px", padding: "14px", borderRadius: "14px", border: "1px solid #EFE6DA", background: "#FFFFFF", display: "flex", flexDirection: "column", gap: "8px", fontSize: "14px" }}>
+              <div style={{ margin: "4px 0 6px", padding: "14px", borderRadius: "14px", border: "1px solid var(--line)", background: "var(--paper)", display: "flex", flexDirection: "column", gap: "8px", fontSize: "14px" }}>
                 <span style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ color: "#5A4434" }}>{tr("tk.you_paid")}</span>
+                  <span style={{ color: "var(--ink-soft)" }}>{tr("tk.you_paid")}</span>
                   <strong>{rupees(cancelling.total)}</strong>
                 </span>
                 <span style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span style={{ color: "#5A4434" }}>{tr("tk.charge", { pct: Math.round(CANCEL_FEE_RATE * 100) }).replace(/:$/, "")}</span>
-                  <strong style={{ color: "#A23A2A" }}>− {rupees(cancelTerms(cancelling.total).fee)}</strong>
+                  <span style={{ color: "var(--ink-soft)" }}>{tr("tk.charge", { pct: Math.round(CANCEL_FEE_RATE * 100) }).replace(/:$/, "")}</span>
+                  <strong style={{ color: "var(--red)" }}>− {rupees(cancelTerms(cancelling.total).fee)}</strong>
                 </span>
-                <span style={{ paddingTop: "8px", borderTop: "1px solid #F3ECE2", display: "flex", justifyContent: "space-between", fontSize: "16px" }}>
+                <span style={{ paddingTop: "8px", borderTop: "1px solid var(--line-soft)", display: "flex", justifyContent: "space-between", fontSize: "16px" }}>
                   <strong>{tr("tk.you_get")}</strong>
-                  <strong style={{ color: "#2F7A4A" }}>{rupees(cancelTerms(cancelling.total).refund)}</strong>
+                  <strong style={{ color: "var(--green)" }}>{rupees(cancelTerms(cancelling.total).refund)}</strong>
                 </span>
               </div>
             ) : (
               <p>{tr("tk.was_free")}</p>
             )}
-            <button type="button" className="sheet-cta" disabled={cancelBusy} aria-busy={cancelBusy} onClick={confirmCancel} style={{ background: "#A23A2A", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+            <button type="button" className="sheet-cta" disabled={cancelBusy} aria-busy={cancelBusy} onClick={confirmCancel} style={{ background: "var(--red)", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
               <span key={cancelBusy ? "busy" : "idle"} className="btn-swap">
                 {cancelBusy ? <Spinner /> : null}
                 {cancelBusy ? tr("tk.cancelling") : cancelling.total ? tr("tk.cancel_refund", { price: rupees(cancelTerms(cancelling.total).refund) }) : tr("tk.cancel_booking")}

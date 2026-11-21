@@ -81,7 +81,7 @@ export default function ReelsScreen() {
         wheelAt.current = Date.now();
         go(e.deltaY > 0 ? 1 : -1);
       }}
-      style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#1E130B", fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#FFFFFF" }}
+      style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "var(--night)", fontFamily: "inherit", color: "var(--paper)" }}
     >
       <button type="button" data-plain aria-label={paused ? t("rl.play") : t("rl.pause")} onClick={() => setPaused(!paused)} style={{ position: "absolute", inset: "0", padding: "0", border: "0", background: "none", cursor: "pointer", overflow: "hidden" }}>
         <img key={reel.id} src={reel.img} alt={reel.alt} className={`kenburns${paused ? " paused" : ""}`} style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", objectPosition: reel.focus, display: "block" }} />
@@ -96,7 +96,7 @@ export default function ReelsScreen() {
       <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", top: "0", height: "170px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0.6) 0%, rgba(20, 12, 6, 0) 100%)", pointerEvents: "none" }} />
       <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", height: "440px", background: "linear-gradient(180deg, rgba(20, 12, 6, 0) 0%, rgba(20, 12, 6, 0.72) 40%, rgba(20, 12, 6, 0.92) 100%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", top: "50px", left: "8px", right: "8px", height: "48px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <BackLink href="/home" aria-label="Close" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
+        <BackLink href="/home" aria-label="Close" style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--paper)" }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M18 6 6 18" />
             <path d="m6 6 12 12" />
@@ -118,10 +118,10 @@ export default function ReelsScreen() {
                 setIndex(0);
                 setPaused(false);
               }}
-              style={{ height: "44px", padding: "0 12px", border: "0", background: "none", color: feed === id ? "#FFFFFF" : "rgba(255, 255, 255, 0.78)", fontSize: "16px", fontWeight: feed === id ? 800 : 700, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px" }}
+              style={{ height: "44px", padding: "0 12px", border: "0", background: "none", color: feed === id ? "var(--paper)" : "rgba(255, 255, 255, 0.78)", fontSize: "16px", fontWeight: feed === id ? 800 : 700, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "4px" }}
             >
               {id === "near" ? t("rl.near") : t("rl.for_you")}
-              <span style={{ width: "20px", height: "3px", borderRadius: "999px", background: feed === id ? "#F3D9A8" : "transparent" }} />
+              <span style={{ width: "20px", height: "3px", borderRadius: "999px", background: feed === id ? "var(--gold-light)" : "transparent" }} />
             </button>
           ))}
         </div>
@@ -135,7 +135,7 @@ export default function ReelsScreen() {
           }}
           style={{ width: "44px", height: "44px", border: "0", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
         >
-          <span style={{ height: "26px", padding: "0 6px", borderRadius: "6px", background: captions ? "#FFFFFF" : "transparent", border: captions ? "0" : "1.5px solid rgba(255, 255, 255, 0.8)", color: captions ? "#1E130B" : "#FFFFFF", fontSize: "12px", fontWeight: "800", display: "flex", alignItems: "center" }}>CC</span>
+          <span style={{ height: "26px", padding: "0 6px", borderRadius: "6px", background: captions ? "var(--paper)" : "transparent", border: captions ? "0" : "1.5px solid rgba(255, 255, 255, 0.8)", color: captions ? "var(--night)" : "var(--paper)", fontSize: "12px", fontWeight: "800", display: "flex", alignItems: "center" }}>CC</span>
         </button>
       </div>
       <div style={{ position: "absolute", right: "12px", bottom: "116px", display: "flex", flexDirection: "column", alignItems: "center", gap: "14px" }}>
@@ -185,7 +185,7 @@ export default function ReelsScreen() {
           <span style={label}>{t("c.share")}</span>
         </button>
         <button type="button" aria-label={t("rl.ask_aria")} onClick={() => ask(reel.question)} style={action}>
-          <span style={{ ...round, background: "#F3D9A8", color: "#2B1B10" }}>
+          <span style={{ ...round, background: "var(--gold-light)", color: "var(--ink)" }}>
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
               <path d="M12 2l2.2 6.3L20.5 10.5l-6.3 2.2L12 19l-2.2-6.3L3.5 10.5l6.3-2.2z" />
               <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" />
@@ -202,7 +202,7 @@ export default function ReelsScreen() {
         </button>
       </div>
       <div key={reel.id} className="rise" style={{ position: "absolute", left: "20px", right: "84px", bottom: "116px", display: "flex", flexDirection: "column", gap: "10px" }}>
-        <Link href={reel.href} style={{ alignSelf: "flex-start", height: "36px", padding: "0 12px 0 8px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.18)", border: "1px solid rgba(255, 255, 255, 0.28)", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700", textDecoration: "none" }}>
+        <Link href={reel.href} style={{ alignSelf: "flex-start", height: "36px", padding: "0 12px 0 8px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.18)", border: "1px solid rgba(255, 255, 255, 0.28)", color: "var(--paper)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700", textDecoration: "none" }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F3D9A8" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
             <circle cx="12" cy="10" r="3" />
@@ -210,10 +210,10 @@ export default function ReelsScreen() {
           <span>{reel.place}</span>
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: "700" }}>
-          <img src="/images/845c09135def6279c007582842533707.png" alt="" style={{ width: "28px", height: "30px", objectFit: "contain", display: "block", background: "#FFFFFF", borderRadius: "8px", padding: "2px" }} />
+          <img src="/images/845c09135def6279c007582842533707.png" alt="" style={{ width: "28px", height: "30px", objectFit: "contain", display: "block", background: "var(--paper)", borderRadius: "8px", padding: "2px" }} />
           <span>Virasa Stories</span>
         </div>
-        {captions ? <p style={{ margin: "0", fontSize: "15px", lineHeight: "1.45", color: "#FFFFFF", textWrap: "pretty" }}>{reel.caption}</p> : null}
+        {captions ? <p style={{ margin: "0", fontSize: "15px", lineHeight: "1.45", color: "var(--paper)", textWrap: "pretty" }}>{reel.caption}</p> : null}
         <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "12px", fontWeight: "600", color: "#E7D3B5" }}>
           <span className={`eq${paused ? " paused" : ""}`} aria-hidden="true">
             <i />
@@ -226,13 +226,13 @@ export default function ReelsScreen() {
         </div>
       </div>
       <div style={{ position: "absolute", left: "20px", right: "20px", bottom: "44px", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "10px" }}>
-        <Link href="/navigate" style={{ height: "52px", borderRadius: "14px", background: "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "800", textDecoration: "none" }}>
+        <Link href="/navigate" style={{ height: "52px", borderRadius: "14px", background: "var(--gold-light)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "800", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <polygon points="3 11 22 2 13 21 11 13 3 11" />
           </svg>
           {" "}{t("rl.go")}{" "}
         </Link>
-        <Link href="/story" style={{ height: "52px", borderRadius: "14px", border: "1.5px solid rgba(255, 255, 255, 0.7)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
+        <Link href="/story" style={{ height: "52px", borderRadius: "14px", border: "1.5px solid rgba(255, 255, 255, 0.7)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: "700", textDecoration: "none" }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" />
           </svg>
@@ -240,7 +240,7 @@ export default function ReelsScreen() {
         </Link>
       </div>
       <div style={{ position: "absolute", left: "20px", right: "20px", bottom: "22px", height: "3px", borderRadius: "999px", background: "rgba(255, 255, 255, 0.3)", overflow: "hidden" }}>
-        <div key={reel.id} data-timer onAnimationEnd={() => go(1)} style={{ width: "100%", height: "100%", borderRadius: "999px", background: "#F3D9A8", animation: `fill ${reel.seconds}s linear backwards`, animationPlayState: paused ? "paused" : "running" }} />
+        <div key={reel.id} data-timer onAnimationEnd={() => go(1)} style={{ width: "100%", height: "100%", borderRadius: "999px", background: "var(--gold-light)", animation: `fill ${reel.seconds}s linear backwards`, animationPlayState: paused ? "paused" : "running" }} />
       </div>
     </div>
   );

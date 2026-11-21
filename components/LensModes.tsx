@@ -81,11 +81,11 @@ export default function LensModes({ active, style }: { active: Mode; style?: CSS
         );
         const look: CSSProperties = { height: "38px", padding: "0 6px", borderRadius: "999px", display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", fontSize: "13px", fontWeight: on ? 800 : 700, whiteSpace: "nowrap", textDecoration: "none", transition: "background-color 0.25s ease, color 0.25s ease" };
         return on ? (
-          <span key={m.id} aria-current="page" style={{ ...look, background: "#FFFFFF", color: "#2B1B10" }}>
+          <span key={m.id} aria-current="page" style={{ ...look, background: "var(--paper)", color: "var(--ink)" }}>
             {inner}
           </span>
         ) : (
-          <Link key={m.id} href={m.href} replace onClick={() => replacingScreen()} style={{ ...look, color: "#FFFFFF" }}>
+          <Link key={m.id} href={m.href} replace onClick={() => replacingScreen()} style={{ ...look, color: "var(--paper)" }}>
             {inner}
           </Link>
         );

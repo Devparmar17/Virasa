@@ -625,7 +625,7 @@ const mr: Record<string, string> = {
   "sv.photo": "फोटो: {name}",
   "sv.downloading": "डाउनलोड होत आहे…",
   "sv.downloaded": "डाउनलोड झाले · 86 MB",
-  "sv.not_downloaded": "डाउनलोड झाले नाही · 86 MB",
+  "sv.not_downloaded": "डाउनलोड झाले नाही",
   "sv.search_aria": "जतन केलेल्यात शोधा",
   "sv.close_search": "शोध बंद करा",
   "sv.items": "जतन केलेल्या गोष्टी",

@@ -49,16 +49,16 @@ export default function BookingCard({ draft, bookedRef, onBooked }: { draft: Boo
   };
 
   return (
-    <div style={{ padding: "12px", borderRadius: "6px 20px 20px 20px", background: "#FFFFFF", border: "1px solid #EFE6DA" }}>
+    <div style={{ padding: "12px", borderRadius: "6px 20px 20px 20px", background: "var(--paper)", border: "1px solid var(--line)" }}>
       <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
         {item.img ? <img src={item.img} alt="" style={{ flex: "0 0 52px", width: "52px", height: "52px", borderRadius: "12px", objectFit: "cover" }} /> : null}
         <span style={{ minWidth: 0 }}>
-          <span style={{ display: "block", fontSize: "11px", fontWeight: 800, letterSpacing: "0.06em", color: "#8A6424" }}>{t(`tk.kind.${item.kind}` as Key).toUpperCase()}</span>
+          <span style={{ display: "block", fontSize: "11px", fontWeight: 800, letterSpacing: "0.06em", color: "var(--gold)" }}>{t(`tk.kind.${item.kind}` as Key).toUpperCase()}</span>
           <span style={{ display: "block", fontSize: "15px", lineHeight: 1.25, fontWeight: 800 }}>{item.title}</span>
-          <span style={{ display: "block", fontSize: "12px", color: "#6F5B4B" }}>{item.place}</span>
+          <span style={{ display: "block", fontSize: "12px", color: "var(--ink-muted)" }}>{item.place}</span>
         </span>
       </div>
-      <dl style={{ margin: "12px 0 0", padding: "10px 12px", borderRadius: "12px", background: "#F6F1EA", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px 10px" }}>
+      <dl style={{ margin: "12px 0 0", padding: "10px 12px", borderRadius: "12px", background: "var(--sand-light)", display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px 10px" }}>
         {[
           [t("tk.date"), longDate(draft.date, uiLang)],
           [item.kind === "car" ? t("tk.pickup") : t("tk.time"), draft.slot === "Any time" ? t("tk.any_time") : draft.slot],
@@ -67,20 +67,20 @@ export default function BookingCard({ draft, bookedRef, onBooked }: { draft: Boo
           [t("tk.total"), rupees(total)],
         ].map(([k, v]) => (
           <div key={k}>
-            <dt style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.06em", color: "#8A6424" }}>{k.toUpperCase()}</dt>
+            <dt style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.06em", color: "var(--gold)" }}>{k.toUpperCase()}</dt>
             <dd style={{ margin: "1px 0 0", fontSize: "14px", fontWeight: 700 }}>{v}</dd>
           </div>
         ))}
       </dl>
       {bookedRef ? (
         <div style={{ marginTop: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ flex: 1, height: "44px", padding: "0 12px", borderRadius: "12px", background: "#E3F1E7", color: "#2F7A4A", display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 800 }}>
+          <span style={{ flex: 1, height: "44px", padding: "0 12px", borderRadius: "12px", background: "var(--green-tint)", color: "var(--green)", display: "flex", alignItems: "center", gap: "6px", fontSize: "14px", fontWeight: 800 }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M20 6 9 17l-5-5" />
             </svg>
             {t("bk.booked", { ref: bookedRef })}
           </span>
-          <Link href="/tickets#mine" style={{ height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", color: "#2B1B10", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, textDecoration: "none" }}>
+          <Link href="/tickets#mine" style={{ height: "44px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid var(--line-strong)", color: "var(--ink)", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, textDecoration: "none" }}>
             {t("bk.see")}
           </Link>
         </div>
@@ -93,16 +93,16 @@ export default function BookingCard({ draft, bookedRef, onBooked }: { draft: Boo
             <input aria-label={t("bk.name_ph")} placeholder={t("bk.name_ph")} autoComplete="name" value={who} onChange={(e) => { setName(e.target.value); setError(""); }} style={{ ...field, marginTop: "8px" }} />
           )}
           {error ? (
-            <p role="alert" style={{ margin: "6px 2px 0", fontSize: "13px", fontWeight: 600, color: "#A23A2A" }}>
+            <p role="alert" style={{ margin: "6px 2px 0", fontSize: "13px", fontWeight: 600, color: "var(--red)" }}>
               {error}
             </p>
           ) : null}
           <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
-            <button type="button" disabled={busy} aria-busy={busy} onClick={(e) => confirm(e.currentTarget)} style={{ flex: 1, height: "46px", border: 0, borderRadius: "12px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "14px", fontWeight: 800, cursor: "pointer" }}>
+            <button type="button" disabled={busy} aria-busy={busy} onClick={(e) => confirm(e.currentTarget)} style={{ flex: 1, height: "46px", border: 0, borderRadius: "12px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "14px", fontWeight: 800, cursor: "pointer" }}>
               {busy ? <Spinner /> : null}
               {busy ? t("bk.booking") : t("bk.confirm", { price: rupees(total) })}
             </button>
-            <Link href={`/tickets?book=${item.id}`} style={{ height: "46px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid #E2D3C1", color: "#2B1B10", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, textDecoration: "none" }}>
+            <Link href={`/tickets?book=${item.id}`} style={{ height: "46px", padding: "0 14px", borderRadius: "12px", border: "1.5px solid var(--line-strong)", color: "var(--ink)", display: "flex", alignItems: "center", fontSize: "13px", fontWeight: 800, textDecoration: "none" }}>
               {t("trip.change")}
             </Link>
           </div>

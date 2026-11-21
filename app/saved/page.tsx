@@ -77,7 +77,7 @@ function Thumb({ item }: { item: Item }) {
     return <img src={item.img} alt="" style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "14px", objectFit: "cover", display: "block" }} />;
   }
   return (
-    <div role="img" aria-label={item.title} style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "14px", background: "#EFE1C9", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div role="img" aria-label={item.title} style={{ flex: "0 0 72px", width: "72px", height: "72px", borderRadius: "14px", background: "var(--parchment)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <svg width="44" height="44" viewBox="0 0 80 80" fill="none" stroke="#9C7A55" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M8 70V36h64v34" />
         <path d="M16 36V26h48v10" />
@@ -187,16 +187,16 @@ export default function SavedScreen() {
         <Thumb item={it} />
         <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "4px" }}>
           <span style={{ fontSize: "16px", fontWeight: "800" }}>{it.title}</span>
-          <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>{it.meta}</span>
+          <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>{it.meta}</span>
           {stamps[it.id] ? (
-            <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px 0 6px", borderRadius: "7px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center", gap: "4px" }}>
+            <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px 0 6px", borderRadius: "7px", background: "var(--green-tint)", color: "var(--green)", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center", gap: "4px" }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M20 6 9 17l-5-5" />
               </svg>
               {t("sv.visited")}
             </span>
           ) : (
-            <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px", borderRadius: "7px", background: "#F6EEE4", color: "#6E4E1E", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>{BADGES[it.badge] ? t(BADGES[it.badge]) : it.badge}</span>
+            <span style={{ alignSelf: "flex-start", height: "24px", padding: "0 8px", borderRadius: "7px", background: "var(--sand)", color: "var(--gold-deep)", fontSize: "12px", fontWeight: "700", display: "flex", alignItems: "center" }}>{BADGES[it.badge] ? t(BADGES[it.badge]) : it.badge}</span>
           )}
         </span>
       </>
@@ -221,7 +221,7 @@ export default function SavedScreen() {
             const li = e.currentTarget.closest("li");
             if (!li || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return remove(it);
             li.animate([{ opacity: 1, translate: "0 0" }, { opacity: 0, translate: "-28px 0" }], { duration: 220, easing: "ease-in", fill: "forwards" }).finished.then(() => remove(it));
-          }} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          }} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
           </svg>
@@ -233,10 +233,10 @@ export default function SavedScreen() {
   const packStatus = downloading ? t("sv.downloading") : pack ? t("sv.downloaded") : t("sv.not_downloaded");
 
   return (
-    <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10", display: "flex", flexDirection: "column" }}>
+    <div style={{ width: "390px", height: "844px", position: "relative", overflow: "hidden", background: "var(--paper)", fontFamily: "inherit", color: "var(--ink)", display: "flex", flexDirection: "column" }}>
       <div style={{ padding: "54px 12px 0 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
         {searching ? (
-          <input autoFocus type="search" aria-label={t("sv.search_aria")} placeholder={t("sv.search")} value={query} onChange={(e) => setQuery(e.target.value)} className="fade-in" style={{ flex: "1", minWidth: "0", height: "44px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid #D9C7B3", background: "#F6F1EA", fontSize: "15px", color: "#2B1B10", outline: "none" }} />
+          <input autoFocus type="search" aria-label={t("sv.search_aria")} placeholder={t("sv.search")} value={query} onChange={(e) => setQuery(e.target.value)} className="fade-in" style={{ flex: "1", minWidth: "0", height: "44px", padding: "0 14px", borderRadius: "14px", border: "1.5px solid var(--line-deep)", background: "var(--sand-light)", fontSize: "15px", color: "var(--ink)", outline: "none" }} />
         ) : (
           <h1 style={{ margin: "0", fontSize: "28px", fontWeight: "800", letterSpacing: "-0.02em" }}>{t("sv.title")}</h1>
         )}
@@ -247,7 +247,7 @@ export default function SavedScreen() {
             setSearching(!searching);
             setQuery("");
           }}
-          style={{ flex: "0 0 44px", width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+          style={{ flex: "0 0 44px", width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
         >
           {searching ? (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -262,37 +262,37 @@ export default function SavedScreen() {
           )}
         </button>
       </div>
-      <div role="tablist" aria-label={t("sv.items")} style={{ marginTop: "8px", padding: "0 20px", display: "flex", gap: "18px", borderBottom: "1px solid #EFE6DA" }}>
+      <div role="tablist" aria-label={t("sv.items")} style={{ marginTop: "8px", padding: "0 20px", display: "flex", gap: "18px", borderBottom: "1px solid var(--line)" }}>
         {TABS.map((tb) => (
-          <button key={tb} type="button" role="tab" aria-selected={tab === tb} onClick={() => setTab(tb)} style={{ height: "44px", padding: "0", border: "0", borderBottom: `3px solid ${tab === tb ? "#9A4E36" : "transparent"}`, background: "none", color: tab === tb ? "#2B1B10" : "#6F5B4B", fontSize: "15px", fontWeight: tab === tb ? 800 : 700, cursor: "pointer" }}>
+          <button key={tb} type="button" role="tab" aria-selected={tab === tb} onClick={() => setTab(tb)} style={{ height: "44px", padding: "0", border: "0", borderBottom: `3px solid ${tab === tb ? "var(--clay)" : "transparent"}`, background: "none", color: tab === tb ? "var(--ink)" : "var(--ink-muted)", fontSize: "15px", fontWeight: tab === tb ? 800 : 700, cursor: "pointer" }}>
             {t(`sv.${tb}`)}
           </button>
         ))}
       </div>
       <div style={{ flex: "1", minHeight: "0", overflowY: "auto", paddingBottom: "104px" }}>
-        <section aria-label={t("sv.pack_aria")} aria-busy={downloading} style={{ position: "relative", overflow: "hidden", margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "#2B1B10", color: "#FBF6EE" }}>
+        <section aria-label={t("sv.pack_aria")} aria-busy={downloading} style={{ position: "relative", overflow: "hidden", margin: "16px 20px 0", padding: "16px", borderRadius: "18px", background: "var(--ink)", color: "var(--cream)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <span className={downloading ? "float" : undefined} style={{ width: "36px", height: "36px", borderRadius: "10px", background: "#F3D9A8", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span className={downloading ? "float" : undefined} style={{ width: "36px", height: "36px", borderRadius: "10px", background: "var(--gold-light)", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" x2="12" y1="15" y2="3" />
               </svg>
             </span>
-            <span style={{ flex: "1", display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span style={{ flex: "1", minWidth: "0", display: "flex", flexDirection: "column", gap: "2px" }}>
               <span style={{ fontSize: "16px", fontWeight: "800" }}>{t("sv.pack_name")}</span>
-              <span style={{ fontSize: "12px", fontWeight: "700", color: pack && !downloading ? "#9FD3B0" : "#F3D9A8" }}>{packStatus}</span>
+              <span style={{ fontSize: "12px", fontWeight: "700", color: pack && !downloading ? "var(--green-light)" : "var(--gold-light)" }}>{packStatus}</span>
             </span>
-            <button type="button" onClick={() => setManage(true)} style={{ height: "44px", padding: "0 12px", border: "0", borderRadius: "12px", background: "rgba(251, 246, 238, 0.12)", color: "#FBF6EE", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}>
+            <button type="button" onClick={() => setManage(true)} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", border: "0", borderRadius: "12px", background: "rgba(251, 246, 238, 0.12)", color: "var(--cream)", fontSize: "13px", fontWeight: "700", whiteSpace: "nowrap", cursor: "pointer" }}>
               {pack ? t("sv.manage") : t("sv.download")}
             </button>
           </div>
-          <p style={{ margin: "12px 0 0", fontSize: "13px", lineHeight: "1.45", color: "#D9C6AE" }}>{pack ? t("sv.pack_have") : t("sv.pack_get")}</p>
+          <p style={{ margin: "12px 0 0", fontSize: "13px", lineHeight: "1.45", color: "var(--sand-on-dark)" }}>{pack ? t("sv.pack_have") : t("sv.pack_get")}</p>
           {/* How far the download has got (it takes as long as the timer in the sheet). */}
-          {downloading ? <div data-timer aria-hidden="true" style={{ position: "absolute", left: 0, bottom: 0, height: "4px", width: "100%", background: "#F3D9A8", animation: "fill 2.2s linear backwards" }} /> : null}
+          {downloading ? <div data-timer aria-hidden="true" style={{ position: "absolute", left: 0, bottom: 0, height: "4px", width: "100%", background: "var(--gold-light)", animation: "fill 2.2s linear backwards" }} /> : null}
         </section>
         <div style={{ margin: "22px 20px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: "13px", fontWeight: "600", color: "#6F5B4B" }}>{count}</span>
+          <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--ink-muted)" }}>{count}</span>
           {items.length > 1 ? (
           <button
             type="button"
@@ -302,7 +302,7 @@ export default function SavedScreen() {
               setSort(next);
               toast(t("sv.sorted", { name: t(`sv.sort.${next}` as Key) }));
             }}
-            style={{ height: "36px", padding: "0 4px", border: "0", background: "none", display: "flex", alignItems: "center", gap: "4px", color: "#9A4E36", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}
+            style={{ height: "36px", padding: "0 4px", border: "0", background: "none", display: "flex", alignItems: "center", gap: "4px", color: "var(--clay)", fontSize: "13px", fontWeight: "700", cursor: "pointer" }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="m21 16-4 4-4-4" />
@@ -320,15 +320,15 @@ export default function SavedScreen() {
           </ul>
         ) : (
           <div className="rise" style={{ margin: "28px 32px 0", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "8px" }}>
-            <span style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#F6EEE4", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ width: "64px", height: "64px", borderRadius: "50%", background: "var(--sand)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
               </svg>
             </span>
             <span style={{ fontSize: "17px", fontWeight: "800" }}>{needle ? t("sv.no_match") : tab === "Offline" ? t("sv.no_offline") : t("sv.none_tab")}</span>
-            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>{needle ? t("sv.no_match_sub", { q: query.trim() }) : tab === "Offline" ? t("sv.offline_sub") : tab === "Plans" ? t("sv.plans_sub") : t("sv.empty_sub")}</span>
+            <span style={{ fontSize: "14px", lineHeight: "1.45", color: "var(--ink-soft)" }}>{needle ? t("sv.no_match_sub", { q: query.trim() }) : tab === "Offline" ? t("sv.offline_sub") : tab === "Plans" ? t("sv.plans_sub") : t("sv.empty_sub")}</span>
             {!needle ? (
-              <Link href={tab === "Plans" ? "/trip" : "/explore"} style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
+              <Link href={tab === "Plans" ? "/trip" : "/explore"} style={{ marginTop: "8px", height: "48px", padding: "0 20px", borderRadius: "14px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "800" }}>
                 {tab === "Plans" ? t("sv.plan_trip") : t("sv.explore")}
               </Link>
             ) : null}
@@ -364,7 +364,7 @@ export default function SavedScreen() {
             <button
               type="button"
               className="sheet-row"
-              style={{ color: "#A23A2A" }}
+              style={{ color: "var(--red)" }}
               onClick={() => {
                 setPack(false);
                 setManage(false);

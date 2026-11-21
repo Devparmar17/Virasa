@@ -26,10 +26,10 @@ export default function PersonalizeScreen() {
   const v: any = renderVals(state, setState);
   const t = useT();
   return (
-    <div style={{ width: "390px", minHeight: "844px", paddingBottom: "120px", position: "relative", background: "#FFFFFF", fontFamily: "'Plus Jakarta Sans', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Tamil', 'Noto Sans Bengali', system-ui, -apple-system, 'Segoe UI', sans-serif", color: "#2B1B10" }}>
+    <div style={{ width: "390px", minHeight: "844px", paddingBottom: "120px", position: "relative", background: "var(--paper)", fontFamily: "inherit", color: "var(--ink)" }}>
       {/* Sticks once scrolled, so Skip and the progress stay in reach. */}
-      <div style={{ position: "sticky", top: "-54px", zIndex: 10, background: "#FFFFFF", padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
-        <BackLink href="/welcome" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#2B1B10" }}>
+      <div style={{ position: "sticky", top: "-54px", zIndex: 10, background: "var(--paper)", padding: "54px 12px 0 8px", height: "98px", display: "flex", alignItems: "center", gap: "8px" }}>
+        <BackLink href="/welcome" aria-label={t("on.back")} style={{ width: "44px", height: "44px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink)" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m12 19-7-7 7-7" />
             <path d="M19 12H5" />
@@ -37,16 +37,16 @@ export default function PersonalizeScreen() {
         </BackLink>
         <div style={{ flex: "1", display: "flex", flexDirection: "column", gap: "6px", alignItems: "center" }}>
           <div style={{ display: "flex", gap: "6px" }}>
-            <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1", overflow: "hidden", display: "block" }}>
-              <span className="step-fill" style={{ display: "block", width: "100%", height: "100%", borderRadius: "999px", background: "#9A4E36" }} />
+            <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "var(--line-strong)", overflow: "hidden", display: "block" }}>
+              <span className="step-fill" style={{ display: "block", width: "100%", height: "100%", borderRadius: "999px", background: "var(--clay)" }} />
             </span>
-            <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1" }} />
+            <span style={{ width: "40px", height: "5px", borderRadius: "999px", background: "var(--line-strong)" }} />
           </div>
-          <span style={{ fontSize: "12px", fontWeight: "600", color: "#6F5B4B" }}>
+          <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--ink-muted)" }}>
             {t("on.step", { n: 1, total: 2 })}
           </span>
         </div>
-        <Link href="/location" style={{ height: "44px", padding: "0 10px", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "700", color: "#5A4434" }}>
+        <Link href="/location" style={{ height: "44px", padding: "0 10px", display: "flex", alignItems: "center", fontSize: "15px", fontWeight: "700", color: "var(--ink-soft)" }}>
           {t("on.skip")}
         </Link>
       </div>
@@ -54,25 +54,25 @@ export default function PersonalizeScreen() {
         <h1 style={{ margin: "0", fontSize: "26px", lineHeight: "1.2", fontWeight: "800", letterSpacing: "-0.02em", textWrap: "balance" }}>
           {t("on.title")}
         </h1>
-        <p style={{ margin: "8px 0 0", fontSize: "14px", lineHeight: "1.45", color: "#5A4434" }}>
+        <p style={{ margin: "8px 0 0", fontSize: "14px", lineHeight: "1.45", color: "var(--ink-soft)" }}>
           {t("on.sub")}
         </p>
       </div>
       <fieldset style={{ border: "0", margin: "20px 0 0", padding: "0 20px", minWidth: "0" }}>
-        <legend style={{ padding: "0", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
+        <legend style={{ padding: "0", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "var(--ink)" }}>
           {t("trip.who")}
         </legend>
         <div style={{ marginTop: "10px" }}>
           <PartyChips />
         </div>
-        <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: "1.4", color: "#6F5B4B" }}>{t("trip.who_hint")}</p>
+        <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: "1.4", color: "var(--ink-muted)" }}>{t("trip.who_hint")}</p>
       </fieldset>
       <fieldset style={{ border: "0", margin: "22px 0 0", padding: "0 20px", minWidth: "0" }}>
-        <legend style={{ padding: "0", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "#2B1B10" }}>
+        <legend style={{ padding: "0", width: "100%", display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: "15px", fontWeight: "800", letterSpacing: "-0.01em", color: "var(--ink)" }}>
           <span>
             {t("on.interests")}
           </span>
-          <span style={{ letterSpacing: "0", fontWeight: "600", color: "#6F5B4B" }}>
+          <span style={{ letterSpacing: "0", fontWeight: "600", color: "var(--ink-muted)" }}>
             {t("on.selected", { n: v.count })}
           </span>
         </legend>
@@ -218,8 +218,8 @@ export default function PersonalizeScreen() {
         </div>
       </fieldset>
       <div className="nav-rail">
-        <div style={{ padding: "28px 20px 24px", background: "linear-gradient(180deg, rgba(251, 246, 238, 0) 0%, #FBF6EE 34%)" }}>
-        <Link href="/location" style={{ height: "56px", borderRadius: "16px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
+        <div style={{ padding: "28px 20px 24px", background: "linear-gradient(180deg, rgba(251, 246, 238, 0) 0%, var(--cream) 34%)" }}>
+        <Link href="/location" style={{ height: "56px", borderRadius: "16px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: "700", textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.28)" }}>
           <span>
             {v.count ? t("on.continue") : t("on.skip_now")}
           </span>

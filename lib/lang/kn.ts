@@ -625,7 +625,7 @@ const kn: Record<string, string> = {
   "sv.photo": "ಫೋಟೋ: {name}",
   "sv.downloading": "ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
   "sv.downloaded": "ಡೌನ್‌ಲೋಡ್ ಆಯಿತು · 86 MB",
-  "sv.not_downloaded": "ಡೌನ್‌ಲೋಡ್ ಆಗಿಲ್ಲ · 86 MB",
+  "sv.not_downloaded": "ಡೌನ್‌ಲೋಡ್ ಆಗಿಲ್ಲ",
   "sv.search_aria": "ಉಳಿಸಿದವುಗಳಲ್ಲಿ ಹುಡುಕಿ",
   "sv.close_search": "ಹುಡುಕಾಟ ಮುಚ್ಚಿ",
   "sv.items": "ಉಳಿಸಿದವು",

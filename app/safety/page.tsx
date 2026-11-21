@@ -8,8 +8,8 @@ import { toast } from "@/components/Toast";
 import { frame, ScreenHeader, Spinner } from "@/components/ui";
 import { useT, type Key } from "@/lib/i18n";
 
-const INK = "#2B1B10";
-const MUTED = "#6F5B4B";
+const INK = "var(--ink)";
+const MUTED = "var(--ink-muted)";
 
 const Icon = ({ d, size = 20 }: { d: string; size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -72,10 +72,10 @@ export default function SafetyScreen() {
     <div style={frame({ paddingBottom: "48px" })}>
       <ScreenHeader title={t("safety.title")} back="/home" />
       <div style={{ padding: "0 20px" }}>
-        <p style={{ margin: "0 0 14px", fontSize: "15px", lineHeight: 1.5, color: "#5A4434" }}>{t("safety.sub")}</p>
+        <p style={{ margin: "0 0 14px", fontSize: "15px", lineHeight: 1.5, color: "var(--ink-soft)" }}>{t("safety.sub")}</p>
 
         {/* 112 first and biggest: the one number to remember. */}
-        <a href="tel:112" aria-label={`${t("safety.call")} 112, ${t("safety.112")}`} className="rise" style={{ minHeight: "92px", padding: "14px 16px", borderRadius: "22px", background: "#B03A2E", color: "#FFFFFF", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", boxShadow: "0 12px 26px rgba(176, 58, 46, 0.3)" }}>
+        <a href="tel:112" aria-label={`${t("safety.call")} 112, ${t("safety.112")}`} className="rise" style={{ minHeight: "92px", padding: "14px 16px", borderRadius: "22px", background: "var(--red-bright)", color: "var(--paper)", display: "flex", alignItems: "center", gap: "14px", textDecoration: "none", boxShadow: "0 12px 26px rgba(176, 58, 46, 0.3)" }}>
           <span style={{ fontSize: "40px", fontWeight: 800, letterSpacing: "-0.02em", lineHeight: 1 }}>112</span>
           <span style={{ flex: 1, minWidth: 0 }}>
             <span style={{ display: "block", fontSize: "18px", fontWeight: 800 }}>{t("safety.112")}</span>
@@ -89,13 +89,13 @@ export default function SafetyScreen() {
         <ul className="stagger" style={{ listStyle: "none", margin: "10px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: "8px" }}>
           {LINES.map((l) => (
             <li key={l.n}>
-              <a href={`tel:${l.n}`} aria-label={`${t("safety.call")} ${l.n}, ${t(l.key as Key)}`} style={{ minHeight: "70px", padding: "10px 12px 10px 14px", borderRadius: "18px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: INK, display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+              <a href={`tel:${l.n}`} aria-label={`${t("safety.call")} ${l.n}, ${t(l.key as Key)}`} style={{ minHeight: "70px", padding: "10px 12px 10px 14px", borderRadius: "18px", border: "1px solid var(--line)", background: "var(--paper)", color: INK, display: "flex", alignItems: "center", gap: "12px", textDecoration: "none" }}>
                 <span style={{ flex: "0 0 64px", height: "44px", borderRadius: "12px", background: l.bg, color: l.fg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", fontWeight: 800 }}>{l.n}</span>
                 <span style={{ flex: 1, minWidth: 0 }}>
                   <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{t(l.key as Key)}</span>
                   <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: MUTED }}>{t(`${l.key}_sub` as Key)}</span>
                 </span>
-                <span style={{ flex: "0 0 auto", height: "40px", padding: "0 12px", borderRadius: "999px", background: "#E3F1E7", color: "#2F7A4A", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 800 }}>
+                <span style={{ flex: "0 0 auto", height: "40px", padding: "0 12px", borderRadius: "999px", background: "var(--green-tint)", color: "var(--green)", display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 800 }}>
                   <Icon d={PHONE} size={15} />
                   {t("safety.call")}
                 </span>
@@ -104,11 +104,11 @@ export default function SafetyScreen() {
           ))}
         </ul>
 
-        <h2 style={{ margin: "26px 0 10px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "#8A6424" }}>{t("safety.nearby")}</h2>
+        <h2 style={{ margin: "26px 0 10px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "var(--gold)" }}>{t("safety.nearby")}</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: "8px" }}>
           {NEARBY.map((n) => (
-            <a key={n.q} href={mapsNear(n.q)} target="_blank" rel="noopener noreferrer" style={{ minHeight: "60px", padding: "10px 12px", borderRadius: "16px", border: "1px solid #EFE6DA", background: "#FFFFFF", color: INK, display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", fontSize: "15px", fontWeight: 700 }}>
-              <span style={{ flex: "0 0 36px", height: "36px", borderRadius: "11px", background: "#F6EEE4", color: "#7E3D29", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <a key={n.q} href={mapsNear(n.q)} target="_blank" rel="noopener noreferrer" style={{ minHeight: "60px", padding: "10px 12px", borderRadius: "16px", border: "1px solid var(--line)", background: "var(--paper)", color: INK, display: "flex", alignItems: "center", gap: "10px", textDecoration: "none", fontSize: "15px", fontWeight: 700 }}>
+              <span style={{ flex: "0 0 36px", height: "36px", borderRadius: "11px", background: "var(--sand)", color: "var(--clay-deep)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Icon d={n.icon} size={19} />
               </span>
               {t(n.key)}
@@ -116,21 +116,21 @@ export default function SafetyScreen() {
           ))}
         </div>
 
-        <button type="button" onClick={shareLocation} disabled={sharing} aria-busy={sharing} style={{ marginTop: "16px", width: "100%", minHeight: "66px", padding: "10px 14px", border: 0, borderRadius: "18px", background: INK, color: "#FBF6EE", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", cursor: "pointer" }}>
+        <button type="button" onClick={shareLocation} disabled={sharing} aria-busy={sharing} style={{ marginTop: "16px", width: "100%", minHeight: "66px", padding: "10px 14px", border: 0, borderRadius: "18px", background: INK, color: "var(--cream)", display: "flex", alignItems: "center", gap: "12px", textAlign: "left", cursor: "pointer" }}>
           <span style={{ flex: "0 0 44px", height: "44px", borderRadius: "14px", background: "rgba(251, 246, 238, 0.14)", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {sharing ? <Spinner /> : <Icon d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0ZM12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z" size={22} />}
           </span>
           <span style={{ flex: 1, minWidth: 0 }}>
             <span style={{ display: "block", fontSize: "16px", fontWeight: 800 }}>{t("safety.share")}</span>
-            <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "#D9C6AE" }}>{t("safety.share_sub")}</span>
+            <span style={{ display: "block", marginTop: "2px", fontSize: "13px", color: "var(--sand-on-dark)" }}>{t("safety.share_sub")}</span>
           </span>
         </button>
 
-        <h2 style={{ margin: "26px 0 10px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "#8A6424" }}>{t("safety.tips")}</h2>
+        <h2 style={{ margin: "26px 0 10px", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "var(--gold)" }}>{t("safety.tips")}</h2>
         <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
           {(["safety.tip1", "safety.tip2", "safety.tip3"] as Key[]).map((k) => (
             <li key={k} style={{ display: "flex", gap: "10px", fontSize: "15px", lineHeight: 1.5 }}>
-              <span style={{ flex: "0 0 auto", marginTop: "2px", color: "#2F7A4A" }}>
+              <span style={{ flex: "0 0 auto", marginTop: "2px", color: "var(--green)" }}>
                 <Icon d="M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3" size={18} />
               </span>
               {t(k)}

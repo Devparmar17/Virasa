@@ -32,7 +32,7 @@ function Seal({ state, line, index, ink, locked, size = 92 }: { state: string; l
         <span style={{ maxWidth: "88%", marginTop: "3px", fontSize: `${Math.max(11, size * 0.12)}px`, fontWeight: 700, letterSpacing: "0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{line.toUpperCase()}</span>
       </span>
       {locked ? (
-        <span style={{ position: "absolute", right: "-2px", top: "2px", width: `${size * 0.3}px`, height: `${size * 0.3}px`, borderRadius: "50%", background: "#FFFFFF", border: `1.5px solid ${LOCKED}`, color: "#A8927C", display: "flex", alignItems: "center", justifyContent: "center", rotate: `${-TILT[index % TILT.length]}deg` }}>
+        <span style={{ position: "absolute", right: "-2px", top: "2px", width: `${size * 0.3}px`, height: `${size * 0.3}px`, borderRadius: "50%", background: "var(--paper)", border: `1.5px solid ${LOCKED}`, color: "var(--taupe)", display: "flex", alignItems: "center", justifyContent: "center", rotate: `${-TILT[index % TILT.length]}deg` }}>
           <svg width={size * 0.15} height={size * 0.15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
             <rect width="18" height="11" x="3" y="11" rx="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -86,7 +86,7 @@ export default function PassportScreen() {
         back="/profile"
         action={
           stamps.length ? (
-            <button type="button" aria-label={t("pp.share")} onClick={() => share(t("pp.share_title"), t("pp.share_text", { n: stamps.length, c: cities }))} style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "#2B1B10", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <button type="button" aria-label={t("pp.share")} onClick={() => share(t("pp.share_title"), t("pp.share_text", { n: stamps.length, c: cities }))} style={{ width: "44px", height: "44px", border: "0", borderRadius: "50%", background: "none", color: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
                 <polyline points="16 6 12 2 8 6" />
@@ -96,20 +96,20 @@ export default function PassportScreen() {
           ) : null
         }
       />
-      <section aria-label={t("pp.progress")} style={{ margin: "8px 20px 0", padding: "18px", borderRadius: "20px", background: "#2B1B10", color: "#FBF6EE" }}>
-        <p style={{ margin: 0, fontSize: "12px", fontWeight: 700, letterSpacing: "0.12em", color: "#E7B98A" }}>
-          <UserName upper />
-        </p>
-        <p style={{ margin: "8px 0 0", fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>
+      <section aria-label={t("pp.progress")} style={{ margin: "8px 20px 0", padding: "18px", borderRadius: "20px", background: "var(--ink)", color: "var(--cream)" }}>
+        <p style={{ margin: 0, fontSize: "26px", lineHeight: 1.15, fontWeight: 800, letterSpacing: "-0.02em" }}>
           {t("pr.stamps", { n: stamps.length, total: SPOTS.length })}
         </p>
+        <p style={{ margin: "4px 0 0", fontSize: "14px", fontWeight: 700, color: "var(--gold-light)" }}>
+          <UserName />
+        </p>
         {stamps.length ? (
-          <p style={{ margin: "4px 0 0", fontSize: "14px", color: "#D9C6AE" }}>
+          <p style={{ margin: "4px 0 0", fontSize: "14px", color: "var(--sand-on-dark)" }}>
             {t("pr.cities", { n: cities })}
           </p>
         ) : null}
         <div style={{ marginTop: "14px", height: "6px", borderRadius: "999px", background: "rgba(251, 246, 238, 0.16)", overflow: "hidden" }}>
-          <div className="splash-bar" style={{ width: `${Math.max(2, (stamps.length / SPOTS.length) * 100)}%`, height: "100%", borderRadius: "999px", background: "#F3D9A8" }} />
+          <div className="splash-bar" style={{ width: `${Math.max(2, (stamps.length / SPOTS.length) * 100)}%`, height: "100%", borderRadius: "999px", background: "var(--gold-light)" }} />
         </div>
       </section>
 
@@ -118,10 +118,10 @@ export default function PassportScreen() {
           const have = stampMap[s.id];
           return (
             <li key={s.id}>
-              <button type="button" onClick={() => setOpen(s)} aria-label={`${s.name}, ${s.city}, ${have ? t("pp.collected", { date: when(have.at) }) : t("pp.not_yet")}`} style={{ width: "100%", padding: "4px 2px", border: "0", background: "none", color: "#2B1B10", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+              <button type="button" onClick={() => setOpen(s)} aria-label={`${s.name}, ${s.city}, ${have ? t("pp.collected", { date: when(have.at) }) : t("pp.not_yet")}`} style={{ width: "100%", padding: "4px 2px", border: "0", background: "none", color: "var(--ink)", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", cursor: "pointer" }}>
                 <Seal state={s.state} line={have ? when(have.at) : ""} index={i} ink={inkOf(s.state)} locked={!have} />
-                <span style={{ fontSize: "13px", lineHeight: 1.25, fontWeight: 700, textAlign: "center", color: have ? "#2B1B10" : "#6F5B4B" }}>{s.name}</span>
-                <span style={{ marginTop: "-5px", fontSize: "12px", color: "#6F5B4B" }}>{s.city}</span>
+                <span style={{ fontSize: "13px", lineHeight: 1.25, fontWeight: 700, textAlign: "center", color: have ? "var(--ink)" : "var(--ink-muted)" }}>{s.name}</span>
+                <span style={{ marginTop: "-5px", fontSize: "12px", color: "var(--ink-muted)" }}>{s.city}</span>
               </button>
             </li>
           );
@@ -136,7 +136,7 @@ export default function PassportScreen() {
                 <Seal state={open.state} line={got ? when(got.at) : ""} index={0} ink={inkOf(open.state)} locked={!got} size={104} />
               </span>
               <p style={{ margin: 0 }}>
-                <strong style={{ color: "#2B1B10" }}>
+                <strong style={{ color: "var(--ink)" }}>
                   {open.city}, {open.state}
                 </strong>
                 <br />

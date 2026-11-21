@@ -12,9 +12,9 @@ import { useT, type Key } from "@/lib/i18n";
 import { lookOf } from "@/lib/kinds";
 import type { Discovery, Find } from "@/lib/discover";
 
-const INK = "#2B1B10";
-const MUTED = "#6F5B4B";
-const BRAND = "#9A4E36";
+const INK = "var(--ink)";
+const MUTED = "var(--ink-muted)";
+const BRAND = "var(--clay)";
 const DAY = 24 * 60 * 60 * 1000;
 
 // Per city and language: the finds, and a photo (or none) for each by name.
@@ -39,10 +39,10 @@ function Section({ title, city, finds, loading, photos }: { title: string; city:
           <Chevron />
         </Link>
       </div>
-      <ul aria-busy={loading} style={{ listStyle: "none", margin: "8px 20px 0", padding: "4px 0", borderRadius: "20px", border: "1px solid #EFE6DA", background: "#FFFFFF" }}>
+      <ul aria-busy={loading} style={{ listStyle: "none", margin: "8px 20px 0", padding: "4px 0", borderRadius: "20px", border: "1px solid var(--line)", background: "var(--paper)" }}>
         {loading
           ? [0, 1, 2].map((i) => (
-              <li key={i} aria-hidden="true" style={{ borderTop: i ? "1px solid #F3ECE2" : "0", margin: "0 12px", minHeight: "76px", display: "flex", alignItems: "center", gap: "14px" }}>
+              <li key={i} aria-hidden="true" style={{ borderTop: i ? "1px solid var(--line-soft)" : "0", margin: "0 12px", minHeight: "76px", display: "flex", alignItems: "center", gap: "14px" }}>
                 <span className="shimmer" style={{ flex: "0 0 52px", height: "52px", borderRadius: "14px" }} />
                 <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
                   <span className="shimmer" style={{ height: "10px", width: "30%", borderRadius: "5px" }} />
@@ -53,7 +53,7 @@ function Section({ title, city, finds, loading, photos }: { title: string; city:
           : finds.map((f, i) => {
               const look = lookOf(f.kind);
               return (
-                <li key={`${f.name}-${i}`} style={{ borderTop: i ? "1px solid #F3ECE2" : "0", margin: "0 12px" }}>
+                <li key={`${f.name}-${i}`} style={{ borderTop: i ? "1px solid var(--line-soft)" : "0", margin: "0 12px" }}>
                   <button type="button" onClick={() => ask(t("dc.ask", { name: f.area ? `${f.name} (${f.area})` : f.name, city }))} style={{ width: "100%", minHeight: "76px", padding: "10px 0", border: 0, background: "none", display: "flex", alignItems: "center", gap: "14px", color: INK, textAlign: "left", font: "inherit", cursor: "pointer" }}>
                     {photos?.[f.name] ? (
                       <img src={photos[f.name]!} alt="" loading="lazy" style={{ flex: "0 0 56px", width: "56px", height: "56px", borderRadius: "14px", objectFit: "cover", display: "block", background: look.bg }} />
@@ -99,7 +99,7 @@ function PlaceCards({ title, city, finds, loading, photos }: { title: string; ci
       <div className="hscroll" aria-busy={loading} style={{ display: "flex", gap: "14px", padding: "12px 20px 8px" }}>
         {loading
           ? [0, 1].map((i) => (
-              <div key={i} aria-hidden="true" style={{ flex: "0 0 272px", borderRadius: "20px", border: "1px solid #EFE6DA", overflow: "hidden" }}>
+              <div key={i} aria-hidden="true" style={{ flex: "0 0 272px", borderRadius: "20px", border: "1px solid var(--line)", overflow: "hidden" }}>
                 <span className="shimmer" style={{ display: "block", height: "156px" }} />
                 <span style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: "8px" }}>
                   <span className="shimmer" style={{ height: "14px", width: "60%", borderRadius: "6px" }} />
@@ -111,7 +111,7 @@ function PlaceCards({ title, city, finds, loading, photos }: { title: string; ci
               const look = lookOf(f.kind);
               const photo = photos?.[f.name];
               return (
-                <button key={`${f.name}-${i}`} type="button" className="tap-card" onClick={() => ask(t("dc.ask", { name: f.area ? `${f.name} (${f.area})` : f.name, city }))} style={{ flex: "0 0 272px", padding: 0, border: "1px solid #EFE6DA", borderRadius: "20px", overflow: "hidden", background: "#FFFFFF", boxShadow: "0 6px 18px rgba(90, 60, 30, 0.07)", display: "flex", flexDirection: "column", textAlign: "left", font: "inherit", color: INK, cursor: "pointer" }}>
+                <button key={`${f.name}-${i}`} type="button" className="tap-card" onClick={() => ask(t("dc.ask", { name: f.area ? `${f.name} (${f.area})` : f.name, city }))} style={{ flex: "0 0 272px", padding: 0, border: "1px solid var(--line)", borderRadius: "20px", overflow: "hidden", background: "var(--paper)", boxShadow: "0 6px 18px rgba(90, 60, 30, 0.07)", display: "flex", flexDirection: "column", textAlign: "left", font: "inherit", color: INK, cursor: "pointer" }}>
                   <span style={{ position: "relative", display: "block", width: "100%", height: "156px", background: look.bg }}>
                     {photo ? (
                       <img src={photo} alt="" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />

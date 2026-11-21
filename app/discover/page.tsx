@@ -20,9 +20,9 @@ import { POPULAR_CITIES } from "@/lib/trip";
 import { FIND_KINDS, mapsUrl, type Discovery, type Find, type FindKind, type SavedFind } from "@/lib/discover";
 import { lookOf } from "@/lib/kinds";
 
-const INK = "#2B1B10";
-const MUTED = "#6F5B4B";
-const BRAND = "#9A4E36";
+const INK = "var(--ink)";
+const MUTED = "var(--ink-muted)";
+const BRAND = "var(--clay)";
 
 const noop = () => () => {};
 
@@ -50,7 +50,7 @@ const ICON = {
 };
 const ALL_ICON = "M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z";
 
-const smallBtn: CSSProperties = { height: "40px", padding: "0 12px", borderRadius: "999px", border: "1.5px solid #E2D3C1", background: "#FFFFFF", color: INK, display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, textDecoration: "none", cursor: "pointer" };
+const smallBtn: CSSProperties = { height: "40px", padding: "0 12px", borderRadius: "999px", border: "1.5px solid var(--line-strong)", background: "var(--paper)", color: INK, display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 700, textDecoration: "none", cursor: "pointer" };
 
 function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void }) {
   const t = useT();
@@ -69,7 +69,7 @@ function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void
     toast(saved ? t("sv.removed", { name: f.name }) : t("c.saved_name", { name: f.name }), saved ? "info" : "success");
   };
   return (
-    <li style={{ padding: "14px", borderRadius: "20px", border: "1px solid #EFE6DA", background: "#FFFFFF" }}>
+    <li style={{ padding: "14px", borderRadius: "20px", border: "1px solid var(--line)", background: "var(--paper)" }}>
       <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
         <span aria-hidden="true" style={{ flex: "0 0 46px", height: "46px", borderRadius: "14px", background: look.bg, color: look.fg, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <Icon d={look.icon} size={22} />
@@ -92,7 +92,7 @@ function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void
             </span>
           ) : null}
           {f.when ? (
-            <span style={{ display: "flex", gap: "8px", fontSize: "13px", lineHeight: 1.4, color: "#5A4434" }}>
+            <span style={{ display: "flex", gap: "8px", fontSize: "13px", lineHeight: 1.4, color: "var(--ink-soft)" }}>
               <span style={{ flex: "0 0 auto", color: MUTED }}>
                 <Icon d={ICON.clock} size={15} />
               </span>
@@ -102,7 +102,7 @@ function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void
         </div>
       ) : null}
       {f.tip ? (
-        <p style={{ margin: "10px 0 0", padding: "8px 10px", borderRadius: "12px", background: "#FBF6EE", display: "flex", gap: "8px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>
+        <p style={{ margin: "10px 0 0", padding: "8px 10px", borderRadius: "12px", background: "var(--cream)", display: "flex", gap: "8px", fontSize: "13px", lineHeight: 1.45, color: "var(--ink-soft)" }}>
           <span style={{ flex: "0 0 auto", color: "#B5841E" }}>
             <Icon d={ICON.bulb} size={16} />
           </span>
@@ -111,7 +111,7 @@ function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void
       ) : null}
       <div style={{ marginTop: "12px", display: "flex", flexWrap: "wrap", gap: "8px" }}>
         {f.href ? (
-          <Link href={f.href} style={{ ...smallBtn, background: INK, borderColor: INK, color: "#FBF6EE" }}>
+          <Link href={f.href} style={{ ...smallBtn, background: INK, borderColor: INK, color: "var(--cream)" }}>
             <Icon d={ICON.book} size={15} />
             {t("disc.open")}
           </Link>
@@ -124,7 +124,7 @@ function FindCard({ f, city, onAsk }: { f: Find; city: string; onAsk: () => void
           <Icon d={ICON.map} size={15} />
           {t("trip.map")}
         </a>
-        <button type="button" aria-pressed={saved} aria-label={saved ? t("sv.remove_aria", { name: f.name }) : t("c.save_name", { name: f.name })} onClick={(e) => toggle(e.currentTarget)} style={{ ...smallBtn, marginLeft: "auto", width: "40px", padding: 0, justifyContent: "center", borderColor: saved ? "#9A4E36" : "#E2D3C1", background: saved ? "#FBEDE6" : "#FFFFFF", color: saved ? "#9A4E36" : INK }}>
+        <button type="button" aria-pressed={saved} aria-label={saved ? t("sv.remove_aria", { name: f.name }) : t("c.save_name", { name: f.name })} onClick={(e) => toggle(e.currentTarget)} style={{ ...smallBtn, marginLeft: "auto", width: "40px", padding: 0, justifyContent: "center", borderColor: saved ? "var(--clay)" : "var(--line-strong)", background: saved ? "var(--clay-tint)" : "var(--paper)", color: saved ? "var(--clay)" : INK }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill={saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
           </svg>
@@ -138,7 +138,7 @@ function Skeleton() {
   return (
     <ul aria-hidden="true" style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "10px" }}>
       {[0, 1, 2].map((i) => (
-        <li key={i} style={{ padding: "14px", borderRadius: "20px", border: "1px solid #EFE6DA", display: "flex", flexDirection: "column", gap: "10px" }}>
+        <li key={i} style={{ padding: "14px", borderRadius: "20px", border: "1px solid var(--line)", display: "flex", flexDirection: "column", gap: "10px" }}>
           <span style={{ display: "flex", gap: "12px", alignItems: "center" }}>
             <span className="shimmer" style={{ flex: "0 0 46px", height: "46px", borderRadius: "14px" }} />
             <span style={{ flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -226,7 +226,7 @@ export default function DiscoverScreen() {
 
       <div style={{ padding: "6px 20px 0" }}>
         <h2 style={{ margin: 0, fontSize: "27px", lineHeight: 1.2, fontWeight: 800, letterSpacing: "-0.02em", textWrap: "balance" }}>{t("disc.title")}</h2>
-        <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: 1.45, color: "#5A4434" }}>{t("disc.sub")}</p>
+        <p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: 1.45, color: "var(--ink-soft)" }}>{t("disc.sub")}</p>
 
         <form
           role="search"
@@ -234,16 +234,16 @@ export default function DiscoverScreen() {
             e.preventDefault();
             go(typed);
           }}
-          style={{ marginTop: "16px", height: "58px", borderRadius: "18px", border: "1.5px solid #E2D3C1", display: "flex", alignItems: "center", gap: "8px", padding: "0 6px 0 14px" }}
+          style={{ marginTop: "16px", height: "58px", borderRadius: "18px", border: "1.5px solid var(--line-strong)", display: "flex", alignItems: "center", gap: "8px", padding: "0 6px 0 14px" }}
         >
           <span style={{ color: BRAND, display: "flex" }}>
             <Icon d={ICON.pin} size={21} />
           </span>
           <input value={typed} onChange={(e) => setDraft(e.target.value)} placeholder={t("disc.city_ph")} aria-label={t("disc.city_ph")} enterKeyHint="search" autoComplete="off" style={{ flex: 1, minWidth: 0, height: "100%", border: 0, outline: "none", background: "none", fontSize: "17px", fontWeight: 700, color: INK, fontFamily: "inherit" }} />
-          <VoiceSearch label={t("trip.say_city")} onResult={go} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "12px", background: "#FBEDE6", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <VoiceSearch label={t("trip.say_city")} onResult={go} style={{ flex: "0 0 44px", width: "44px", height: "44px", border: 0, borderRadius: "12px", background: "var(--clay-tint)", color: BRAND, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
             <Icon d={ICON.mic} />
           </VoiceSearch>
-          <button type="submit" style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", border: 0, borderRadius: "12px", background: BRAND, color: "#FFFFFF", fontSize: "14px", fontWeight: 800, cursor: "pointer" }}>
+          <button type="submit" style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", border: 0, borderRadius: "12px", background: BRAND, color: "var(--paper)", fontSize: "14px", fontWeight: 800, cursor: "pointer" }}>
             {t("disc.find")}
           </button>
         </form>
@@ -251,7 +251,7 @@ export default function DiscoverScreen() {
 
       <div className="hscroll" style={{ marginTop: "10px", padding: "0 20px", display: "flex", gap: "6px" }}>
         {POPULAR_CITIES.filter((c) => c.toLowerCase() !== city.toLowerCase()).map((c) => (
-          <button key={c} type="button" onClick={() => go(c)} style={{ flex: "0 0 auto", height: "36px", padding: "0 12px", borderRadius: "999px", border: 0, background: "#F6F1EA", color: "#5A4434", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+          <button key={c} type="button" onClick={() => go(c)} style={{ flex: "0 0 auto", height: "36px", padding: "0 12px", borderRadius: "999px", border: 0, background: "var(--sand-light)", color: "var(--ink-soft)", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
             {c}
           </button>
         ))}
@@ -271,9 +271,9 @@ export default function DiscoverScreen() {
                 pop(e.currentTarget);
                 setKind(id);
               }}
-              style={{ flex: "0 0 auto", height: "46px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? INK : "#E2D3C1"}`, background: on ? INK : "#FFFFFF", color: on ? "#FBF6EE" : INK, display: "flex", alignItems: "center", gap: "7px", fontSize: "14px", fontWeight: 700, cursor: "pointer", transition: "background-color 0.18s ease, color 0.18s ease" }}
+              style={{ flex: "0 0 auto", height: "46px", padding: "0 14px", borderRadius: "999px", border: `1.5px solid ${on ? INK : "var(--line-strong)"}`, background: on ? INK : "var(--paper)", color: on ? "var(--cream)" : INK, display: "flex", alignItems: "center", gap: "7px", fontSize: "14px", fontWeight: 700, cursor: "pointer", transition: "background-color 0.18s ease, color 0.18s ease" }}
             >
-              <span style={{ color: on ? "#F3D9A8" : look.fg, display: "flex" }}>
+              <span style={{ color: on ? "var(--gold-light)" : look.fg, display: "flex" }}>
                 <Icon d={look.icon} size={17} />
               </span>
               {t(`disc.${id}` as Key)}
@@ -296,8 +296,8 @@ export default function DiscoverScreen() {
             <Skeleton />
           </>
         ) : result.error ? (
-          <div role="alert" className="rise" style={{ padding: "24px 18px", borderRadius: "20px", background: "#FBF6EE", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.5, color: "#5A4434" }}>{result.error}</p>
+          <div role="alert" className="rise" style={{ padding: "24px 18px", borderRadius: "20px", background: "var(--cream)", textAlign: "center" }}>
+            <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.5, color: "var(--ink-soft)" }}>{result.error}</p>
             <button type="button" className="sheet-cta" onClick={retry} style={{ marginTop: "14px" }}>
               {t("trip.retry")}
             </button>
@@ -318,7 +318,7 @@ export default function DiscoverScreen() {
             ) : (
               <p style={{ margin: 0, fontSize: "15px", color: MUTED }}>{t("disc.none")}</p>
             )}
-            <Link href={`/trip?city=${encodeURIComponent(result.data?.city || city)}`} style={{ marginTop: "14px", height: "56px", borderRadius: "16px", background: BRAND, color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: 800, textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" }}>
+            <Link href={`/trip?city=${encodeURIComponent(result.data?.city || city)}`} style={{ marginTop: "14px", height: "56px", borderRadius: "16px", background: BRAND, color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontSize: "16px", fontWeight: 800, textDecoration: "none", boxShadow: "0 10px 22px rgba(154, 78, 54, 0.24)" }}>
               <Icon d={ICON.route} />
               {t("disc.plan", { city: result.data?.city || city })}
             </Link>

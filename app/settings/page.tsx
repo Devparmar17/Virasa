@@ -49,7 +49,7 @@ export default function SettingsScreen() {
                 <Avatar style={{ flex: "0 0 44px", width: "44px", height: "44px", borderRadius: "50%", objectFit: "cover", display: "block" }} />
                 <span style={{ minWidth: 0 }}>
                   <span style={{ display: "block", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.name}</span>
-                  <span style={{ display: "block", marginTop: "2px", fontSize: "13px", fontWeight: 500, color: "#6F5B4B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <span style={{ display: "block", marginTop: "2px", fontSize: "13px", fontWeight: 500, color: "var(--ink-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {user.email} · {user.provider === "google" ? "Google" : t("st.email")}
                   </span>
                 </span>
@@ -61,7 +61,7 @@ export default function SettingsScreen() {
                   toast(t("lg.logged_out"));
                   router.push("/login");
                 }}
-                style={{ ...rowStyle(true), color: "#A23A2A" }}
+                style={{ ...rowStyle(true), color: "var(--red)" }}
               >
                 {t("us.logout")}
               </button>
@@ -70,7 +70,7 @@ export default function SettingsScreen() {
             <Link href="/login" style={rowStyle(true)}>
               <span>
                 {t("us.join")}
-                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>{t("st.guest")}</span>
+                <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "var(--ink-muted)" }}>{t("st.guest")}</span>
               </span>
               <Chevron />
             </Link>
@@ -82,11 +82,11 @@ export default function SettingsScreen() {
           <div style={{ ...rowStyle(true), cursor: "default" }}>
             <span>
               {t("st.ai")}
-              <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "#6F5B4B" }}>
+              <span style={{ display: "block", marginTop: "2px", fontSize: "12px", fontWeight: 500, color: "var(--ink-muted)" }}>
                 {ai === null ? t("st.checking") : ai.gemini || ai.claude ? t("st.ai_on") : t("st.ai_lib")}
               </span>
             </span>
-            <span style={{ flex: "0 0 auto", height: "26px", padding: "0 10px", borderRadius: "999px", background: ai?.gemini ? "#EEF2FE" : "#F6EEE4", color: ai?.gemini ? "#3457C9" : "#6E4E1E", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center" }}>
+            <span style={{ flex: "0 0 auto", height: "26px", padding: "0 10px", borderRadius: "999px", background: ai?.gemini ? "#EEF2FE" : "var(--sand)", color: ai?.gemini ? "var(--ai-blue)" : "var(--gold-deep)", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center" }}>
               {ai === null ? "…" : ai.gemini || ai.claude ? t("st.on") : t("st.library")}
             </span>
           </div>
@@ -109,7 +109,7 @@ export default function SettingsScreen() {
             <Segmented label={t("trip.food")} value={profile.diet} onChange={(diet) => setP({ diet })} options={DIETS.map(([id]) => [id, t(`pf.${id}` as Key)])} />
           </div>
         </Card>
-        <p style={{ margin: "8px 2px 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>{t("trip.who_hint")}</p>
+        <p style={{ margin: "8px 2px 0", fontSize: "12px", lineHeight: 1.45, color: "var(--ink-muted)" }}>{t("trip.who_hint")}</p>
 
         <SectionLabel id="language">{t("st.language")}</SectionLabel>
         <Card>
@@ -122,14 +122,14 @@ export default function SettingsScreen() {
                 }} style={rowStyle(i === LANGS.length - 1)}>
                 <span lang={l.id}>
                   {l.native}
-                  <span style={{ marginLeft: "8px", fontSize: "13px", fontWeight: 500, color: "#6F5B4B" }}>{l.label}</span>
+                  <span style={{ marginLeft: "8px", fontSize: "13px", fontWeight: 500, color: "var(--ink-muted)" }}>{l.label}</span>
                 </span>
-                <span aria-hidden="true" style={{ flex: "0 0 22px", width: "22px", height: "22px", borderRadius: "50%", border: lang === l.id ? "7px solid #9A4E36" : "2px solid #CDBFAE", background: "#FFFFFF", transition: "border 0.18s ease" }} />
+                <span aria-hidden="true" style={{ flex: "0 0 22px", width: "22px", height: "22px", borderRadius: "50%", border: lang === l.id ? "7px solid var(--clay)" : "2px solid var(--stone)", background: "var(--paper)", transition: "border 0.18s ease" }} />
               </button>
             ))}
           </div>
         </Card>
-        <p style={{ margin: "8px 2px 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>{t("st.lang_note")}</p>
+        <p style={{ margin: "8px 2px 0", fontSize: "12px", lineHeight: 1.45, color: "var(--ink-muted)" }}>{t("st.lang_note")}</p>
 
         <SectionLabel id="stories">{t("st.stories")}</SectionLabel>
         <Card style={{ padding: "14px" }}>
@@ -159,7 +159,7 @@ export default function SettingsScreen() {
               ["brisk", t("st.pace.brisk")],
             ]}
           />
-          <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: 1.45, color: "#6F5B4B" }}>{t("st.pace_note")}</p>
+          <p style={{ margin: "8px 0 0", fontSize: "12px", lineHeight: 1.45, color: "var(--ink-muted)" }}>{t("st.pace_note")}</p>
         </Card>
         <Card style={{ marginTop: "10px" }}>
           <SwitchRow label={t("st.voice")} hint={t("st.voice_hint")} on={voice} onToggle={() => setPrefs((p) => ({ ...p, voice: !voice }))} />
@@ -179,8 +179,8 @@ export default function SettingsScreen() {
               ["xlarge", t("st.size.xlarge")],
             ]}
           />
-          <p style={{ margin: "10px 0 0", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.45, color: "#2B1B10" }}>{t("st.text_sample")}</p>
-          <p style={{ margin: "6px 0 0", fontSize: "12px", color: "#6F5B4B" }}>{t("st.text_note")}</p>
+          <p style={{ margin: "10px 0 0", fontSize: "calc(15px * var(--read-scale, 1))", lineHeight: 1.45, color: "var(--ink)" }}>{t("st.text_sample")}</p>
+          <p style={{ margin: "6px 0 0", fontSize: "12px", color: "var(--ink-muted)" }}>{t("st.text_note")}</p>
         </Card>
         <Card style={{ marginTop: "10px" }}>
           <SwitchRow label={t("st.desc")} hint={t("st.desc_hint")} on={sw.desc} onToggle={() => setSw((s) => ({ ...s, desc: !s.desc }))} last />
@@ -214,7 +214,7 @@ export default function SettingsScreen() {
           <button
             type="button"
             onClick={() => setConfirmReset(true)}
-            style={{ ...rowStyle(true), color: "#A23A2A" }}
+            style={{ ...rowStyle(true), color: "var(--red)" }}
           >
             {t("st.reset")}
           </button>
@@ -232,7 +232,7 @@ export default function SettingsScreen() {
           </Link>
           <div style={{ ...rowStyle(true), cursor: "default" }}>
             {t("st.version")}
-            <span style={{ fontSize: "14px", fontWeight: 500, color: "#6F5B4B" }}>0.1.0</span>
+            <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--ink-muted)" }}>0.1.0</span>
           </div>
         </Card>
       </div>
@@ -242,7 +242,7 @@ export default function SettingsScreen() {
         <button
           type="button"
           className="sheet-cta"
-          style={{ background: "#A23A2A" }}
+          style={{ background: "var(--red)" }}
           onClick={() => {
             setConfirmReset(false);
             resetStored();

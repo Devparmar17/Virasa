@@ -29,7 +29,7 @@ export default function LensScreen() {
   }, [scanning]);
 
   return (
-    <div style={{ width: "390px", minHeight: "844px", position: "relative", overflow: "hidden", background: "#1E130B", color: "#2B1B10" }}>
+    <div style={{ width: "390px", minHeight: "844px", position: "relative", overflow: "hidden", background: "var(--night)", color: "var(--ink)" }}>
       {/* Camera */}
       <div style={{ position: "relative", height: "500px", overflow: "hidden" }}>
         <img src="/images/a9558385034112d0e27f39ea353dd7ed.jpg" alt="Camera view of the Tree of Life jali" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "26% 50%", display: "block", filter: scanning ? "brightness(0.85)" : "none", transition: "filter 0.4s ease" }} />
@@ -52,7 +52,7 @@ export default function LensScreen() {
                 className="label-in"
                 style={{ position: "absolute", left: `${d.x - 22}px`, top: `${d.y - 22}px`, width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", animationDelay: `${i * 0.12}s` }}
               >
-                <span style={{ width: "30px", height: "30px", borderRadius: "50%", background: pick === i ? "#FFFFFF" : "#9A4E36", color: pick === i ? "#9A4E36" : "#FFFFFF", border: "2px solid #FFFFFF", boxShadow: "0 0 0 6px rgba(154, 78, 54, 0.35)", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", transition: "background-color 0.2s ease, color 0.2s ease" }}>
+                <span style={{ width: "30px", height: "30px", borderRadius: "50%", background: pick === i ? "var(--paper)" : "var(--clay)", color: pick === i ? "var(--clay)" : "var(--paper)", border: "2px solid var(--paper)", boxShadow: "0 0 0 6px rgba(154, 78, 54, 0.35)", fontSize: "13px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", transition: "background-color 0.2s ease, color 0.2s ease" }}>
                   {i + 1}
                 </span>
               </button>
@@ -60,15 +60,15 @@ export default function LensScreen() {
           : null}
 
         {/* Top bar and modes */}
-        <div style={{ position: "absolute", top: "50px", left: "12px", right: "12px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "#FFFFFF" }}>
-          <BackLink href="/home" aria-label="Close" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(20, 12, 6, 0.45)", display: "flex", alignItems: "center", justifyContent: "center", color: "#FFFFFF" }}>
+        <div style={{ position: "absolute", top: "50px", left: "12px", right: "12px", display: "flex", alignItems: "center", justifyContent: "space-between", color: "var(--paper)" }}>
+          <BackLink href="/home" aria-label="Close" style={{ width: "44px", height: "44px", borderRadius: "50%", background: "rgba(20, 12, 6, 0.45)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--paper)" }}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
               <path d="M18 6 6 18" />
               <path d="m6 6 12 12" />
             </svg>
           </BackLink>
           <span style={{ fontSize: "16px", fontWeight: 800 }}>{t("lm.identify")}</span>
-          <Toggle storeKey="prefs" field="flash" onLabel="ln.flash_on" offLabel="ln.flash_off" onToast="ln.flash_on" offToast="ln.flash_off" style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "rgba(20, 12, 6, 0.45)", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+          <Toggle storeKey="prefs" field="flash" onLabel="ln.flash_on" offLabel="ln.flash_off" onToast="ln.flash_on" offToast="ln.flash_off" style={{ width: "44px", height: "44px", border: 0, borderRadius: "50%", background: "rgba(20, 12, 6, 0.45)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
             on={
               <svg width="20" height="20" viewBox="0 0 24 24" fill="#F3D9A8" stroke="#F3D9A8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
@@ -83,8 +83,8 @@ export default function LensScreen() {
         </div>
         <LensModes active="lens" style={{ top: "108px" }} />
         {scanning ? (
-          <p role="status" className="fade-in" style={{ position: "absolute", left: "50%", bottom: "64px", transform: "translateX(-50%)", margin: 0, height: "36px", padding: "0 14px", borderRadius: "999px", background: "rgba(20, 12, 6, 0.7)", color: "#FFFFFF", fontSize: "13px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px", whiteSpace: "nowrap" }}>
-            <span className="spin" aria-hidden="true" style={{ width: "14px", height: "14px", borderRadius: "50%", border: "2px solid rgba(255, 255, 255, 0.35)", borderTopColor: "#FFFFFF" }} />
+          <p role="status" className="fade-in" style={{ position: "absolute", left: "50%", bottom: "64px", transform: "translateX(-50%)", margin: 0, height: "36px", padding: "0 14px", borderRadius: "999px", background: "rgba(20, 12, 6, 0.7)", color: "var(--paper)", fontSize: "13px", fontWeight: 700, display: "flex", alignItems: "center", gap: "8px", whiteSpace: "nowrap" }}>
+            <span className="spin" aria-hidden="true" style={{ width: "14px", height: "14px", borderRadius: "50%", border: "2px solid rgba(255, 255, 255, 0.35)", borderTopColor: "var(--paper)" }} />
             {t("ln.point")}
           </p>
         ) : null}
@@ -92,31 +92,31 @@ export default function LensScreen() {
 
       {/* What it is, its details, and what to do next. */}
       {scanning ? null : (
-        <section aria-label={t("ln.result")} className="arrive-card" style={{ position: "relative", marginTop: "-24px", borderRadius: "26px 26px 0 0", background: "#FFFFFF", padding: "10px 20px 28px" }}>
+        <section aria-label={t("ln.result")} className="arrive-card" style={{ position: "relative", marginTop: "-24px", borderRadius: "26px 26px 0 0", background: "var(--paper)", padding: "10px 20px 28px" }}>
           <AutoDescribe text="Identified: the Tree of Life jali at Sidi Saiyyed Mosque. A carved stone screen from around 1573, showing intertwined trees with curling palm fronds." />
-          <div style={{ width: "40px", height: "5px", borderRadius: "999px", background: "#E2D3C1", margin: "0 auto" }} />
+          <div style={{ width: "40px", height: "5px", borderRadius: "999px", background: "var(--line-strong)", margin: "0 auto" }} />
           <div style={{ marginTop: "14px", display: "flex", alignItems: "center", gap: "8px" }}>
-            <span style={{ height: "26px", padding: "0 10px 0 6px", borderRadius: "999px", background: "#E3F1E7", color: "#2F7A4A", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", gap: "4px" }}>
+            <span style={{ height: "26px", padding: "0 10px 0 6px", borderRadius: "999px", background: "var(--green-tint)", color: "var(--green)", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", gap: "4px" }}>
               <Tick size={14} width={3} />
               {t("ln.found")}
             </span>
-            <span style={{ fontSize: "12px", fontWeight: 600, color: "#6F5B4B" }}>Sidi Saiyyed Mosque</span>
-            <button type="button" onClick={() => { setPick(null); setScanning(true); }} style={{ marginLeft: "auto", height: "36px", padding: "0 12px", border: "1.5px solid #E2D3C1", borderRadius: "999px", background: "#FFFFFF", color: "#2B1B10", fontSize: "12px", fontWeight: 800, cursor: "pointer" }}>
+            <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--ink-muted)" }}>Sidi Saiyyed Mosque</span>
+            <button type="button" onClick={() => { setPick(null); setScanning(true); }} style={{ marginLeft: "auto", height: "36px", padding: "0 12px", border: "1.5px solid var(--line-strong)", borderRadius: "999px", background: "var(--paper)", color: "var(--ink)", fontSize: "12px", fontWeight: 800, cursor: "pointer" }}>
               {t("ln.again")}
             </button>
           </div>
           <h1 style={{ margin: "10px 0 0", fontSize: "23px", lineHeight: 1.2, fontWeight: 800, letterSpacing: "-0.01em" }}>Tree of Life jali</h1>
-          <p style={{ margin: "3px 0 0", fontSize: "13px", fontWeight: 600, color: "#6F5B4B" }}>Carved stone screen · c. 1573</p>
+          <p style={{ margin: "3px 0 0", fontSize: "13px", fontWeight: 600, color: "var(--ink-muted)" }}>Carved stone screen · c. 1573</p>
 
           <h2 style={{ margin: "16px 0 0", fontSize: "15px", fontWeight: 800 }}>{t("ln.seeing")}</h2>
           <ol style={{ listStyle: "none", margin: "8px 0 0", padding: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
             {DETAILS.map((d, i) => (
               <li key={d.name}>
-                <button type="button" aria-pressed={pick === i} onClick={() => setPick(pick === i ? null : i)} style={{ width: "100%", padding: "10px 12px", border: `1.5px solid ${pick === i ? "#9A4E36" : "#EFE6DA"}`, borderRadius: "14px", background: pick === i ? "#FBEDE6" : "#FFFFFF", color: "#2B1B10", display: "flex", alignItems: "flex-start", gap: "10px", textAlign: "left", cursor: "pointer", transition: "background-color 0.2s ease, border-color 0.2s ease" }}>
-                  <span style={{ flex: "0 0 24px", width: "24px", height: "24px", borderRadius: "50%", background: "#9A4E36", color: "#FFFFFF", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
+                <button type="button" aria-pressed={pick === i} onClick={() => setPick(pick === i ? null : i)} style={{ width: "100%", padding: "10px 12px", border: `1.5px solid ${pick === i ? "var(--clay)" : "var(--line)"}`, borderRadius: "14px", background: pick === i ? "var(--clay-tint)" : "var(--paper)", color: "var(--ink)", display: "flex", alignItems: "flex-start", gap: "10px", textAlign: "left", cursor: "pointer", transition: "background-color 0.2s ease, border-color 0.2s ease" }}>
+                  <span style={{ flex: "0 0 24px", width: "24px", height: "24px", borderRadius: "50%", background: "var(--clay)", color: "var(--paper)", fontSize: "12px", fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
                   <span>
                     <span style={{ display: "block", fontSize: "14px", fontWeight: 800 }}>{d.name}</span>
-                    <span style={{ display: "block", marginTop: "2px", fontSize: "13px", lineHeight: 1.45, color: "#5A4434" }}>{d.note}</span>
+                    <span style={{ display: "block", marginTop: "2px", fontSize: "13px", lineHeight: 1.45, color: "var(--ink-soft)" }}>{d.note}</span>
                   </span>
                 </button>
               </li>
@@ -124,13 +124,13 @@ export default function LensScreen() {
           </ol>
 
           <div style={{ marginTop: "14px", display: "flex", gap: "10px" }}>
-            <Link href="/story?ch=1" style={{ flex: 1, height: "52px", borderRadius: "14px", background: "#9A4E36", color: "#FFFFFF", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: 800, textDecoration: "none" }}>
+            <Link href="/story?ch=1" style={{ flex: 1, height: "52px", borderRadius: "14px", background: "var(--clay)", color: "var(--paper)", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", fontSize: "15px", fontWeight: 800, textDecoration: "none" }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <polygon points="7 4 19 12 7 20 7 4" />
               </svg>
               {t("ln.hear")}
             </Link>
-            <Toggle storeKey="saved" field="lens-tree" onLabel="ln.j_on" offLabel="ln.j_off" onToast="ln.j_toast" offToast="ln.j_removed" style={{ flex: "0 0 52px", width: "52px", height: "52px", border: "1.5px solid #E2D3C1", borderRadius: "14px", background: "#FFFFFF", color: "#9A4E36", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
+            <Toggle storeKey="saved" field="lens-tree" onLabel="ln.j_on" offLabel="ln.j_off" onToast="ln.j_toast" offToast="ln.j_removed" style={{ flex: "0 0 52px", width: "52px", height: "52px", border: "1.5px solid var(--line-strong)", borderRadius: "14px", background: "var(--paper)", color: "var(--clay)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
               on={
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="#9A4E36" stroke="#9A4E36" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
@@ -144,14 +144,14 @@ export default function LensScreen() {
             />
           </div>
 
-          <p style={{ margin: "18px 0 0", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "#8A6424" }}>{t("ln.ask_ai").toUpperCase()}</p>
+          <p style={{ margin: "18px 0 0", fontSize: "12px", fontWeight: 800, letterSpacing: "0.1em", color: "var(--gold)" }}>{t("ln.ask_ai").toUpperCase()}</p>
           <div className="hscroll" style={{ margin: "8px -20px 0", padding: "0 20px", display: "flex", gap: "8px" }}>
             {[
               [t("ln.q1"), t("ln.q1_ask")],
               [t("ln.q2"), t("ln.q2_ask")],
               [t("ln.q3"), t("ln.q3_ask")],
             ].map(([label, ask]) => (
-              <Tap key={label} ask={ask} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "999px", border: "1.5px solid #E2D3C1", background: "#F6F1EA", color: "#2B1B10", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+              <Tap key={label} ask={ask} style={{ flex: "0 0 auto", height: "44px", padding: "0 14px", borderRadius: "999px", border: "1.5px solid var(--line-strong)", background: "var(--sand-light)", color: "var(--ink)", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
                 {label}
               </Tap>
             ))}
